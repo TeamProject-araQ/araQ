@@ -12,4 +12,9 @@ public class MatchController {
     public String around() {
         return "match";
     }
+
+    @GetMapping("/personality")
+    public String personality() {
+        return "match";
+    }
 }
