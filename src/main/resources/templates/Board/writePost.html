@@ -1,5 +1,16 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    
+<div layout:fragment="content" class="container">
+    <h3 class="my-3">톡 작성하기</h3>
+    <form id="regForm" method="post">
+        <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
+        <button class="btn btn-outline-dark my-3 w-100" id="regBtn">등록</button>
+    </form>
+    <script>
+        $(function() {
+            $("#regBtn").on('click', function() {
+
+            });
+        });
+    </script>
 </div>
 </html>

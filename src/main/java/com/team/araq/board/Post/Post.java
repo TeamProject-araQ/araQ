@@ -1,5 +1,6 @@
 package com.team.araq.board.Post;
 
+import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,5 +23,8 @@ public class Post {
     private LocalDateTime createDate;
 
     private LocalDateTime modifyDate;
+
+    @ManyToOne
+    private SiteUser writer;
 
 }
