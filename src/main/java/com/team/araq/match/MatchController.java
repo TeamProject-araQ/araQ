@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/match")
@@ -19,6 +20,10 @@ public class MatchController {
     @GetMapping("/around")
     public String around(Model model, Principal principal) {
         SiteUser user = userService.getByUsername(principal.getName());
+        String address = user.getAddress();
+        String[] words = address.split(" ");
+        List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1]);
+        model.addAttribute("userList", userList);
         return "match";
     }
 
