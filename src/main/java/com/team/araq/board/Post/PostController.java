@@ -24,7 +24,7 @@ public class PostController {
 
     @PostMapping("/post/create")
     public String create(String content, Principal principal) {
-        SiteUser user = this.userService.getUser(principal.getName());
+        SiteUser user = this.userService.getByUsername(principal.getName());
         this.postService.createPost(content, user);
         return "redirect:/";
     }
