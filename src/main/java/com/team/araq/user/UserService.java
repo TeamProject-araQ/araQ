@@ -10,7 +10,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser craete(String username, String email, String password, String phoneNum){
+    public SiteUser create(String username, String email, String password, String phoneNum){
         SiteUser user = new SiteUser();
         user.setUsername(username);
         user.setEmail(email);
