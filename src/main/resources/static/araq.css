@@ -8,3 +8,25 @@ a {
     color:inherit;
     text-decoration:none;
 }
+
+.menu {
+    position:relative;
+    width:25%;
+}
+
+.option {
+    margin-bottom:10px;
+    color:dimgray;
+    font-size:14pt;
+    font-weight:bold;
+}
+
+.depth {
+  position:absolute;
+  display:none;
+  width:100%;
+}
+
+.menu:hover .depth {
+  display:block;
+}
