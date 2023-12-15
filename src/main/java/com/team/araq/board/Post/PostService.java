@@ -9,4 +9,7 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    public void createPost(String content) {
+        Post post = new Post();
+    }
 }
