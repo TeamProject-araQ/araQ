@@ -70,6 +70,7 @@ a {
 	margin:0 auto;
 	margin-bottom:30px;
 	padding:10px;
+	text-align:end;
 }
 
 .me:after {
