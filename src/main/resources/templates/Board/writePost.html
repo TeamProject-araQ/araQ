@@ -1,0 +1,20 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h3 class="my-3">톡 작성하기</h3>
+    <form id="regForm" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
+        <button class="btn btn-outline-dark my-3 w-100" id="regBtn">등록</button>
+    </form>
+    <script>
+        $(function() {
+            $("#regBtn").on('click', function() {
+                if ($("#content").val() == "")
+                    alert("내용을 입력해주세요.");
+                else
+                    $("#regForm").submit();
+            });
+        });
+    </script>
+</div>
+</html>

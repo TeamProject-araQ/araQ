@@ -1,8 +1,12 @@
 package com.team.araq.user;
 
+import com.team.araq.board.Comment.Comment;
+import com.team.araq.board.Post.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,4 +59,11 @@ public class SiteUser {
 
     // 사진
     private String image;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
+    private List<Post> postList;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList;
+
 }

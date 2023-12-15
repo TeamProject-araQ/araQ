@@ -1,8 +1,57 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    <h1>시작화면</h1>
+<div layout:fragment="content" class="container">
+    <!-- 옵션 바 -->
     <a th:href="@{/user/signup}">회원가입</a>
     <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
     <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
+    <div class="d-flex justify-content-around my-3 text-center">
+        <ul class="menu">
+            <li class="option"><a href="#">매칭</a></li>
+            <ul class="depth">
+                <li><a th:href="@{/match/around}">내 위치 주변</a></li>
+                <li><a href="#">내 이상형</a></li>
+                <li><a href="#">성향 및 관심사</a></li>
+            </ul>
+        </ul>
+        <ul class="menu">
+            <li class="option"><a href="#">채팅</a></li>
+            <ul class="depth">
+                <li><a href="#">채팅 목록</a></li>
+            </ul>
+        </ul>
+        <ul class="menu">
+            <li class="option"><a href="#">설문</a></li>
+            <ul class="depth">
+                <li><a href="#">설문 참여</a></li>
+            </ul>
+        </ul>
+        <ul class="menu">
+            <li class="option"><a href="#">고객센터</a></li>
+            <ul class="depth">
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">자주 묻는 질문</a></li>
+                <li><a href="#">나문희</a></li>
+                <li><a href="#">리뷰 작성</a></li>
+            </ul>
+        </ul>
+    </div>
+    <!-- 매칭 추천 -->
+    <h3># 매칭 추천</h3>
+    <div class="d-flex justify-content-between my-3">
+        <h1 class="border border-dark p-3">추천된 사람 1</h1>
+        <h1 class="border border-dark p-3">추천된 사람 2</h1>
+        <h1 class="border border-dark p-3">추천된 사람 3</h1>
+    </div>
+    <h3># AraQ Talk</h3>
+    <div class="my-3 border border-dark p-3">
+        <div class="d-flex justify-content-end">
+            <a th:href="@{/post/create}" class="btn btn-outline-dark">톡 작성하기</a>
+        </div>
+        <div>
+            <div class="you">블라블라</div>
+            <div class="me">블라블라</div>
+            <div class="you">블라블라</div>
+        </div>
+    </div>
 </div>
 </html>
