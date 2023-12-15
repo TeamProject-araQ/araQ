@@ -32,9 +32,38 @@ public class SiteUser {
 
     private String address;
 
+    private String age;
+
+    private String height;
+
+    // 종교
+    private String religion;
+
+    // 음주
+    private String drinking;
+
+    // 흡연
+    private String smoking;
+
+    // 학력
+    private String education;
+
+    // mbti
+    private String mbti;
+
+    // 성격
+    private String personality;
+
+    // 취미
+    private String hobby;
+
+    // 사진
+    private String image;
+
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Post> postList;
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
+
 }
