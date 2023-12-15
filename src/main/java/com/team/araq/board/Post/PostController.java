@@ -3,11 +3,16 @@ package com.team.araq.board.Post;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +32,13 @@ public class PostController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         this.postService.createPost(content, user);
         return "redirect:/";
+    }
+
+    @GetMapping("/post/detail/{id}")
+    public String detail(@PathVariable("id") Integer id, Model model) {
+        Post post = this.postService.getPost(id);
+        model.addAttribute("post", post);
+        return "board/detail";
     }
 
 }
