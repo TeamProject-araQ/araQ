@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/araq.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
     <title>AraQ</title>
 </head>
 <body>
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
 <th:block layout:fragment="content"></th:block>
 <script type="text/javascript" th:src="@{/bootstrap.bundle.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
