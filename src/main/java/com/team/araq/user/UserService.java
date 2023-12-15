@@ -10,12 +10,24 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public SiteUser create(String username, String email, String password, String phoneNum){
+    public SiteUser create(UserCreateForm userCreateForm) {
         SiteUser user = new SiteUser();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setPhoneNum(phoneNum);
+        user.setUsername(userCreateForm.getUsername());
+        user.setEmail(userCreateForm.getEmail());
+        user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
+        user.setNickName(userCreateForm.getNickName());
+        user.setPhoneNum(userCreateForm.getPhoneNum());
+        user.setAddress(userCreateForm.getAddress());
+        user.setAge(userCreateForm.getAge());
+        user.setHeight(userCreateForm.getHeight());
+        user.setReligion(userCreateForm.getReligion());
+        user.setDrinking(userCreateForm.getDrinking());
+        user.setSmoking(userCreateForm.getSmoking());
+        user.setEducation(userCreateForm.getEducation());
+        user.setMbti(userCreateForm.getMbti());
+        user.setPersonality(userCreateForm.getPersonality());
+        user.setHobby(userCreateForm.getHobby());
+        user.setImage(userCreateForm.getImage());
         userRepository.save(user);
         return user;
     }
