@@ -14,6 +14,25 @@
             <div th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></div>
         </div>
         <div th:text="${post.content}" class="border border-dark p-2 my-2 text-center"></div>
+        <h5 class="border-bottom border-secondary pb-1">댓글</h5>
+        <div>
+            <form th:action="@{|/comment/create/${post.id}|}" method="post" class="input-group" id="regForm">
+                <input type="text" id="content" name="content" class="form-control">
+                <input type="button" value="등록" class="btn btn-outline-dark" id="regBtn">
+            </form>
+        </div>
     </div>
 </div>
+<script layout:fragment="script">
+    $(function () {
+        $("#regBtn").on('click', function() {
+            if ($("#content").val() == "")
+                alert("댓글 내용을 입력해주세요.");
+            else {
+                alert("댓글이 등록되었습니다.");
+                $("#regForm").submit();
+            }
+        });
+    });
+</script>
 </html>
