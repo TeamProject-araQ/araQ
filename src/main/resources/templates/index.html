@@ -1,9 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
     <!-- 옵션 바 -->
-    <a th:href="@{/user/signup}">회원가입</a>
-    <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
-    <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그아웃</a>
     <div class="d-flex justify-content-around my-3 text-center">
         <ul class="menu">
             <li class="option"><a href="#">매칭</a></li>
