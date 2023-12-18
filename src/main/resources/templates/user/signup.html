@@ -33,7 +33,8 @@
         </div>
         <div class="mb-3">
             <label for="address" class="form-label">주소</label>
-            <input type="text" th:field="*{address}" class="form-control">
+            <input type="text" th:field="*{address}" class="form-control" id="address" readonly>
+            <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
         </div>
         <div class="mb-3">
             <label for="height" class="form-label">키</label>
@@ -77,5 +78,17 @@
         </div>
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function sample5_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    var addr = data.address; // 최종 주소 변수
+
+                    document.getElementById("address").value = addr;
+                }
+            }).open();
+        }
+    </script>
 </div>
 </html>
