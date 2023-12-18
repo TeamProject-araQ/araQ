@@ -7,11 +7,10 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -20,22 +19,40 @@ import java.util.UUID;
 public class ChatController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final UserService userService;
-
-    @GetMapping("/with/{username}")
-    public String chat(Model model, Principal principal, @PathVariable(value = "username") String username) {
-        SiteUser user = userService.getByUsername(principal.getName());
-        SiteUser target = userService.getByUsername(username);
-        String uuid = UUID.randomUUID().toString();
-        return "conn/chat";
-    }
+    private final RoomService roomService;
 
     @MessageMapping("/send")
     public void sendMessage(ChatDto chatDto) {
         simpMessagingTemplate.convertAndSend("/topic/chat", chatDto);
     }
 
-    @GetMapping("/room")
-    public String room() {
-       return "conn/room";
+    @GetMapping("/create/{username}")
+    public String chat(Model model, Principal principal, @PathVariable(value = "username") String username) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        SiteUser target = userService.getByUsername(username);
+        String uuid = UUID.randomUUID().toString();
+
+        roomService.create(uuid, user, target);
+
+        return "redirect:/chat/list";
+    }
+
+    @PostMapping("/join")
+    public String join(Model model, Principal principal, @RequestParam(value = "code") String code) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        Room room = roomService.get(code);
+
+        model.addAttribute("user", user);
+        model.addAttribute("room", room);
+        return "conn/chat";
+    }
+
+    @GetMapping("/list")
+    public String room(Model model, Principal principal) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        List<Room> roomList = roomService.getList(user);
+
+        model.addAttribute("roomList", roomList);
+        return "conn/room";
     }
 }

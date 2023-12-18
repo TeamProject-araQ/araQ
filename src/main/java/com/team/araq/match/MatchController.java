@@ -22,7 +22,8 @@ public class MatchController {
         SiteUser user = userService.getByUsername(principal.getName());
         String address = user.getAddress();
         String[] words = address.split(" ");
-        List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1]);
+        String gender = user.getGender().equals("남성") ? "여성" : "남성";
+        List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1], gender);
         model.addAttribute("userList", userList);
         return "conn/match";
     }

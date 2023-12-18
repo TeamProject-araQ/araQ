@@ -1,5 +1,20 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-
+    <ul>
+        <li th:each="room : ${roomList}">
+            <a href="javascript:void(0)" th:data-value="${room.code}" class="joinRoom"></a>
+        </li>
+    </ul>
+    <form th:action="@{/join}" id="roomJoinForm">
+        <input type="hidden" name="code">
+    </form>
 </div>
+<script layout:fragment="script">
+$(function() {
+    $(".joinRoom").on('click', function(self) {
+        $("#roomJoinForm > input").val(self.dataset.value);
+        $("#roomJoinForm").submit();
+    });
+});
+</script>
 </html>
