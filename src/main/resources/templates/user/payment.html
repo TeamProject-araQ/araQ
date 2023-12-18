@@ -15,16 +15,15 @@
     </div>
 </div>
 <input type="hidden" th:value="${user}">
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
-<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.7.js"></script>
 <script type="text/javascript" layout:fragment="script">
+
+    IMP.init('imp65467420');
+
     var selectedPg = '';
 
     function selectPg(pg) {
         selectedPg = pg;
     }
-
-    IMP.init('imp65467420');
 
     var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
