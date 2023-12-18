@@ -5,89 +5,117 @@
             <h4>회원가입</h4>
         </div>
     </div>
+
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <div class="mb-3">
-            <label for="username" class="form-label">사용자ID</label>
-            <input type="text" th:field="*{username}" class="form-control">
+        <div id="step1">
+            <div class="mb-3">
+                <label for="username" class="form-label">사용자ID</label>
+                <input type="text" th:field="*{username}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">비밀번호</label>
+                <input type="password" th:field="*{password1}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">비밀번호 확인</label>
+                <input type="password" th:field="*{password2}" class="form-control">
+            </div>
+            <button type="button" onclick="nextStep('step1', 'step2')">다음</button>
         </div>
-        <div class="mb-3">
-            <label for="password1" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password1}" class="form-control">
+
+        <div id="step2" style="display:none;">
+            <div class="mb-3">
+                <label for="email" class="form-label">이메일</label>
+                <input type="email" th:field="*{email}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="nickName" class="form-label">별명</label>
+                <input type="text" th:field="*{nickName}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="phoneNum" class="form-label">핸드폰</label>
+                <input type="text" th:field="*{phoneNum}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">주소</label>
+                <input type="text" th:field="*{address}" class="form-control" id="address" readonly>
+                <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
+            </div>
+            <button type="button" onclick="prevStep('step2', 'step1')">이전</button>
+            <button type="button" onclick="nextStep('step2', 'step3')">다음</button>
         </div>
-        <div class="mb-3">
-            <label for="password2" class="form-label">비밀번호 확인</label>
-            <input type="password" th:field="*{password2}" class="form-control">
+
+        <div id="step3" style="display:none;">
+            <div class="mb-3">
+                <label for="height" class="form-label">키</label>
+                <input type="text" th:field="*{height}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">나이</label>
+                <input type="text" th:field="*{age}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="religion" class="form-label">종교</label>
+                <input type="text" th:field="*{religion}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="drinking" class="form-label">음주</label>
+                <input type="text" th:field="*{drinking}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="smoking" class="form-label">흡연</label>
+                <input type="text" th:field="*{smoking}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="education" class="form-label">최종학력</label>
+                <input type="text" th:field="*{education}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="mbti" class="form-label">MBTI</label>
+                <input type="text" th:field="*{mbti}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="personality" class="form-label">성격</label>
+                <input type="text" th:field="*{personality}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="hobby" class="form-label">취미</label>
+                <input type="text" th:field="*{hobby}" class="form-control">
+            </div>
+            <button type="button" onclick="prevStep('step3', 'step2')">이전</button>
+            <button type="button" onclick="nextStep('step3', 'step4')">다음</button>
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control">
+
+        <div id="step4" style="display:none;">
+            <div class="mb-3">
+                <label for="image" class="form-label">사진</label>
+                <input type="text" th:field="*{image}" class="form-control">
+            </div>
+            <button type="button" onclick="prevStep('step4', 'step3')">이전</button>
+            <button type="submit" class="btn btn-primary">회원가입</button>
         </div>
-        <div class="mb-3">
-            <label for="nickName" class="form-label">별명</label>
-            <input type="text" th:field="*{nickName}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="phoneNum" class="form-label">핸드폰</label>
-            <input type="text" th:field="*{phoneNum}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="address" class="form-label">주소</label>
-            <input type="text" th:field="*{address}" class="form-control" id="address" readonly>
-            <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
-        </div>
-        <div class="mb-3">
-            <label for="height" class="form-label">키</label>
-            <input type="text" th:field="*{height}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="age" class="form-label">나이</label>
-            <input type="text" th:field="*{age}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="religion" class="form-label">종교</label>
-            <input type="text" th:field="*{religion}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="drinking" class="form-label">음주</label>
-            <input type="text" th:field="*{drinking}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="smoking" class="form-label">흡연</label>
-            <input type="text" th:field="*{smoking}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="education" class="form-label">최종학력</label>
-            <input type="text" th:field="*{education}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="mbti" class="form-label">MBTI</label>
-            <input type="text" th:field="*{mbti}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="personality" class="form-label">성격</label>
-            <input type="text" th:field="*{personality}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="hobby" class="form-label">취미</label>
-            <input type="text" th:field="*{hobby}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">사진</label>
-            <input type="text" th:field="*{image}" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
+
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
         function sample5_execDaumPostcode() {
             new daum.Postcode({
                 oncomplete: function(data) {
                     var addr = data.address; // 최종 주소 변수
-
                     document.getElementById("address").value = addr;
                 }
             }).open();
+        }
+
+        function nextStep(currentStepId, nextStepId) {
+            document.getElementById(currentStepId).style.display = 'none';
+            document.getElementById(nextStepId).style.display = 'block';
+        }
+
+        function prevStep(currentStepId, prevStepId) {
+            document.getElementById(currentStepId).style.display = 'none';
+            document.getElementById(prevStepId).style.display = 'block';
         }
     </script>
 </div>

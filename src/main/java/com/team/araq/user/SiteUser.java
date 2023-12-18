@@ -28,10 +28,12 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private String phoneNum;
 
     private String address;
 
+    //
     private String age;
 
     private String height;
