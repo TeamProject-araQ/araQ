@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -20,4 +21,6 @@ public class Room {
     private SiteUser participant2;
     @OneToMany(mappedBy = "room", cascade = CascadeType.REMOVE)
     private List<Chat> chats;
+    private String code;
+    private LocalDateTime createDate;
 }

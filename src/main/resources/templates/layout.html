@@ -19,11 +19,24 @@
         ...
     </div>
 </div>
+<input type="hidden" th:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
 <script type="text/javascript" th:src="@{/bootstrap.bundle.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var socket = new SockJS("/ws");
+        var stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
+
+            });
+        });
+    });
+</script>
 <th:block layout:fragment="script"></th:block>
 </body>
 </html>
