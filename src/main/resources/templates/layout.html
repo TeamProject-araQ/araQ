@@ -55,14 +55,16 @@
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.7.js"></script>
 <script type="text/javascript">
     $(function() {
-        var socket = new SockJS("/ws");
-        var stompClient = Stomp.over(socket);
+        if($("#hiddenUserName").val() != null) {
+            var socket = new SockJS("/ws");
+            var stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
+            stompClient.connect({}, function(frame) {
+                stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
 
+                });
             });
-        });
+        }
     });
 </script>
 <th:block layout:fragment="script"></th:block>
