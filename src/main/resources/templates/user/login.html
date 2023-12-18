@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container my-3">
-    <a href="#" class="text-center"><h3>AraQ</h3></a>
+    <a href="#" class="text-center"><h2>AraQ</h2></a>
     <form th:action="@{/user/login}" method="post">
         <div th:if="${param.error}">
             <div class="alert alert-danger">
@@ -26,6 +26,8 @@
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
     </form>
+    <span>아직 회원이 아니신가요?</span>
+    <a th:href="@{/user/signup}">회원가입</a>
 </div>
 </body>
 </html>
