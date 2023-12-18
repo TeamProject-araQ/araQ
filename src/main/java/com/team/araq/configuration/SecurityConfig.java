@@ -21,7 +21,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests)->authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/**"),
+                                new AntPathRequestMatcher("/bootstrap**"),
+                                new AntPathRequestMatcher("/araq**")).permitAll()
                         .anyRequest().authenticated())
 
                 .formLogin((formLogin) -> formLogin
