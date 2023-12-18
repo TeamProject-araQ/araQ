@@ -1,5 +1,15 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
+    <title>AraQ</title>
+</head>
+<body>
+<div class="container my-3">
+    <a href="#" class="text-center"><h3>AraQ</h3></a>
     <form th:action="@{/user/login}" method="post">
         <div th:if="${param.error}">
             <div class="alert alert-danger">
@@ -17,4 +27,5 @@
         <button type="submit" class="btn btn-primary">로그인</button>
     </form>
 </div>
+</body>
 </html>
