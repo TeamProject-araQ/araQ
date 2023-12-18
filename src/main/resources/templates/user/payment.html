@@ -1,41 +1,70 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container">
+    <h5>결제 수단을 선택해주세요.</h5>
     <div>
-        <button type="button" class="btn btn-secondary" id="payBtn">결제하기</button>
+        <button onclick="selectPg('kakaopay')">카카오페이</button>
+        <button onclick="selectPg('uplus')">토스페이먼츠</button>
+        <button onclick="selectPg('danal')">휴대폰 결제</button>
+    </div>
+    <h5>결제할 버블을 선택해주세요.</h5>
+    <div>
+        <input onclick="pay(this.value)" type="button" value="100">
+        <input onclick="pay(this.value)" type="button" value="300">
+        <input onclick="pay(this.value)" type="button" value="500">
+        <input onclick="pay(this.value)" type="button" value="1000">
     </div>
 </div>
+<input type="hidden" th:value="${user}">
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.7.js"></script>
-<script type="text/javascript">
-    // 아임포트 초기화
+<script type="text/javascript" layout:fragment="script">
+    var selectedPg = '';
+
+    function selectPg(pg) {
+        selectedPg = pg;
+    }
+
     IMP.init('imp65467420');
 
-    // 결제 함수 정의
-    function pay() {
-        console.log("결제 함수 호출됨");
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    function pay(amount) {
+        if (!selectedPg) {
+            alert('결제 수단을 선택해주세요.');
+            return;
+        }
 
         IMP.request_pay({
-            pg: 'INIBillTst',
+            pg: selectedPg,
             pay_method: 'card',
             merchant_uid: 'merchant_' + new Date().getTime(),
-            name: '주문명:결제테스트',
-            amount: 1000,
-            buyer_email: 'iamport@siot.do',
-            buyer_name: '구매자이름',
+            name: 'AraQ_Bubble 결제',
+            amount: amount,
+            buyer_email: '[[${user.email}]]',
+            buyer_name: '[[${user.username}]]',
             buyer_tel: '010-1234-5678',
             buyer_addr: '서울특별시 강남구 삼성동',
             buyer_postcode: '123-456'
         }, function (rsp) {
             if (rsp.success) {
-                // 결제 성공 시 로직
-            } else {
-                // 결제 실패 시 로직
+                fetch('/charge', {
+                    method:'POST',
+                    headers:{
+                        'Content-Type' : 'application/x-www-form-urlencoded',
+                        [csrfHeader]: csrfToken
+                    },
+                    body: 'bubble=' + amount
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
             }
         });
     }
-
-    // 결제하기 버튼에 이벤트 리스너 추가
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('payBtn').addEventListener('click', pay);
-    });
 </script>
 </html>

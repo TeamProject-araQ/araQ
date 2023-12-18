@@ -66,6 +66,8 @@ public class SiteUser {
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
+    private int bubble;
+
     private String gender;
 
 }

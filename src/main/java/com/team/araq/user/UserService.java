@@ -54,4 +54,9 @@ public class UserService {
         user.setGender(gender);
         userRepository.save(user);
     }
+
+    public void addBubbles(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() + bubble);
+        this.userRepository.save(user);
+    }
 }
