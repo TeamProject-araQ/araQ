@@ -12,7 +12,7 @@
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
 <th:block layout:fragment="content"></th:block>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div sec:authorize="isAuthenticated()" class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">내 정보</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -53,14 +53,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script type="text/javascript">
     $(function() {
-        var socket = new SockJS("/ws");
-        var stompClient = Stomp.over(socket);
+        if($("#hiddenUserName").val() != null) {
+            var socket = new SockJS("/ws");
+            var stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
+            stompClient.connect({}, function(frame) {
+                stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
 
+                });
             });
-        });
+        }
     });
 </script>
 <th:block layout:fragment="script"></th:block>
