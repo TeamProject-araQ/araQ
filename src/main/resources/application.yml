@@ -11,3 +11,11 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
+
+#iampport
+imp:
+  code: "imp65467420"
+  api:
+    key: "4323773555508561"
+    secret: "y46aKg8JTOLBqyKtcM04uAnLPeJ4PfrIEiHIP1vymIVaK91zGwQNJibao4Dw2mOxAlmvCiv37Yq1ueSc"
+
