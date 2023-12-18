@@ -21,6 +21,11 @@
                 <input type="button" value="등록" class="btn btn-outline-dark" id="regBtn">
             </form>
         </div>
+        <div th:each="comment : ${post.commentList}">
+            <div th:text="${comment.writer}"></div>
+            <div th:text="${comment.content}"></div>
+            <div th:text="${comment.createDate}"></div>
+        </div>
     </div>
 </div>
 <script layout:fragment="script">
