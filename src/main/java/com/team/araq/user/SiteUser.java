@@ -28,12 +28,10 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
-    @Column(unique = true)
     private String phoneNum;
 
     private String address;
 
-    //
     private String age;
 
     private String height;
@@ -54,7 +52,7 @@ public class SiteUser {
     private String mbti;
 
     // 성격
-    private String personality;
+    private List<String> personality;
 
     // 취미
     private String hobby;
