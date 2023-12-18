@@ -41,8 +41,18 @@ public class UserService {
         throw new RuntimeException("그런 사람 없습니다.");
     }
 
-    public List<SiteUser> getByAddress(String address) {
-        return userRepository.findByAddressLike(address + "%");
+    public List<SiteUser> getByAddress(String address, String gender) {
+        return userRepository.findByAddressLikeAndGender(address + "%", gender);
+    }
+
+    public void createTmp(String name, String age, String phoneNum, String address, String gender) {
+        SiteUser user = new SiteUser();
+        user.setNickName(name);
+        user.setAge(age);
+        user.setPhoneNum(phoneNum);
+        user.setAddress(address);
+        user.setGender(gender);
+        userRepository.save(user);
     }
 
     public void addBubbles(SiteUser user, int bubble) {

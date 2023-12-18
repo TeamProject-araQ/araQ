@@ -4,31 +4,22 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-8">
-                            <img src="/profile/default-m.jpg" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
+                    <div th:text="|총 ${#lists.size(userList)}명의 유저가 추천되었습니다.|" style="height:800px;"></div>
                 </div>
             </div>
-            <div class="carousel-item">
+            <div class="carousel-item" th:each="user : ${userList}">
                 <div class="card mb-3">
                     <div class="row g-0">
                         <div class="col-md-8">
-                            <img src="/profile/default-w.jpg" class="img-fluid rounded-start" alt="...">
+                            <img th:if="${user.gender.equals('여성')}" src="/profile/default-w.jpg"
+                                 class="img-fluid rounded-start" alt="...">
+                            <img th:if="${user.gender.equals('남성')}" src="/profile/default-m.jpg"
+                                 class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-4">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                                <h1 class="card-title" th:text="${user.nickName}"></h1>
+                                <p class="card-text" th:text="${user.age}"></p>
                             </div>
                         </div>
                     </div>
@@ -36,7 +27,7 @@
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="carousel-control-prev-icon" aria-hidden="false"></span>
             <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">

@@ -68,4 +68,6 @@ public class SiteUser {
 
     private int bubble;
 
+    private String gender;
+
 }
