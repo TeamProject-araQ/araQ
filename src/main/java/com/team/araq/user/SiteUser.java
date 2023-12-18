@@ -52,7 +52,7 @@ public class SiteUser {
     private String mbti;
 
     // 성격
-    private String personality;
+    private List<String> personality;
 
     // 취미
     private String hobby;
