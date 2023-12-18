@@ -6,15 +6,15 @@
         <textarea name="content" id="content" cols="30" rows="10" class="form-control"></textarea>
         <button class="btn btn-outline-dark my-3 w-100" id="regBtn">등록</button>
     </form>
-    <script>
-        $(function() {
-            $("#regBtn").on('click', function() {
-                if ($("#content").val() == "")
-                    alert("내용을 입력해주세요.");
-                else
-                    $("#regForm").submit();
-            });
-        });
-    </script>
 </div>
+<script layout:fragment="script">
+    $(function() {
+        $("#regBtn").on('click', function() {
+            if ($("#content").val() == "")
+                alert("내용을 입력해주세요.");
+            else
+                $("#regForm").submit();
+        });
+    });
+</script>
 </html>

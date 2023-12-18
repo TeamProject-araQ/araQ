@@ -1,5 +1,6 @@
 package com.team.araq.board.Comment;
 
+import com.team.araq.board.Post.Post;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,5 +26,8 @@ public class Comment {
 
     @ManyToOne
     private SiteUser writer;
+
+    @ManyToOne
+    private Post post;
 
 }

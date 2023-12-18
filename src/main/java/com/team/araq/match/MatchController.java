@@ -24,11 +24,11 @@ public class MatchController {
         String[] words = address.split(" ");
         List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1]);
         model.addAttribute("userList", userList);
-        return "match";
+        return "conn/match";
     }
 
     @GetMapping("/personality")
     public String personality() {
-        return "match";
+        return "conn/match";
     }
 }
