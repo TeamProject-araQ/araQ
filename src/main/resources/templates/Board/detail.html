@@ -11,7 +11,7 @@
                 </div>
                 <div th:text="${post.writer.username}"><!-- 닉네임으로 변경 --></div>
             </div>
-            <div>
+            <div th:if="${post.writer.username == user.username}">
                 <a th:href="@{|/post/modify/${post.id}|}">수정</a>
                 <span>|</span>
                 <a href="javascript:void(0)" th:data-uri="@{|/post/delete/${post.id}|}" id="deleteP">삭제</a>
@@ -32,9 +32,13 @@
             <div th:text="${comment.writer.username}"><!-- 닉네임으로 변경 --></div>
             <div th:text="${comment.content}"></div>
             <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                    th:data-bs-target="|#comment_${comment.id}|">수정</button>
-            <a href="javascript:void(0)" class="deleteC btn btn-secondary" th:data-uri="@{|/comment/delete/${comment.id}|}">삭제</a>
+            <div th:if="${comment.writer.username == user.username}">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                        th:data-bs-target="|#comment_${comment.id}|">수정
+                </button>
+                <a href="javascript:void(0)" class="deleteC btn btn-secondary"
+                   th:data-uri="@{|/comment/delete/${comment.id}|}">삭제</a>
+            </div>
             <!-- 댓글 수정 모달 -->
             <div class="modal fade" th:id="|comment_${comment.id}|" tabindex="-1" aria-labelledby="modifyCommentLabel"
                  aria-hidden="true">
