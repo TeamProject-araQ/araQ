@@ -44,4 +44,9 @@ public class UserService {
     public List<SiteUser> getByAddress(String address) {
         return userRepository.findByAddressLike(address + "%");
     }
+
+    public void addBubbles(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() + bubble);
+        this.userRepository.save(user);
+    }
 }
