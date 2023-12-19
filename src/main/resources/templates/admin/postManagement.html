@@ -1,6 +1,6 @@
 <html layout:decorate="~{admin/page}">
 <div layout:fragment="content" class="container-fluid p-5">
-    <h3>게시물 목록</h3>
+    <h3 class="border-bottom pb-2">게시물 목록</h3>
     <div class="d-flex justify-content-end my-3">
         <div class="input-group" style="width:30%;">
             <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="내용, 작성자 검색">
@@ -26,14 +26,14 @@
             </svg>
         </button>
     </div>
-    <table class="table table-hover text-center" style="width:100%;">
+    <table class="table table-hover text-center" style="width:100%; table-layout: fixed;">
         <thead style="background:#5f566d; color:white;">
         <tr>
-            <th>선택</th>
-            <th>번호</th>
+            <th style="width: 5%;">선택</th>
+            <th style="width: 5%;">번호</th>
             <th style="width: 50%;">내용</th>
-            <th>작성자</th>
-            <th>작성일</th>
+            <th style="width: 20%;">작성자</th>
+            <th style="width: 20%;">작성일</th>
         </tr>
         </thead>
         <tbody>
@@ -41,7 +41,9 @@
             <td><input class="check form-check-input" type="checkbox" th:value="${post.id}"></td>
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <td>
-                <a class="truncate-link" th:href="@{|/post/detail/${post.id}|}" th:text="${post.content}"></a>
+                <div class="text-truncate text-dark" style="max-width: 100%; overflow: hidden; white-space: nowrap;">
+                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.content}"></a>
+                </div>
             </td>
             <td th:text="${post.writer.nickName}"></td>
             <td th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></td>
