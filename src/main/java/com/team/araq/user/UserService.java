@@ -56,6 +56,8 @@ public class UserService {
         user.setHobby(userCreateForm.getHobby());
         user.setImage(userCreateForm.getImage());
         user.setCreateDate(LocalDateTime.now());
+        user.setGender(userCreateForm.getGender());
+        user.setIntroduce(userCreateForm.getIntroduce());
         userRepository.save(user);
         return user;
     }

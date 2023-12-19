@@ -93,6 +93,8 @@
             var socket = new SockJS("/ws");
             var stompClient = Stomp.over(socket);
 
+            console.log
+
             stompClient.connect({}, function(frame) {
                 stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
                     var data = JSON.parse(message.body);
@@ -104,14 +106,44 @@
                         $("#chatRequestModal .introduce").text(data.introduce);
                         $("#chatRequestModal").modal("show");
                     }
+
+                    if (data.type == "refuse")
+                        alert(data.content);
+
+                    if (data.type == "acceptChat") {
+                        alert(data.nickname + "님이 수락했습니다. 채팅방으로 이동합니다.");
+                        window.location.href = "/chat/join/" + data.content;
+                    }
                 });
             });
         }
 
         $("#chatRequestModal .refuse").on('click', function() {
-            stompClient.send("/app/send/alert", {}, JSON.stringify({
-                content:
+            stompClient.send("/app/alert", {}, JSON.stringify({
+                type: "refuse",
+                target: $("#chatRequestModal .nickName").text()
             }));
+        });
+
+        $("#chatRequestModal .accept").on('click', function() {
+            var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            $.ajax({
+                url: "/chat/create",
+                type: "POST",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType:"text/plain",
+                data: $("#chatRequestModal .nickName").text(),
+                success: function(data) {
+                    window.location.href = "/chat/join/" + data;
+                },
+                error: function(err) {
+                    alert("채팅방 생성에 실패했습니다.");
+                }
+            });
         });
     });
 </script>
