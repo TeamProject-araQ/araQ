@@ -2,6 +2,7 @@ package com.team.araq.user;
 
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
+import com.team.araq.review.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -74,5 +75,8 @@ public class SiteUser {
     private String introduce;
 
     private LocalDateTime createDate;
+
+    @OneToOne(mappedBy = "writer", cascade = CascadeType.REMOVE)
+    private Review review;
 
 }
