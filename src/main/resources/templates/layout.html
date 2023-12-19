@@ -133,7 +133,7 @@
                 contentType:"text/plain",
                 data: $("#chatRequestModal .nickName").text(),
                 success: function(data) {
-                    console.log(data);
+                    window.location.href = "/chat/join" + data;
                 },
                 error: function(err) {
                     alert("실패");
