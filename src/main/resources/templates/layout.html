@@ -109,6 +109,11 @@
 
                     if (data.type == "refuse")
                         alert(data.content);
+
+                    if (data.type == "acceptChat") {
+                        alert(data.nickname + "님이 수락했습니다. 채팅방으로 이동합니다.");
+                        window.location.href = "/chat/join/" + data.content;
+                    }
                 });
             });
         }
@@ -133,10 +138,10 @@
                 contentType:"text/plain",
                 data: $("#chatRequestModal .nickName").text(),
                 success: function(data) {
-                    window.location.href = "/chat/join" + data;
+                    window.location.href = "/chat/join/" + data;
                 },
                 error: function(err) {
-                    alert("실패");
+                    alert("채팅방 생성에 실패했습니다.");
                 }
             });
         });
