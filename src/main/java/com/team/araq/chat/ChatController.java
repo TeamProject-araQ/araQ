@@ -23,7 +23,7 @@ public class ChatController {
 
     @MessageMapping("/send")
     public void sendMessage(ChatDto chatDto) {
-        simpMessagingTemplate.convertAndSend("/topic/chat", chatDto);
+        simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
     }
 
     @MessageMapping("/alert")
