@@ -28,7 +28,7 @@ public class PostService {
                 query.distinct(true);
                 Join<Post, SiteUser> u1 = post.join("writer", JoinType.LEFT);
                 return criteriaBuilder.or(criteriaBuilder.like(post.get("content"), "%" + kw + "%"),
-                        criteriaBuilder.like(u1.get("nickname"), "%" + kw + "%"));
+                        criteriaBuilder.like(u1.get("nickName"), "%" + kw + "%"));
             }
         };
     }
@@ -40,7 +40,7 @@ public class PostService {
     public Page<Post> getList(int page, String kw) {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, 8, Sort.by(sort));
         Specification<Post> specification = search(kw);
         return this.postRepository.findAll(specification, pageable);
     }

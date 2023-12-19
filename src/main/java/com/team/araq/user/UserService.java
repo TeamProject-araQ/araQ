@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +55,7 @@ public class UserService {
         user.setPersonality(userCreateForm.getPersonality());
         user.setHobby(userCreateForm.getHobby());
         user.setImage(userCreateForm.getImage());
+        user.setCreateDate(LocalDateTime.now());
         userRepository.save(user);
         return user;
     }
@@ -96,5 +98,9 @@ public class UserService {
         user.setUsername("admin");
         user.setPassword(passwordEncoder.encode("admin"));
         this.userRepository.save(user);
+    }
+
+    public void deleteUser(SiteUser user) {
+        this.userRepository.delete(user);
     }
 }
