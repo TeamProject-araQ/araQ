@@ -21,7 +21,7 @@ class AraqApplicationTests {
 
     @Test
     void contextLoads() throws IOException {
-        FileInputStream file = new FileInputStream(new File("example.xlsx"));
+        FileInputStream file = new FileInputStream(new File("dummy.xlsx"));
 
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
@@ -39,5 +39,7 @@ class AraqApplicationTests {
 
             userRepository.save(user);
         }
+
+        file.close();
     }
 }
