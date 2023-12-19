@@ -16,7 +16,19 @@ public class Review {
     private Integer id;
 
     @Column(columnDefinition = "TEXT")
-    private String content;
+    private String answer1;
+
+    @Column(columnDefinition = "TEXT")
+    private String answer2;
+
+    @Column(columnDefinition = "TEXT")
+    private String answer3;
+
+    @Column(columnDefinition = "TEXT")
+    private String answer4;
+
+    @Column(columnDefinition = "TEXT")
+    private String answer5;
 
     @OneToOne
     private SiteUser writer;
