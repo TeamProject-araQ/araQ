@@ -31,6 +31,8 @@ public class UserService {
         user.setPersonality(userCreateForm.getPersonality());
         user.setHobby(userCreateForm.getHobby());
         user.setImage(userCreateForm.getImage());
+        user.setGender(userCreateForm.getGender());
+        user.setIntroduce(userCreateForm.getIntroduce());
         userRepository.save(user);
         return user;
     }

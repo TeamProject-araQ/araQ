@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
 
         <div id="step1">
@@ -228,6 +228,12 @@
                 <label for="hobby" class="form-label">취미</label>
                 <input type="text" th:field="*{hobby}" class="form-control">
             </div>
+
+            <div class="mb-3">
+                <label for="introduce" class="form-label">자기소개</label>
+                <textarea th:field="*{introduce}" class="form-control"></textarea>
+            </div>
+
             <button type="button" onclick="prevStep('step3', 'step2')">이전</button>
             <button type="button" onclick="updateMBTI(); nextStep('step3', 'step4')">다음</button>
         </div>
