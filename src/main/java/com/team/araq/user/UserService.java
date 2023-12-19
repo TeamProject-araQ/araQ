@@ -90,4 +90,11 @@ public class UserService {
         Specification<SiteUser> specification = search(kw);
         return this.userRepository.findAll(specification, pageable);
     }
+
+    public void createAdmin() {
+        SiteUser user = new SiteUser();
+        user.setUsername("admin");
+        user.setPassword(passwordEncoder.encode("admin"));
+        this.userRepository.save(user);
+    }
 }

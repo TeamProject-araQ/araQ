@@ -1,5 +1,7 @@
 package com.team.araq.user.admin;
 
+import com.team.araq.board.post.Post;
+import com.team.araq.board.post.PostService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ public class AdminController {
 
     private final UserService userService;
 
+    private final PostService postService;
+
     @GetMapping("")
     public String page() {
         return "admin/page";
@@ -28,5 +32,13 @@ public class AdminController {
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
         return "admin/userManagement";
+    }
+
+    @GetMapping("/post")
+    public String managePost(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Post> paging = this.postService.getList(page, kw);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "admin/postManagement";
     }
 }
