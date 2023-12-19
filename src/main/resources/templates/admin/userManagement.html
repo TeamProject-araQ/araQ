@@ -1,0 +1,36 @@
+<html layout:decorate="~{admin/page}">
+<div layout:fragment="content">
+    <h3>회원 목록</h3>
+    <div class="input-group" style="width:30%;">
+        <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="유저ID, 닉네임 검색">
+        <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                 viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+            </svg>
+        </button>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>ID</th>
+            <th>닉네임</th>
+            <th>성별</th>
+            <th>나이</th>
+            <th>가입일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user, loop : ${paging}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.nickname}"></td>
+            <td th:text="${user.gender}"></td>
+            <td th:text="${user.age}"></td>
+            <td th:text="${#temporals.format(user.createDate, 'yyyy-MM-dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

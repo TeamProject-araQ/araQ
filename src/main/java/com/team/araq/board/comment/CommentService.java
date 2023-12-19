@@ -1,6 +1,6 @@
-package com.team.araq.board.Comment;
+package com.team.araq.board.comment;
 
-import com.team.araq.board.Post.Post;
+import com.team.araq.board.post.Post;
 import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

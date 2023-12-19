@@ -1,8 +1,7 @@
-package com.team.araq.board.Post;
+package com.team.araq.board.post;
 
 import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

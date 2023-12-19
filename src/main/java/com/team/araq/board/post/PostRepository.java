@@ -1,4 +1,4 @@
-package com.team.araq.board.Post;
+package com.team.araq.board.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
