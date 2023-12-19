@@ -31,4 +31,9 @@ public class RoomService {
     public List<Room> getList(SiteUser user) {
         return roomRepo.findByParticipant1OrParticipant2(user, user);
     }
+
+    public boolean check(Room room, SiteUser user) {
+        return user.getUsername().equals(room.getParticipant1().getUsername()) ||
+                user.getUsername().equals(room.getParticipant2().getUsername());
+    }
 }
