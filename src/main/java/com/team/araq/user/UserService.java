@@ -38,7 +38,7 @@ public class UserService {
         user.setHobby(userCreateForm.getHobby());
         user.setGender(userCreateForm.getGender());
         user.setIntroduce(userCreateForm.getIntroduce());
-//        user.setImage(userCreateForm.getImage());
+
         File uploadDirectory = new File(uploadPath);
         // 파일 경로 폴더가 없을 때 폴더 생성
         if (!uploadDirectory.exists()) {

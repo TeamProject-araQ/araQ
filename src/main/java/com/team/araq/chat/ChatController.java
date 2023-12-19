@@ -41,8 +41,11 @@ public class ChatController {
         SiteUser target = userService.getByUsername(targetName);
         String uuid = UUID.randomUUID().toString();
 
-        // roomService.create(uuid, user, target);
+        roomService.create(uuid, user, target);
 
+        MessageDto messageDto = new MessageDto("acceptChat", user.getNickName(), null, null,
+                null, uuid, null);
+        simpMessagingTemplate.convertAndSend("/topic/all/" + targetName, messageDto);
         return uuid;
     }
 
