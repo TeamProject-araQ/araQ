@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
 
         <div id="step1">
