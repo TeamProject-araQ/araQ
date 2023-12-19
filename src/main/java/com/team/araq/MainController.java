@@ -1,7 +1,7 @@
 package com.team.araq;
 
-import com.team.araq.board.Post.Post;
-import com.team.araq.board.Post.PostService;
+import com.team.araq.board.post.Post;
+import com.team.araq.board.post.PostService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;

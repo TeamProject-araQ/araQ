@@ -1,11 +1,12 @@
 package com.team.araq.user;
 
-import com.team.araq.board.Comment.Comment;
-import com.team.araq.board.Post.Post;
+import com.team.araq.board.comment.Comment;
+import com.team.araq.board.post.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -71,5 +72,7 @@ public class SiteUser {
     private String gender;
 
     private String introduce;
+
+    private LocalDateTime createDate;
 
 }

@@ -1,4 +1,4 @@
-package com.team.araq.board.Comment;
+package com.team.araq.board.comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

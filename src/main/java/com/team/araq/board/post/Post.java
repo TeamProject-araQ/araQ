@@ -1,11 +1,10 @@
-package com.team.araq.board.Post;
+package com.team.araq.board.post;
 
-import com.team.araq.board.Comment.Comment;
+import com.team.araq.board.comment.Comment;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
