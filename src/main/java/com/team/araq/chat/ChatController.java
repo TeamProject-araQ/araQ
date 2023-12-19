@@ -55,4 +55,15 @@ public class ChatController {
         model.addAttribute("roomList", roomList);
         return "conn/room";
     }
+
+    @PostMapping("/request")
+    @ResponseBody
+    public String request(Model model, Principal principal, @RequestBody String username) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
+                user.getIntroduce(), user.getImage(),
+                username + "님이 채팅을 신청했습니다.");
+        simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
+        return null;
+    }
 }

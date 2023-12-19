@@ -12,7 +12,8 @@
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
 <th:block layout:fragment="content"></th:block>
-<div sec:authorize="isAuthenticated()" class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+<div sec:authorize="isAuthenticated()" class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+     aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasRightLabel">내 정보</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -45,6 +46,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="chatRequestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="chatRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="chatRequestModalLabel"></h1>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            <img th:src="@{/profile/default-m.jpg}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <h5 class="nickName card-title"></h5>
+                                    <small class="userAge ms-3"></small>
+                                </div>
+                                <p class="introduce card-text"></p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="refuse btn btn-secondary" data-bs-dismiss="modal">거절</button>
+                <button type="button" class="accept btn btn-primary">수락</button>
+            </div>
+        </div>
+    </div>
+</div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
 <script type="text/javascript" th:src="@{/bootstrap.bundle.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -61,10 +95,24 @@
 
             stompClient.connect({}, function(frame) {
                 stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
+                    var data = JSON.parse(message.body);
 
+                    if (data.type == "chatRequest") {
+                        $("#chatRequestModal .modal-title").text(data.content);
+                        $("#chatRequestModal .nickName").text(data.nickname);
+                        $("#chatRequestModal .userAge").text(data.age);
+                        $("#chatRequestModal .introduce").text(data.introduce);
+                        $("#chatRequestModal").modal("show");
+                    }
                 });
             });
         }
+
+        $("#chatRequestModal .refuse").on('click', function() {
+            stompClient.send("/app/send/alert", {}, JSON.stringify({
+                content:
+            }));
+        });
     });
 </script>
 <th:block layout:fragment="script"></th:block>

@@ -70,4 +70,6 @@ public class SiteUser {
 
     private String gender;
 
+    private String introduce;
+
 }
