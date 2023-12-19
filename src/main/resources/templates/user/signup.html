@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post">
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
 
         <div id="step1">
@@ -65,6 +65,20 @@
                 <label for="age" class="form-label">나이</label>
                 <input type="text" th:field="*{age}" class="form-control">
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">성별</label>
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    <input type="radio" th:field="*{gender}" class="btn-check" name="genderOption"
+                           id="genderOption1" autocomplete="off" value="남성">
+                    <label class="btn btn-secondary" for="genderOption1">남성</label>
+
+                    <input type="radio" th:field="*{gender}" class="btn-check" name="genderOption"
+                           id="genderOption2" autocomplete="off" value="여성">
+                    <label class="btn btn-secondary" for="genderOption2">여성</label>
+                </div>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label">종교</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -173,10 +187,7 @@
                 </div>
             </div>
 
-<!--            <div class="mb-3">-->
-<!--                <label for="personality" class="form-label">성격</label>-->
-<!--                <input type="text" th:field="*{personalities}" class="form-control">-->
-<!--            </div>-->
+
             <div class="mb-3">
                 <label class="form-label">성격</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -224,7 +235,7 @@
         <div id="step4" style="display:none;">
             <div class="mb-3">
                 <label for="image" class="form-label">사진 업로드</label>
-                <input type="file" id="image" name="image" accept="image/**" class="form-control">
+                <input type="file" id="imageFiles" name="image" accept="image/**" class="form-control">
             </div>
             <button type="button" onclick="prevStep('step4', 'step3')">이전</button>
             <button type="submit" class="btn btn-primary">회원가입</button>

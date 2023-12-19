@@ -53,4 +53,6 @@ public class UserCreateForm {
 
     // 사진
     private String image;
+
+    private String gender;
 }
