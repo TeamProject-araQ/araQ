@@ -36,4 +36,8 @@ public class RoomService {
         return user.getUsername().equals(room.getParticipant1().getUsername()) ||
                 user.getUsername().equals(room.getParticipant2().getUsername());
     }
+
+    public void delete(Room room) {
+        roomRepo.delete(room);
+    }
 }

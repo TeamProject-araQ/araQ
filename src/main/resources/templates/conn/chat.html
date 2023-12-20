@@ -1,7 +1,13 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <div class="card">
-        <div style="height:60vh; overflow-y:scroll;" id="chatBoard"></div>
+        <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
+            <div th:each="chat : ${chatList}">
+                <span th:text="${chat.writer.nickName}"></span>
+                <span>: </span>
+                <span th:text="${chat.content}"></span>
+            </div>
+        </div>
         <button class="btn btn-secondary btn-sm p-0 m-auto" type="button" data-bs-toggle="collapse"
                 data-bs-target="#chatMoreFunction"
                 aria-expanded="false" aria-controls="collapseExample" style="width:50px">
@@ -37,7 +43,7 @@
         stompClient.connect({}, function(frame) {
             stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
                 var data = JSON.parse(message.body);
-                $("#chatBoard").append("<p>" + data.writer + ": " + data.content + "</p>");
+                $("#chatBoard").append("<div>" + data.writer + " : " + data.content + "</div>");
 
                 var element = document.getElementById("chatBoard");
                 element.scrollTop = element.scrollHeight;

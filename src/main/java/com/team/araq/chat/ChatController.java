@@ -20,11 +20,18 @@ public class ChatController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final UserService userService;
     private final RoomService roomService;
+    private final ChatService chatService;
 
     @MessageMapping("/send")
     public void sendMessage(ChatDto chatDto) {
         SiteUser user = userService.getByUsername(chatDto.getWriter());
         SiteUser target = userService.getByUsername(chatDto.getTarget());
+        Room room = roomService.get(chatDto.getCode());
+
+        chatService.create(room, user, target, chatDto.getContent());
+
+        chatDto.setWriter(user.getNickName());
+        chatDto.setTarget(target.getNickName());
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
     }
 
@@ -63,6 +70,7 @@ public class ChatController {
         else model.addAttribute("target", room.getParticipant1());
         model.addAttribute("user", user);
         model.addAttribute("room", room);
+        model.addAttribute("chatList", room.getChats());
         return "conn/chat";
     }
 
@@ -82,6 +90,13 @@ public class ChatController {
         MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
                 user.getIntroduce(), user.getImage(), username + "님이 채팅을 신청했습니다.", username);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
+        return null;
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestBody String code) {
+        roomService.delete(roomService.get(code));
         return null;
     }
 }
