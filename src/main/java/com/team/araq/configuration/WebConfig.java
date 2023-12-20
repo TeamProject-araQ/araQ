@@ -23,5 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(customUserInterceptor());
     }
+
+    private String userImagePath= "C:/uploads/user";
 }
 

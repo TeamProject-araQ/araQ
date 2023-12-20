@@ -1,0 +1,82 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="border-bottom pb-2">후기 작성</h3>
+    <form method="post" th:object="${reviewDTO}" id="reviewForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <h5>별점 선택</h5>
+        <div class="d-flex justify-content-center mb-3">
+            <div class="rate">
+                <input type="radio" id="rating10" name="rating" value="10">
+                <label for="rating10" title="5점"></label>
+                <input type="radio" id="rating9" name="rating" value="9">
+                <label class="half" for="rating9" title="4.5점"></label>
+                <input type="radio" id="rating8" name="rating" value="8">
+                <label for="rating8" title="4점"></label>
+                <input type="radio" id="rating7" name="rating" value="7">
+                <label class="half" for="rating7" title="3.5점"></label>
+                <input type="radio" id="rating6" name="rating" value="6">
+                <label for="rating6" title="3점"></label>
+                <input type="radio" id="rating5" name="rating" value="5">
+                <label class="half" for="rating5" title="2.5점"></label>
+                <input type="radio" id="rating4" name="rating" value="4">
+                <label for="rating4" title="2점"></label>
+                <input type="radio" id="rating3" name="rating" value="3">
+                <label class="half" for="rating3" title="1.5점"></label>
+                <input type="radio" id="rating2" name="rating" value="2">
+                <label for="rating2" title="1점"></label>
+                <input type="radio" id="rating1" name="rating" value="1">
+                <label class="half" for="rating1" title="0.5점"></label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <h5>Q1. 좋은 인연을 만나기 위해 AraQ를 선택하신 이유가 무엇인가요?</h5>
+            <textarea id="answer1" th:field="*{answer1}" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <h5>Q2. AraQ에서 찾고자 한 이성은 어떤 분이었나요?</h5>
+            <textarea id="answer2" th:field="*{answer2}" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <h5>Q3. AraQ를 이용하며 가장 좋았던 점은 무엇인가요?</h5>
+            <textarea id="answer3"th:field="*{answer3}" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <h5>Q4. AraQ를 이용하며 아쉬웠던 점은 무엇인가요?</h5>
+            <textarea id="answer4" th:field="*{answer4}" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+            <h5>Q5. 마지막으로 하고 싶은 말을 자유롭게 남겨주세요.</h5>
+            <textarea id="answer5" th:field="*{answer5}" rows="5" class="form-control"></textarea>
+        </div>
+        <input type="hidden" th:field="*{star}" id="star">
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-secondary" id="regBtn">등록</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    $(function () {
+        $('.rate input').on('change', function() {
+            var selectedRating = $(this).val()/2;
+            $('#star').val(selectedRating);
+        });
+
+        $('#regBtn').on('click', function() {
+            if($('#answer1').val() == '')
+                alert("첫번째 질문에 대한 답변을 입력해주세요.");
+            else if($('#answer2').val() == '')
+                alert("두번째 질문에 대한 답변을 입력해주세요.");
+            else if($('#answer3').val() == '')
+                alert("세번째 질문에 대한 답변을 입력해주세요.");
+            else if($('#answer4').val() == '')
+                alert("네번째 질문에 대한 답변을 입력해주세요.");
+            else if($('#answer5').val() == '')
+                alert("다섯번째 질문에 대한 답변을 입력해주세요.");
+            else if($('#star').val() == '')
+                alert("별점을 선택해주세요.");
+            else
+                $('#reviewForm').submit();
+        });
+    });
+</script>
+</html>
