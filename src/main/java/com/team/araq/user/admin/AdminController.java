@@ -2,6 +2,9 @@ package com.team.araq.user.admin;
 
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.review.Review;
+
+import com.team.araq.review.ReviewService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ public class AdminController {
     private final UserService userService;
 
     private final PostService postService;
+
+    private final ReviewService reviewService;
 
     @GetMapping("")
     public String page() {
@@ -43,6 +47,14 @@ public class AdminController {
         return "admin/post";
     }
 
+    @GetMapping("/review")
+    public String manageReview(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Review> paging = this.reviewService.getAll(page, kw);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "admin/review";
+    }
+
     @PostMapping("/user/delete")
     @ResponseBody
     public String deleteUser(@RequestBody List<String> usernames) {
@@ -61,5 +73,15 @@ public class AdminController {
             this.postService.deletePost(post);
         }
         return "게시물이 삭제되었습니다.";
+    }
+
+    @PostMapping("/review/delete")
+    @ResponseBody
+    public String deleteReview(@RequestBody List<String> reviews) {
+        for (String reviewId : reviews) {
+            Review review = this.reviewService.getReview(Integer.parseInt(reviewId));
+            this.reviewService.deleteReview(review);
+        }
+        return "리뷰가 삭제되었습니다.";
     }
 }

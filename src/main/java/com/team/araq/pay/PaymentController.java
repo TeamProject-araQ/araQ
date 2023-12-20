@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final UserService userService;
+
+    private final PaymentService paymentService;
 
     @GetMapping("/payment")
     public String pay() {
@@ -21,10 +24,10 @@ public class PaymentController {
 
     @PostMapping("/charge")
     @ResponseBody
-    public String charge(@RequestParam("bubble") int bubble, Principal principal) {
-        SiteUser user = this.userService.getByUsername(principal.getName());
-        this.userService.addBubbles(user, bubble);
-        return bubble + "버블이 충전되었습니다.";
+    public String charge(@RequestBody PaymentDTO paymentDTO) {
+        this.paymentService.savePayment(paymentDTO);
+        this.userService.addBubbles(this.userService.getByUsername(paymentDTO.getUsername()), paymentDTO.getAmount());
+        return paymentDTO.getAmount() + " 버블이 충전되었습니다.";
     }
 
 }
