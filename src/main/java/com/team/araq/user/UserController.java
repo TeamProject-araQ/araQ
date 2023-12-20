@@ -3,7 +3,9 @@ package com.team.araq.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm){
@@ -48,5 +54,34 @@ public class UserController {
     @GetMapping("/login")
     public String login() {
         return "user/login";
+    }
+
+    @GetMapping("/update")
+    public String modify(){
+        return "user/update";
+    }
+
+    @PostMapping("/checkCurrentPw")
+    public String checkCurrentPassword(@RequestParam("currentPassword") String currentPassword, Principal principal, Model model) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        boolean checkedPw = userService.checkPassword(user, currentPassword);
+        if (checkedPw) {
+            return "user/changePw";
+        } else {
+            model.addAttribute("error", "현재 비밀번호가 올바르지 않습니다.");
+            return "user/updatePw";
+        }
+    }
+
+    @PostMapping("/changePw")
+    public String changePw(@RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw, Principal principal) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.updatePw(user, newPw, confirmPw);
+        return "redirect:/user/update";
+    }
+
+    @GetMapping("/updatePw")
+    public String checkPw(){
+        return "user/updatePw";
     }
 }
