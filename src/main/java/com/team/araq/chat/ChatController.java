@@ -20,9 +20,18 @@ public class ChatController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final UserService userService;
     private final RoomService roomService;
+    private final ChatService chatService;
 
     @MessageMapping("/send")
     public void sendMessage(ChatDto chatDto) {
+        SiteUser user = userService.getByUsername(chatDto.getWriter());
+        SiteUser target = userService.getByUsername(chatDto.getTarget());
+        Room room = roomService.get(chatDto.getCode());
+
+        chatService.create(room, user, target, chatDto.getContent());
+
+        chatDto.setWriter(user.getNickName());
+        chatDto.setTarget(target.getNickName());
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
     }
 
@@ -56,8 +65,12 @@ public class ChatController {
 
         if (!roomService.check(room, user)) throw new RuntimeException("권한이 없습니다.");
 
+        if (user.getUsername().equals(room.getParticipant1().getUsername()))
+            model.addAttribute("target", room.getParticipant2());
+        else model.addAttribute("target", room.getParticipant1());
         model.addAttribute("user", user);
         model.addAttribute("room", room);
+        model.addAttribute("chatList", room.getChats());
         return "conn/chat";
     }
 
@@ -72,11 +85,18 @@ public class ChatController {
 
     @PostMapping("/request")
     @ResponseBody
-    public String request(Model model, Principal principal, @RequestBody String username) {
+    public String request(Principal principal, @RequestBody String username) {
         SiteUser user = userService.getByUsername(principal.getName());
         MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
                 user.getIntroduce(), user.getImage(), username + "님이 채팅을 신청했습니다.", username);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
+        return null;
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestBody String code) {
+        roomService.delete(roomService.get(code));
         return null;
     }
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -14,8 +16,11 @@ public class Chat {
     private Long id;
     @ManyToOne
     private Room room;
-    @OneToOne
+    @ManyToOne
     private SiteUser writer;
-    @OneToOne
-    private SiteUser receiver;
+    @ManyToOne
+    private SiteUser target;
+    @Column(columnDefinition = "TEXT")
+    private String content;
+    private LocalDateTime createDate;
 }

@@ -1,20 +1,57 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <ul>
-        <li th:each="room : ${roomList}">
-            <a href="javascript:void(0)" th:data-value="${room.code}" class="joinRoom"></a>
-        </li>
-    </ul>
-    <form th:action="@{/join}" id="roomJoinForm">
-        <input type="hidden" name="code">
-    </form>
+    <table class="table">
+        <thead class="table-secondary">
+        <tr>
+            <th style="width:70%">채팅방이름</th>
+            <th>생성시간</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="room : ${roomList}">
+            <td>
+                <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
+                   th:text="|${room.participant2.nickName}님과 채팅|"
+                   th:if="${room.participant1.username.equals(user.username)}"></a>
+                <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
+                   th:text="|${room.participant1.nickName}님과 채팅|"
+                   th:if="${room.participant2.username.equals(user.username)}"></a>
+            </td>
+            <td th:text="${#temporals.format(room.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <button class="roomDeleteBtn btn btn-danger btn-sm" th:data-value="${room.code}" style="width:50px;">삭제</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <script layout:fragment="script">
-$(function() {
-    $(".joinRoom").on('click', function(self) {
-        $("#roomJoinForm > input").val(self.dataset.value);
-        $("#roomJoinForm").submit();
+    $(function() {
+        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        $(".roomDeleteBtn").on('click', function() {
+            if (confirm("채팅방을 삭제하시겠습니까?")) {
+                var code = $(this).data("value");
+                $.ajax({
+                    url: "/chat/delete",
+                    type: "post",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType:"text/plain",
+                    data: code,
+                    success: function() {
+                        alert("삭제가 완료되었습니다.");
+                        window.location.reload();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+            }
+        });
     });
-});
 </script>
 </html>

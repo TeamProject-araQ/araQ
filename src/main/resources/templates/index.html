@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container">
+<div layout:fragment="content" class="container my-3">
     <!-- 옵션 바 -->
     <div class="d-flex justify-content-around my-3 text-center">
         <ul class="menu">
@@ -28,7 +28,7 @@
                 <li><a href="#">공지사항</a></li>
                 <li><a href="#">자주 묻는 질문</a></li>
                 <li><a href="#">나문희</a></li>
-                <li><a href="#">리뷰 작성</a></li>
+                <li><a th:href="@{/review/list}">회원 후기</a></li>
             </ul>
         </ul>
     </div>
