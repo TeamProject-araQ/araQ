@@ -19,4 +19,6 @@ public class PaymentDTO {
     private String method;
 
     private String username;
+
+    private String card;
 }

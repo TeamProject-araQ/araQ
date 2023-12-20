@@ -29,4 +29,6 @@ public class Payment {
 
     private String status;
 
+    private String card;
+
 }

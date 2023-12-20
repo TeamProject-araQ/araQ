@@ -2,6 +2,8 @@ package com.team.araq.user.admin;
 
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.pay.Payment;
+import com.team.araq.pay.PaymentService;
 import com.team.araq.review.Review;
 
 import com.team.araq.review.ReviewService;
@@ -25,6 +27,8 @@ public class AdminController {
     private final PostService postService;
 
     private final ReviewService reviewService;
+
+    private final PaymentService paymentService;
 
     @GetMapping("")
     public String page() {
@@ -53,6 +57,14 @@ public class AdminController {
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
         return "admin/review";
+    }
+
+    @GetMapping("/payment")
+    public String managePayment(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Payment> paging = this.paymentService.getList(page, kw);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "admin/payment";
     }
 
     @PostMapping("/user/delete")
