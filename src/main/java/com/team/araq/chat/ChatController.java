@@ -32,7 +32,15 @@ public class ChatController {
 
         chatDto.setWriter(user.getNickName());
         chatDto.setTarget(target.getNickName());
+        MessageDto messageDto = new MessageDto();
+        messageDto.setType("sendChat");
+        messageDto.setNickname(user.getNickName());
+        messageDto.setContent(chatDto.getContent());
+        messageDto.setImage(user.getImage());
+        messageDto.setTarget(chatDto.getCode());
+
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
+        simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
     }
 
     @MessageMapping("/alert")

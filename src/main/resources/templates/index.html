@@ -50,5 +50,11 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        <h3 class="card-header">현재 접속자</h3>
+        <div class="card-body">
+            <a href="#" th:each="online : ${onlineUsers}" th:text="${online.nickName}"></a>
+        </div>
+    </div>
 </div>
 </html>
