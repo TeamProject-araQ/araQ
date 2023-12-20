@@ -40,14 +40,20 @@
         <h1 class="border border-dark p-3">추천된 사람 3</h1>
     </div>
     <h3># AraQ Talk</h3>
-    <div class="my-3 border border-dark p-3">
-        <div class="d-flex justify-content-end">
-            <a th:href="@{/post/create}" class="btn btn-outline-dark">톡 작성하기</a>
-        </div>
-        <div th:each="post : ${postList}">
-            <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
-                <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
+    <div id="postsContainerWrapper" style="position: relative;">
+        <div class="my-3 border border-dark p-3" id="talkContainer" style="height:800px; overflow:hidden;">
+            <div class="d-flex justify-content-end">
+                <a th:href="@{/post/create}" class="btn btn-outline-dark">톡 작성하기</a>
             </div>
+            <div th:each="post : ${postList}">
+                <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
+                    <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
+                </div>
+            </div>
+        </div>
+        <div id="scrollButtons" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%);">
+            <button onclick="scrollUp()">▲</button>
+            <button onclick="scrollDown()">▼</button>
         </div>
     </div>
     <div class="card" id="onlineUsers">
@@ -65,7 +71,17 @@
         </div>
     </div>
 </div>
-<script layout:fragment="script">
+<script type="text/javascript" layout:fragment="script">
+    function scrollUp() {
+        var container = document.getElementById('talkContainer');
+        container.scrollBy({ top: -200, behavior: 'smooth' });
+    }
+
+    function scrollDown() {
+        var container = document.getElementById('talkContainer');
+        container.scrollBy({ top: 200, behavior: 'smooth' });
+    }
+
     $(function() {
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));

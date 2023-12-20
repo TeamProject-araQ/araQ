@@ -1,5 +1,131 @@
 <html layout:decorate="~{admin/page}">
 <div layout:fragment="content" class="container-fluid p-5">
+    <h3 class="border-bottom pb-2">후기 목록</h3>
+    <div class="d-flex justify-content-end my-3">
+        <div class="input-group" style="width:30%;">
+            <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="결제 번호, 회원 검색">
+            <button class="btn btn-light" type="button" id="searchBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                     viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check text-dark">
+            <input class="form-check-input" type="checkbox" id="checkAll">
+            <label class="form-check-label" for="checkAll">
+                전체 선택
+            </label>
+        </div>
+        <button type="button" class="btn btn-sm btn-light" id="cancelBtn">결제 취소
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                 viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+            </svg>
+        </button>
+    </div>
+    <table class="table table-hover text-center">
+        <thead style="background:#5f566d; color:white;">
+        <tr>
+            <th>선택</th>
+            <th>주문 번호</th>
+            <th>주문자</th>
+            <th>결제 금액</th>
+            <th>결제 수단</th>
+            <th>카드사</th>
+            <th>결제 일시</th>
+            <th>결제 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="payment, loop : ${paging}">
+            <td><input class="check form-check-input" type="checkbox" th:value="${payment.id}"></td>
+            <td th:text="${payment.orderNum}"></td>
+            <td th:text="${payment.user.nickName}"></td>
+            <td th:text="${payment.amount}"></td>
+            <td th:text="${payment.method}"></td>
+            <td th:text="${payment.card}"></td>
+            <td th:text="${#temporals.format(payment.date, 'yyyy-MM-dd')}"></td>
+            <td th:text="${payment.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+        <form th:action="@{/admin/user}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+            <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script type="text/javascript" layout:fragment="script">
+        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+        $(function() {
+            $(".page-link").on('click', function() {
+                $("#page").val(this.dataset.page);
+                $("#searchForm").submit();
+            });
+
+            $("#searchBtn").on('click', function() {
+                $("#kw").val($("#searchKw").val());
+                $("#page").val("0");
+                $("#searchForm").submit();
+            });
+
+            $("#checkAll").on('click', function() {
+                $('.check').prop('checked', this.checked);
+            });
+
+            $("#cancelBtn").on('click', function() {
+                var checkedValues = $(".check:checked").map(function() {
+                    return this.value;
+                }).get();
+
+                if (checkedValues.length === 0) {
+                    alert('선택된 결제가 없습니다.');
+                    return;
+                }
+                if (confirm('결제를 취소하시겠습니까?')) {
+                    $.ajax({
+                        url: '/path-to-your-cancel-api',
+                        type: 'POST',
+                        data: JSON.stringify({ 'imp_uids': checkedValues }),
+                        contentType: 'application/json',
+                        headers: {
+                            [csrfHeader] : csrfToken
+                        },
+                        success: function(response) {
+                            alert('결제가 취소되었습니다.');
+                        },
+                        error: function(error) {
+                            console.log(error)
+                            alert('결제 취소에 실패하였습니다.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </div>
 </html>

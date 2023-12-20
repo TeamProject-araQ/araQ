@@ -97,10 +97,15 @@
             });
 
             $("#deleteBtn").on('click', function() {
-                var checkedValues = [];
-                $(".check:checked").each(function() {
-                    checkedValues.push($(this).val());
-                });
+                var checkedValues = $(".check:checked").map(function() {
+                    return this.value;
+                }).get();
+
+                if (checkedValues.length === 0) {
+                    alert('선택된 게시물이 없습니다.');
+                    return;
+                }
+
                 if (confirm('게시물을 삭제하시겠습니까?')) {
                     $.ajax({
                         url : '/admin/post/delete',

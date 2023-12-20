@@ -155,3 +155,14 @@ a {
 .underline:hover::after {
     width: 100%;
 }
+
+#scrollButtons {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+#scrollButtons button {
+    display: block;
+}
