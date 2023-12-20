@@ -44,7 +44,7 @@ public class PostController {
     public String modify(@PathVariable("id") Integer id, Model model) {
         Post post = this.postService.getPost(id);
         model.addAttribute("post", post);
-        return "board/writePost";
+        return "board/write";
     }
 
     @PostMapping("/modify/{id}")

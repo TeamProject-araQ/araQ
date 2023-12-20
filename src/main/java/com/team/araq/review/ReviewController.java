@@ -28,12 +28,12 @@ public class ReviewController {
         Page<Review> paging = this.reviewService.getList(page, sort);
         model.addAttribute("paging", paging);
         model.addAttribute("sort", sort);
-        return "review/reviewList";
+        return "review/list";
     }
 
     @GetMapping("/create")
     public String create(ReviewDTO reviewDTO) {
-        return "review/writeReview";
+        return "review/write";
     }
 
     @PostMapping("/create")
@@ -54,10 +54,10 @@ public class ReviewController {
         reviewDTO.setAnswer4(review.getAnswer4());
         reviewDTO.setAnswer5(review.getAnswer5());
         reviewDTO.setStar(review.getStar());
-        return "review/writeReview";
+        return "review/write";
     }
 
-    @PostMapping("/review/modify/{id}")
+    @PostMapping("/modify/{id}")
     public String modify(@PathVariable("id") Integer id, Principal principal, @Valid ReviewDTO reviewDTO, BindingResult bindingResult) {
         Review review = this.reviewService.getReview(id);
         if (!review.getWriter().getUsername().equals(principal.getName()))
@@ -66,12 +66,19 @@ public class ReviewController {
         return "redirect:/review/list";
     }
 
-    @GetMapping("/review/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, Principal principal) {
         Review review = this.reviewService.getReview(id);
         if (!review.getWriter().getUsername().equals(principal.getName()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         this.reviewService.deleteReview(review);
         return "redirect:/review/list";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Integer id, Model model) {
+        Review review = this.reviewService.getReview(id);
+        model.addAttribute("review", review);
+        return "review/detail";
     }
 }

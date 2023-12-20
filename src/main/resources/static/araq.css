@@ -99,26 +99,37 @@ a {
 .reviewCard {
     position: relative;
     overflow: hidden;
-    transition: filter 0.3s;
+    transition: all 0.3s ease;
 }
 
-.reviewCard #deleteBtn {
+.reviewCard .cardOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
+}
+
+.reviewCard .button {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform 0.3s;
-    display: none;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display:none;
 }
 
-.reviewCard:hover {
-    filter: brightness(50%);
+.reviewCard:hover .cardOverlay {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.reviewCard:hover #deleteBtn {
-    display: block;
-    transform: translate(-50%, -50%) scale(1);
+.reviewCard:hover .button {
+    display:block;
+    z-index: 3;
 }
+
 
 .underline {
     position: relative;
@@ -144,7 +155,3 @@ a {
 .underline:hover::after {
     width: 100%;
 }
-
-
-
-
