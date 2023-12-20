@@ -1,10 +1,16 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <h3 class="underline my-3">AraQ 회원 후기</h3>
-    <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <select class="form-select" aria-label="sortBy" id="sortBy">
+                <option th:selected="${sort == 'createDate'}" value="createDate">등록일순</option>
+                <option th:selected="${sort == 'star'}" value="star">별점순</option>
+            </select>
+        </div>
         <a th:href="@{/review/create}" th:if="${user.review == null}" class="btn btn-light">후기 작성하기</a>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-3" th:each="review, loop:${paging}">
             <a th:href="@{|/review/detail/${review.id}|}">
                 <div class="reviewCard card p-0">
@@ -13,7 +19,8 @@
                         <a th:href="@{|/review/modify/${user.review.id}|}"
                            th:if="${review.writer.username == user.username}"
                            class="btn btn-light">수정</a>
-                        <a th:if="${review.writer.username == user.username}" th:data-uri="@{|/review/delete/${review.id}|}"
+                        <a th:if="${review.writer.username == user.username}"
+                           th:data-uri="@{|/review/delete/${review.id}|}"
                            class="btn btn-light" id="deleteBtn" href="javascript:void(0)">삭제</a>
                     </div>
                     <input type="hidden" class="reviewStar" th:value="${review.star}">
@@ -45,9 +52,44 @@
             </a>
         </div>
     </div>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+        <form th:action="@{/review/list}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+            <input type="hidden" id="sort" name="sort" th:value="${sort}">
+        </form>
+    </div>
 </div>
 <script type="text/javascript" layout:fragment="script">
     $(function() {
+        $(".page-link").on('click', function() {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
+
+        $("#sortBy").on('change', function() {
+            var selectedValue = $(this).val();
+            $("#sort").val(selectedValue);
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
+
         $('.reviewCard').each(function() {
             var rating = parseFloat($(this).find('.reviewStar').val());
             var stars = $(this).find('.star-rating i');

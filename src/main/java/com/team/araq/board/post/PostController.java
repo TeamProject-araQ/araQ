@@ -23,7 +23,7 @@ public class PostController {
 
     @GetMapping("/create")
     public String create() {
-        return "board/writePost";
+        return "board/write";
     }
 
     @PostMapping("/create")

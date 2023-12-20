@@ -2,9 +2,9 @@
 <div layout:fragment="content" class="container my-3">
     <h5>결제 수단을 선택해주세요.</h5>
     <div>
-        <button onclick="selectPg('kakaopay')">카카오페이</button>
-        <button onclick="selectPg('uplus')">토스페이먼츠</button>
-        <button onclick="selectPg('danal')">휴대폰 결제</button>
+        <button onclick="selectPg('kakaopay')" class="btn" data-bs-toggle="button">카카오페이</button>
+        <button onclick="selectPg('uplus')" class="btn" data-bs-toggle="button">토스페이먼츠</button>
+        <button onclick="selectPg('danal')" class="btn" data-bs-toggle="button">휴대폰 결제</button>
     </div>
     <h5>결제할 버블을 선택해주세요.</h5>
     <div>
@@ -47,13 +47,20 @@
             buyer_postcode: '123-456'
         }, function (rsp) {
             if (rsp.success) {
+                var data = {
+                    orderNum: rsp.merchant_uid,
+                    date: new Date(rsp.paid_at * 1000).toISOString(),
+                    amount: rsp.paid_amount,
+                    method: rsp.pay_method,
+                    username: rsp.buyer_name
+                };
                 fetch('/charge', {
                     method:'POST',
                     headers:{
-                        'Content-Type' : 'application/x-www-form-urlencoded',
+                        'Content-Type' : 'application/json',
                         [csrfHeader]: csrfToken
                     },
-                    body: 'bubble=' + amount
+                    body: JSON.stringify(data)
                 })
                 .then(response => response.text())
                 .then(data => {

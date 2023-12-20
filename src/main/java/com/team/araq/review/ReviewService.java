@@ -1,11 +1,14 @@
 package com.team.araq.review;
 
+import com.team.araq.board.post.Post;
 import com.team.araq.user.SiteUser;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,11 +22,35 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
+    private Specification<Review> search(String kw) {
+        return new Specification<Review>() {
+            @Override
+            public Predicate toPredicate(Root<Review> review, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                query.distinct(true);
+                Join<Review, SiteUser> u1 = review.join("writer", JoinType.LEFT);
+                return criteriaBuilder.or(criteriaBuilder.like(review.get("answer1"), "%" + kw + "%"),
+                        criteriaBuilder.like(review.get("answer2"), "%" + kw + "%"),
+                        criteriaBuilder.like(review.get("answer3"), "%" + kw + "%"),
+                        criteriaBuilder.like(review.get("answer4"), "%" + kw + "%"),
+                        criteriaBuilder.like(review.get("answer5"), "%" + kw + "%"),
+                        criteriaBuilder.like(u1.get("nickName"), "%" + kw + "%"));
+            }
+        };
+    }
+
     public Page<Review> getList(int page, String sortBy) {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc(sortBy));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, 12, Sort.by(sort));
         return this.reviewRepository.findAll(pageable);
+    }
+
+    public Page<Review> getAll(int page, String kw) {
+        List<Sort.Order> sort = new ArrayList<>();
+        sort.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Specification<Review> specification = search(kw);
+        return this.reviewRepository.findAll(specification, pageable);
     }
 
     public void createReview(ReviewDTO reviewDTO, SiteUser user) {
