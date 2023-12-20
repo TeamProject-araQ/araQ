@@ -1,17 +1,38 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <div style="height:30vh; overflow-y:scroll;" id="chatBoard"></div>
-    <form class="input-group" id="sendChatForm">
-        <input type="text" id="msgContent" class="form-control">
-        <button type="submit" class="btn btn-primary">보내기</button>
-    </form>
+    <div class="card">
+        <div style="height:60vh; overflow-y:scroll;" id="chatBoard"></div>
+        <button class="btn btn-secondary btn-sm p-0 m-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#chatMoreFunction"
+                aria-expanded="false" aria-controls="collapseExample" style="width:50px">
+            더보기
+        </button>
+        <div class="collapse" id="chatMoreFunction">
+            <div class="card card-body">
+                <div class="d-flex justify-content-around">
+                    <a href="#">기능</a>
+                    <a href="#">기능</a>
+                    <a href="#">기능</a>
+                    <a href="#">기능</a>
+                </div>
+            </div>
+        </div>
+        <form class="input-group" id="sendChatForm">
+            <input type="text" id="msgContent" class="form-control">
+            <button type="submit" class="btn btn-primary">보내기</button>
+        </form>
+    </div>
 </div>
 <script layout:fragment="script" th:inline="javascript">
     $(function() {
+        $("#msgContent").focus();
+
         var socket = new SockJS("/ws");
         var stompClient = Stomp.over(socket);
         var roomCode = [[${room.code}]];
         var nickName = [[${user.nickName}]];
+        var user = [[${user.username}]];
+        var target = [[${target.username}]];
 
         stompClient.connect({}, function(frame) {
             stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
@@ -26,13 +47,17 @@
         $("#sendChatForm").submit(function(event) {
             event.preventDefault();
 
-            stompClient.send("/app/send", {}, JSON.stringify({
-                content: $("#msgContent").val(),
-                writer: nickName,
-                code: roomCode
-            }));
+            if($("#msgContent").val() != "") {
+                stompClient.send("/app/send", {}, JSON.stringify({
+                    content: $("#msgContent").val(),
+                    writer: user,
+                    code: roomCode,
+                    target: target
+                }));
+            }
 
             $("#msgContent").val("");
+            $("#msgContent").focus();
         });
     });
 </script>
