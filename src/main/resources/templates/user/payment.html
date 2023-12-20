@@ -37,7 +37,7 @@
         IMP.request_pay({
             pg: selectedPg,
             pay_method: 'card',
-            merchant_uid: 'merchant_' + new Date().getTime(),
+            merchant_uid: '[[${user.id}]]' + new Date().getTime(),
             name: 'AraQ_Bubble 결제',
             amount: amount,
             buyer_email: '[[${user.email}]]',
@@ -52,7 +52,8 @@
                     date: new Date(rsp.paid_at * 1000).toISOString(),
                     amount: rsp.paid_amount,
                     method: rsp.pay_method,
-                    username: rsp.buyer_name
+                    username: rsp.buyer_name,
+                    card: rsp.card_name
                 };
                 fetch('/charge', {
                     method:'POST',
