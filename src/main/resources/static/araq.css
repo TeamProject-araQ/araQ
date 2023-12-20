@@ -88,4 +88,63 @@ a {
     margin-bottom: -20px;
 }
 
+.star-rating .fa-star {
+    color: gray;
+}
+
+.star-rating .fas {
+    color: gold;
+}
+
+.reviewCard {
+    position: relative;
+    overflow: hidden;
+    transition: filter 0.3s;
+}
+
+.reviewCard #deleteBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.3s;
+    display: none;
+}
+
+.reviewCard:hover {
+    filter: brightness(50%);
+}
+
+.reviewCard:hover #deleteBtn {
+    display: block;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.underline {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.underline::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background: #D8D3E0;
+    transition: width 0.5s ease;
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+}
+
+.underline:hover::after {
+    width: 100%;
+}
+
+
+
 

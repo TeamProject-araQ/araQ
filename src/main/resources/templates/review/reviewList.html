@@ -1,5 +1,63 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    <a th:href="@{/review/create}">후기 작성하기</a>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline">AraQ 회원 후기</h3>
+    <div class="d-flex justify-content-end mb-3">
+        <a th:href="@{/review/create}" th:if="${user.review == null}" class="btn btn-light">후기 작성하기</a>
+        <a th:href="@{|/review/modify/${user.review.id}|}" th:if="${user.review != null}" class="btn btn-light">후기
+            수정하기</a>
+    </div>
+    <div class="row">
+        <div class="col-3" th:each="review, loop:${paging}">
+            <div class="reviewCard card p-0">
+                <a th:if="${review.writer.username == user.username}" th:href="@{|/review/delete/${review.id}|}"
+                   class="btn btn-light" id="deleteBtn">삭제</a>
+                <input type="hidden" class="reviewStar" th:value="${review.star}">
+                <img class="card-img-top" style="height:200px;"
+                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI2SCqH0zF2kry1RYzdpNn40dauN-U9i0huw&usqp=CAU">
+                <div class="card-header d-flex justify-content-between">
+                    <div th:text="|${review.writer.nickName}님의 후기|"></div>
+                    <div class="d-flex align-items-center">
+                        <div class="star-rating me-1">
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                        <div style="font-size:11pt; color:gray;" th:text="|(${review.star})|"></div>
+                    </div>
+                </div>
+                <div class="card-text p-2">
+                    <div class="text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap;">
+                        <a th:href="@{|/review/detail/${review.id}|}" th:text="${review.answer5}"></a>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <div class="badge bg-light text-dark"
+                             th:text="${#temporals.format(review.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script type="text/javascript" layout:fragment="script">
+    $(function() {
+        $('.reviewCard').each(function() {
+            var rating = parseFloat($(this).find('.reviewStar').val());
+            var stars = $(this).find('.star-rating i');
+
+            stars.removeClass('fas far fa-star-half-alt');
+
+            stars.each(function(index) {
+                if (rating >= index + 1) {
+                    $(this).addClass('fas fa-star');
+                } else if (rating > index) {
+                    $(this).addClass('fas fa-star-half-alt');
+                } else {
+                    $(this).addClass('far fa-star');
+                }
+            });
+        });
+    });
+</script>
 </html>

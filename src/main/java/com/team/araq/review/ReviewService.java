@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,18 +39,24 @@ public class ReviewService {
         this.reviewRepository.save(review);
     }
 
-    public void modifyReview(Review review, String answer1, String answer2, String answer3, String answer4, String answer5, int star) {
-        review.setAnswer1(answer1);
-        review.setAnswer2(answer2);
-        review.setAnswer3(answer3);
-        review.setAnswer4(answer4);
-        review.setAnswer5(answer5);
-        review.setStar(star);
+    public void modifyReview(Review review, ReviewDTO reviewDTO) {
+        review.setAnswer1(reviewDTO.getAnswer1());
+        review.setAnswer2(reviewDTO.getAnswer2());
+        review.setAnswer3(reviewDTO.getAnswer3());
+        review.setAnswer4(reviewDTO.getAnswer4());
+        review.setAnswer5(reviewDTO.getAnswer5());
+        review.setStar(reviewDTO.getStar());
         review.setModifyDate(LocalDateTime.now());
         this.reviewRepository.save(review);
     }
 
     public void deleteReview(Review review) {
         this.reviewRepository.delete(review);
+    }
+
+    public Review getReview(Integer id) {
+        Optional<Review> review = this.reviewRepository.findById(id);
+        if (review.isPresent()) return review.get();
+        else throw new RuntimeException("그런 리뷰 없습니다.");
     }
 }
