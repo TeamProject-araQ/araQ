@@ -23,15 +23,18 @@
                 </div>
             </div>
         </div>
-        <form class="input-group" id="sendChatForm">
+        <form class="input-group" id="sendChatForm" autocomplete="off">
             <input type="text" id="msgContent" class="form-control">
             <button type="submit" class="btn btn-primary">보내기</button>
         </form>
     </div>
+    <a th:href="@{/chat/list}" class="btn btn-secondary">나가기</a>
 </div>
 <script layout:fragment="script" th:inline="javascript">
     $(function() {
         $("#msgContent").focus();
+        var chatBoard = document.getElementById("chatBoard");
+        chatBoard.scrollTop = chatBoard.scrollHeight;
 
         var socket = new SockJS("/ws");
         var stompClient = Stomp.over(socket);
@@ -41,12 +44,17 @@
         var target = [[${target.username}]];
 
         stompClient.connect({}, function(frame) {
+
+            stompClient.send("/app/online", {}, JSON.stringify({
+                type: "online",
+                target: $("#hiddenUserName").val()
+            }));
+
             stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
                 var data = JSON.parse(message.body);
                 $("#chatBoard").append("<div>" + data.writer + " : " + data.content + "</div>");
 
-                var element = document.getElementById("chatBoard");
-                element.scrollTop = element.scrollHeight;
+                chatBoard.scrollTop = chatBoard.scrollHeight;
             });
         });
 
@@ -64,6 +72,18 @@
 
             $("#msgContent").val("");
             $("#msgContent").focus();
+        });
+
+        $(window).on('beforeunload', function() {
+            $.ajax({
+                url: "/offline",
+                type: "POST",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType:"text/plain",
+                data: $("#hiddenUserName").val()
+            });
         });
     });
 </script>

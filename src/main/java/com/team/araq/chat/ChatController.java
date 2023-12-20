@@ -32,7 +32,15 @@ public class ChatController {
 
         chatDto.setWriter(user.getNickName());
         chatDto.setTarget(target.getNickName());
+        MessageDto messageDto = new MessageDto();
+        messageDto.setType("sendChat");
+        messageDto.setNickname(user.getNickName());
+        messageDto.setContent(chatDto.getContent());
+        messageDto.setImage(user.getImage());
+        messageDto.setTarget(chatDto.getCode());
+
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
+        simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
     }
 
     @MessageMapping("/alert")
@@ -88,7 +96,7 @@ public class ChatController {
     public String request(Principal principal, @RequestBody String username) {
         SiteUser user = userService.getByUsername(principal.getName());
         MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
-                user.getIntroduce(), user.getImage(), username + "님이 채팅을 신청했습니다.", username);
+                user.getIntroduce(), user.getImage(), user.getUsername() + "님이 채팅을 신청했습니다.", username);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
         return null;
     }
