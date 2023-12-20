@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -121,5 +122,22 @@ public class UserService {
 
     public void deleteUser(SiteUser user) {
         this.userRepository.delete(user);
+    }
+
+    public boolean checkPassword(SiteUser user,String currentPassword) {
+        if(passwordEncoder.matches(currentPassword, user.getPassword())){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void updatePw(SiteUser user, String newPw, String confirmPw) {
+        if(newPw.equals(confirmPw)){
+            user.setPassword(passwordEncoder.encode(newPw));
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+        }
     }
 }

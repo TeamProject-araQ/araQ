@@ -1,15 +1,21 @@
 <html layout:decorate="~{user/update}">
 <div layout:fragment="content" class="container-fluid p-5">
     <h3 class="border-bottom pb-2">비밀번호변경</h3>
-    <div class="d-flex justify-content-end my-3">
-        <div class="input-group" style="width:30%;">
-
-        </div>
+    <div>
+        <form th:action="@{/user/checkCurrentPw}" method="post" id="passwordCheckForm" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label for="currentPassword">현재 비밀번호</label>
+                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary">비밀번호 확인</button>
+        </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script type="text/javascript" layout:fragment="script">
-
+    <script th:if="${error}" th:inline="javascript">
+        $(document).ready(function() {
+            alert([[${error}]])
+        });
     </script>
 </div>
 </html>

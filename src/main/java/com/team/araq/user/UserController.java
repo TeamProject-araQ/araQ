@@ -5,16 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 
 
 @RequiredArgsConstructor
@@ -63,15 +62,22 @@ public class UserController {
     }
 
     @PostMapping("/checkCurrentPw")
-    public Map<String, Boolean> checkCurrentPw(@RequestBody Map<String, String> request, Principal principal){
-        String currentPassword = request.get("currentPassword");
+    public String checkCurrentPassword(@RequestParam("currentPassword") String currentPassword, Principal principal, Model model) {
         SiteUser user = userService.getByUsername(principal.getName());
-        // 예시로 현재 비밀번호가 "test123"일 때 true를 반환하도록 설정합니다.
-        boolean isValid = user != null && passwordEncoder.matches(currentPassword,user.getPassword());
+        boolean checkedPw = userService.checkPassword(user, currentPassword);
+        if (checkedPw) {
+            return "user/changePw";
+        } else {
+            model.addAttribute("error", "현재 비밀번호가 올바르지 않습니다.");
+            return "user/updatePw";
+        }
+    }
 
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("isValid", isValid);
-        return response;
+    @PostMapping("/changePw")
+    public String changePw(@RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw, Principal principal) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.updatePw(user, newPw, confirmPw);
+        return "redirect:/user/update";
     }
 
     @GetMapping("/updatePw")
