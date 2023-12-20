@@ -2,19 +2,13 @@
 <div layout:fragment="content" class="container my-3">
     <ul>
         <li th:each="room : ${roomList}">
-            <a href="javascript:void(0)" th:data-value="${room.code}" class="joinRoom"></a>
+            <a th:href="@{|/chat/join/${room.code}|}" th:data-value="${room.code}" class="joinRoom"
+               th:text="|${room.participant2.nickName}님과 채팅|"
+               th:if="${room.participant1.username.equals(user.username)}"></a>
+            <a th:href="@{|/chat/join/${room.code}|}" th:data-value="${room.code}" class="joinRoom"
+               th:text="|${room.participant1.nickName}님과 채팅|"
+               th:if="${room.participant2.username.equals(user.username)}"></a>
         </li>
     </ul>
-    <form th:action="@{/join}" id="roomJoinForm">
-        <input type="hidden" name="code">
-    </form>
 </div>
-<script layout:fragment="script">
-$(function() {
-    $(".joinRoom").on('click', function(self) {
-        $("#roomJoinForm > input").val(self.dataset.value);
-        $("#roomJoinForm").submit();
-    });
-});
-</script>
 </html>

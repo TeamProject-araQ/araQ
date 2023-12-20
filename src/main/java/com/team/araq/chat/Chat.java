@@ -14,8 +14,8 @@ public class Chat {
     private Long id;
     @ManyToOne
     private Room room;
-    @OneToOne
+    @ManyToOne
     private SiteUser writer;
-    @OneToOne
-    private SiteUser receiver;
+    @ManyToOne
+    private SiteUser target;
 }

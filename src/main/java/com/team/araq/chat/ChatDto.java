@@ -9,4 +9,5 @@ public class ChatDto {
     private String content;
     private String writer;
     private String code;
+    private String target;
 }

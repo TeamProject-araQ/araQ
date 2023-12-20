@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Controller
@@ -20,7 +22,7 @@ public class UserController {
         return "user/signup";
     }
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult){
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image){
         if(bindingResult.hasErrors()){
             return "user/signup";
         }
@@ -29,7 +31,7 @@ public class UserController {
             return "user/signup";
         }
         try{
-            userService.create(userCreateForm);
+            userService.create(userCreateForm, image);
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
