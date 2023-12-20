@@ -96,7 +96,7 @@ public class ChatController {
     public String request(Principal principal, @RequestBody String username) {
         SiteUser user = userService.getByUsername(principal.getName());
         MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
-                user.getIntroduce(), user.getImage(), username + "님이 채팅을 신청했습니다.", username);
+                user.getIntroduce(), user.getImage(), user.getUsername() + "님이 채팅을 신청했습니다.", username);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
         return null;
     }
