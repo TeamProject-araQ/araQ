@@ -50,5 +50,52 @@
             </div>
         </div>
     </div>
+    <div class="card" id="onlineUsers">
+        <h3 class="card-header">현재 접속자</h3>
+        <div class="card-body">
+            <div class="dropdown dropend" th:each="online : ${onlineUsers}">
+                <a href="#" th:text="${online.nickName}" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">프로필</a></li>
+                    <li><a class="chatRequest dropdown-item" href="javascript:void(0)" th:data-nick="${online.nickName}"
+                           th:data-value="${online.username}">채팅 신청</a></li>
+                    <li><a class="dropdown-item text-danger" href="#">신고</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+<script layout:fragment="script">
+    $(function() {
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        $("#onlineUsers .chatRequest").on('click', function() {
+            var nick = $(this).data("nick");
+            var dataValue = $(this).data("value");
+
+            if (confirm(nick + "님에게 채팅 신청을 하시겠습니까?")) {
+
+                $.ajax({
+                    url: "/chat/request",
+                    type: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType:"text/plain",
+                    data: dataValue,
+                    success: function() {
+                        alert("성공적으로 요청이 완료되었습니다.");
+                    },
+                    error: function(err) {
+                        alert("요청이 실패하였습니다.");
+                    }
+                });
+            }
+        });
+    });
+</script>
 </html>
