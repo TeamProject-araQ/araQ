@@ -37,6 +37,8 @@ public class Review {
 
     private LocalDateTime modifyDate;
 
-    private int star;
+    private double star;
+
+    private String image;
 
 }

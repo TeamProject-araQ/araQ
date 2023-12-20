@@ -18,6 +18,6 @@ public class ReviewDTO {
 
     private String answer5;
 
-    private int star;
+    private double star;
 
 }
