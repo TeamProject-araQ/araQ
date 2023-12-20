@@ -32,7 +32,7 @@ public class AdminController {
         Page<SiteUser> paging = this.userService.getList(page, kw);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
-        return "admin/userManagement";
+        return "admin/user";
     }
 
     @GetMapping("/post")
@@ -40,7 +40,7 @@ public class AdminController {
         Page<Post> paging = this.postService.getList(page, kw);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
-        return "admin/postManagement";
+        return "admin/post";
     }
 
     @PostMapping("/user/delete")

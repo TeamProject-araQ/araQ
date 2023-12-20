@@ -67,24 +67,13 @@ public class UserService {
         user.setIntroduce(userCreateForm.getIntroduce());
 
         File uploadDirectory = new File(uploadPath);
-        // 파일 경로 폴더가 없을 때 폴더 생성
         if (!uploadDirectory.exists()) {
             uploadDirectory.mkdirs();
         }
-
-        // 원본 파일에서 파일 확장자만 꺼내오기
         String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-
-        // 파일 이름 정하고 확장자 뒤에 붙이기  (파일 이름 겹치면 안돼서 고유 아이디랑 합침.)
         String fileName = user.getUsername() + "." + fileExtension;
-
-        // 파일의 전체 경로 생성
         File dest = new File(uploadPath + File.separator + fileName);
-
-        // 이미지의 바이트 데이터를 경로에 지정된 폴더로 복사 -> 서버의 파일 시스템에 저장
         FileCopyUtils.copy(image.getBytes(), dest);
-
-        // 이미지 경로 저장
         user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
         userRepository.save(user);
         return user;

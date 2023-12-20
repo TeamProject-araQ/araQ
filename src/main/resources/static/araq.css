@@ -88,4 +88,70 @@ a {
     margin-bottom: -20px;
 }
 
+.star-rating .fa-star {
+    color: gray;
+}
 
+.star-rating .fas {
+    color: gold;
+}
+
+.reviewCard {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.reviewCard .cardOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
+}
+
+.reviewCard .button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display:none;
+}
+
+.reviewCard:hover .cardOverlay {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.reviewCard:hover .button {
+    display:block;
+    z-index: 3;
+}
+
+
+.underline {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.underline::after {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 0;
+    background: #D8D3E0;
+    transition: width 0.5s ease;
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+}
+
+.underline:hover::after {
+    width: 100%;
+}
