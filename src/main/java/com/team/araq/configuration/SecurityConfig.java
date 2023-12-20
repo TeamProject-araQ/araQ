@@ -1,5 +1,6 @@
 package com.team.araq.configuration;
 
+import com.team.araq.CustomSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,11 +25,13 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/user/**"),
                                 new AntPathRequestMatcher("/bootstrap**"),
                                 new AntPathRequestMatcher("/araq**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated())
 
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
-                        .defaultSuccessUrl("/", true))
+                        .defaultSuccessUrl("/", true)
+                        .successHandler(new CustomSuccessHandler()))
 
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))

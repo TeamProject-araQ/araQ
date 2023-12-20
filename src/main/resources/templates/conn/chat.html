@@ -1,27 +1,36 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <input type="text" id="msgContent">
-    <button type="button" id="sendMsgBtn" class="btn btn-primary">보내기</button>
+    <div style="height:80vh; overflow:scroll;" id="chatBoard"></div>
+    <form class="input-group" id="sendChatForm">
+        <input type="text" id="msgContent" class="form-control">
+        <button type="submit" class="btn btn-primary">보내기</button>
+    </form>
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
     $(function() {
         var socket = new SockJS("/ws");
         var stompClient = Stomp.over(socket);
+        var roomCode = [[${room.code}]];
+        var nickName = [[${user.nickName}]];
 
         stompClient.connect({}, function(frame) {
-            stompClient.subscribe("/topic/chat", function(message) {
-                alert(JSON.parse(message.body).content);
+            stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
+                var data = JSON.parse(message.body);
+                $("#chatBoard").append("<p>" + data.writer + ": " + data.content + "</p>");
             });
         });
 
-        $("#sendMsgBtn").on('click', function() {
+        $("#sendChatForm").submit(function(event) {
+            event.preventDefault();
+
             stompClient.send("/app/send", {}, JSON.stringify({
                 content: $("#msgContent").val(),
-                writer: "stranger"
+                writer: nickName,
+                code: roomCode
             }));
+
             $("#msgContent").val("");
         });
-
     });
 </script>
 </html>

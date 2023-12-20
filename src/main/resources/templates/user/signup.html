@@ -6,6 +6,54 @@
             color: #fff;
             border-color: #007bff;
         }
+
+        .btn-secondary:hover {
+    background-color: #0056b3 !important;
+    color: #fff !important;
+    border-color: #0056b3 !important;
+
+    /* 이전 버튼 스타일 */
+    .prev-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.3s ease;
+    }
+
+    .prev-btn::before {
+        content: '\00ab'; /* 왼쪽 화살표 유니코드 */
+        font-size: 20px;
+        margin-right: 5px;
+    }
+
+    /* 다음 버튼 스타일 */
+    .next-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: relative;
+        transition: background-color 0.3s ease;
+    }
+
+    .next-btn::after {
+        content: '\00bb'; /* 오른쪽 화살표 유니코드 */
+        font-size: 20px;
+        margin-left: 5px;
+    }
+
+    /* 호버 효과 */
+    .prev-btn:hover,
+    .next-btn:hover {
+        background-color: #0056b3;
+    }
+}
     </style>
 </head>
 <div layout:fragment="content" class="container my-3">

@@ -1,12 +1,10 @@
-package com.team.araq.board.Comment;
+package com.team.araq.board.comment;
 
-import com.team.araq.board.Post.Post;
-import com.team.araq.board.Post.PostService;
+import com.team.araq.board.post.Post;
+import com.team.araq.board.post.PostService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

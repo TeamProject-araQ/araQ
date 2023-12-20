@@ -1,4 +1,4 @@
-package com.team.araq.Pay;
+package com.team.araq.pay;
 
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;

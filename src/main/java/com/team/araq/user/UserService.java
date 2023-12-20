@@ -1,23 +1,49 @@
 package com.team.araq.user;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
     private String uploadPath = "C:/uploads/user";
+
+
+
+    private Specification<SiteUser> search(String kw) {
+        return new Specification<SiteUser>() {
+            @Override
+            public Predicate toPredicate(Root<SiteUser> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                query.distinct(true);
+                return criteriaBuilder.or(criteriaBuilder.like(root.get("username"), "%" + kw + "%"),
+                        criteriaBuilder.like(root.get("nickName"), "%" + kw + "%"));
+            }
+        };
+    }
+
 
     public SiteUser create(UserCreateForm userCreateForm, MultipartFile image) throws IOException {
         SiteUser user = new SiteUser();
@@ -36,6 +62,7 @@ public class UserService {
         user.setMbti(userCreateForm.getMbti());
         user.setPersonality(userCreateForm.getPersonality());
         user.setHobby(userCreateForm.getHobby());
+        user.setCreateDate(LocalDateTime.now());
         user.setGender(userCreateForm.getGender());
         user.setIntroduce(userCreateForm.getIntroduce());
 
@@ -88,4 +115,22 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public Page<SiteUser> getList(int page, String kw) {
+        List<Sort.Order> sort = new ArrayList<>();
+        sort.add(Sort.Order.asc("username"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Specification<SiteUser> specification = search(kw);
+        return this.userRepository.findAll(specification, pageable);
+    }
+
+    public void createAdmin() {
+        SiteUser user = new SiteUser();
+        user.setUsername("admin");
+        user.setPassword(passwordEncoder.encode("admin"));
+        this.userRepository.save(user);
+    }
+
+    public void deleteUser(SiteUser user) {
+        this.userRepository.delete(user);
+    }
 }
