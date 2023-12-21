@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -35,4 +36,8 @@ public class Inquiry {
 
     @OneToOne(mappedBy = "inquiry", cascade = CascadeType.REMOVE)
     private Answer answer;
+
+    private String visibility;
+
+    private List<String> files;
 }
