@@ -3,6 +3,7 @@ package com.team.araq.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,9 +83,35 @@ public class UserController {
         return "user/updatePw";
     }
 
+
+    @GetMapping("/out")
+    public String out(){
+        return "user/out";
+    }
+
+    @PostMapping("/out")
+    public String out(@RequestParam("username") String username, @RequestParam("password") String password, Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.deleteUser(user);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "redirect:/user/logout";
+    }
+
+    @PostMapping("/checkUser")
+    @ResponseBody
+    public String checkUser(@RequestParam String username, @RequestParam String password, Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        if(userService.checkUser(user,username,password)){
+            return "success";
+        } else{
+            return "fail";
+        }
+    }
+
     @PostMapping("/getInfo")
     @ResponseBody
     public SiteUser getInfo(@RequestBody String username) {
         return userService.getByUsername(username);
+
     }
 }
