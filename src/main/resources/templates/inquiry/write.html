@@ -1,3 +1,28 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content"></div>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="my-3">문의하기</h3>
+    <form action="">
+        <select class="form-select" aria-label="selectCategory" style="width:30%;">
+            <option value="">카테고리</option>
+            <option value="pay">결제 관련 문의</option>
+            <option value="chat">채팅 관련 문의</option>
+            <option value="match">매칭 관련 문의</option>
+            <option value="user">계정 관련 문의</option>
+            <option value="etc">기타</option>
+        </select>
+        <div class="form-floating my-3">
+            <input class="form-control" placeholder="제목" id="title" name="title">
+            <label for="title">제목</label>
+        </div>
+        <div class="form-floating my-3">
+            <textarea class="form-control" placeholder="내용" id="content" name="content" style="height:400px;"></textarea>
+            <label for="title">내용</label>
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">첨부파일</label>
+            <input class="form-control" type="file" id="formFile">
+        </div>
+        <input type="button" class="btn 버튼" value="등록">
+    </form>
+</div>
 </html>

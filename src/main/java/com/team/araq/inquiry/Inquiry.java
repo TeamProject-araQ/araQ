@@ -35,4 +35,6 @@ public class Inquiry {
 
     @OneToOne(mappedBy = "inquiry", cascade = CascadeType.REMOVE)
     private Answer answer;
+
+    private String visibility;
 }
