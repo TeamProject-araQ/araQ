@@ -187,7 +187,7 @@ a {
 }
 
 .chatBox > div {
-    width:70%;
+    max-width:70%;
 }
 
 .chatBox > div > .card{
