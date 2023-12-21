@@ -33,7 +33,16 @@
         <tr th:each="inquiry, loop : ${paging}">
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <td th:text="${inquiry.category}"></td>
-            <td><a th:href="@{|/inquiry/detail/${inquiry.id}|}" th:text="${inquiry.title}"></a></td>
+            <td>
+                <a th:if="${inquiry.visibility != 'private' ||
+                   (inquiry.visibility == 'private' && inquiry.writer.username == user.username)}"
+                   th:href="@{|/inquiry/detail/${inquiry.id}|}"
+                   th:text="${inquiry.title}"></a>
+                <span th:if="${inquiry.visibility == 'private'}"><i class="bi bi-lock-fill ms-1 text-secondary"></i></span>
+                <span th:unless="${inquiry.visibility != 'private' ||
+                          (inquiry.visibility == 'private' && inquiry.writer.username == #authentication.name)}"
+                      th:text="${inquiry.title}"></span>
+            </td>
             <td th:text="${inquiry.writer.nickName}"></td>
             <td th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${inquiry.status}"></td>
@@ -80,6 +89,9 @@
             $("#page").val("0");
             $("#searchForm").submit();
         });
+
+        $("")
+
     });
 </script>
 </html>
