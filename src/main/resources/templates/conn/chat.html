@@ -56,6 +56,20 @@
 
             stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
                 var data = JSON.parse(message.body);
+
+                /* 지우지 마시오
+                var element =
+                '<div class="chatBox">' +
+                    '<img src="' + data.image + '" alt="">' +
+                    '<div>' +
+                        '<p>' + data.nickName + '</p>' +
+                        '<div class="card">' +
+                            '<p class="card-body">' + data.content + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+                */
+
                 $("#chatBoard").append("<div style='background:black;color:white;'>" + data.writer + " : " + data.content + "</div>");
 
                 chatBoard.scrollTop = chatBoard.scrollHeight;
