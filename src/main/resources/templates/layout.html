@@ -62,7 +62,7 @@
                 <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z"/>
             </svg>
         </div>
-        <div th:text="${user.username}"><!-- 닉네임으로 변경 --></div>
+        <div th:text="${user.nickName}"></div>
         <div class="d-flex justify-content-center align-items-center">
             <div th:text="|내 버블 : ${user.bubble}|"></div>
             <img src="/image/bubble.jpg" alt="" style="width:20px; height:20px;">
@@ -87,51 +87,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="chatRequestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="chatRequestModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="chatRequestModalLabel"></h1>
-            </div>
-            <div class="modal-body">
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0">
-                        <div class="col-md-6">
-                            <img th:src="@{/profile/default-m.jpg}" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <h5 class="nickName card-title"></h5>
-                                    <small class="userAge ms-3"></small>
-                                </div>
-                                <p class="introduce card-text"></p>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="refuse btn btn-secondary" data-bs-dismiss="modal">거절</button>
-                <button type="button" class="accept btn btn-primary">수락</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="chatToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img class="profile rounded me-2" alt="..." style="width:30px;height:30px;">
-            <strong class="nickName me-auto"></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            <a href="#"></a>
-        </div>
-    </div>
-</div>
+<div th:replace="~{layout_modal :: modal}"></div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
 <script type="text/javascript" th:src="@{/bootstrap.bundle.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -140,95 +96,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.7.js"></script>
-<script type="text/javascript">
-    $(function() {
-
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        if($("#hiddenUserName").val() != null && !window.location.pathname.includes("/chat/join")) {
-            var socket = new SockJS("/ws");
-            var stompClient = Stomp.over(socket);
-
-            stompClient.connect({}, function(frame) {
-
-                stompClient.send("/app/online", {}, JSON.stringify({
-                    type: "online",
-                    target: $("#hiddenUserName").val()
-                }));
-
-                stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
-                    var data = JSON.parse(message.body);
-                    var chatToast = new bootstrap.Toast($('#chatToast'), {
-                        autohide: false
-                    });
-
-                    if (data.type == "chatRequest") {
-                        $("#chatRequestModal .modal-title").text(data.content);
-                        $("#chatRequestModal .nickName").text(data.nickname);
-                        $("#chatRequestModal .userAge").text(data.age);
-                        $("#chatRequestModal .introduce").text(data.introduce);
-                        $("#chatRequestModal").modal("show");
-                    }
-
-                    else if (data.type == "refuse")
-                        alert(data.content);
-
-                    else if (data.type == "acceptChat") {
-                        alert(data.nickname + "님이 수락했습니다. 채팅방으로 이동합니다.");
-                        window.location.href = "/chat/join/" + data.content;
-                    }
-
-                    else if (data.type == "sendChat") {
-                        $("#chatToast .profile").attr("src", data.image);
-                        $("#chatToast .nickName").text(data.nickname);
-                        $("#chatToast .toast-body > a").text(data.content);
-                        $("#chatToast .toast-body > a").attr("href", "/chat/join/" + data.target);
-                        chatToast.show();
-                    }
-                });
-            });
-        }
-
-        $("#chatRequestModal .refuse").on('click', function() {
-            stompClient.send("/app/alert", {}, JSON.stringify({
-                type: "refuse",
-                target: $("#chatRequestModal .nickName").text()
-            }));
-        });
-
-        $("#chatRequestModal .accept").on('click', function() {
-
-            $.ajax({
-                url: "/chat/create",
-                type: "POST",
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                contentType:"text/plain",
-                data: $("#chatRequestModal .nickName").text(),
-                success: function(data) {
-                    window.location.href = "/chat/join/" + data;
-                },
-                error: function(err) {
-                    alert("채팅방 생성에 실패했습니다.");
-                }
-            });
-        });
-
-        $(window).on('beforeunload', function() {
-            $.ajax({
-                url: "/offline",
-                type: "POST",
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                contentType:"text/plain",
-                data: $("#hiddenUserName").val()
-            });
-        });
-    });
-</script>
+<script th:src="@{/layout.js}" type="text/javascript"></script>
 <th:block layout:fragment="script"></th:block>
 </body>
 </html>

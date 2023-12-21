@@ -33,7 +33,6 @@ public class UserService {
     private String uploadPath = "C:/uploads/user";
 
 
-
     private Specification<SiteUser> search(String kw) {
         return new Specification<SiteUser>() {
             @Override
@@ -67,15 +66,20 @@ public class UserService {
         user.setGender(userCreateForm.getGender());
         user.setIntroduce(userCreateForm.getIntroduce());
 
-        File uploadDirectory = new File(uploadPath);
-        if (!uploadDirectory.exists()) {
-            uploadDirectory.mkdirs();
+        if (image.isEmpty() && userCreateForm.getGender().equals("남성")) user.setImage("/profile/default-m.jpg");
+        else if (image.isEmpty()) user.setImage("/profile/default-w.jpg");
+        else {
+            File uploadDirectory = new File(uploadPath);
+            if (!uploadDirectory.exists()) {
+                uploadDirectory.mkdirs();
+            }
+            String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+            String fileName = user.getUsername() + "." + fileExtension;
+            File dest = new File(uploadPath + File.separator + fileName);
+            FileCopyUtils.copy(image.getBytes(), dest);
+            user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
         }
-        String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-        String fileName = user.getUsername() + "." + fileExtension;
-        File dest = new File(uploadPath + File.separator + fileName);
-        FileCopyUtils.copy(image.getBytes(), dest);
-        user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
+
         userRepository.save(user);
         return user;
     }
@@ -132,8 +136,8 @@ public class UserService {
         this.userRepository.delete(user);
     }
 
-    public boolean checkPassword(SiteUser user,String currentPassword) {
-        if(passwordEncoder.matches(currentPassword, user.getPassword())){
+    public boolean checkPassword(SiteUser user, String currentPassword) {
+        if (passwordEncoder.matches(currentPassword, user.getPassword())) {
             return true;
         } else {
             return false;
@@ -141,7 +145,7 @@ public class UserService {
     }
 
     public void updatePw(SiteUser user, String newPw, String confirmPw) {
-        if(newPw.equals(confirmPw)){
+        if (newPw.equals(confirmPw)) {
             user.setPassword(passwordEncoder.encode(newPw));
             userRepository.save(user);
         } else {
