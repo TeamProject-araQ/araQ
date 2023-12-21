@@ -31,4 +31,10 @@ public class Payment {
 
     private String card;
 
+    private String impUid;
+
+    private String pg;
+
+    private LocalDateTime cancelDate;
+
 }
