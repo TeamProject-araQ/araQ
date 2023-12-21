@@ -35,20 +35,24 @@
             <th>결제 금액</th>
             <th>결제 수단</th>
             <th>카드사</th>
+            <th>pg사</th>
             <th>결제 일시</th>
+            <th>취소 일시</th>
             <th>결제 상태</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="payment, loop : ${paging}">
-            <td><input class="check form-check-input" type="checkbox" th:value="${payment.id}"></td>
+            <td><input class="check form-check-input" type="checkbox" th:value="${payment.impUid}"></td>
             <td th:text="${payment.orderNum}"></td>
             <td th:text="${payment.user.nickName}"></td>
             <td th:text="${payment.amount}"></td>
             <td th:text="${payment.method}"></td>
             <td th:text="${payment.card}"></td>
-            <td th:text="${#temporals.format(payment.date, 'yyyy-MM-dd')}"></td>
-            <td th:text="${payment.status}"></td>
+            <td th:text="${payment.pg}"></td>
+            <td th:text="${#temporals.format(payment.date, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${#temporals.format(payment.cancelDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${payment.status == 'paid'} ? '결제 완료' : '결제 취소'"></td>
         </tr>
         </tbody>
     </table>
@@ -70,7 +74,7 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/admin/user}" method="get" id="searchForm">
+        <form th:action="@{/admin/payment}" method="get" id="searchForm">
             <input type="hidden" id="page" name="page" th:value="${paging.number}">
             <input type="hidden" id="kw" name="kw" th:value="${kw}">
         </form>
@@ -106,17 +110,20 @@
                     alert('선택된 결제가 없습니다.');
                     return;
                 }
+
+                console.log(checkedValues);
                 if (confirm('결제를 취소하시겠습니까?')) {
                     $.ajax({
-                        url: '/path-to-your-cancel-api',
+                        url: '/admin/cancel',
                         type: 'POST',
-                        data: JSON.stringify({ 'imp_uids': checkedValues }),
+                        data: JSON.stringify(checkedValues),
                         contentType: 'application/json',
                         headers: {
                             [csrfHeader] : csrfToken
                         },
                         success: function(response) {
-                            alert('결제가 취소되었습니다.');
+                            alert(response);
+                            location.reload();
                         },
                         error: function(error) {
                             console.log(error)

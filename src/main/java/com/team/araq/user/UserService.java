@@ -104,10 +104,17 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addBubbles(SiteUser user, int bubble) {
+    public void plusBubbles(SiteUser user, int bubble) {
         user.setBubble(user.getBubble() + bubble);
         this.userRepository.save(user);
     }
+
+    public void minusBubbles(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() - bubble);
+        this.userRepository.save(user);
+    }
+
+
 
     public Page<SiteUser> getList(int page, String kw) {
         List<Sort.Order> sort = new ArrayList<>();
@@ -120,6 +127,7 @@ public class UserService {
     public void createAdmin() {
         SiteUser user = new SiteUser();
         user.setUsername("admin");
+        user.setNickName("관리자");
         user.setPassword(passwordEncoder.encode("admin"));
         this.userRepository.save(user);
     }
@@ -144,4 +152,13 @@ public class UserService {
             throw new IllegalArgumentException("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
         }
     }
+
+    public boolean checkUser(SiteUser user, String username, String password) {
+        if(user.getUsername().equals(username) && passwordEncoder.matches(password, user.getPassword())){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
