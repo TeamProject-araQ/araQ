@@ -3,14 +3,12 @@ package com.team.araq.user;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -83,5 +81,29 @@ public class UserController {
     @GetMapping("/updatePw")
     public String checkPw(){
         return "user/updatePw";
+    }
+
+    @GetMapping("/out")
+    public String out(){
+        return "user/out";
+    }
+
+    @PostMapping("/out")
+    public String out(@RequestParam("username") String username, @RequestParam("password") String password, Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.deleteUser(user);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "redirect:/user/logout";
+    }
+
+    @PostMapping("/checkUser")
+    @ResponseBody
+    public String checkUser(@RequestParam String username, @RequestParam String password, Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        if(userService.checkUser(user,username,password)){
+            return "success";
+        } else{
+            return "fail";
+        }
     }
 }

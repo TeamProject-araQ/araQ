@@ -1,6 +1,6 @@
 <html layout:decorate="~{user/update}">
 <div layout:fragment="content" class="container-fluid p-5">
-    <h3 class="border-bottom pb-2">비밀번호변경</h3>
+    <h3 class="border-bottom pb-2">현재 비밀번호 확인</h3>
     <div>
         <form th:action="@{/user/checkCurrentPw}" method="post" id="passwordCheckForm" onsubmit="return validateForm()">
             <div class="form-group">
