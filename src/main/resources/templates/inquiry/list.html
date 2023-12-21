@@ -1,5 +1,97 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">문의게시판</h3>
+    <div class="d-flex justify-content-between my-3">
+        <select class="form-select" aria-label="Default select example" style="width:30%;">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+        <div class="input-group" style="width:40%;">
+            <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="제목, 내용, 작성자 검색">
+            <button class="btn btn-light" type="button" id="searchBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                     viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <table class="table table-hover text-center">
+        <thead style="background:#D8D3E0;">
+        <tr>
+            <th>번호</th>
+            <th>카테고리</th>
+            <th style="width:40%;">제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>답변 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inquiry, loop : ${paging}">
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+            <td th:text="${inquiry.category}"></td>
+            <td>
+                <a th:if="${inquiry.visibility != 'private' ||
+                   (inquiry.visibility == 'private' && inquiry.writer.username == user.username)}"
+                   th:href="@{|/inquiry/detail/${inquiry.id}|}"
+                   th:text="${inquiry.title}"></a>
+                <span th:if="${inquiry.visibility == 'private'}"><i class="bi bi-lock-fill ms-1 text-secondary"></i></span>
+                <span th:unless="${inquiry.visibility != 'private' ||
+                          (inquiry.visibility == 'private' && inquiry.writer.username == #authentication.name)}"
+                      th:text="${inquiry.title}"></span>
+            </td>
+            <td th:text="${inquiry.writer.nickName}"></td>
+            <td th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${inquiry.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+        <form th:action="@{/inquiry/list}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+            <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        </form>
+    </div>
+    <a th:href="@{/inquiry/create}" class="btn btn-light">문의하기</a>
 </div>
+<script type="text/javascript" layout:fragment="script">
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    $(function() {
+        $(".page-link").on('click', function() {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
+
+        $("#searchBtn").on('click', function() {
+            $("#kw").val($("#searchKw").val());
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
+
+        $("")
+
+    });
+</script>
 </html>
