@@ -166,3 +166,34 @@ a {
 #scrollButtons button {
     display: block;
 }
+
+.chatBox {
+    display:flex;
+    align-items:center;
+    margin:10px 0;
+}
+
+.chatBox > img {
+    width:50px;
+    height:50px;
+    border-radius:10px;
+    margin:0 10px;
+}
+
+.chatBox .card {
+    max-width:70%;
+}
+
+.chatBox .card > * {
+    padding:0 10px;
+    margin:0;
+}
+
+.chatBox > div {
+}
+
+.chatBox > div > p {
+    padding:0;
+    margin:0;
+    font-weight: bold;
+}
