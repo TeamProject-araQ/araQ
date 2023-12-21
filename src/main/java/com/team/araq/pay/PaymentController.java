@@ -26,8 +26,7 @@ public class PaymentController {
     @ResponseBody
     public String charge(@RequestBody PaymentDTO paymentDTO) {
         this.paymentService.savePayment(paymentDTO);
-        this.userService.addBubbles(this.userService.getByUsername(paymentDTO.getUsername()), paymentDTO.getAmount());
+        this.userService.plusBubbles(this.userService.getByUsername(paymentDTO.getUsername()), paymentDTO.getAmount());
         return paymentDTO.getAmount() + " 버블이 충전되었습니다.";
     }
-
 }

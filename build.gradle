@@ -40,6 +40,7 @@ dependencies {
 	implementation 'com.github.iamport:iamport-rest-client-java:0.1.6'
 	implementation 'org.apache.poi:poi:5.2.5'
 	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+	implementation 'org.json:json:20210307'
 }
 
 tasks.named('bootBuildImage') {

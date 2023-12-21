@@ -83,6 +83,7 @@ public class UserController {
         return "user/updatePw";
     }
 
+
     @GetMapping("/out")
     public String out(){
         return "user/out";
@@ -105,5 +106,12 @@ public class UserController {
         } else{
             return "fail";
         }
+    }
+
+    @PostMapping("/getInfo")
+    @ResponseBody
+    public SiteUser getInfo(@RequestBody String username) {
+        return userService.getByUsername(username);
+
     }
 }

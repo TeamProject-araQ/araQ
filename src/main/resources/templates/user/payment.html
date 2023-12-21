@@ -42,33 +42,36 @@
             amount: amount,
             buyer_email: '[[${user.email}]]',
             buyer_name: '[[${user.username}]]',
-            buyer_tel: '010-1234-5678',
-            buyer_addr: '서울특별시 강남구 삼성동',
-            buyer_postcode: '123-456'
+            buyer_tel: '[[${user.phoneNum}]]',
+            buyer_addr: '[[${user.address}]]',
+            status: status
         }, function (rsp) {
             if (rsp.success) {
                 var data = {
                     orderNum: rsp.merchant_uid,
-                    date: new Date(rsp.paid_at * 1000).toISOString(),
                     amount: rsp.paid_amount,
                     method: rsp.pay_method,
                     username: rsp.buyer_name,
-                    card: rsp.card_name
+                    card: rsp.card_name,
+                    impUid: rsp.imp_uid,
+                    status: rsp.status,
+                    pg: rsp.pg_provider
                 };
-                fetch('/charge', {
-                    method:'POST',
-                    headers:{
-                        'Content-Type' : 'application/json',
+                $.ajax({
+                    url: '/charge',
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
                         [csrfHeader]: csrfToken
                     },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.text())
-                .then(data => {
-                    alert(data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
                 });
             }
         });
