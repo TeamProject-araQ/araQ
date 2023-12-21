@@ -66,8 +66,8 @@ public class UserService {
         user.setGender(userCreateForm.getGender());
         user.setIntroduce(userCreateForm.getIntroduce());
 
-        if (image == null && userCreateForm.getGender().equals("남성")) user.setImage("/profile/default-m.jpg");
-        else if (image == null) user.setImage("/profile/default-w.jpg");
+        if (image.isEmpty() && userCreateForm.getGender().equals("남성")) user.setImage("/profile/default-m.jpg");
+        else if (image.isEmpty()) user.setImage("/profile/default-w.jpg");
         else {
             File uploadDirectory = new File(uploadPath);
             if (!uploadDirectory.exists()) {

@@ -11,10 +11,7 @@
                 <div class="card mb-3">
                     <div class="row g-0">
                         <div class="col-md-8">
-                            <img th:if="${user.gender.equals('여성')}" src="/profile/default-w.jpg"
-                                 class="img-fluid rounded-start" alt="...">
-                            <img th:if="${user.gender.equals('남성')}" src="/profile/default-m.jpg"
-                                 class="img-fluid rounded-start" alt="...">
+                            <img th:src="@{${user.image}}" class="img-fluid rounded-start" alt="...">
                         </div>
                         <div class="col-md-4">
                             <div class="card-body">

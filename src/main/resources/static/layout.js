@@ -25,6 +25,7 @@ $(function() {
                     $("#chatRequestModal .nickName").text(data.nickname);
                     $("#chatRequestModal .userAge").text(data.age);
                     $("#chatRequestModal .introduce").text(data.introduce);
+                    $("#chatRequestModal .profileImage").attr("src", data.image);
                     $("#chatRequestModal").modal("show");
                 }
 
