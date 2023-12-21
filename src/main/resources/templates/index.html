@@ -129,7 +129,16 @@
                     $("#profileModal .profileImage").attr("src", data.image);
                     $("#profileModal .card-title").text(data.nickName);
                     $("#profileModal .age").text(data.age);
+                    $("#profileModal .introduce").text(data.introduce);
                     $("#profileModal").modal("show");
+
+                    $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(2) > td").text(data.drinking);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(3) > td").text(data.smoking);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(4) > td").text(data.personality);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(5) > td").text(data.hobby);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(6) > td").text(data.mbti);
+                    $("#moreInfoForm > table > tbody > tr:nth-child(7) > td").text(data.religion);
                 },
                 error: function(err) {
                     alert("요청이 실패하였습니다.");
