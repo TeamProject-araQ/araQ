@@ -1,4 +1,21 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">문의 내용</h3>
+    <select class="form-select" style="width:30%;" disabled>
+        <option selected th:text="${inquiry.category}"></option>
+    </select>
+    <div class="my-3 pb-1 border-bottom d-flex justify-content-between align-items-end">
+        <h4 th:text="|Q. ${inquiry.title}|"></h4>
+        <div th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+    </div>
+    <div class="card">
+        <div class="card-body" th:text="${inquiry.content}"></div>
+    </div>
+    <div th:if="${inquiry.answer}">
+        <h5 class="my-3">답변</h5>
+        <div class="card">
+            <div class="card-body" th:text="${inquiry.answer}"></div>
+        </div>
+    </div>
 </div>
 </html>
