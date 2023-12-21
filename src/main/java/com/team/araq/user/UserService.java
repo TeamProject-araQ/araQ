@@ -152,4 +152,13 @@ public class UserService {
             throw new IllegalArgumentException("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
         }
     }
+
+    public boolean checkUser(SiteUser user, String username, String password) {
+        if(user.getUsername().equals(username) && passwordEncoder.matches(password, user.getPassword())){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
