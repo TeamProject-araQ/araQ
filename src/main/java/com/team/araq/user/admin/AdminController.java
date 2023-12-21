@@ -3,6 +3,7 @@ package com.team.araq.user.admin;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
 import com.team.araq.pay.Payment;
+import com.team.araq.pay.PaymentDTO;
 import com.team.araq.pay.PaymentService;
 import com.team.araq.review.Review;
 
@@ -95,5 +96,23 @@ public class AdminController {
             this.reviewService.deleteReview(review);
         }
         return "리뷰가 삭제되었습니다.";
+    }
+
+    @PostMapping("/cancel")
+    @ResponseBody
+    public String cancel(@RequestBody List<String> payments) throws Exception {
+        for (String impUid : payments) {
+            Payment payment = this.paymentService.getPayment(impUid);
+            if (payment.getStatus().equals("cancelled"))
+                return "이미 취소된 결제입니다.";
+            else if (payment.getUser().getBubble() < payment.getAmount())
+                return "이미 사용된 결제 내역입니다.";
+            else {
+                this.paymentService.cancelPayment(impUid);
+                this.paymentService.updatePayment(payment, impUid);
+                this.userService.minusBubbles(payment.getUser(), payment.getAmount());
+            }
+        }
+        return "결제가 취소되었습니다.";
     }
 }

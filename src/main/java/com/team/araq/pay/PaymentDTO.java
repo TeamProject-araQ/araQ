@@ -21,4 +21,10 @@ public class PaymentDTO {
     private String username;
 
     private String card;
+
+    private String impUid;
+
+    private String pg;
+
+    private String status;
 }

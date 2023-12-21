@@ -2,6 +2,7 @@ package com.team.araq.user;
 
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
+import com.team.araq.inquiry.Inquiry;
 import com.team.araq.pay.Payment;
 import com.team.araq.review.Review;
 import jakarta.persistence.*;
@@ -82,5 +83,8 @@ public class SiteUser {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Payment> paymentList;
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
+    private List<Inquiry> inquiryList;
 
 }
