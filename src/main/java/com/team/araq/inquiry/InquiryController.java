@@ -43,6 +43,7 @@ public class InquiryController {
     public String create(@Valid InquiryDTO inquiryDTO, BindingResult bindingResult, Principal principal,
                          @RequestParam(value = "files") MultipartFile[] files) throws IOException {
         SiteUser user = this.userService.getByUsername(principal.getName());
+        if (bindingResult.hasErrors()) return "inquiry/write";
         Inquiry inquiry = this.inquiryService.createInquiry(inquiryDTO, user);
         this.inquiryService.uploadImage(inquiry, files);
         return "redirect:/inquiry/list";
