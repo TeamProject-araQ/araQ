@@ -2,14 +2,12 @@
 <div layout:fragment="content" class="container my-3">
     <div class="card">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
-            <div>
-                <div class="chatBox" th:each="chat : ${chatList}">
-                    <img th:src="@{${chat.writer.image}}" alt="">
-                    <div>
-                        <p th:text="${chat.writer.nickName}"></p>
-                        <div class="card">
-                            <p class="card-body" th:text="${chat.content}"></p>
-                        </div>
+            <div class="chatBox" th:each="chat : ${chatList}">
+                <img th:src="@{${chat.writer.image}}" alt="">
+                <div>
+                    <p th:text="${chat.writer.nickName}"></p>
+                    <div class="card">
+                        <p class="card-body" th:text="${chat.content}"></p>
                     </div>
                 </div>
             </div>
