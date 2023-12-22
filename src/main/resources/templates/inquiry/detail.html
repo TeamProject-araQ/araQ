@@ -4,17 +4,33 @@
     <select class="form-select" style="width:30%;" disabled>
         <option selected th:text="${inquiry.category}"></option>
     </select>
-    <div class="my-3 pb-1 border-bottom d-flex justify-content-between align-items-end">
+    <div class="pb-1 border-bottom my-3">
         <h4 th:text="|Q. ${inquiry.title}|"></h4>
-        <div th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+        <div th:text="${inquiry.content}" style="font-size:13pt;"></div>
+        <div class="d-flex justify-content-end my-1">
+            <div class="badge bg-light text-dark"
+                 th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+        </div>
     </div>
     <div class="card">
-        <div class="card-body" th:text="${inquiry.content}"></div>
+        <div class="card-body">
+            <label for="file" style="border-bottom:2px solid #d8d3e0;" class="fw-bold mb-2">첨부파일</label>
+            <div th:if="${inquiry.files != null}">
+                <div class="row">
+                    <div th:each="file : ${inquiry.files}" class="col-4">
+                        <img th:src="@{${file}}" alt="" style="width:100%; border-radius:10px;">
+                    </div>
+                </div>
+            </div>
+            <h4 class="text-center text-secondary p-2" th:if="${inquiry.files == null}">첨부파일 없음</h4>
+        </div>
     </div>
-    <div th:if="${inquiry.answer}">
-        <h5 class="my-3">답변</h5>
-        <div class="card">
-            <div class="card-body" th:text="${inquiry.answer}"></div>
+    <div class="my-5 pb-1 border-bottom" th:if="${inquiry.answer}">
+        <h4>A.</h4>
+        <div th:text="${inquiry.answer.content}" style="font-size:13pt;"></div>
+        <div class="d-flex justify-content-end my-1">
+            <div class="badge text-dark"
+                 th:text="${#temporals.format(inquiry.answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
         </div>
     </div>
 </div>
