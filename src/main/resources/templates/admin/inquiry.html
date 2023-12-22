@@ -160,11 +160,13 @@
         $('.regBtn').on('click', function () {
             var formId = $(this).data('target');
             var content =  $(this).parent().prev().children().last().val();
+            var modal = $(this).closest('.modal');
             if (content == '')
                 alert('답변 내용을 입력해주세요.');
             else {
                 alert('답변이 등록되었습니다.');
                 $('#' + formId).submit();
+                modal.modal('hide');
             }
         });
 

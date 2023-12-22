@@ -66,12 +66,40 @@
                            th:data-value="${online.username}">프로필</a></li>
                     <li><a class="chatRequest dropdown-item" href="javascript:void(0)" th:data-nick="${online.nickName}"
                            th:data-value="${online.username}">채팅 신청</a></li>
-                    <li><a class="dropdown-item text-danger" href="#">신고</a></li>
+                    <li>
+                        <button class="dropdown-item text-danger" type="button" data-bs-toggle="modal" data-bs-target="#report">신고
+                        </button>
+                    </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 신고 모달 -->
+    <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="reportModalLabel">신고하기</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" aria-label="reportReason">
+                        <option value="">신고 사유 선택</option>
+                        <option value="1">스팸 홍보 및 도배</option>
+                        <option value="2">욕설, 비속어, 인신공격</option>
+                        <option value="3">음란성, 선정성</option>
+                        <option value="4">기타</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" th:src="@{/index.js}" layout:fragment="script">
+
 </script>
 </html>
