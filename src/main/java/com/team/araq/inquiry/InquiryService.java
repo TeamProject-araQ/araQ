@@ -1,6 +1,7 @@
 package com.team.araq.inquiry;
 
 import com.team.araq.board.post.Post;
+import com.team.araq.review.Review;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
@@ -29,25 +30,11 @@ public class InquiryService {
 
     private String uploadPath = "C:/uploads/inquiry";
 
-    private Specification<Inquiry> search(String kw) {
-        return new Specification<Inquiry>() {
-            @Override
-            public Predicate toPredicate(Root<Inquiry> inquiry, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                query.distinct(true);
-                Join<Inquiry, SiteUser> u1 = inquiry.join("writer", JoinType.LEFT);
-                return criteriaBuilder.or(criteriaBuilder.like(inquiry.get("content"), "%" + kw + "%"),
-                        criteriaBuilder.like(inquiry.get("title"), "%" + kw + "%"),
-                        criteriaBuilder.like(u1.get("nickName"), "%" + kw + "%"));
-            }
-        };
-    }
-
-    public Page<Inquiry> getList(int page, String kw) {
+    public Page<Inquiry> getList(int page, String kw, String category) {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
-        Specification<Inquiry> spec = search(kw);
-        return this.inquiryRepository.findAll(spec, pageable);
+        return this.inquiryRepository.findByKeywordAndCategory(kw, category, pageable);
     }
 
     public Inquiry createInquiry(InquiryDTO inquiryDTO, SiteUser user) {
@@ -63,18 +50,16 @@ public class InquiryService {
     }
 
     public void uploadImage(Inquiry inquiry, MultipartFile[] files) throws IOException {
-        if (inquiry.getFiles() == null) inquiry.setFiles(new ArrayList<>());
         File uploadDirectory = new File(uploadPath);
         if (!uploadDirectory.exists()) {
             uploadDirectory.mkdirs();
         }
-        if (files != null) {
-            for (MultipartFile file : files) {
-                String fileName = inquiry.getId() + "_" + file.getOriginalFilename();
-                File dest = new File(uploadPath + File.separator + fileName);
-                FileCopyUtils.copy(file.getBytes(), dest);
-                inquiry.getFiles().add("/inquiry/image/" + fileName);
-            }
+        if (inquiry.getFiles() == null) inquiry.setFiles(new ArrayList<>());
+        for (MultipartFile file : files) {
+            String fileName = inquiry.getId() + "_" + file.getOriginalFilename();
+            File dest = new File(uploadPath + File.separator + fileName);
+            FileCopyUtils.copy(file.getBytes(), dest);
+            inquiry.getFiles().add("/inquiry/image/" + fileName);
         }
         this.inquiryRepository.save(inquiry);
     }
@@ -83,5 +68,14 @@ public class InquiryService {
         Optional<Inquiry> inquiry = this.inquiryRepository.findById(id);
         if (inquiry.isPresent()) return inquiry.get();
         else throw new RuntimeException("그런 문의 없습니다.");
+    }
+
+    public void updateStatus(Inquiry inquiry) {
+        inquiry.setStatus("답변 완료");
+        this.inquiryRepository.save(inquiry);
+    }
+
+    public void deleteInquiry(Inquiry inquiry) {
+        this.inquiryRepository.delete(inquiry);
     }
 }

@@ -1,6 +1,9 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <h3 class="my-3">문의하기</h3>
+    <div class="card mb-3" style="background:#d8d3e0;">
+        <div class="card-body">※ 문의하신 내용에 답변이 달리면 가입된 이메일로 메일이 발송됩니다.</div>
+    </div>
     <form th:object="${inquiryDTO}" method="post" enctype="multipart/form-data">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
