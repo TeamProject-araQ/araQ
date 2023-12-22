@@ -1,15 +1,5 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
-    <title>AraQ</title>
-</head>
-<body>
-<div class="container my-3">
-    <a href="#" class="text-center"><h2>AraQ</h2></a>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
     <form th:action="@{/user/login}" method="post">
         <div th:if="${param.error}">
             <div class="alert alert-danger">
@@ -28,6 +18,186 @@
     </form>
     <span>아직 회원이 아니신가요?</span>
     <a th:href="@{/user/signup}">회원가입</a>
+    <!-- 모달 버튼 -->
+    <!--    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findIdModal">-->
+    <!--        아이디 찾기-->
+    <!--    </button>-->
+
+    <!--    &lt;!&ndash; 아이디 찾기 모달 &ndash;&gt;-->
+    <!--    <div class="modal fade" id="findIdModal" tabindex="-1" aria-labelledby="findIdModalLabel" aria-hidden="true">-->
+    <!--        <div class="modal-dialog">-->
+    <!--            <div class="modal-content">-->
+    <!--                <div class="modal-header">-->
+    <!--                    <h5 class="modal-title" id="findIdModalLabel">아이디 찾기</h5>-->
+    <!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+    <!--                </div>-->
+    <!--                <div class="modal-body">-->
+    <!--                    <div class="mb-3">-->
+    <!--                        <label for="email" class="form-label">이메일</label>-->
+    <!--                        <input type="email" id="email" class="form-control">-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--                <div class="modal-footer">-->
+    <!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
+    <!--                    <button type="button" class="btn btn-primary" onclick="findId()">확인</button>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findPwModal">
+        비밀번호 찾기
+    </button>
+
+    <div class="modal fade" id="findPwModal" tabindex="-1" aria-labelledby="findPwModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="findPwModalLabel">비밀번호 찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">찾기 방법</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="findMethod" id="findByEmail"
+                                   value="email"
+                                   onclick="showSection('emailSection')" checked>
+                            <label class="form-check-label" for="findByEmail">이메일로 찾기</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="findMethod" id="findByPhone"
+                                   value="phone"
+                                   onclick="showSection('phoneSection')">
+                            <label class="form-check-label" for="findByPhone">핸드폰 번호 인증으로 찾기</label>
+                        </div>
+                    </div>
+                    <div id="idSection" class="mb-3" style="display: none;">
+                        <label for="id" class="form-label">아이디</label>
+                        <input type="text" id="id" class="form-control">
+                    </div>
+                    <div id="emailSection" class="mb-3" style="display: none;">
+                        <label for="email" class="form-label">이메일</label>
+                        <input type="email" id="email" class="form-control">
+                    </div>
+                    <!-- 핸드폰 번호 입력 섹션 -->
+                    <div id="phoneSection" class="mb-3" style="display: none;">
+                        <label for="phoneNum" class="form-label">전화 번호</label>
+                        <input type="text" id="phoneNum" class="form-control">
+                        <!-- 인증번호 보내기 버튼 추가 -->
+                        <button type="button" class="btn btn-primary mt-2" onclick="sendVerificationCode()">인증번호 보내기</button>
+                        <!-- 인증번호 입력 칸 -->
+                        <div id="authNumSection" class="mb-3" style="display: none;">
+                            <label for="authNum" class="form-label">인증 번호</label>
+                            <input type="text" id="authNum" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <!-- 확인 버튼이 아래에 있습니다. -->
+                    <button type="button" class="btn btn-primary" onclick="verifyFindInfo()">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
+<script layout:fragment="script">
+    function findId() {
+        var email = document.getElementById('email').value;
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/findId',
+            contentType: 'text/plain',
+            data: email,
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            success: function (response) {
+                var modalBody = $('.modal-body');
+                if (response.success) {
+                    modalBody.html('아이디를 찾았습니다. 사용자명: ' + response.username);
+                } else {
+                    alert('해당 이메일에 해당하는 아이디를 찾을 수 없습니다.');
+                }
+            },
+            error: function () {
+                alert('서버 오류');
+            }
+        });
+
+    }
+
+    $(document).ready(function () {
+        $('#findIdModal').on('hidden.bs.modal', function () {
+            // 모달이 닫힐 때 입력 필드 초기화
+            $('#email').val('');
+            $('.modal-body').html('<div class="mb-3"><label for="email" class="form-label">이메일</label><input type="email" id="email" class="form-control"></div>');
+        });
+    });
+
+
+     function showSection(sectionId) {
+        // 선택한 라디오 버튼에 따라 해당 섹션을 보이게 처리
+        $('#emailSection').hide();
+        $('#phoneSection').hide();
+        $('#verificationSection').hide();
+        $('#idSection').show();
+
+        $('#' + sectionId).show();
+    }
+
+    function sendVerificationCode() {
+        // 여기에서 전화번호로 인증번호를 보내는 로직을 구현
+        alert('인증번호를 전송했습니다.');
+        $('#verificationSection').show();
+    }
+
+     function verifyFindInfo() {
+        var selectedMethod = $('input[name="findMethod"]:checked').val();
+        var id = $('#id').val();
+
+        if (selectedMethod === 'email') {
+            var email = $('#email').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/user/sendEmail',
+                contentType: 'text/plain',
+                data: { email: email, id: id },  // 데이터 형식을 수정함
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert('이메일을 발송했습니다.');
+                    }
+                },
+                error: function () {
+                    alert('서버 오류');
+                }
+            });
+        } else if (selectedMethod === 'phone') {
+            var phoneNum = $('#phoneNum').val();
+            var verificationCode = $('#authNum').val();
+
+            // 핸드폰 번호 인증으로 찾기 선택 시, id와 phoneNum, verificationCode를 확인하고 로직
+        }
+
+        // 모달 닫기
+        $('#findPwModal').modal('hide');
+    }
+
+    $(document).ready(function () {
+        // 모달이 닫힐 때 입력 필드 초기화
+        $('#findPwModal').on('hidden.bs.modal', function () {
+            $('#id').val('');
+            $('#email').val('');
+            $('#phoneNum').val('');
+            $('#authNum').val('');
+            $('.modal-body').html('<div class="mb-3"><label class="form-label">찾기 방법</label><div class="form-check"><input class="form-check-input" type="radio" name="findMethod" id="findByEmail" value="email" onclick="showSection(\'emailSection\')" checked><label class="form-check-label" for="findByEmail">이메일로 찾기</label></div><div class="form-check"><input class="form-check-input" type="radio" name="findMethod" id="findByPhone" value="phone" onclick="showSection(\'phoneSection\')"><label class="form-check-label" for="findByPhone">핸드폰 번호 인증으로 찾기</label></div></div><div id="idSection" class="mb-3"><label for="id" class="form-label">아이디</label><input type="text" id="id" class="form-control"></div><div id="emailSection" class="mb-3" style="display: none;"><label for="email" class="form-label">이메일</label><input type="email" id="email" class="form-control"></div><div id="phoneSection" class="mb-3" style="display: none;"><label for="phoneNum" class="form-label">전화 번호</label><input type="text" id="phoneNum" class="form-control"></div><div id="authNumSection" class="mb-3" style="display: none;"><label for="authNum" class="form-label">인증 번호</label><input type="text" id="authNum" class="form-control"></div>');
+        });
+    });
+</script>
 </html>
