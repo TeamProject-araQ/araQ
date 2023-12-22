@@ -2,12 +2,13 @@
 <div layout:fragment="content" class="container my-3">
     <div class="card">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
-            <div class="chatBox" th:each="chat : ${chatList}">
-                <img th:src="@{${chat.writer.image}}" alt="">
+            <div class="chatBox" th:each="chat : ${chatList}"
+                 th:classappend="${chat.writer.username.equals(user.username)} ? 'text-end'">
+                <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
                 <div>
-                     <p th:text="${chat.writer.nickName}"></p>
-                    <div class="card">
-                        <p class="card-body" th:text="${chat.content}"></p>
+                    <p th:text="${chat.writer.nickName}" th:if="${!chat.writer.username.equals(user.username)}"></p>
+                    <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
+                        <p class="card-body text-start" th:text="${chat.content}"></p>
                     </div>
                 </div>
             </div>
@@ -33,101 +34,13 @@
         </form>
     </div>
     <a th:href="@{/chat/list}" class="btn btn-secondary">나가기</a>
-</div>
-<script layout:fragment="script" th:inline="javascript">
-    $(function() {
-        $("#msgContent").focus();
-        var chatBoard = document.getElementById("chatBoard");
-        chatBoard.scrollTop = chatBoard.scrollHeight;
-
-        var socket = new SockJS("/ws");
-        var stompClient = Stomp.over(socket);
+    <script th:inline="javascript">
         var roomCode = [[${room.code}]];
         var nickName = [[${user.nickName}]];
         var user = [[${user.username}]];
         var target = [[${target.username}]];
-
-        stompClient.connect({}, function(frame) {
-
-            stompClient.send("/app/online", {}, JSON.stringify({
-                type: "online",
-                target: $("#hiddenUserName").val()
-            }));
-
-            stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-                var m = JSON.parse(message.body);
-
-                $.ajax({
-                    url: "/user/getInfo",
-                    type: "post",
-                    contentType: "text/plain",
-                    dataType: "json",
-                    data: m.writer,
-                    headers: {
-                        [csrfHeader]: csrfToken
-                    },
-                    success: function(data) {
-                        var element =
-                        '<div class="chatBox">' +
-                            '<img src="' + data.image + '" alt="">' +
-                            '<div>' +
-                                '<p>' + data.nickName + '</p>' +
-                                '<div class="card">' +
-                                    '<p class="card-body">' + m.content + '</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-
-                        if (data.writer == user) {
-                            element =
-                                '<div class="chatBox">' +
-                                '<div>' +
-                                    '<p>' + data.nickName + '</p>' +
-                                    '<div class="card">' +
-                                        '<p class="card-body">' + m.content + '</p>' +
-                                    '</div>' +
-                                '</div>' +
-                                '<img src="' + data.image + '" alt="">' +
-                            '</div>';
-                        }
-
-                        $("#chatBoard").append(element);
-                        chatBoard.scrollTop = chatBoard.scrollHeight;
-                    },
-                    error: function(err) {
-                        alert("요청이 실패하였습니다.");
-                    }
-                });
-            });
-        });
-
-        $("#sendChatForm").submit(function(event) {
-            event.preventDefault();
-
-            if($("#msgContent").val() != "") {
-                stompClient.send("/app/send", {}, JSON.stringify({
-                    content: $("#msgContent").val(),
-                    writer: user,
-                    code: roomCode,
-                    target: target
-                }));
-            }
-
-            $("#msgContent").val("");
-            $("#msgContent").focus();
-        });
-
-        $(window).on('beforeunload', function() {
-            $.ajax({
-                url: "/offline",
-                type: "POST",
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                contentType:"text/plain",
-                data: $("#hiddenUserName").val()
-            });
-        });
-    });
+    </script>
+</div>
+<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script">
 </script>
 </html>
