@@ -160,24 +160,27 @@
 
         if (selectedMethod === 'email') {
             var email = $('#email').val();
+            var username = $('#id').val();
 
-            $.ajax({
-                type: 'POST',
-                url: '/user/sendEmail',
-                contentType: 'text/plain',
-                data: { email: email, id: id },  // 데이터 형식을 수정함
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert('이메일을 발송했습니다.');
-                    }
-                },
-                error: function () {
-                    alert('서버 오류');
+           $.ajax({
+            type: 'POST',
+            url: '/user/sendEmail',
+            contentType: 'application/json',
+            data: JSON.stringify({ username: username, email: email }),
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert('이메일을 발송했습니다.');
+                } else {
+                    alert('그런 사람없다.');
                 }
-            });
+            },
+            error: function () {
+                alert('서버 오류');
+            },
+        });
         } else if (selectedMethod === 'phone') {
             var phoneNum = $('#phoneNum').val();
             var verificationCode = $('#authNum').val();
