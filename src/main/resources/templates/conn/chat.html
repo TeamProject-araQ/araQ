@@ -2,89 +2,35 @@
 <div layout:fragment="content" class="container my-3">
     <div class="card">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
-            <div th:each="chat : ${chatList}">
-                <span th:text="${chat.writer.nickName}"></span>
-                <span>: </span>
-                <span th:text="${chat.content}"></span>
-            </div>
-        </div>
-        <button class="btn btn-secondary btn-sm p-0 m-auto" type="button" data-bs-toggle="collapse"
-                data-bs-target="#chatMoreFunction"
-                aria-expanded="false" aria-controls="collapseExample" style="width:50px">
-            더보기
-        </button>
-        <div class="collapse" id="chatMoreFunction">
-            <div class="card card-body">
-                <div class="d-flex justify-content-around">
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
+            <div class="chatBox" th:each="chat : ${chatList}"
+                 th:classappend="${chat.writer.username.equals(user.username)} ? 'text-end'">
+                <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
+                <div>
+                    <p th:text="${chat.writer.nickName}" th:if="${!chat.writer.username.equals(user.username)}"></p>
+                    <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
+                        <p class="card-body text-start" th:text="${chat.content}"></p>
+                    </div>
                 </div>
             </div>
         </div>
-        <form class="input-group" id="sendChatForm" autocomplete="off">
-            <input type="text" id="msgContent" class="form-control">
-            <button type="submit" class="btn btn-primary">보내기</button>
+        <form id="sendChatForm" autocomplete="off">
+            <textarea type="text" id="msgContent" class="form-control"></textarea>
+            <div class="d-flex justify-content-between align-items-center m-2">
+                <a th:href="@{/chat/list}" class="btn btn-outline-secondary">나가기</a>
+                <a href="#">기능</a>
+                <a href="#">기능</a>
+                <a href="#">기능</a>
+                <button type="submit" class="버튼 btn" style="width:80px;">보내기</button>
+            </div>
         </form>
     </div>
-    <a th:href="@{/chat/list}" class="btn btn-secondary">나가기</a>
-</div>
-<script layout:fragment="script" th:inline="javascript">
-    $(function() {
-        $("#msgContent").focus();
-        var chatBoard = document.getElementById("chatBoard");
-        chatBoard.scrollTop = chatBoard.scrollHeight;
-
-        var socket = new SockJS("/ws");
-        var stompClient = Stomp.over(socket);
+    <script th:inline="javascript">
         var roomCode = [[${room.code}]];
         var nickName = [[${user.nickName}]];
         var user = [[${user.username}]];
         var target = [[${target.username}]];
-
-        stompClient.connect({}, function(frame) {
-
-            stompClient.send("/app/online", {}, JSON.stringify({
-                type: "online",
-                target: $("#hiddenUserName").val()
-            }));
-
-            stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-                var data = JSON.parse(message.body);
-                $("#chatBoard").append("<div>" + data.writer + " : " + data.content + "</div>");
-
-                chatBoard.scrollTop = chatBoard.scrollHeight;
-            });
-        });
-
-        $("#sendChatForm").submit(function(event) {
-            event.preventDefault();
-
-            if($("#msgContent").val() != "") {
-                stompClient.send("/app/send", {}, JSON.stringify({
-                    content: $("#msgContent").val(),
-                    writer: user,
-                    code: roomCode,
-                    target: target
-                }));
-            }
-
-            $("#msgContent").val("");
-            $("#msgContent").focus();
-        });
-
-        $(window).on('beforeunload', function() {
-            $.ajax({
-                url: "/offline",
-                type: "POST",
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                contentType:"text/plain",
-                data: $("#hiddenUserName").val()
-            });
-        });
-    });
+    </script>
+</div>
+<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script">
 </script>
 </html>

@@ -1,5 +1,6 @@
 package com.team.araq.chat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
+    @JsonIgnore
     private Room room;
     @ManyToOne
     private SiteUser writer;

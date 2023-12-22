@@ -1,5 +1,6 @@
 package com.team.araq.pay;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class Payment {
     private LocalDateTime date;
 
     @ManyToOne
+    @JsonBackReference
     private SiteUser user;
 
     private int amount;

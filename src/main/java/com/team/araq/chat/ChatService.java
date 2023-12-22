@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 public class ChatService {
     private final ChatRepo chatRepo;
 
-    public void create(Room room, SiteUser writer, SiteUser target, String content) {
+    public Chat create(Room room, SiteUser writer, SiteUser target, String content) {
         Chat chat = new Chat();
         chat.setRoom(room);
         chat.setWriter(writer);
         chat.setTarget(target);
         chat.setContent(content);
         chat.setCreateDate(LocalDateTime.now());
-        chatRepo.save(chat);
+        return chatRepo.save(chat);
     }
 }
