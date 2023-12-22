@@ -25,4 +25,5 @@ public class Chat {
     @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDateTime createDate;
+    private Integer confirm;
 }

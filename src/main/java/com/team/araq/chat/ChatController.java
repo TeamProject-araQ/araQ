@@ -109,4 +109,11 @@ public class ChatController {
         roomService.delete(roomService.get(code));
         return null;
     }
+
+    @PostMapping("/confirm")
+    @ResponseBody
+    public String confirm(@RequestBody MessageDto messageDto){
+        // todo 여기 해야함
+        return null;
+    }
 }
