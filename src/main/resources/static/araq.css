@@ -171,7 +171,6 @@ a {
     display:flex;
     align-items:center;
     margin:10px 0;
-    width:100%;
 }
 
 .chatBox > img {
@@ -187,10 +186,12 @@ a {
 }
 
 .chatBox > div {
-    max-width:70%;
+    width:100%;
 }
 
 .chatBox > div > .card{
+    display:inline-block;
+    max-width:70%;
 }
 
 .chatBox > div > p {

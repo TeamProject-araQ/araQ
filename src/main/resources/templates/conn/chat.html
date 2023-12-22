@@ -5,7 +5,7 @@
             <div class="chatBox" th:each="chat : ${chatList}">
                 <img th:src="@{${chat.writer.image}}" alt="">
                 <div>
-                    <p th:text="${chat.writer.nickName}"></p>
+                     <p th:text="${chat.writer.nickName}"></p>
                     <div class="card">
                         <p class="card-body" th:text="${chat.content}"></p>
                     </div>
@@ -55,24 +55,49 @@
             }));
 
             stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-                var data = JSON.parse(message.body);
+                var m = JSON.parse(message.body);
 
-                /* 지우지 마시오
-                var element =
-                '<div class="chatBox">' +
-                    '<img src="' + data.image + '" alt="">' +
-                    '<div>' +
-                        '<p>' + data.nickName + '</p>' +
-                        '<div class="card">' +
-                            '<p class="card-body">' + data.content + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-                */
+                $.ajax({
+                    url: "/user/getInfo",
+                    type: "post",
+                    contentType: "text/plain",
+                    dataType: "json",
+                    data: m.writer,
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    success: function(data) {
+                        var element =
+                        '<div class="chatBox">' +
+                            '<img src="' + data.image + '" alt="">' +
+                            '<div>' +
+                                '<p>' + data.nickName + '</p>' +
+                                '<div class="card">' +
+                                    '<p class="card-body">' + m.content + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>';
 
-                $("#chatBoard").append("<div style='background:black;color:white;'>" + data.writer + " : " + data.content + "</div>");
+                        if (data.writer == user) {
+                            element =
+                                '<div class="chatBox">' +
+                                '<div>' +
+                                    '<p>' + data.nickName + '</p>' +
+                                    '<div class="card">' +
+                                        '<p class="card-body">' + m.content + '</p>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<img src="' + data.image + '" alt="">' +
+                            '</div>';
+                        }
 
-                chatBoard.scrollTop = chatBoard.scrollHeight;
+                        $("#chatBoard").append(element);
+                        chatBoard.scrollTop = chatBoard.scrollHeight;
+                    },
+                    error: function(err) {
+                        alert("요청이 실패하였습니다.");
+                    }
+                });
             });
         });
 

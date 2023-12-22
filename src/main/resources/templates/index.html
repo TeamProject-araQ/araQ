@@ -87,9 +87,6 @@
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
         $("#onlineUsers .chatRequest").on('click', function() {
             var nick = $(this).data("nick");
             var dataValue = $(this).data("value");

@@ -30,8 +30,6 @@ public class ChatController {
 
         chatService.create(room, user, target, chatDto.getContent());
 
-        chatDto.setWriter(user.getNickName());
-        chatDto.setTarget(target.getNickName());
         MessageDto messageDto = new MessageDto();
         messageDto.setType("sendChat");
         messageDto.setNickname(user.getNickName());
