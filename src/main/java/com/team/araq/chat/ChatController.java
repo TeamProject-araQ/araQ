@@ -28,7 +28,11 @@ public class ChatController {
         SiteUser target = userService.getByUsername(chatDto.getTarget());
         Room room = roomService.get(chatDto.getCode());
 
-        chatService.create(room, user, target, chatDto.getContent());
+        Chat chat = chatService.create(room, user, target, chatDto.getContent());
+
+        chatDto.setWriterNick(user.getNickName());
+        chatDto.setWriterImage(user.getImage());
+        chatDto.setCreateDate(chat.getCreateDate());
 
         MessageDto messageDto = new MessageDto();
         messageDto.setType("sendChat");

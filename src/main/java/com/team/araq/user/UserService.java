@@ -114,7 +114,19 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void login(SiteUser user) {
+        user.setLogin(true);
+        userRepository.save(user);
+    }
 
+    public void logout(SiteUser user) {
+        user.setLogin(false);
+        userRepository.save(user);
+    }
+
+    public List<SiteUser> getLoginUsers() {
+        return userRepository.findByLogin(true);
+    }
 
     public Page<SiteUser> getList(int page, String kw) {
         List<Sort.Order> sort = new ArrayList<>();

@@ -98,5 +98,7 @@ public class SiteUser {
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Inquiry> inquiryList;
 
+    private boolean login;
+
 
 }

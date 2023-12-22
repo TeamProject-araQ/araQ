@@ -13,27 +13,17 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-secondary btn-sm p-0 m-auto" type="button" data-bs-toggle="collapse"
-                data-bs-target="#chatMoreFunction"
-                aria-expanded="false" aria-controls="collapseExample" style="width:50px">
-            더보기
-        </button>
-        <div class="collapse" id="chatMoreFunction">
-            <div class="card card-body">
-                <div class="d-flex justify-content-around">
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
-                    <a href="#">기능</a>
-                </div>
+        <form id="sendChatForm" autocomplete="off">
+            <textarea type="text" id="msgContent" class="form-control"></textarea>
+            <div class="d-flex justify-content-between align-items-center m-2">
+                <a th:href="@{/chat/list}" class="btn btn-outline-secondary">나가기</a>
+                <a href="#">기능</a>
+                <a href="#">기능</a>
+                <a href="#">기능</a>
+                <button type="submit" class="버튼 btn" style="width:80px;">보내기</button>
             </div>
-        </div>
-        <form class="input-group" id="sendChatForm" autocomplete="off">
-            <input type="text" id="msgContent" class="form-control">
-            <button type="submit" class="btn btn-primary">보내기</button>
         </form>
     </div>
-    <a th:href="@{/chat/list}" class="btn btn-secondary">나가기</a>
     <script th:inline="javascript">
         var roomCode = [[${room.code}]];
         var nickName = [[${user.nickName}]];

@@ -6,6 +6,13 @@ $(function() {
     var chatBoard = document.getElementById("chatBoard");
     chatBoard.scrollTop = chatBoard.scrollHeight;
 
+    $("#sendChatForm > textarea").on('keydown', function(e) {
+        if (e.keyCode == 13 && !e.shiftKey) {
+            e.preventDefault();
+            $("#sendChatForm").submit();
+        }
+    });
+
     stompClient.connect({}, function(frame) {
 
         stompClient.send("/app/online", {}, JSON.stringify({
@@ -14,56 +21,40 @@ $(function() {
         }));
 
         stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-            var m = JSON.parse(message.body);
+            var data = JSON.parse(message.body);
+            var element = "";
 
-            $.ajax({
-                url: "/user/getInfo",
-                type: "post",
-                contentType: "text/plain",
-                dataType: "json",
-                data: m.writer,
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                success: function(data) {
-                    var element = "";
+            if (data.writer == user) {
+                element =
+                '<div class="chatBox text-end">' +
+                    '<div>' +
+                        '<div class="card ourColor">' +
+                            '<p class="card-body text-start">' + data.content + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            } else {
+                element =
+                '<div class="chatBox">' +
+                    '<img src="' + data.writerImage + '" alt="">' +
+                    '<div>' +
+                        '<p>' + data.writerNick + '</p>' +
+                        '<div class="card">' +
+                            '<p class="card-body">' + data.content + '</p>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }
 
-                    if (data.username == user) {
-                        element =
-                        '<div class="chatBox text-end">' +
-                            '<div>' +
-                                '<div class="card ourColor">' +
-                                    '<p class="card-body text-start">' + m.content + '</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-                    } else {
-                        element =
-                        '<div class="chatBox">' +
-                            '<img src="' + data.image + '" alt="">' +
-                            '<div>' +
-                                '<p>' + data.nickName + '</p>' +
-                                '<div class="card">' +
-                                    '<p class="card-body">' + m.content + '</p>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
-                    }
-
-                    $("#chatBoard").append(element);
-                    chatBoard.scrollTop = chatBoard.scrollHeight;
-                },
-                error: function(err) {
-                    alert("요청이 실패하였습니다.");
-                }
-            });
+            $("#chatBoard").append(element);
+            chatBoard.scrollTop = chatBoard.scrollHeight;
         });
     });
 
     $("#sendChatForm").submit(function(event) {
         event.preventDefault();
 
-        if($("#msgContent").val() != "") {
+        if($("#msgContent").val().trim() != "") {
             stompClient.send("/app/send", {}, JSON.stringify({
                 content: $("#msgContent").val(),
                 writer: user,

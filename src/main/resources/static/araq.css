@@ -169,7 +169,6 @@ a {
 
 .chatBox {
     display:flex;
-    align-items:center;
     margin:10px 0;
     overflow:hidden;
 }
@@ -184,6 +183,7 @@ a {
 .chatBox .card > * {
     padding:2px 10px;
     margin:0;
+    white-space:pre-line;
 }
 
 .chatBox > div {
@@ -204,6 +204,7 @@ a {
 .버튼 {
     border:1px solid rgb(146, 132, 168);
     color:rgb(146, 132, 168);
+    font-weight:bold;
 }
 
 .버튼:hover {
