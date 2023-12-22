@@ -100,5 +100,6 @@ public class SiteUser {
 
     private boolean login;
 
+    private String token;
 
 }

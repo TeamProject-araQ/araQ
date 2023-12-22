@@ -1,5 +1,7 @@
 package com.team.araq.user;
 
+import com.team.araq.board.email.MailDto;
+import com.team.araq.board.email.MailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -20,27 +24,29 @@ import java.security.Principal;
 public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @GetMapping("/signup")
-    public String signup(UserCreateForm userCreateForm){
+    public String signup(UserCreateForm userCreateForm) {
         return "user/signup";
     }
+
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image){
-        if(bindingResult.hasErrors()){
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
+        if (bindingResult.hasErrors()) {
             return "user/signup";
         }
-        if(!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())){
-            bindingResult.rejectValue("password2","passwordInCorrect","2개의 패스워드가 일치하지않습니다.");
+        if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
         }
-        try{
+        try {
             userService.create(userCreateForm, image);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
             return "user/signup";
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "user/signup";
@@ -55,7 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/update")
-    public String modify(){
+    public String modify() {
         return "user/update";
     }
 
@@ -79,18 +85,18 @@ public class UserController {
     }
 
     @GetMapping("/updatePw")
-    public String checkPw(){
+    public String checkPw() {
         return "user/updatePw";
     }
 
 
     @GetMapping("/out")
-    public String out(){
+    public String out() {
         return "user/out";
     }
 
     @PostMapping("/out")
-    public String out(@RequestParam("username") String username, @RequestParam("password") String password, Principal principal){
+    public String out(@RequestParam("username") String username, @RequestParam("password") String password, Principal principal) {
         SiteUser user = userService.getByUsername(principal.getName());
         userService.deleteUser(user);
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -99,11 +105,11 @@ public class UserController {
 
     @PostMapping("/checkUser")
     @ResponseBody
-    public String checkUser(@RequestParam String username, @RequestParam String password, Principal principal){
+    public String checkUser(@RequestParam String username, @RequestParam String password, Principal principal) {
         SiteUser user = userService.getByUsername(principal.getName());
-        if(userService.checkUser(user,username,password)){
+        if (userService.checkUser(user, username, password)) {
             return "success";
-        } else{
+        } else {
             return "fail";
         }
     }
@@ -113,5 +119,36 @@ public class UserController {
     public SiteUser getInfo(@RequestBody String username) {
         return userService.getByUsername(username);
 
+    }
+
+    @PostMapping("/findId")
+    @ResponseBody
+    public Map<String, Object> findId(@RequestBody String email){
+        Map<String, Object> response = new HashMap<>();
+        String username = userService.findUsernameByEmail(email).getUsername();
+
+        if(username != null){
+            response.put("success", true);
+            response.put("username", username);
+        } else {
+            response.put("success", false);
+        }
+        return response;
+    }
+
+    @PostMapping("/sendEmail")
+    @ResponseBody
+    public String sendEmail(@RequestBody Map<String, String> data) {
+        String username = data.get("username");
+        String email = data.get("email");
+
+        SiteUser user = userService.getByUsername(username);
+
+        if (user.getEmail().equals(email)) {
+            mailService.sendPasswordResetEmail(username);
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 }

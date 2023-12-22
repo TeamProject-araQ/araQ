@@ -12,20 +12,17 @@ spring:
     hibernate:
       ddl-auto: update
 
-  #naverMail
   mail:
-    host: smtp.naver.com
-    port: 465
-    username: wjddbstj1@naver.com
-    password: yunseo1322
+    host: smtp.gmail.com
+    port: 587
+    username: teriyaki970326
+    password: pdtv fdbj vecz mpqm
     properties:
-      mail:
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-            trust: smtp.naver.com
-
+     mail:
+       smtp:
+         auth: true
+         starttls:
+           enable: true
 
 #iampport
 imp:

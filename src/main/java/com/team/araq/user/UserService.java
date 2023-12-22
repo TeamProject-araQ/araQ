@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -31,6 +32,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private String uploadPath = "C:/uploads/user";
+
 
 
     private Specification<SiteUser> search(String kw) {
@@ -171,6 +173,15 @@ public class UserService {
         } else {
             return false;
         }
+    }
+
+    public SiteUser findUsernameByEmail(String email){
+        Optional<SiteUser> user = userRepository.findByEmail(email);
+        if(user.isPresent()){
+            return user.get();
+        }
+        throw new RuntimeException("그런 사람 없습니다.");
+
     }
 
 }
