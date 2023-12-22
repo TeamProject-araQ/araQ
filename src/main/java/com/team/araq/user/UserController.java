@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -113,5 +115,20 @@ public class UserController {
     public SiteUser getInfo(@RequestBody String username) {
         return userService.getByUsername(username);
 
+    }
+
+    @PostMapping("/findId")
+    @ResponseBody
+    public Map<String, Object> findId(@RequestBody String email){
+        Map<String, Object> response = new HashMap<>();
+        String username = userService.findUsernameByEmail(email).getUsername();
+
+        if(username != null){
+            response.put("success", true);
+            response.put("username", username);
+        } else {
+            response.put("success", false);
+        }
+        return response;
     }
 }
