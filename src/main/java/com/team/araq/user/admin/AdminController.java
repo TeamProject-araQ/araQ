@@ -2,6 +2,8 @@ package com.team.araq.user.admin;
 
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.inquiry.Inquiry;
+import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentDTO;
 import com.team.araq.pay.PaymentService;
@@ -30,6 +32,8 @@ public class AdminController {
     private final ReviewService reviewService;
 
     private final PaymentService paymentService;
+
+    private final InquiryService inquiryService;
 
     @GetMapping("")
     public String page() {
@@ -68,6 +72,17 @@ public class AdminController {
         return "admin/payment";
     }
 
+    @GetMapping("/inquiry")
+    public String manageInquiry(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+                                @RequestParam(value = "kw", defaultValue = "") String kw,
+                                @RequestParam(value = "category", defaultValue = "") String category) {
+        Page<Inquiry> paging = this.inquiryService.getList(page, kw, category);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        model.addAttribute("category", category);
+        return "admin/inquiry";
+    }
+
     @PostMapping("/user/delete")
     @ResponseBody
     public String deleteUser(@RequestBody List<String> usernames) {
@@ -100,7 +115,7 @@ public class AdminController {
 
     @PostMapping("/cancel")
     @ResponseBody
-    public String cancel(@RequestBody List<String> payments) throws Exception {
+    public String cancelPayment(@RequestBody List<String> payments) throws Exception {
         for (String impUid : payments) {
             Payment payment = this.paymentService.getPayment(impUid);
             if (payment.getStatus().equals("cancelled"))
@@ -114,5 +129,15 @@ public class AdminController {
             }
         }
         return "결제가 취소되었습니다.";
+    }
+
+    @ResponseBody
+    @PostMapping("/inquiry/delete")
+    public String deleteInquiry(@RequestBody List<String> inquiries) {
+        for (String inquiryId : inquiries) {
+            Inquiry inquiry = this.inquiryService.getInquiry(Integer.parseInt(inquiryId));
+            this.inquiryService.deleteInquiry(inquiry);
+        }
+        return "문의가 삭제되었습니다.";
     }
 }

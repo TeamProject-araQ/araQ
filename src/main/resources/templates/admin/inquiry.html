@@ -1,0 +1,208 @@
+<html layout:decorate="~{admin/page}">
+<div layout:fragment="content" class="container-fluid p-5">
+    <h3 class="border-bottom pb-2">문의 목록</h3>
+    <div class="d-flex justify-content-between my-3">
+        <select class="form-select" style="width:30%;" id="selectCategory">
+            <option th:selected="${category == ''}" value="">카테고리 선택</option>
+            <option th:selected="${category == '결제'}" value="결제">결제 관련 문의</option>
+            <option th:selected="${category == '채팅'}" value="채팅">채팅 관련 문의</option>
+            <option th:selected="${category == '매칭'}" value="매칭">매칭 관련 문의</option>
+            <option th:selected="${category == '계정'}" value="계정">계정 관련 문의</option>
+            <option th:selected="${category == '기타'}" value="기타">기타</option>
+        </select>
+        <div class="input-group" style="width:40%;">
+            <input type="text" id="searchKw" class="form-control" placeholder="제목, 내용, 작성자 검색">
+            <button class="btn 버튼" type="button" id="searchBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                     viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check text-dark">
+            <input class="form-check-input" type="checkbox" id="checkAll">
+            <label class="form-check-label" for="checkAll">
+                전체 선택
+            </label>
+        </div>
+        <button type="button" class="btn btn-sm 버튼" id="deleteBtn">삭제
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                 viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+            </svg>
+        </button>
+    </div>
+    <table class="table table-hover text-center">
+        <thead style="background:#5f566d; color:white;">
+        <tr>
+            <th>선택</th>
+            <th>번호</th>
+            <th>카테고리</th>
+            <th style="width:40%;">제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>답변 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="inquiry, loop : ${paging}">
+            <td><input class="check form-check-input" type="checkbox" th:value="${inquiry.id}"></td>
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+            <td th:text="${inquiry.category}"></td>
+            <td>
+                <a th:href="@{|/inquiry/detail/${inquiry.id}|}" th:text="${inquiry.title}"></a>
+            </td>
+            <td th:text="${inquiry.writer.nickName}"></td>
+            <td th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd')}"></td>
+            <td th:if="${inquiry.status == '답변 완료'}" th:text="${inquiry.status}"></td>
+            <td th:if="${inquiry.status == '답변 대기'}">
+                <button type="button" class="btn 버튼 btn-sm" data-bs-toggle="modal"
+                        th:data-bs-target="|#answer_${inquiry.id}|">
+                    답변하기
+                </button>
+            </td>
+            <!-- 답변 모달 -->
+            <div class="modal fade" th:id="|answer_${inquiry.id}|" tabindex="-1" aria-labelledby="writeAnswerLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-dark" id="writeAnswerLabel">답변</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3 text-center" style="width:32%;">
+                                <div class="card p-1" th:text="|카테고리 > ${inquiry.category}|"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="title" style="border-bottom:2px solid #d8d3e0;" class="mb-2">제목</label>
+                                <div class="card p-2" th:text="${inquiry.title}"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="content" style="border-bottom:2px solid #d8d3e0;" class="mb-2">내용</label>
+                                <div class="card p-2" th:text="${inquiry.content}"></div>
+                            </div>
+                            <div class="mb-3" th:if="${inquiry.files != null}">
+                                <label for="file" style="border-bottom:2px solid #d8d3e0;" class="mb-2">첨부파일</label>
+                                <div class="row">
+                                    <div th:each="file : ${inquiry.files}" class="col-4">
+                                        <img th:src="@{${file}}" alt="" style="border-radius:15px; width:100%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <form th:action="@{|/answer/create/${inquiry.id}|}" method="post"
+                                  th:id="|answerForm_${inquiry.id}|">
+                                <label for="content" style="border-bottom:2px solid #d8d3e0;"
+                                       class="form-label">답변</label>
+                                <textarea name="content" rows="5" class="form-control"></textarea>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn 버튼 btn-sm regBtn"
+                                    th:data-target="|answerForm_${inquiry.id}|">등록
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+        <form th:action="@{/admin/inquiry}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+            <input type="hidden" id="kw" name="kw" th:value="${kw}">
+            <input type="hidden" id="category" name="category" th:value="${category}">
+        </form>
+    </div>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    $(function() {
+        $(".page-link").on('click', function() {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
+
+        $("#searchBtn").on('click', function() {
+            $("#kw").val($("#searchKw").val());
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
+
+        $('#selectCategory').on('change', function() {
+            $("#category").val($(this).val());
+            $('#page').val('0');
+            $('#searchForm').submit();
+        });
+
+        $('.regBtn').on('click', function () {
+            var formId = $(this).data('target');
+            var content =  $(this).parent().prev().children().last().val();
+            var modal = $(this).closest('.modal');
+            if (content == '')
+                alert('답변 내용을 입력해주세요.');
+            else {
+                alert('답변이 등록되었습니다.');
+                $('#' + formId).submit();
+                modal.modal('hide');
+            }
+        });
+
+        $("#checkAll").on('click', function() {
+                $('.check').prop('checked', this.checked);
+        });
+
+        $("#deleteBtn").on('click', function() {
+            var checkedValues = $(".check:checked").map(function() {
+                return this.value;
+            }).get();
+
+            if (checkedValues.length === 0) {
+                alert('선택된 문의가 없습니다.');
+                return;
+            }
+
+            if (confirm('문의를 삭제하시겠습니까?')) {
+                $.ajax({
+                    url : '/admin/inquiry/delete',
+                    type : 'post',
+                    headers : {
+                        [csrfHeader] : csrfToken
+                    },
+                    contentType : 'application/json',
+                    data: JSON.stringify(checkedValues),
+                    success : function(data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error : function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</html>
