@@ -12,6 +12,17 @@ spring:
     hibernate:
       ddl-auto: update
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: teriyaki970326
+    password: pdtv fdbj vecz mpqm
+    properties:
+     mail:
+       smtp:
+         auth: true
+         starttls:
+           enable: true
 #iampport
 imp:
   code: "imp65467420"
