@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko">
+<body>
+<h1>AraQ</h1>
+<div style="display:flex; margin-top:10px;  ">
+    <div style="font-weight:bold; margin-right:3px;" th:text="${nickname}"></div>
+    <div>님께서 문의하신 내용에 대한 답변이 등록되었습니다.</div>
+</div>
+<div style="margin-top:20px;">
+    <a th:href="@{|http://localhost:8080/inquiry/detail/${inquiryId}|}">바로 가기 →</a>
+</div>
+</body>
+</html>

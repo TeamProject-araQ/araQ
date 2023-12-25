@@ -14,6 +14,12 @@ $(function() {
     });
 
     stompClient.connect({}, function(frame) {
+        $.ajax({
+            url: "",
+            type: "post",
+            contentType: "text/plain",
+            data: target,
+        });
 
         stompClient.send("/app/online", {}, JSON.stringify({
             type: "online",

@@ -18,6 +18,12 @@ public class ChatService {
         chat.setTarget(target);
         chat.setContent(content);
         chat.setCreateDate(LocalDateTime.now());
+        chat.setConfirm(0);
         return chatRepo.save(chat);
+    }
+
+    public void confirm(Chat chat) {
+        chat.setConfirm(1);
+        chatRepo.save(chat);
     }
 }

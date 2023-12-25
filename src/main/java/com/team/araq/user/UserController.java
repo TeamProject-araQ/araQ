@@ -123,11 +123,11 @@ public class UserController {
 
     @PostMapping("/findId")
     @ResponseBody
-    public Map<String, Object> findId(@RequestBody String email) {
+    public Map<String, Object> findId(@RequestBody String email){
         Map<String, Object> response = new HashMap<>();
         String username = userService.findUsernameByEmail(email).getUsername();
 
-        if (username != null) {
+        if(username != null){
             response.put("success", true);
             response.put("username", username);
         } else {
