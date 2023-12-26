@@ -29,6 +29,8 @@ public class SiteUser {
     @JsonIgnore
     private String password;
 
+    private String name;
+
     // 별명
     private String nickName;
 
