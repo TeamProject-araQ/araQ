@@ -2,9 +2,14 @@ package com.team.araq.user;
 
 import com.team.araq.board.email.MailDto;
 import com.team.araq.board.email.MailService;
+import com.team.araq.sms.SmsService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.maven.model.Site;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final SmsService smsService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -151,4 +157,65 @@ public class UserController {
             return "fail";
         }
     }
+
+    @GetMapping("/resetPw/{token}")
+    public String resetPw(@PathVariable("token") String token, Model model){
+        SiteUser user = userService.getByUserToken(token);
+        model.addAttribute("user", user);
+        return "/user/resetPw";
+    }
+
+    @PostMapping("/resetPw")
+    public String resetPw(@RequestParam("token") String token, @RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw){
+        SiteUser user = userService.getByUserToken(token);
+        if(user != null){
+            userService.updatePw(user, newPw, confirmPw);
+            mailService.createToken(user.getUsername());
+
+            return "redirect:/user/login";
+        } return "redirect:/error";
+    }
+
+    @PostMapping("/sendVerificationCode")
+    @ResponseBody
+    public String sendVerificationCod(@RequestBody Map<String, String> data, HttpSession session) {
+        String username = data.get("username");
+        String phoneNum = data.get("phoneNum");
+
+        SiteUser user = userService.getByUsername(username);
+
+        if (user.getPhoneNum().equals(phoneNum)) {
+            String verificationcode = smsService.createRandomNum();
+            session.setAttribute("verificationCode", verificationcode);
+            smsService.sendSms(phoneNum, verificationcode);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @PostMapping("/verifyCode")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>>verifyCode(@RequestBody Map<String, String> data, HttpSession session){
+        String username = data.get("username");
+        String phoneNum = data.get("phoneNum");
+        String verificationCode = data.get("verificationCode");
+
+        String verkey = (String) session.getAttribute("verificationCode");
+
+        SiteUser user = userService.getByUsername(username);
+
+        if(user != null && user.getPhoneNum().equals(phoneNum) && verificationCode.equals(verkey)){
+            mailService.createToken(username);
+            session.removeAttribute("verificationCode");
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("token", user.getToken());
+
+            return ResponseEntity.ok(responseMap);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+
 }

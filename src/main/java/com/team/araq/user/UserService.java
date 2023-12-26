@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -184,4 +185,11 @@ public class UserService {
 
     }
 
+    public SiteUser getByUserToken(String token) {
+        Optional<SiteUser> user = userRepository.findByToken(token);
+        if(user.isPresent()){
+            return user.get();
+        }
+        throw new UsernameNotFoundException("그런 사람 없습니다.");
+    }
 }
