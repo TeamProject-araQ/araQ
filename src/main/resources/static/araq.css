@@ -246,3 +246,18 @@ a {
     margin:auto;
     text-align:center;
 }
+
+#chatImageInput {
+    display:none;
+}
+
+#imagePreviewForm {
+    width:700px;
+    margin:auto;
+    display:none;
+    text-align:center;
+}
+
+#imagePreview > img {
+    margin:0 10px;
+}

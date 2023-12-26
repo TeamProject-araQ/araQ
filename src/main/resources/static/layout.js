@@ -18,6 +18,7 @@ $(function() {
                 });
 
                 if (data.type == "chatRequest") {
+                    $("#requestUsername").val(data.username);
                     $("#chatRequestModal .modal-title").text(data.content);
                     $("#chatRequestModal .nickName").text(data.nickname);
                     $("#chatRequestModal .userAge").text(data.age);
@@ -48,7 +49,7 @@ $(function() {
     $("#chatRequestModal .refuse").on('click', function() {
         stompClient.send("/app/alert", {}, JSON.stringify({
             type: "refuse",
-            target: $("#chatRequestModal .nickName").text()
+            target: $("#requestUsername").val()
         }));
     });
 
@@ -61,7 +62,7 @@ $(function() {
                 [csrfHeader]: csrfToken
             },
             contentType:"text/plain",
-            data: $("#chatRequestModal .nickName").text(),
+            data: $("#requestUsername").val(),
             success: function(data) {
                 window.location.href = "/chat/join/" + data;
             },

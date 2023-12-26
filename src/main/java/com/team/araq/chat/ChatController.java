@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -63,8 +64,8 @@ public class ChatController {
 
         roomService.create(uuid, user, target);
 
-        MessageDto messageDto = new MessageDto("acceptChat", user.getNickName(), null, null,
-                null, uuid, null);
+        MessageDto messageDto = new MessageDto("acceptChat", user.getNickName(), user.getUsername(), null,
+                null, null, uuid, null);
         simpMessagingTemplate.convertAndSend("/topic/all/" + targetName, messageDto);
         return uuid;
     }
@@ -98,8 +99,8 @@ public class ChatController {
     @ResponseBody
     public String request(Principal principal, @RequestBody String username) {
         SiteUser user = userService.getByUsername(principal.getName());
-        MessageDto messageDto = new MessageDto("chatRequest", user.getUsername(), user.getAge(),
-                user.getIntroduce(), user.getImage(), user.getUsername() + "님이 채팅을 신청했습니다.", username);
+        MessageDto messageDto = new MessageDto("chatRequest", user.getNickName(), user.getUsername(), user.getAge(),
+                user.getIntroduce(), user.getImage(), user.getNickName() + "님이 채팅을 신청했습니다.", username);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
         return null;
     }
@@ -113,7 +114,7 @@ public class ChatController {
 
     @PostMapping("/confirm")
     @ResponseBody
-    public String confirm(@RequestBody MessageDto messageDto){
+    public String confirm(@RequestBody MessageDto messageDto) {
         SiteUser writer = userService.getByUsername(messageDto.getTarget());
         Room room = roomService.get(messageDto.getContent());
         List<Chat> chats = chatService.getByRoomAndWriter(room, writer);
@@ -124,6 +125,13 @@ public class ChatController {
         chatDto.setTarget(messageDto.getTarget());
 
         simpMessagingTemplate.convertAndSend("/topic/chat/" + messageDto.getContent(), chatDto);
+        return null;
+    }
+
+    @PostMapping("/uploadImage")
+    @ResponseBody
+    public String uploadImage(@RequestParam("files") MultipartFile[] files) {
+        // todo 이미지 업로드
         return null;
     }
 }

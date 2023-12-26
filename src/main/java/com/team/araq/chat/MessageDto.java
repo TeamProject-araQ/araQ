@@ -12,6 +12,7 @@ import lombok.Setter;
 public class MessageDto {
     private String type;
     private String nickname;
+    private String username;
     private String age;
     private String introduce;
     private String image;
