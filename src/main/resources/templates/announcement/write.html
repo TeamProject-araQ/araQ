@@ -1,0 +1,54 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        .ProseMirror {
+            font-size:20px;
+            font-family: 'nanum';
+        }
+
+        .toastui-editor-contents {
+            font-size:20px;
+            font-family: 'nanum';
+        }
+    </style>
+</head>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="my-3 border-bottom pb-2">공지 사항</h3>
+    <form th:action="@{/admin/announcement/create}" method="post" id="announcementForm">
+        <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" class="form-control" name="title" id="title">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <input type="hidden" name="content" id="content">
+            <div id="editor"></div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <input type="button" class="btn 버튼-full" value="등록" id="regBtn">
+        </div>
+    </form>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    $(function() {
+        const editor = new toastui.Editor({
+            el: $('#editor')[0],
+            height: '500px',
+            initialEditType: 'markdown',
+            previewStyle: 'vertical'
+        });
+
+        $('#regBtn').on('click', function() {
+            const markdown = editor.getMarkdown();
+            $('#content').val(markdown);
+            if ($('#title').val() == '')
+                alert('제목을 입력해주세요.');
+            else if ($('#content').val() == '')
+                alert('내용을 입력해주세요.');
+            else
+                $('#announcementForm').submit();
+        });
+    });
+</script>
+</html>
