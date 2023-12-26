@@ -1,14 +1,24 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <div class="card">
+    <div class="card" style="min-width:250px;">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
+            <div class="card date" th:text="${#temporals.format(room.createDate, 'yyyy년 MM월 dd일')}"></div>
             <div class="chatBox" th:each="chat : ${chatList}"
-                 th:classappend="${chat.writer.username.equals(user.username)} ? 'text-end'">
+                 th:classappend="(${chat.difDate} ? 'difDate') + (${chat.writer.username.equals(user.username)} ? ' text-end')"
+                 th:data-date="${#temporals.format(chat.createDate, 'yyyy년 MM월 dd일')}">
                 <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
                 <div>
                     <p th:text="${chat.writer.nickName}" th:if="${!chat.writer.username.equals(user.username)}"></p>
-                    <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
-                        <p class="card-body text-start" th:text="${chat.content}"></p>
+                    <div>
+                        <small th:text="${#temporals.format(chat.createDate, 'HH:mm')}"
+                               th:if="${chat.writer.username.equals(user.username)}"></small>
+                        <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
+                            <span class="confirm"
+                                  th:if="${chat.writer.username.equals(user.username) && chat.confirm == 0}"></span>
+                            <p class="card-body text-start" th:text="${chat.content}"></p>
+                        </div>
+                        <small th:text="${#temporals.format(chat.createDate, 'HH:mm')}"
+                               th:if="${!chat.writer.username.equals(user.username)}"></small>
                     </div>
                 </div>
             </div>
@@ -16,7 +26,7 @@
         <form id="sendChatForm" autocomplete="off">
             <textarea type="text" id="msgContent" class="form-control"></textarea>
             <div class="d-flex justify-content-between align-items-center m-2">
-                <a th:href="@{/chat/list}" class="btn btn-outline-secondary">나가기</a>
+                <a th:href="@{/chat/list}" class="btn btn-outline-secondary" style="padding:3px 5px;">나가기</a>
                 <a href="#">기능</a>
                 <a href="#">기능</a>
                 <a href="#">기능</a>

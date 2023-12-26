@@ -23,4 +23,5 @@ public class Room {
     private List<Chat> chats;
     private String code;
     private LocalDateTime createDate;
+    private LocalDateTime recentDate;
 }
