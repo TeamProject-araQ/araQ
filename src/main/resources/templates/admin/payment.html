@@ -79,60 +79,58 @@
             <input type="hidden" id="kw" name="kw" th:value="${kw}">
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script type="text/javascript" layout:fragment="script">
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-        $(function() {
-            $(".page-link").on('click', function() {
-                $("#page").val(this.dataset.page);
-                $("#searchForm").submit();
-            });
-
-            $("#searchBtn").on('click', function() {
-                $("#kw").val($("#searchKw").val());
-                $("#page").val("0");
-                $("#searchForm").submit();
-            });
-
-            $("#checkAll").on('click', function() {
-                $('.check').prop('checked', this.checked);
-            });
-
-            $("#cancelBtn").on('click', function() {
-                var checkedValues = $(".check:checked").map(function() {
-                    return this.value;
-                }).get();
-
-                if (checkedValues.length === 0) {
-                    alert('선택된 결제가 없습니다.');
-                    return;
-                }
-
-                console.log(checkedValues);
-                if (confirm('결제를 취소하시겠습니까?')) {
-                    $.ajax({
-                        url: '/admin/cancel',
-                        type: 'POST',
-                        data: JSON.stringify(checkedValues),
-                        contentType: 'application/json',
-                        headers: {
-                            [csrfHeader] : csrfToken
-                        },
-                        success: function(response) {
-                            alert(response);
-                            location.reload();
-                        },
-                        error: function(error) {
-                            console.log(error)
-                            alert('결제 취소에 실패하였습니다.');
-                        }
-                    });
-                }
-            });
-        });
-    </script>
 </div>
+<script type="text/javascript" layout:fragment="script">
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    $(function() {
+        $(".page-link").on('click', function() {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
+
+        $("#searchBtn").on('click', function() {
+            $("#kw").val($("#searchKw").val());
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
+
+        $("#checkAll").on('click', function() {
+            $('.check').prop('checked', this.checked);
+        });
+
+        $("#cancelBtn").on('click', function() {
+            var checkedValues = $(".check:checked").map(function() {
+                return this.value;
+            }).get();
+
+            if (checkedValues.length === 0) {
+                alert('선택된 결제가 없습니다.');
+                return;
+            }
+
+            console.log(checkedValues);
+            if (confirm('결제를 취소하시겠습니까?')) {
+                $.ajax({
+                    url: '/admin/cancel',
+                    type: 'POST',
+                    data: JSON.stringify(checkedValues),
+                    contentType: 'application/json',
+                    headers: {
+                        [csrfHeader] : csrfToken
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error)
+                        alert('결제 취소에 실패하였습니다.');
+                    }
+                });
+            }
+        });
+    });
+</script>
 </html>

@@ -67,7 +67,8 @@
                     <li><a class="chatRequest dropdown-item" href="javascript:void(0)" th:data-nick="${online.nickName}"
                            th:data-value="${online.username}">채팅 신청</a></li>
                     <li>
-                        <button class="dropdown-item text-danger" type="button" data-bs-toggle="modal" data-bs-target="#report">신고
+                        <button class="reportBtn dropdown-item text-danger" type="button" data-bs-toggle="modal"
+                                data-bs-target="#report" th:data-value="${online.username}">신고
                         </button>
                     </li>
                 </ul>
@@ -83,23 +84,26 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <select class="form-select" aria-label="reportReason">
-                        <option value="">신고 사유 선택</option>
-                        <option value="1">스팸 홍보 및 도배</option>
-                        <option value="2">욕설, 비속어, 인신공격</option>
-                        <option value="3">음란성, 선정성</option>
-                        <option value="4">기타</option>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form th:action="@{/report/create}" method="post" id="reportForm">
+                    <input type="hidden" id="reportedUsername" name="reportedUsername">
+                    <div class="modal-body">
+                        <select class="form-select" aria-label="reportReason" name="reason" id="selectReason">
+                            <option value="">신고 사유 선택</option>
+                            <option value="1">채팅방 도배 및 광고</option>
+                            <option value="2">욕설 / 폭언 / 비속어 등</option>
+                            <option value="3">음란성 / 선정성</option>
+                            <option value="4">기타</option>
+                        </select>
+                        <label for="detailReason" class="form-label mt-3">신고 내용</label>
+                        <textarea id="detailReason" name="detailReason" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="submitBtn btn 버튼 btn-sm" value="제출">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript" th:src="@{/index.js}" layout:fragment="script">
-
-</script>
+<script type="text/javascript" th:src="@{/index.js}" layout:fragment="script"></script>
 </html>
