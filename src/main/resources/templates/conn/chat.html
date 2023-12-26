@@ -2,8 +2,9 @@
 <div layout:fragment="content" class="container my-3">
     <div class="card" style="min-width:250px;">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
+            <div class="card date" th:text="${#temporals.format(room.createDate, 'yyyy년 MM월 dd일')}"></div>
             <div class="chatBox" th:each="chat : ${chatList}"
-                 th:classappend="${chat.difDate} ? 'difDate' : '' + (${chat.writer.username.equals(user.username)} ? ' text-end' : '')"
+                 th:classappend="(${chat.difDate} ? 'difDate') + (${chat.writer.username.equals(user.username)} ? ' text-end')"
                  th:data-date="${#temporals.format(chat.createDate, 'yyyy년 MM월 dd일')}">
                 <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
                 <div>
