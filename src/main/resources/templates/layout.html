@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
     <link href="https://font.elice.io/css?family=Elice+DX+Neolli" rel="stylesheet">
     <title>AraQ</title>
     <style>
@@ -77,20 +77,28 @@
         <h5 class="offcanvas-title" id="offcanvasRightLabel">내 정보</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body text-center">
-        <img th:src="@{${user.image}}" alt="" style="width:150px; height:150px;">
-        <div th:text="${user.nickName}"></div>
-        <div class="d-flex justify-content-center align-items-center">
-            <div th:text="|내 버블 : ${user.bubble}|"></div>
-            <img src="/image/bubble.jpg" alt="" style="width:20px; height:20px;">
-            <a th:href="@{/payment}" class="badge bg-light text-dark border border-dark">충전하기</a>
+    <div class="offcanvas-body text-center" style="padding:10px;">
+        <img th:src="@{${user.image}}" alt="" style="width:150px; height:150px; border-radius:50%;">
+        <div class="d-flex justify-content-center align-items-center mt-3">
+            <div class="fs-3 pb-1" th:text="${user.nickName}"></div>
+            <div class="ms-1">님</div>
         </div>
-
-        <div class="d-flex justify-content-center align-items-center">
-            <a th:href="@{/user/update}" class="badge bg-light text-dark border border-dark">프로필 수정</a>
+        <div>환영합니다!</div>
+        <div class="row mt-3">
+            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/버블.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">버블</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/user/update}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/유저.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">마이페이지</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/버블.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">버블</div>
+            </a>
         </div>
-
-        <div class="d-flex justify-content-end align-items-center">
+        <div class="d-flex justify-content-end align-items-center mt-2">
             <a th:href="@{/user/logout}">
                 <span>로그아웃</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
