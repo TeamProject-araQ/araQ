@@ -224,17 +224,17 @@ a {
     background:rgb(141, 128, 166);
 }
 
-.버튼-outline {
+.버튼-full {
     border:1px solid rgb(141, 128, 166);
     color:white;
     font-weight:bold;
     background:rgb(141, 128, 166);
 }
 
-.버튼-outline:hover {
-    border:1px solid rgb(146, 132, 168);
-    color:rgb(146, 132, 168);
-    font-weight:bold;
+.버튼-full:hover {
+    border:1px solid rgb(96, 83, 119);
+    background:rgb(96, 83, 119);
+    color:white;
 }
 
 .ourColor{

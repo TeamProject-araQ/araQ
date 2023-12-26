@@ -1,6 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <h3 class="my-3">문의하기</h3>
+    <h3 class="border-bottom pb-2 my-3">문의하기</h3>
     <div class="card mb-3" style="background:#d8d3e0;">
         <div class="card-body">※ 문의하신 내용에 답변이 달리면 가입된 이메일로 메일이 발송됩니다.</div>
     </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="mb-3">
             <label for="files" class="form-label">첨부파일</label>
-            <input class="form-control" type="file" name="files" multiple>
+            <input class="form-control" type="file" name="files" accept="image/*" multiple>
         </div>
         <input type="submit" class="btn 버튼" value="등록">
     </form>

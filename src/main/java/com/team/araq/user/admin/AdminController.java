@@ -1,5 +1,7 @@
 package com.team.araq.user.admin;
 
+import com.team.araq.announcement.Announcement;
+import com.team.araq.announcement.AnnouncementService;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
 import com.team.araq.inquiry.Inquiry;
@@ -42,6 +44,8 @@ public class AdminController {
     private final ReportService reportService;
 
     private final BlacklistService blacklistService;
+
+    private final AnnouncementService announcementService;
 
     @GetMapping("")
     public String page() {
@@ -96,6 +100,25 @@ public class AdminController {
         Page<Report> paging = this.reportService.getList(page);
         model.addAttribute("paging", paging);
         return "admin/report";
+    }
+
+    @GetMapping("/announcement")
+    public String manageAnnouncement(@RequestParam(value = "page", defaultValue = "0") int page,
+                                     @RequestParam(value = "kw", defaultValue = "") String kw, Model model) {
+        Page<Announcement> paging = this.announcementService.getList(page, kw);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
+        return "admin/announcement";
+    }
+
+    @ResponseBody
+    @PostMapping("/announcement/delete")
+    public String deleteAnnouncement(@RequestBody List<String> announcements) {
+        for (String announcementId : announcements) {
+            Announcement announcement = this.announcementService.getAnnouncement(Integer.parseInt(announcementId));
+            this.announcementService.deleteAnnouncement(announcement);
+        }
+        return "공지 사항이 삭제되었습니다.";
     }
 
     @PostMapping("/report/delete")
@@ -183,5 +206,16 @@ public class AdminController {
         }
         this.userService.deleteUser(report.getReportedUser());
         return "탈퇴 처리가 완료되었습니다.";
+    }
+
+    @GetMapping("/announcement/create")
+    public String createAnnouncement() {
+        return "announcement/write";
+    }
+
+    @PostMapping("/announcement/create")
+    public String createAnnouncement(String title, String content) {
+        this.announcementService.createAnnouncement(title, content);
+        return "redirect:/admin";
     }
 }
