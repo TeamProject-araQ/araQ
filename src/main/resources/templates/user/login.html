@@ -18,32 +18,42 @@
     </form>
     <span>아직 회원이 아니신가요?</span>
     <a th:href="@{/user/signup}">회원가입</a>
-     모달 버튼
-        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findIdModal">
-            아이디 찾기
-        </button>
 
-        <!-- 아이디 찾기 모달 -->
-        <div class="modal fade" id="findIdModal" tabindex="-1" aria-labelledby="findIdModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="findIdModalLabel">아이디 찾기</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- 모달 버튼 -->
+    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findIdModal">
+        아이디 찾기
+    </button>
+
+    <!-- 아이디 찾기 모달 -->
+    <div class="modal fade" id="findIdModal" tabindex="-1" aria-labelledby="findIdModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="findIdModalLabel">아이디 찾기</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">이름</label>
+                        <input type="text" id="name" class="form-control">
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="phoneNumber" class="form-label">전화 번호</label>
-                            <input type="text" id="phoneNumber" class="form-control">
-                        </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">전화 번호</label>
+                        <input type="text" id="phoneNumber" class="form-control">
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                        <button type="button" class="btn btn-primary" onclick="findId()">확인</button>
+                    <div id="verKeySection" class="mb-3" style="display: none;">
+                        <label for="authNum" class="form-label">인증 번호</label>
+                        <input type="text" id="verKey" class="form-control">
                     </div>
+                    <button type="button" class="btn btn-primary mt-2" onclick="sendVerKey()">인증번호 보내기</button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" onclick="findId()">확인</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findPwModal">
         비밀번호 찾기
@@ -103,30 +113,58 @@
     </div>
 </div>
 <script layout:fragment="script" type="text/javascript">
+    function sendVerKey() {
+        var name = $('#name').val();
+        var phoneNum = $('#phoneNumber').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/sendVerKey',
+            contentType: 'application/json',
+            data: JSON.stringify({ name: name, phoneNum: phoneNum }),
+            headers: {
+               'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert('인증번호을 발송했습니다.');
+                    $('#verKeySection').show();
+                } else {
+                    alert('그런 사람없다.');
+                }
+            },
+            error: function () {
+                alert('서버 오류');
+            },
+        });
+    }
+
     function findId() {
-        var email = document.getElementById('email').value;
+        var name = $('#name').val();
+        var phoneNum = $('#phoneNumber').val();
+        var verKey = $('#verKey').val();
 
         $.ajax({
             type: 'POST',
             url: '/user/findId',
-            contentType: 'text/plain',
-            data: email,
+            contentType: 'application/json',
+            data: JSON.stringify({ name: name, phoneNum: phoneNum, verKey: verKey }),
             headers: {
                 [csrfHeader]: csrfToken
             },
             success: function (response) {
-                var modalBody = $('.modal-body');
-                if (response.success) {
-                    modalBody.html('아이디를 찾았습니다. 사용자명: ' + response.username);
+                if (response !== "fail") {
+                    $('#findIdModal').modal('hide');
+                    alert('인증번호가 확인되었습니다.');
+                    alert('아이디 : ' + response);
                 } else {
-                    alert('해당 이메일에 해당하는 아이디를 찾을 수 없습니다.');
+                    alert('인증번호가 일치하지 않습니다.');
                 }
             },
             error: function () {
                 alert('서버 오류');
             }
         });
-
     }
 
     $(document).ready(function () {

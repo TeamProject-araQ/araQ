@@ -53,6 +53,7 @@ public class UserService {
         user.setUsername(userCreateForm.getUsername());
         user.setEmail(userCreateForm.getEmail());
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
+        user.setName(userCreateForm.getName());
         user.setNickName(userCreateForm.getNickName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
         user.setAddress(userCreateForm.getAddress());
@@ -190,5 +191,12 @@ public class UserService {
             return user.get();
         }
         throw new UsernameNotFoundException("그런 사람 없습니다.");
+    }
+
+    public SiteUser getByNameAndPhoneNum(String name, String phoneNum) {
+        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name,phoneNum);
+        if(user.isPresent()){
+            return user.get();
+        } throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
 }
