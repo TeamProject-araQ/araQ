@@ -26,4 +26,5 @@ public class Chat {
     private String content;
     private LocalDateTime createDate;
     private Integer confirm;
+    private boolean difDate;
 }

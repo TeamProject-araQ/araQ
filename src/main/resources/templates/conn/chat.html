@@ -3,7 +3,8 @@
     <div class="card" style="min-width:250px;">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
             <div class="chatBox" th:each="chat : ${chatList}"
-                 th:classappend="${chat.writer.username.equals(user.username)} ? 'text-end'">
+                 th:classappend="${chat.difDate} ? 'difDate' : '' + (${chat.writer.username.equals(user.username)} ? ' text-end' : '')"
+                 th:data-date="${#temporals.format(chat.createDate, 'yyyy년 MM월 dd일')}">
                 <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
                 <div>
                     <p th:text="${chat.writer.nickName}" th:if="${!chat.writer.username.equals(user.username)}"></p>
@@ -11,7 +12,8 @@
                         <small th:text="${#temporals.format(chat.createDate, 'HH:mm')}"
                                th:if="${chat.writer.username.equals(user.username)}"></small>
                         <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
-                            <span class="confirm" th:if="${chat.writer.username.equals(user.username) && chat.confirm == 0}"></span>
+                            <span class="confirm"
+                                  th:if="${chat.writer.username.equals(user.username) && chat.confirm == 0}"></span>
                             <p class="card-body text-start" th:text="${chat.content}"></p>
                         </div>
                         <small th:text="${#temporals.format(chat.createDate, 'HH:mm')}"

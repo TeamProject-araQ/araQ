@@ -18,6 +18,7 @@ public class RoomService {
         room.setParticipant1(user1);
         room.setParticipant2(user2);
         room.setCreateDate(LocalDateTime.now());
+        room.setRecentDate(LocalDateTime.now());
         room.setCode(uuid);
         roomRepo.save(room);
     }
@@ -39,5 +40,10 @@ public class RoomService {
 
     public void delete(Room room) {
         roomRepo.delete(room);
+    }
+
+    public void setRecent(Room room, LocalDateTime recentDate) {
+        room.setRecentDate(recentDate);
+        roomRepo.save(room);
     }
 }
