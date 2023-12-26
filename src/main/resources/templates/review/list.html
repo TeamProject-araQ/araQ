@@ -8,7 +8,7 @@
                 <option th:selected="${sort == 'star'}" value="star">별점순</option>
             </select>
         </div>
-        <a th:href="@{/review/create}" th:if="${user.review == null}" class="btn btn-light">후기 작성하기</a>
+        <a th:href="@{/review/create}" th:if="${user.review == null}" class="btn 버튼-full">후기 작성하기</a>
     </div>
     <div class="row mb-3">
         <div class="col-3" th:each="review, loop:${paging}">

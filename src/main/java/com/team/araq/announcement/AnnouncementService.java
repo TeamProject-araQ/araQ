@@ -47,4 +47,11 @@ public class AnnouncementService {
         announcement.setView(announcement.getView() + 1);
         this.announcementRepository.save(announcement);
     }
+
+    public void modifyAnnouncement(Announcement announcement, String title, String content) {
+        announcement.setTitle(title);
+        announcement.setContent(content);
+        announcement.setModifyDate(LocalDateTime.now());
+        this.announcementRepository.save(announcement);
+    }
 }
