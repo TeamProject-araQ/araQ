@@ -216,6 +216,20 @@ public class AdminController {
     @PostMapping("/announcement/create")
     public String createAnnouncement(String title, String content) {
         this.announcementService.createAnnouncement(title, content);
+        return "redirect:/admin/announcement";
+    }
+
+    @GetMapping("/announcement/modify/{id}")
+    public String modify(@PathVariable("id") Integer id, Model model) {
+        Announcement announcement = this.announcementService.getAnnouncement(id);
+        model.addAttribute("announcement", announcement);
+        return "announcement/write";
+    }
+
+    @PostMapping("/announcement/modify/{id}")
+    public String modify(@PathVariable("id") Integer id, String title, String content) {
+        Announcement announcement = this.announcementService.getAnnouncement(id);
+        this.announcementService.modifyAnnouncement(announcement, title, content);
         return "redirect:/admin";
     }
 }

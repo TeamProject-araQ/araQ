@@ -24,4 +24,6 @@ public class Announcement {
 
     private LocalDateTime createDate;
 
+    private LocalDateTime modifyDate;
+
 }
