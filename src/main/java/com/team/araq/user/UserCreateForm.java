@@ -23,6 +23,8 @@ public class UserCreateForm {
     @NotEmpty(message= "핸드폰 번호를 입력하세요.")
     private String phoneNum;
 
+    private String name;
+
     private String nickName;
 
     private String address;
