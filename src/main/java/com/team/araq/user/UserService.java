@@ -183,7 +183,6 @@ public class UserService {
             return user.get();
         }
         throw new RuntimeException("그런 사람 없습니다.");
-
     }
 
     public SiteUser getByUserToken(String token) {
@@ -193,7 +192,6 @@ public class UserService {
         }
         throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
-
 
     public SiteUser getByNameAndPhoneNum(String name, String phoneNum) {
         Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name,phoneNum);

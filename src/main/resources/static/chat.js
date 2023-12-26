@@ -2,9 +2,6 @@ var socket = new SockJS("/ws");
 var stompClient = Stomp.over(socket);
 
 $(function() {
-    $("#msgContent").focus();
-    var chatBoard = document.getElementById("chatBoard");
-    chatBoard.scrollTop = chatBoard.scrollHeight;
 
     $("#sendChatForm > textarea").on('keydown', function(e) {
         if (e.keyCode == 13 && !e.shiftKey) {
@@ -16,6 +13,10 @@ $(function() {
     $(".difDate").each(function() {
         $(this).before("<div class='card date'>" + $(this).data("date") + "</div>");
     });
+
+    $("#msgContent").focus();
+    var chatBoard = document.getElementById("chatBoard");
+    chatBoard.scrollTop = chatBoard.scrollHeight;
 
     stompClient.connect({}, function(frame) {
         $.ajax({

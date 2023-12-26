@@ -7,6 +7,9 @@ import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentDTO;
 import com.team.araq.pay.PaymentService;
+import com.team.araq.report.BlacklistService;
+import com.team.araq.report.Report;
+import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
 
 import com.team.araq.review.ReviewService;
@@ -19,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,6 +38,10 @@ public class AdminController {
     private final PaymentService paymentService;
 
     private final InquiryService inquiryService;
+
+    private final ReportService reportService;
+
+    private final BlacklistService blacklistService;
 
     @GetMapping("")
     public String page() {
@@ -81,6 +89,23 @@ public class AdminController {
         model.addAttribute("kw", kw);
         model.addAttribute("category", category);
         return "admin/inquiry";
+    }
+
+    @GetMapping("/report")
+    public String manageReport(@RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+        Page<Report> paging = this.reportService.getList(page);
+        model.addAttribute("paging", paging);
+        return "admin/report";
+    }
+
+    @PostMapping("/report/delete")
+    @ResponseBody
+    public String deleteReport(@RequestBody List<String> reports) {
+        for (String reportId : reports) {
+            Report report = this.reportService.getReport(Integer.parseInt(reportId));
+            this.reportService.deleteReport(report);
+        }
+        return "신고 내역이 삭제되었습니다.";
     }
 
     @PostMapping("/user/delete")
@@ -139,5 +164,24 @@ public class AdminController {
             this.inquiryService.deleteInquiry(inquiry);
         }
         return "문의가 삭제되었습니다.";
+    }
+
+    @ResponseBody
+    @PostMapping("/report/keep")
+    public String keepUser(@RequestBody String reportId) {
+        Report report = this.reportService.getReport(Integer.parseInt(reportId));
+        this.reportService.updateStatus(report);
+        return "처리가 완료되었습니다.";
+    }
+
+    @ResponseBody
+    @PostMapping("/report/withdraw")
+    public String withdrawUser(@RequestBody String reportId) {
+        Report report = this.reportService.getReport(Integer.parseInt(reportId));
+        if (blacklistService.checkBlacklist(report.getReportedUser().getPhoneNum()) == null) {
+            this.blacklistService.saveBlacklist(report.getReportedUser().getPhoneNum(), report.getReason());
+        }
+        this.userService.deleteUser(report.getReportedUser());
+        return "탈퇴 처리가 완료되었습니다.";
     }
 }

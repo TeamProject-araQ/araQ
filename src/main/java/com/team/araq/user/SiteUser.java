@@ -6,6 +6,7 @@ import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.pay.Payment;
+import com.team.araq.report.Report;
 import com.team.araq.review.Review;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -104,4 +105,9 @@ public class SiteUser {
 
     private String token;
 
+    @OneToMany(mappedBy = "reportingUser", cascade = CascadeType.REMOVE)
+    private List<Report> reportingUsers;
+
+    @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.REMOVE)
+    private List<Report> reportedUsers;
 }

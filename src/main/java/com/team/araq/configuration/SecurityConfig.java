@@ -24,6 +24,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/user/**"),
                                 new AntPathRequestMatcher("/bootstrap**"),
+                                new AntPathRequestMatcher("/layout**"),
                                 new AntPathRequestMatcher("/araq**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated())

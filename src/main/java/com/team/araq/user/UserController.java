@@ -1,17 +1,15 @@
 package com.team.araq.user;
 
-import com.team.araq.board.email.MailDto;
 import com.team.araq.board.email.MailService;
+import com.team.araq.report.BlacklistService;
 import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.maven.model.Site;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,10 +25,11 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final SmsService smsService;
+    private final BlacklistService blacklistService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -38,13 +37,17 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image, Model model) {
         if (bindingResult.hasErrors()) {
             return "user/signup";
         }
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
+        }
+        if (this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()) != null) {
+            model.addAttribute("blacklist", this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()));
+            return "user/blacklist";
         }
         try {
             userService.create(userCreateForm, image);
@@ -95,7 +98,6 @@ public class UserController {
         return "user/updatePw";
     }
 
-
     @GetMapping("/out")
     public String out() {
         return "user/out";
@@ -144,19 +146,18 @@ public class UserController {
     }
 
     @GetMapping("/resetPw/{token}")
-    public String resetPw(@PathVariable("token") String token, Model model) {
+    public String resetPw(@PathVariable("token") String token, Model model){
         SiteUser user = userService.getByUserToken(token);
         model.addAttribute("user", user);
         return "/user/resetPw";
     }
 
     @PostMapping("/resetPw")
-    public String resetPw(@RequestParam("token") String token, @RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw) {
+    public String resetPw(@RequestParam("token") String token, @RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw){
         SiteUser user = userService.getByUserToken(token);
-        if (user != null) {
+        if(user != null){
             userService.updatePw(user, newPw, confirmPw);
             mailService.createToken(user.getUsername());
-
             return "redirect:/user/login";
         }
         return "redirect:/error";
@@ -194,7 +195,6 @@ public class UserController {
             return username;
         }
         return "fail";
-
     }
 
     @PostMapping("/sendVerificationCode")
@@ -210,13 +210,15 @@ public class UserController {
             session.setAttribute("verificationCode", verificationcode);
             smsService.sendSms(phoneNum, verificationcode);
             return "success";
+        } else {
+            return "fail";
         }
-        return "fail";
     }
 
     @PostMapping("/verifyCode")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> verifyCode(@RequestBody Map<String, String> data, HttpSession session) {
+
+    public ResponseEntity<Map<String, String>>verifyCode(@RequestBody Map<String, String> data, HttpSession session){
         String username = data.get("username");
         String phoneNum = data.get("phoneNum");
         String verificationCode = data.get("verificationCode");
@@ -225,7 +227,7 @@ public class UserController {
 
         SiteUser user = userService.getByUsername(username);
 
-        if (user != null && user.getPhoneNum().equals(phoneNum) && verificationCode.equals(verkey)) {
+        if(user != null && user.getPhoneNum().equals(phoneNum) && verificationCode.equals(verkey)){
             mailService.createToken(username);
             session.removeAttribute("verificationCode");
             Map<String, String> responseMap = new HashMap<>();

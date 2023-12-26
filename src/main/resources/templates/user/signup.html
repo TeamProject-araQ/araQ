@@ -8,52 +8,51 @@
         }
 
         .btn-secondary:hover {
-    background-color: #0056b3 !important;
-    color: #fff !important;
-    border-color: #0056b3 !important;
+            background-color: #0056b3 !important;
+            color: #fff !important;
+            border-color: #0056b3 !important;
+        }
 
-    /* 이전 버튼 스타일 */
-    .prev-btn {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        position: relative;
-        transition: background-color 0.3s ease;
-    }
+        .prev-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
 
-    .prev-btn::before {
-        content: '\00ab'; /* 왼쪽 화살표 유니코드 */
-        font-size: 20px;
-        margin-right: 5px;
-    }
+        .prev-btn::before {
+            content: '\00ab'; /* 왼쪽 화살표 유니코드 */
+            font-size: 20px;
+            margin-right: 5px;
+        }
 
-    /* 다음 버튼 스타일 */
-    .next-btn {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        position: relative;
-        transition: background-color 0.3s ease;
-    }
+        /* 다음 버튼 스타일 */
+        .next-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
 
-    .next-btn::after {
-        content: '\00bb'; /* 오른쪽 화살표 유니코드 */
-        font-size: 20px;
-        margin-left: 5px;
-    }
+        .next-btn::after {
+            content: '\00bb'; /* 오른쪽 화살표 유니코드 */
+            font-size: 20px;
+            margin-left: 5px;
+        }
 
-    /* 호버 효과 */
-    .prev-btn:hover,
-    .next-btn:hover {
-        background-color: #0056b3;
-    }
-}
+        /* 호버 효과 */
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <div layout:fragment="content" class="container my-3">
@@ -62,10 +61,8 @@
             <h4>회원가입</h4>
         </div>
     </div>
-
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-
         <div id="step1">
             <div class="mb-3">
                 <label for="username" class="form-label">사용자ID</label>
@@ -89,7 +86,6 @@
             </div>
             <button type="button" onclick="nextStep('step1', 'step2')">다음</button>
         </div>
-
         <div id="step2" style="display:none;">
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
@@ -107,7 +103,6 @@
             <button type="button" onclick="prevStep('step2', 'step1')">이전</button>
             <button type="button" onclick="nextStep('step2', 'step3')">다음</button>
         </div>
-
         <div id="step3" style="display:none;">
             <div class="mb-3">
                 <label for="height" class="form-label">키</label>
@@ -117,7 +112,6 @@
                 <label for="age" class="form-label">나이</label>
                 <input type="text" th:field="*{age}" class="form-control">
             </div>
-
             <div class="mb-3">
                 <label class="form-label">성별</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -130,7 +124,6 @@
                     <label class="btn btn-secondary" for="genderOption2">여성</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">종교</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -151,7 +144,6 @@
                     <label class="btn btn-secondary" for="religionOption4">무교</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">음주</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -172,38 +164,32 @@
                     <label class="btn btn-secondary" for="drinkingOption4">매일</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">흡연</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" th:field="*{smoking}" class="btn-check" name="smokingOption" id="smokingYes"
                            autocomplete="off" value="흡연">
                     <label class="btn btn-secondary" for="smokingYes">흡연</label>
-
                     <input type="radio" th:field="*{smoking}" class="btn-check" name="smokingOption" id="smokingNo"
                            autocomplete="off" value="비흡연">
                     <label class="btn btn-secondary" for="smokingNo">비흡연</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">최종학력</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" th:field="*{education}" class="btn-check" name="educationOption" id="highSchool"
                            autocomplete="off" value="고등학교 졸업">
                     <label class="btn btn-secondary" for="highSchool">고등학교 졸업</label>
-
                     <input type="radio" th:field="*{education}" class="btn-check" name="educationOption" id="university"
                            autocomplete="off" value="대학교 졸업">
                     <label class="btn btn-secondary" for="university">대학교 재학</label>
-
                     <input type="radio" th:field="*{education}" class="btn-check" name="educationOption"
                            id="universityGraduation"
                            autocomplete="off" value="대학교 재학">
                     <label class="btn btn-secondary" for="universityGraduation">대학교 졸업</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label class="form-label">MBTI</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
@@ -211,39 +197,28 @@
                     <!-- E/S 차원 (윗줄) -->
                     <input type="radio" class="btn-check" name="mbtiE" id="mbtiE1" autocomplete="off" value="E">
                     <label class="btn btn-secondary" for="mbtiE1">E</label>
-
                     <input type="radio" class="btn-check" name="mbtiS" id="mbtiS1" autocomplete="off" value="S">
                     <label class="btn btn-secondary" for="mbtiS1">S</label>
-
                     <input type="radio" class="btn-check" name="mbtiT" id="mbtiT1" autocomplete="off" value="T">
                     <label class="btn btn-secondary" for="mbtiT1">T</label>
-
                     <input type="radio" class="btn-check" name="mbtiJ" id="mbtiJ1" autocomplete="off" value="J">
                     <label class="btn btn-secondary" for="mbtiJ1">J</label>
-
                     <br>
                     <br>
-
                     <!-- I/N 차원 (아래줄) -->
                     <input type="radio" class="btn-check" name="mbtiE" id="mbtiE2" autocomplete="off" value="I">
                     <label class="btn btn-secondary" for="mbtiE2">I</label>
-
                     <input type="radio" class="btn-check" name="mbtiS" id="mbtiS2" autocomplete="off" value="N">
                     <label class="btn btn-secondary" for="mbtiS2">N</label>
-
                     <input type="radio" class="btn-check" name="mbtiT" id="mbtiT2" autocomplete="off" value="F">
                     <label class="btn btn-secondary" for="mbtiT2">F</label>
-
                     <input type="radio" class="btn-check" name="mbtiJ" id="mbtiJ2" autocomplete="off" value="P">
                     <label class="btn btn-secondary" for="mbtiJ2">P</label>
                 </div>
             </div>
-
-
             <div class="mb-3">
                 <label class="form-label">성격</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-
                     <input type="checkbox" class="btn-check" name="personality" id="personality1" autocomplete="off" value="활발한">
                     <label class="btn btn-secondary" for="personality1">활발한</label>
 
@@ -275,21 +250,17 @@
                     <label class="btn btn-secondary" for="personality10">열정적인</label>
                 </div>
             </div>
-
             <div class="mb-3">
                 <label for="hobby" class="form-label">취미</label>
                 <input type="text" th:field="*{hobby}" class="form-control">
             </div>
-
             <div class="mb-3">
                 <label for="introduce" class="form-label">자기소개</label>
                 <textarea th:field="*{introduce}" class="form-control"></textarea>
             </div>
-
             <button type="button" onclick="prevStep('step3', 'step2')">이전</button>
             <button type="button" onclick="updateMBTI(); nextStep('step3', 'step4')">다음</button>
         </div>
-
         <div id="step4" style="display:none;">
             <div class="mb-3">
                 <label for="image" class="form-label">사진 업로드</label>
@@ -299,29 +270,29 @@
             <button type="submit" class="btn btn-primary">회원가입</button>
         </div>
     </form>
+</div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type='text/javascript' layout:fragment="script">
+    function sample5_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = data.address; // 최종 주소 변수
+                document.getElementById("address").value = addr;
+            }
+        }).open();
+    }
 
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-        function sample5_execDaumPostcode() {
-            new daum.Postcode({
-                oncomplete: function(data) {
-                    var addr = data.address; // 최종 주소 변수
-                    document.getElementById("address").value = addr;
-                }
-            }).open();
-        }
+    function nextStep(currentStepId, nextStepId) {
+        document.getElementById(currentStepId).style.display = 'none';
+        document.getElementById(nextStepId).style.display = 'block';
+    }
 
-        function nextStep(currentStepId, nextStepId) {
-            document.getElementById(currentStepId).style.display = 'none';
-            document.getElementById(nextStepId).style.display = 'block';
-        }
+    function prevStep(currentStepId, prevStepId) {
+        document.getElementById(currentStepId).style.display = 'none';
+        document.getElementById(prevStepId).style.display = 'block';
+    }
 
-        function prevStep(currentStepId, prevStepId) {
-            document.getElementById(currentStepId).style.display = 'none';
-            document.getElementById(prevStepId).style.display = 'block';
-        }
-
-        function updateMBTI() {
+    function updateMBTI() {
         var selectedE = document.querySelector('input[name="mbtiE"]:checked').value;
         var selectedS = document.querySelector('input[name="mbtiS"]:checked').value;
         var selectedT = document.querySelector('input[name="mbtiT"]:checked').value;
@@ -329,10 +300,10 @@
 
         var selectedMBTI = selectedE + selectedS + selectedT + selectedJ;
 
-        // 숨겨진 입력 필드 업데이트
         document.getElementById('mbtiHidden').value = selectedMBTI;
     }
-        document.addEventListener('DOMContentLoaded', function () {
+
+    document.addEventListener('DOMContentLoaded', function () {
         var checkboxes = document.querySelectorAll('input[name="personality"]');
         var maxAllowed = 3;
 
@@ -347,6 +318,5 @@
             });
         });
     });
-    </script>
-</div>
+</script>
 </html>
