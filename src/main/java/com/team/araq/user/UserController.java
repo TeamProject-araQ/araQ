@@ -27,11 +27,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-
     private final MailService mailService;
-
     private final SmsService smsService;
-
     private final BlacklistService blacklistService;
 
     @GetMapping("/signup")
@@ -101,7 +98,6 @@ public class UserController {
         return "user/updatePw";
     }
 
-
     @GetMapping("/out")
     public String out() {
         return "user/out";
@@ -133,21 +129,6 @@ public class UserController {
 
     }
 
-    @PostMapping("/findId")
-    @ResponseBody
-    public Map<String, Object> findId(@RequestBody String email){
-        Map<String, Object> response = new HashMap<>();
-        String username = userService.findUsernameByEmail(email).getUsername();
-
-        if(username != null){
-            response.put("success", true);
-            response.put("username", username);
-        } else {
-            response.put("success", false);
-        }
-        return response;
-    }
-
     @PostMapping("/sendEmail")
     @ResponseBody
     public String sendEmail(@RequestBody Map<String, String> data) {
@@ -177,9 +158,43 @@ public class UserController {
         if(user != null){
             userService.updatePw(user, newPw, confirmPw);
             mailService.createToken(user.getUsername());
-
             return "redirect:/user/login";
-        } return "redirect:/error";
+        }
+        return "redirect:/error";
+    }
+
+    @PostMapping("/sendVerKey")
+    @ResponseBody
+    public String sendVerKey(@RequestBody Map<String, String> data, HttpSession session) {
+        String name = data.get("name");
+        String phoneNum = data.get("phoneNum");
+
+        SiteUser user = userService.getByNameAndPhoneNum(name, phoneNum);
+
+        if (user.getPhoneNum().equals(phoneNum)) {
+            String verKey = smsService.createRandomNum();
+            session.setAttribute("verKey", verKey);
+            smsService.sendSms(phoneNum, verKey);
+            return "success";
+        }
+        return "fail";
+    }
+
+    @PostMapping("/findId")
+    @ResponseBody
+    public String findId(@RequestBody Map<String, String> data, HttpSession session){
+        String name = data.get("name");
+        String phoneNum = data.get("phoneNum");
+        String verKey = data.get("verKey");
+
+        String storedVerKey = (String) session.getAttribute("verKey");
+
+        if(verKey.equals(storedVerKey)){
+            SiteUser user = userService.getByNameAndPhoneNum(name, phoneNum);
+            String username = user.getUsername();
+            return username;
+        }
+        return "fail";
     }
 
     @PostMapping("/sendVerificationCode")
@@ -202,6 +217,7 @@ public class UserController {
 
     @PostMapping("/verifyCode")
     @ResponseBody
+
     public ResponseEntity<Map<String, String>>verifyCode(@RequestBody Map<String, String> data, HttpSession session){
         String username = data.get("username");
         String phoneNum = data.get("phoneNum");
@@ -222,6 +238,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-
-
 }
