@@ -81,80 +81,78 @@
             <input type="hidden" id="kw" name="kw" th:value="${kw}">
         </form>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script type="text/javascript" layout:fragment="script">
+</div>
+<script type="text/javascript" layout:fragment="script">
 
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-        $(function() {
-            $(".page-link").on('click', function() {
-                $("#page").val(this.dataset.page);
-                $("#searchForm").submit();
-            });
+    $(function() {
+        $(".page-link").on('click', function() {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
 
-            $("#searchBtn").on('click', function() {
-                $("#kw").val($("#searchKw").val());
-                $("#page").val("0");
-                $("#searchForm").submit();
-            });
+        $("#searchBtn").on('click', function() {
+            $("#kw").val($("#searchKw").val());
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
 
-            $("#checkAll").on('click', function() {
-                $('.check').prop('checked', this.checked);
-            });
+        $("#checkAll").on('click', function() {
+            $('.check').prop('checked', this.checked);
+        });
 
-            $("#deleteBtn").on('click', function() {
-                var checkedValues = $(".check:checked").map(function() {
-                    return this.value;
-                }).get();
+        $("#deleteBtn").on('click', function() {
+            var checkedValues = $(".check:checked").map(function() {
+                return this.value;
+            }).get();
 
-                if (checkedValues.length === 0) {
-                    alert('선택된 후기가 없습니다.');
-                    return;
-                }
+            if (checkedValues.length === 0) {
+                alert('선택된 후기가 없습니다.');
+                return;
+            }
 
-                if (confirm('후기를 삭제하시겠습니까?')) {
-                    $.ajax({
-                        url : '/admin/review/delete',
-                        type : 'post',
-                        headers : {
-                            [csrfHeader] : csrfToken
-                        },
-                        contentType : 'application/json',
-                        data: JSON.stringify(checkedValues),
-                        success : function(data) {
-                            alert(data);
-                            location.reload();
-                        },
-                        error : function(error) {
-                            console.log(error);
-                        }
-                    });
-                }
-            });
-
-            $('.starCount').each(function() {
-                var rating = parseFloat($(this).find('.reviewStar').val());
-                var stars = $(this).find('.star-rating i');
-
-                stars.removeClass('fas far fa-star-half-alt');
-
-                stars.each(function(index) {
-                    if (rating >= index + 1) {
-                        $(this).addClass('fas fa-star');
-                    } else if (rating > index) {
-                        $(this).addClass('fas fa-star-half-alt');
-                    } else {
-                        $(this).addClass('far fa-star');
+            if (confirm('후기를 삭제하시겠습니까?')) {
+                $.ajax({
+                    url : '/admin/review/delete',
+                    type : 'post',
+                    headers : {
+                        [csrfHeader] : csrfToken
+                    },
+                    contentType : 'application/json',
+                    data: JSON.stringify(checkedValues),
+                    success : function(data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error : function(error) {
+                        console.log(error);
                     }
                 });
-            });
+            }
+        });
 
-            $('.check').click(function(event) {
-                event.stopPropagation();
+        $('.starCount').each(function() {
+            var rating = parseFloat($(this).find('.reviewStar').val());
+            var stars = $(this).find('.star-rating i');
+
+            stars.removeClass('fas far fa-star-half-alt');
+
+            stars.each(function(index) {
+                if (rating >= index + 1) {
+                    $(this).addClass('fas fa-star');
+                } else if (rating > index) {
+                    $(this).addClass('fas fa-star-half-alt');
+                } else {
+                    $(this).addClass('far fa-star');
+                }
             });
         });
-    </script>
-</div>
+
+        $('.check').click(function(event) {
+            event.stopPropagation();
+        });
+    });
+</script>
 </html>

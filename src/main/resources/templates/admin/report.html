@@ -1,18 +1,7 @@
 <html layout:decorate="~{admin/page}">
 <div layout:fragment="content" class="container-fluid p-5">
-    <h3 class="border-bottom pb-2">회원 목록</h3>
-    <div class="d-flex justify-content-end my-3">
-        <div class="input-group" style="width:30%;">
-            <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="유저ID, 닉네임 검색">
-            <button class="btn 버튼" type="button" id="searchBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-                     viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
-            </button>
-        </div>
-    </div>
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="border-bottom pb-2">신고 목록</h3>
+    <div class="d-flex justify-content-between align-items-center my-3">
         <div class="form-check text-dark">
             <input class="form-check-input" type="checkbox" id="checkAll">
             <label class="form-check-label" for="checkAll">
@@ -26,30 +15,34 @@
             </svg>
         </button>
     </div>
-    <table class="table table-hover text-center">
+    <table class="table table-hover text-center" style="width:100%; table-layout: fixed;">
         <thead style="background:#5f566d; color:white;">
         <tr>
-            <th>선택</th>
-            <th>번호</th>
-            <th>ID</th>
-            <th>닉네임</th>
-            <th>성별</th>
-            <th>나이</th>
-            <th style="width:40%;">주소</th>
-            <th>가입일</th>
+            <th style="width:5%;">선택</th>
+            <th style="width:5%;">번호</th>
+            <th>사유</th>
+            <th>상세 사유</th>
+            <th>신고자</th>
+            <th>신고 대상</th>
+            <th>신고일</th>
+            <th>처리 상태</th>
+            <th>탈퇴</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user, loop : ${paging}" th:if="${user.username != 'admin'}">
-            <td><input class="check form-check-input" type="checkbox" th:value="${user.username}" th:id="${user.id}">
+        <tr th:each="report, loop : ${paging}">
+            <td><input class="check form-check-input" type="checkbox" th:value="${report.id}"></td>
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+            <td th:text="${report.reason}"></td>
+            <td th:text="${report.detailReason}"></td>
+            <td th:text="${report.reportingUser.username}"></td>
+            <td th:text="${report.reportedUser.username}"></td>
+            <td th:text="${#temporals.format(report.reportDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${report.status}"></td>
+            <td>
+                <input type="button" class="keep btn btn-sm btn-outline-primary" th:if="${report.status == '처리 대기'}" value="활동 유지" th:data-value="${report.id}">
+                <input type="button" class="withdraw btn btn-sm btn-outline-secondary" th:if="${report.status == '처리 대기'}" value="강제 탈퇴" th:data-value="${report.id}">
             </td>
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.username}"></td>
-            <td th:text="${user.nickName}"></td>
-            <td th:text="${user.gender}"></td>
-            <td th:text="${user.age}"></td>
-            <td class="text-start" th:text="${user.address}"></td>
-            <td th:text="${#temporals.format(user.createDate, 'yyyy-MM-dd')}"></td>
         </tr>
         </tbody>
     </table>
@@ -71,31 +64,62 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/admin/user}" method="get" id="searchForm">
+        <form th:action="@{/admin/report}" method="get" id="searchForm">
             <input type="hidden" id="page" name="page" th:value="${paging.number}">
-            <input type="hidden" id="kw" name="kw" th:value="${kw}">
         </form>
     </div>
 </div>
 <script type="text/javascript" layout:fragment="script">
-
-    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
     $(function() {
         $(".page-link").on('click', function() {
             $("#page").val(this.dataset.page);
             $("#searchForm").submit();
         });
 
-        $("#searchBtn").on('click', function() {
-            $("#kw").val($("#searchKw").val());
-            $("#page").val("0");
-            $("#searchForm").submit();
-        });
-
         $("#checkAll").on('click', function() {
             $('.check').prop('checked', this.checked);
+        });
+
+        $(".keep").on('click', function() {
+            if (confirm('계정을 유지하시겠습니까?')) {
+                $.ajax({
+                    url: '/admin/report/keep',
+                    type : 'post',
+                    headers : {
+                        [csrfHeader] : csrfToken
+                    },
+                    contentType : 'text/plain',
+                    data: JSON.stringify($(this).data('value')),
+                    success : function(data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error : function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+
+        $(".withdraw").on('click', function() {
+            if (confirm('계정을 탈퇴 처리하시겠습니까?')) {
+                $.ajax({
+                    url: '/admin/report/withdraw',
+                    type : 'post',
+                    headers : {
+                        [csrfHeader] : csrfToken
+                    },
+                    contentType : 'text/plain',
+                    data: JSON.stringify($(this).data('value')),
+                    success : function(data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error : function(error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
 
         $("#deleteBtn").on('click', function() {
@@ -104,13 +128,13 @@
             }).get();
 
             if (checkedValues.length === 0) {
-                alert('선택된 회원이 없습니다.');
+                alert('선택된 신고 내역이 없습니다.');
                 return;
             }
 
-            if (confirm('회원 정보를 삭제하시겠습니까?')) {
+            if (confirm('신고 내역을 삭제하시겠습니까?')) {
                 $.ajax({
-                    url : '/admin/user/delete',
+                    url : '/admin/report/delete',
                     type : 'post',
                     headers : {
                         [csrfHeader] : csrfToken

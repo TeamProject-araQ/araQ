@@ -2,6 +2,8 @@ package com.team.araq.user;
 
 import com.team.araq.board.email.MailDto;
 import com.team.araq.board.email.MailService;
+import com.team.araq.report.Blacklist;
+import com.team.araq.report.BlacklistService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,9 +24,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+
     private final MailService mailService;
+
+    private final BlacklistService blacklistService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -32,13 +37,17 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image, Model model) {
         if (bindingResult.hasErrors()) {
             return "user/signup";
         }
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
+        }
+        if (this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()) != null) {
+            model.addAttribute("blacklist", this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()));
+            return "user/blacklist";
         }
         try {
             userService.create(userCreateForm, image);
