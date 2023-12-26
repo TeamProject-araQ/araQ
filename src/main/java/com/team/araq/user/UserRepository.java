@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
     List<SiteUser> findByLogin(boolean login);
 
     Optional<SiteUser> findByEmail(String email);
+
+    Optional<SiteUser> findByToken(String token);
 }

@@ -40,7 +40,6 @@ public class MailService {
     }
 
     public void mailSend(MailDto mailDto) {
-        System.out.println("전송 완료!");
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
@@ -77,7 +76,7 @@ public class MailService {
         String resetToken = createToken(username);
 
         // 비밀번호 재설정 링크를 이메일에 포함시켜 전송
-        String resetLink = "http://localhost:8080/user/resetPassword/" + resetToken;
+        String resetLink = "http://localhost:8080/user/resetPw/" + resetToken;
         String emailContent = "<p>비밀번호를 변경하려면 다음 링크를 클릭하세요: <a href='" + resetLink + "'>비밀번호 변경하기</a></p>";
         MailDto dto = new MailDto();
         dto.setAddress(user.getEmail());
