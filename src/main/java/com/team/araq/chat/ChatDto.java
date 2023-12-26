@@ -16,4 +16,5 @@ public class ChatDto {
     private String writerNick;
     private LocalDateTime createDate;
     private Integer confirm;
+    private Integer difDate;
 }

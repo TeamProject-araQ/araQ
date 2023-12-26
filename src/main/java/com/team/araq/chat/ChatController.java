@@ -28,7 +28,8 @@ public class ChatController {
         SiteUser target = userService.getByUsername(chatDto.getTarget());
         Room room = roomService.get(chatDto.getCode());
 
-        Chat chat = chatService.create(room, user, target, chatDto.getContent());
+        Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
+        roomService.setRecent(room, chat.getCreateDate());
 
         chatDto.setWriterNick(user.getNickName());
         chatDto.setWriterImage(user.getImage());
@@ -113,7 +114,16 @@ public class ChatController {
     @PostMapping("/confirm")
     @ResponseBody
     public String confirm(@RequestBody MessageDto messageDto){
-        // todo 여기 해야함
+        SiteUser writer = userService.getByUsername(messageDto.getTarget());
+        Room room = roomService.get(messageDto.getContent());
+        List<Chat> chats = chatService.getByRoomAndWriter(room, writer);
+        chatService.confirm(chats);
+
+        ChatDto chatDto = new ChatDto();
+        chatDto.setCode("confirm");
+        chatDto.setTarget(messageDto.getTarget());
+
+        simpMessagingTemplate.convertAndSend("/topic/chat/" + messageDto.getContent(), chatDto);
         return null;
     }
 }

@@ -227,3 +227,9 @@ a {
 .ourColor{
     background:#d8d3e0;
 }
+
+#chatBoard .date {
+    width:150px;
+    margin:auto;
+    text-align:center;
+}
