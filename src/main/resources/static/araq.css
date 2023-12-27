@@ -376,5 +376,12 @@ a:hover {
   word-break: keep-all;   // 문단으로 끊어져서 줄바꿈 됨
 }
 
+.roomConfirm {
+    background:rgb(131, 115, 157);
+    width:10px;
+    height:10px;
+    border-radius:50%;
+}
+
 
 

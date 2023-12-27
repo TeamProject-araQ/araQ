@@ -3,22 +3,23 @@
     <table class="table">
         <thead class="table-secondary">
         <tr>
-            <th style="width:70%">채팅방이름</th>
-            <th>생성시간</th>
+            <th style="width:70%">채팅방 이름</th>
+            <th>마지막 대화</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="room : ${roomList}">
-            <td>
+            <td class="d-flex align-items-center">
                 <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
                    th:text="|${room.participant2.nickName}님과 채팅|"
                    th:if="${room.participant1.username.equals(user.username)}"></a>
                 <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
                    th:text="|${room.participant1.nickName}님과 채팅|"
                    th:if="${room.participant2.username.equals(user.username)}"></a>
+                <div th:if="${room.confirm != null && room.confirm.equals(user.username)}" class="roomConfirm ms-2"></div>
             </td>
-            <td th:text="${#temporals.format(room.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(room.recentDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
                 <button class="roomDeleteBtn btn btn-danger btn-sm" th:data-value="${room.code}" style="width:50px;">삭제</button>
             </td>

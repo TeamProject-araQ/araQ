@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,4 +28,5 @@ public class Chat {
     private LocalDateTime createDate;
     private Integer confirm;
     private boolean difDate;
+    private List<String> images;
 }

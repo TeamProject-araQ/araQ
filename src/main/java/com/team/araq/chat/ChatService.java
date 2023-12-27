@@ -40,4 +40,9 @@ public class ChatService {
     public List<Chat> getByRoomAndWriter(Room room, SiteUser writer) {
         return chatRepo.findByRoomAndWriter(room, writer);
     }
+
+    public void setImages(Chat chat, List<String> images) {
+        chat.setImages(images);
+        chatRepo.save(chat);
+    }
 }

@@ -1,5 +1,6 @@
 package com.team.araq.chat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +35,7 @@ public class ChatController {
 
         Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
         roomService.setRecent(room, chat.getCreateDate());
+        roomService.setConfirm(room, target.getUsername());
 
         chatDto.setWriterNick(user.getNickName());
         chatDto.setWriterImage(user.getImage());
@@ -114,11 +119,12 @@ public class ChatController {
 
     @PostMapping("/confirm")
     @ResponseBody
-    public String confirm(@RequestBody MessageDto messageDto) {
+    public String confirm(@RequestBody MessageDto messageDto, Principal principal) {
         SiteUser writer = userService.getByUsername(messageDto.getTarget());
         Room room = roomService.get(messageDto.getContent());
         List<Chat> chats = chatService.getByRoomAndWriter(room, writer);
         chatService.confirm(chats);
+        roomService.confirm(room, principal.getName());
 
         ChatDto chatDto = new ChatDto();
         chatDto.setCode("confirm");
@@ -130,8 +136,49 @@ public class ChatController {
 
     @PostMapping("/uploadImage")
     @ResponseBody
-    public String uploadImage(@RequestParam("files") MultipartFile[] files) {
-        // todo 이미지 업로드
+    public String uploadImage(@RequestParam("files") MultipartFile[] files,
+                              @RequestParam("chatContainer") String chatContainer) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChatDto chatDto = objectMapper.readValue(chatContainer, ChatDto.class);
+
+        SiteUser user = userService.getByUsername(chatDto.getWriter());
+        SiteUser target = userService.getByUsername(chatDto.getTarget());
+        Room room = roomService.get(chatDto.getCode());
+
+        Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
+        roomService.setRecent(room, chat.getCreateDate());
+        roomService.setConfirm(room, target.getUsername());
+
+        String dirPath = "C:/uploads/chat/" + chat.getId();
+        File dir = new File(dirPath);
+        List<String> images = new ArrayList<>();
+
+        if (!dir.exists()) dir.mkdirs();
+
+        for (MultipartFile file : files) {
+            String filename = file.getOriginalFilename();
+            File image = new File(dirPath + "/" + filename);
+            file.transferTo(image);
+            images.add("/chat/image/" + chat.getId() + "/" + filename);
+        }
+
+        chatService.setImages(chat, images);
+
+        chatDto.setWriterNick(user.getNickName());
+        chatDto.setWriterImage(user.getImage());
+        chatDto.setCreateDate(chat.getCreateDate());
+        chatDto.setImages(images);
+
+        MessageDto messageDto = new MessageDto();
+        messageDto.setType("sendChat");
+        messageDto.setNickname(user.getNickName());
+        messageDto.setContent(chatDto.getContent());
+        messageDto.setImage(user.getImage());
+        messageDto.setTarget(chatDto.getCode());
+
+        simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
+        simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
+
         return null;
     }
 }
