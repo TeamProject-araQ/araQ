@@ -46,4 +46,16 @@ public class RoomService {
         room.setRecentDate(recentDate);
         roomRepo.save(room);
     }
+
+    public void setConfirm(Room room, String username) {
+        room.setConfirm(username);
+        roomRepo.save(room);
+    }
+
+    public void confirm(Room room, String username) {
+        if (room.getConfirm().equals(username)) {
+            room.setConfirm("");
+            roomRepo.save(room);
+        }
+    }
 }

@@ -221,6 +221,14 @@ $(function() {
     });
 
     $("#voiceChatBtn").on('click', function() {
-        navigator.mediaDevices.getUserMedia({audio: true, video:false});
+        navigator.mediaDevices.getUserMedia({audio: true, video: false})
+        .then(stream => {
+            alert("스트림 가져오기 성공");
+        })
+        .catch(error => alert("스트림 가져오기 실패\n" + error));
+    });
+
+    $(".chatWriterBtn").on('click', function() {
+        $("#profileModal").modal("show");
     });
 });
