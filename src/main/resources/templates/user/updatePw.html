@@ -1,13 +1,15 @@
-<html layout:decorate="~{user/update}">
-<div layout:fragment="content" class="container-fluid p-5">
-    <h3 class="border-bottom pb-2">현재 비밀번호 확인</h3>
-    <div>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline">비밀번호 확인</h3>
+    <div class="my-3">
         <form th:action="@{/user/checkCurrentPw}" method="post" id="passwordCheckForm" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="currentPassword">현재 비밀번호</label>
+            <div class="form-group mb-3">
+                <label for="currentPassword" class="form-label" style="border-bottom:2px solid #d8d3e0;">현재 비밀번호</label>
                 <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
             </div>
-            <button type="submit" class="btn btn-primary">비밀번호 확인</button>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn 버튼-full">비밀번호 확인</button>
+            </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"

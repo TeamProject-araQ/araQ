@@ -1,18 +1,20 @@
-<html layout:decorate="~{user/update}">
-<div layout:fragment="content" class="container-fluid p-5">
-    <h3 class="border-bottom pb-2">비밀번호변경</h3>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline">비밀번호변경</h3>
     <div>
         <form th:action="@{/user/resetPw}" method="post" onsubmit="return checkNewPw()">
             <input type="hidden" name="token" th:value="${user.token}">
-            <div class="form-group">
-                <label for="newPw">비밀번호</label>
+            <div class="form-group mb-3">
+                <label for="newPw" class="form-label" style="border-bottom:2px solid #d8d3e0;">비밀번호</label>
                 <input type="password" class="form-control" id="newPw" name="newPw" required>
             </div>
-            <div class="form-group">
-                <label for="confirmPw">비밀번호 확인</label>
+            <div class="form-group mb-3">
+                <label for="confirmPw" class="form-label" style="border-bottom:2px solid #d8d3e0;">비밀번호 확인</label>
                 <input type="password" class="form-control" id="confirmPw" name="confirmPw" required>
             </div>
-            <button type="submit" class="btn btn-primary">변경</button>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn 버튼-full">변경</button>
+            </div>
         </form>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
