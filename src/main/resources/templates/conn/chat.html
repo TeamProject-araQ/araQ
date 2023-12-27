@@ -43,6 +43,7 @@
             </div>
         </form>
         <input type="file" id="chatImageInput" accept="image/*" multiple>
+        <audio autoplay></audio>
     </div>
     <script th:inline="javascript">
         var roomCode = [[${room.code}]];
@@ -51,6 +52,5 @@
         var target = [[${target.username}]];
     </script>
 </div>
-<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script">
-</script>
+<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script"></script>
 </html>

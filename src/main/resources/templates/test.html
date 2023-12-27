@@ -1,17 +1,20 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3 d-flex align-items-center justify-content-center" style="height:80vh;">
-    <div>
-        <div class="d-flex align-items-center justify-content-center mb-3">
-            <img src="/image/alert.png" alt="" style="height:80px; width:auto;">
-            <h2 class="ms-3">강제 탈퇴되어 해당 사이트에 접근하실 수 없습니다.</h2>
-        </div>
-        <div class="d-flex justify-content-center">
-            <div>
-                <h5>관리자에 의해 강제 탈퇴 처리된 회원은 재가입이 불가능합니다.</h5>
-                <p>탈퇴 사유 : </p>
-                <!-- <p th:text="${blacklist.reason}"></p> -->
-            </div>
-        </div>
-    </div>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebRTC Audio Chat</title>
+</head>
+<body>
+<h2>WebRTC Audio Chat</h2>
+<audio id="localAudio" autoplay muted></audio>
+<audio id="remoteAudio" autoplay></audio>
+<button onclick="connect()">Connect</button>
+<button onclick="startCall()">Start Call</button>
+<button onclick="endCall()">End Call</button>
+
+<a href="https://doublem.org/webrtc-story-02/" target="_blank">여기</a>
+<!-- WebRTC와 STOMP 스크립트 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script th:src="@{/rtc.js}"></script>
+</body>
 </html>
