@@ -1,11 +1,11 @@
 function scrollUp() {
     var container = document.getElementById('talkContainer');
-    container.scrollBy({ top: -200, behavior: 'smooth' });
+    container.scrollBy({ top: -500, behavior: 'smooth' });
 }
 
 function scrollDown() {
     var container = document.getElementById('talkContainer');
-    container.scrollBy({ top: 200, behavior: 'smooth' });
+    container.scrollBy({ top: 500, behavior: 'smooth' });
 }
 
 $(function() {
