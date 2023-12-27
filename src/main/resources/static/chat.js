@@ -219,4 +219,8 @@ $(function() {
             data: $("#hiddenUserName").val()
         });
     });
+
+    $("#voiceChatBtn").on('click', function() {
+        navigator.mediaDevices.getUserMedia({audio: true, video:false});
+    });
 });
