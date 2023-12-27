@@ -1,10 +1,13 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container">
-    <h3 class="my-3">톡 작성하기</h3>
-    <form id="regForm" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <textarea name="content" id="content" cols="30" rows="10" class="form-control" th:text="${post != null} ? ${post.content} : ''"></textarea>
-        <button class="btn btn-outline-dark my-3 w-100" id="regBtn">등록</button>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline">톡 작성하기</h3>
+    <form id="regForm" method="post" class="my-3">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <textarea name="content" id="content" cols="30" rows="10" class="form-control"
+                  th:text="${post != null} ? ${post.content} : ''" placeholder="내용을 입력해주세요."></textarea>
+        <div class="d-flex justify-content-end">
+            <button class="btn 버튼-full my-3" id="regBtn">등록</button>
+        </div>
     </form>
 </div>
 <script layout:fragment="script">
