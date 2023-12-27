@@ -217,7 +217,6 @@ public class UserController {
 
     @PostMapping("/verifyCode")
     @ResponseBody
-
     public ResponseEntity<Map<String, String>>verifyCode(@RequestBody Map<String, String> data, HttpSession session){
         String username = data.get("username");
         String phoneNum = data.get("phoneNum");
@@ -237,5 +236,10 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+
+    @GetMapping("/page")
+    public String page() {
+        return "user/page";
     }
 }
