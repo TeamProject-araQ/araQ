@@ -24,6 +24,7 @@ $(function() {
 
     $("#chatImageInput").on('change', function() {
         var files = this.files;
+        console.log(files);
         var preview = $("#imagePreview");
 
         if (files.length > 5) {
@@ -32,6 +33,16 @@ $(function() {
             preview.empty();
             $("#imagePreviewForm").hide();
             return;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if(!files[i].type.startsWith('image/')) {
+                alert("이미지 파일만 선택해주세요.");
+                $(this).val("");
+                preview.empty();
+                $("#imagePreviewForm").hide();
+                return;
+            }
         }
 
         preview.empty();
@@ -85,6 +96,15 @@ $(function() {
                     // 날짜
                 }
                 var date = createDate.getHours().toString().padStart(2, '0')+":"+createDate.getMinutes().toString().padStart(2, '0');
+                var imageElement = ""
+                if (data.images != null) {
+                    for (var i = 0; i < data.images.length; i++) {
+                        imageElement +=
+                        '<a href="' + data.images[i] + '">'+
+                            '<img src="' + data.images[i] + '" alt="" style="width:100px; height:100px;">'+
+                        '</a>';
+                    }
+                }
 
                 if (data.writer == user) {
                     element =
@@ -94,6 +114,7 @@ $(function() {
                                 '<small> '+ date +' </small>'+
                                 '<div class="card ourColor">'+
                                     '<span class="confirm"></span>'+
+                                    imageElement+
                                     '<p class="card-body text-start">' + data.content + '</p>'+
                                 '</div>'+
                             '</div>'+
@@ -107,6 +128,7 @@ $(function() {
                             '<p>' + data.writerNick + '</p>'+
                             '<div>'+
                                 '<div class="card">'+
+                                    imageElement+
                                     '<p class="card-body text-start">' + data.content + '</p>'+
                                 '</div>'+
                                 '<small> ' + date + ' </small>'+
@@ -167,13 +189,12 @@ $(function() {
                 processData: false,
                 contentType: false,
                 success: function(result) {
-                    alert("업로드 성공");
                     $("#imagePreview").empty();
                     $("#imagePreviewForm").hide();
                     $("#chatImageInput").val("");
                 },
                 error: function(err) {
-                    alert("업로드 실패");
+                    alert("사진 업로드 실패");
                     console.log(err);
                 }
             });
