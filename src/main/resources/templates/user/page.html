@@ -1,7 +1,8 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <h3 class="highlight">마이페이지</h3>
-    <div class="d-flex align-items-center my-3 py-3" style="border-top:1px solid #d8d3e0; border-bottom:1px solid #d8d3e0;">
+    <div class="d-flex align-items-center my-3 py-3"
+         style="border-top:1px solid #d8d3e0; border-bottom:1px solid #d8d3e0;">
         <img th:src="@{${user.image}}" alt=""
              style="width:100px; height:100px; border:1px solid lightgray; border-radius:50%;">
         <div class="ms-3">
@@ -9,9 +10,77 @@
             <a href="">프로필 변경 ></a>
         </div>
     </div>
-    <h4 class="underline-start">나의 문의내역</h4>
-    <div th:each="inquiry : ${user.inquiryList}">
-
+    <div class="d-flex justify-content-between align-items-end">
+        <h4 class="underline-start">최근 문의내역</h4>
+        <a href="">더보기 ></a>
+    </div>
+    <div class="my-3">
+        <table class="table table-hover text-center">
+            <thead class="ourColor">
+            <tr>
+                <th>번호</th>
+                <th>카테고리</th>
+                <th>제목</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="inquiry : ${inquiryList}">
+                <td th:text="${inquiry.id}"></td>
+                <td th:text="${inquiry.category}"></td>
+                <td><a th:href="@{|/inquiry/detail/${inquiry.id}|}" th:text="${inquiry.title}"></a></td>
+                <td th:text="${inquiry.status}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-end">
+        <h4 class="underline-start">최근 게시물</h4>
+        <a href="">더보기 ></a>
+    </div>
+    <div class="my-3">
+        <table class="table table-hover text-center">
+            <thead class="ourColor">
+            <tr>
+                <th>번호</th>
+                <th>내용</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${postList}">
+                <td th:text="${post.id}"></td>
+                <td><a th:href="@{|/post/detail/${post.id}|}" th:text="${post.content}"></a></td>
+                <td th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-end">
+        <h4 class="underline-start">최근 결제 내역</h4>
+        <a href="">더보기 ></a>
+    </div>
+    <div class="my-3">
+        <table class="table table-hover text-center">
+            <thead class="ourColor">
+            <tr>
+                <th>번호</th>
+                <th>결제 금액</th>
+                <th>버블</th>
+                <th>결제일</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pay : ${paymentList}">
+                <td th:text="${pay.id}"></td>
+                <td th:text="${pay.amount}"></td>
+                <td th:text="|+ ${pay.bubble}|"></td>
+                <td th:text="${#temporals.format(pay.date, 'yyyy-MM-dd')}"></td>
+                <td th:text="${pay.status == 'paid'} ? '결제 완료'"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </html>

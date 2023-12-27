@@ -1,11 +1,13 @@
 package com.team.araq.inquiry;
 
+import com.team.araq.user.SiteUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
@@ -18,5 +20,6 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
                                            @Param("category") String category,
                                            Pageable pageable);
 
+    List<Inquiry> findTop3ByWriterOrderByCreateDateDesc(SiteUser writer);
 
 }

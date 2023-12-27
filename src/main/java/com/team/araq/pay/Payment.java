@@ -39,4 +39,6 @@ public class Payment {
 
     private LocalDateTime cancelDate;
 
+    private int bubble;
+
 }

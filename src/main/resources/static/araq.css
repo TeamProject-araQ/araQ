@@ -339,7 +339,6 @@ a:hover {
 }
 
 .highlight {
-  display: inline-block;
   position: relative;
   color: #000;
   cursor: pointer;

@@ -1,6 +1,12 @@
 package com.team.araq.user;
 
 import com.team.araq.board.email.MailService;
+import com.team.araq.board.post.Post;
+import com.team.araq.board.post.PostService;
+import com.team.araq.inquiry.Inquiry;
+import com.team.araq.inquiry.InquiryService;
+import com.team.araq.pay.Payment;
+import com.team.araq.pay.PaymentService;
 import com.team.araq.report.BlacklistService;
 import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
@@ -18,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -27,9 +34,18 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+
     private final MailService mailService;
+
     private final SmsService smsService;
+
     private final BlacklistService blacklistService;
+
+    private final InquiryService inquiryService;
+
+    private final PostService postService;
+
+    private final PaymentService paymentService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -239,7 +255,14 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public String page() {
+    public String page(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<Inquiry> inquiryList = this.inquiryService.getListByWriter(user);
+        List<Post> postList = this.postService.getListByWriter(user);
+        List<Payment> paymentList = this.paymentService.getListByUser(user);
+        model.addAttribute("inquiryList", inquiryList);
+        model.addAttribute("postList", postList);
+        model.addAttribute("paymentList", paymentList);
         return "user/page";
     }
 }

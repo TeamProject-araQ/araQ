@@ -78,4 +78,8 @@ public class InquiryService {
     public void deleteInquiry(Inquiry inquiry) {
         this.inquiryRepository.delete(inquiry);
     }
+
+    public List<Inquiry> getListByWriter(SiteUser user) {
+        return this.inquiryRepository.findTop3ByWriterOrderByCreateDateDesc(user);
+    }
 }
