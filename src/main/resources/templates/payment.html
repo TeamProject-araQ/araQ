@@ -1,0 +1,159 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline mb-3">버블 충전</h3>
+    <div class="border-bottom border-top py-3">
+        <div class="text-center">
+            <div class="d-flex justify-content-center align-items-center">
+                <div style="font-size:2rem; font-family:'nanum-bold'; margin-right:5px;" th:text="${user.bubble}"></div>
+                <img src="/image/bubble.jpg" alt="" style="width:50px; height:50px;">
+            </div>
+            <div>내 보유 버블</div>
+        </div>
+    </div>
+    <h4 class="my-3">결제 수단</h4>
+    <div class="d-flex justify-content-around">
+        <button onclick="selectPg('kakaopay')" class="btn kakao" data-bs-toggle="button" style="width:32%;">
+            <img src="/image/kakao.png" alt="" style="margin-right:10px; height:20px; width:auto;">카카오페이
+        </button>
+        <button onclick="selectPg('uplus')" class="btn toss col-4" data-bs-toggle="button" style="width:32%;">
+            <img src="/image/toss.png" alt="" style="margin-right:10px; height:20px; width:auto;">토스페이먼츠
+        </button>
+        <button onclick="selectPg('danal')" class="btn phone col-4" data-bs-toggle="button" style="width:32%;">
+            <img src="/image/phone.png" alt="" style="margin-right:10px; height:20px; width:auto;">휴대폰 결제
+        </button>
+    </div>
+    <h4 class="my-3">결제할 버블</h4>
+    <div>
+        <div class="bubble d-flex justify-content-between align-items-center" style="border-top:1px solid lightgray;">
+            <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">1000
+                <span>버블</span></div>
+            <div class="뱃지">￦ 1000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">3000
+                <span>버블</span></div>
+            <div class="뱃지">￦ 3000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">5500 <span>버블</span>
+                </div>
+                <div class="badge bg-danger text-light ms-3">+ 10%</div>
+            </div>
+            <div class="뱃지">￦ 5000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">11000 <span>버블</span>
+                </div>
+                <div class="badge bg-danger text-light ms-3">+ 10%</div>
+            </div>
+            <div class="뱃지">￦ 10000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">33000 <span>버블</span>
+                </div>
+                <div class="badge bg-danger text-light ms-3">+ 10%</div>
+            </div>
+            <div class="뱃지">￦ 30000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">55000 <span>버블</span>
+                </div>
+                <div class="badge bg-danger text-light ms-3">+ 10%</div>
+            </div>
+            <div class="뱃지">￦ 50000</div>
+        </div>
+        <div class="bubble d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <div><img src="/image/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">110000 <span>버블</span>
+                </div>
+                <div class="badge bg-danger text-light ms-3">+ 10%</div>
+            </div>
+            <div class="뱃지">￦ 100000</div>
+        </div>
+    </div>
+</div>
+<input type="hidden" th:value="${user}">
+<script type="text/javascript" layout:fragment="script">
+
+    IMP.init('imp65467420');
+
+    var selectedPg = '';
+
+    var amount = '';
+
+    function selectPg(pg) {
+        var buttons = document.querySelectorAll('.btn[data-bs-toggle="button"]');
+        buttons.forEach(function (button) {
+            button.classList.remove('active');
+        });
+
+        var clickedButton = document.querySelector('.btn[data-bs-toggle="button"][onclick="selectPg(\'' + pg + '\')"]');
+        clickedButton.classList.add('active');
+
+        selectedPg = pg;
+    }
+
+    $('.bubble').on('click', function() {
+        if (!selectedPg) {
+            alert('결제 수단을 선택해주세요.');
+            return;
+        }
+
+        var bubbleValueElement = $(this).find('div:first-child');
+        var bubbleValue = bubbleValueElement.text();
+        var bubbleNumber = parseInt(bubbleValue.match(/\d+/)[0]);
+
+        var badgeElement = $(this).find('.뱃지');
+        var text = badgeElement.text();
+        var matchResult = text.match(/\d+/);
+        amount = parseInt(matchResult[0]);
+
+        IMP.request_pay({
+            pg: selectedPg,
+            pay_method: 'card',
+            merchant_uid: '[[${user.id}]]' + new Date().getTime(),
+            name: 'AraQ_Bubble 결제',
+            amount: amount,
+            buyer_email: '[[${user.email}]]',
+            buyer_name: '[[${user.username}]]',
+            buyer_tel: '[[${user.phoneNum}]]',
+            buyer_addr: '[[${user.address}]]',
+            status: status
+        }, function (rsp) {
+            if (rsp.success) {
+                var data = {
+                    orderNum: rsp.merchant_uid,
+                    amount: rsp.paid_amount,
+                    method: rsp.pay_method,
+                    username: rsp.buyer_name,
+                    card: rsp.card_name,
+                    impUid: rsp.imp_uid,
+                    status: rsp.status,
+                    pg: rsp.pg_provider,
+                    bubble : bubbleNumber
+                };
+                $.ajax({
+                    url: '/charge',
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [csrfHeader]: csrfToken
+                    },
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+</html>
