@@ -19,7 +19,7 @@ public class PaymentController {
 
     @GetMapping("/payment")
     public String pay() {
-        return "user/payment";
+        return "payment";
     }
 
     @PostMapping("/charge")

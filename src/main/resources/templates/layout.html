@@ -11,34 +11,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
-    <link href="https://font.elice.io/css?family=Elice+DX+Neolli" rel="stylesheet">
     <title>AraQ</title>
     <style>
-
-        @font-face {
-            font-family: 'nanum-regular';
-            src: url('/font/nanum-regular.ttf') format('truetype');
-        }
-
-        @font-face {
-            font-family: 'nanum-light';
-            src: url('/font/nanum-light.ttf') format('truetype');
-        }
-
-        @font-face {
-            font-family: 'nanum-bold';
-            src: url('/font/nanum-bold.ttf') format('truetype');
-        }
-
-        @font-face {
-            font-family: 'nanum-semiBold';
-            src: url('/font/nanum-semiBold.ttf') format('truetype');
-        }
-
-        html, body {
-            font-family: 'nanum-regular';
-        }
-
         @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
         .rate {
             display: inline-block;
@@ -76,6 +50,38 @@
 </head>
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
+<!-- 옵션 바 -->
+<div class="d-flex justify-content-around my-3 text-center container">
+    <ul class="menu">
+        <li class="option"><a href="#">매칭</a></li>
+        <ul class="depth">
+            <li><a th:href="@{/match/around}">내 위치 주변</a></li>
+            <li><a href="#">내 이상형</a></li>
+            <li><a href="#">성향 및 관심사</a></li>
+        </ul>
+    </ul>
+    <ul class="menu">
+        <li class="option"><a href="#">채팅</a></li>
+        <ul class="depth">
+            <li><a th:href="@{/chat/list}">채팅 목록</a></li>
+        </ul>
+    </ul>
+    <ul class="menu">
+        <li class="option"><a href="#">설문</a></li>
+        <ul class="depth">
+            <li><a href="#">설문 참여</a></li>
+        </ul>
+    </ul>
+    <ul class="menu">
+        <li class="option"><a href="#">고객센터</a></li>
+        <ul class="depth">
+            <li><a th:href="@{/announcement/list}">공지사항</a></li>
+            <li><a href="#">자주 묻는 질문</a></li>
+            <li><a th:href="@{/inquiry/list}">나문희</a></li>
+            <li><a th:href="@{/review/list}">회원 후기</a></li>
+        </ul>
+    </ul>
+</div>
 <th:block layout:fragment="content"></th:block>
 <div sec:authorize="isAuthenticated()" class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
      aria-labelledby="offcanvasRightLabel">
@@ -100,7 +106,7 @@
                 <img src="/image/person.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">마이페이지</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/inquiry}" style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/inquiry.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">1:1 문의</div>
             </a>
@@ -108,11 +114,11 @@
                 <img src="/image/password.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">비밀번호 변경</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/update}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/payment}" style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/pay.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">결제 관리</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/post}" style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/post.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">나의 톡</div>
             </a>

@@ -4,6 +4,30 @@ body, ul, li {
     padding:0;
 }
 
+@font-face {
+    font-family: 'nanum-regular';
+    src: url('/font/nanum-regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'nanum-light';
+    src: url('/font/nanum-light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'nanum-bold';
+    src: url('/font/nanum-bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'nanum-semiBold';
+    src: url('/font/nanum-semiBold.ttf') format('truetype');
+}
+
+html, body {
+    font-family: 'nanum-regular';
+}
+
 a {
     color:inherit;
     text-decoration:none;
@@ -22,24 +46,48 @@ a:hover {
 .option {
     margin-bottom:5px;
     color:dimgray;
-    font-size:14pt;
+    font-size:15pt;
     font-weight:bold;
+    position: relative;
+}
+
+.option::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 2px;
+    background-color: #d8d3e0;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+}
+
+.option:hover::after {
+    transform: scaleX(1);
 }
 
 .depth {
-  position:absolute;
-  display:none;
-  width:100%;
-  background:white;
-  z-index:99;
+    position:absolute;
+    width:100%;
+    background:white;
+    z-index:99;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.7s ease-in-out;
 }
 
 .depth > li {
-    padding:5px;
+    padding:10px;
+    font-size:12pt;
+}
+
+.depth > li:hover {
+    background:rgb(231,227,236);
 }
 
 .menu:hover .depth {
-  display:block;
+  max-height: 500px;
 }
 
 .you {
@@ -55,7 +103,7 @@ a:hover {
 	content: '';
 	position: absolute;
 	bottom: 0;
-	left: 20%;
+	left: 10%;
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
@@ -80,7 +128,7 @@ a:hover {
 	content: '';
 	position: absolute;
 	bottom: 0;
-	left: 80%;
+	left: 90%;
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
@@ -211,6 +259,7 @@ a:hover {
     border:1px solid rgb(146, 132, 168);
     color:rgb(146, 132, 168);
     font-weight:bold;
+    background:white;
 }
 
 .버튼:hover {
@@ -263,7 +312,7 @@ a:hover {
 }
 
 .kakao:hover {
-    background:rgb(236, 218, 0);
+    background:rgb(255, 235, 0);
 }
 
 .kakao.active {
@@ -285,7 +334,7 @@ a:hover {
 }
 
 .phone {
-    background:rgb(237, 236, 249);
+    background:white;
 }
 
 .phone:hover {
@@ -339,6 +388,7 @@ a:hover {
 }
 
 .highlight {
+  display: inline-block;
   position: relative;
   color: #000;
   cursor: pointer;
