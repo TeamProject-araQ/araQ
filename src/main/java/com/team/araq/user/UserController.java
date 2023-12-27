@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,9 @@ public class UserController {
             return "user/blacklist";
         }
         try {
-            userService.create(userCreateForm, image);
+            SiteUser user = userService.create(userCreateForm, image);
+            model.addAttribute("user", user);
+            model.addAttribute("userUpdateForm", new UserUpdateForm());
         } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -61,6 +64,13 @@ public class UserController {
             return "user/signup";
         }
 
+        return "user/updateInfo";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
+        SiteUser user = userService.getByUsername(username);
+        userService.update(user, userUpdateForm, image);
         return "redirect:/";
     }
 
@@ -146,16 +156,16 @@ public class UserController {
     }
 
     @GetMapping("/resetPw/{token}")
-    public String resetPw(@PathVariable("token") String token, Model model){
+    public String resetPw(@PathVariable("token") String token, Model model) {
         SiteUser user = userService.getByUserToken(token);
         model.addAttribute("user", user);
         return "/user/resetPw";
     }
 
     @PostMapping("/resetPw")
-    public String resetPw(@RequestParam("token") String token, @RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw){
+    public String resetPw(@RequestParam("token") String token, @RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw) {
         SiteUser user = userService.getByUserToken(token);
-        if(user != null){
+        if (user != null) {
             userService.updatePw(user, newPw, confirmPw);
             mailService.createToken(user.getUsername());
             return "redirect:/user/login";
@@ -182,6 +192,7 @@ public class UserController {
 
     @PostMapping("/findId")
     @ResponseBody
+
     public String findId(@RequestBody Map<String, String> data, HttpSession session){
         String name = data.get("name");
         String phoneNum = data.get("phoneNum");
@@ -189,7 +200,7 @@ public class UserController {
 
         String storedVerKey = (String) session.getAttribute("verKey");
 
-        if(verKey.equals(storedVerKey)){
+        if (verKey.equals(storedVerKey)) {
             SiteUser user = userService.getByNameAndPhoneNum(name, phoneNum);
             String username = user.getUsername();
             return username;
@@ -217,7 +228,7 @@ public class UserController {
 
     @PostMapping("/verifyCode")
     @ResponseBody
-    public ResponseEntity<Map<String, String>>verifyCode(@RequestBody Map<String, String> data, HttpSession session){
+    public ResponseEntity<Map<String, String>> verifyCode(@RequestBody Map<String, String> data, HttpSession session) {
         String username = data.get("username");
         String phoneNum = data.get("phoneNum");
         String verificationCode = data.get("verificationCode");
@@ -226,7 +237,7 @@ public class UserController {
 
         SiteUser user = userService.getByUsername(username);
 
-        if(user != null && user.getPhoneNum().equals(phoneNum) && verificationCode.equals(verkey)){
+        if (user != null && user.getPhoneNum().equals(phoneNum) && verificationCode.equals(verkey)) {
             mailService.createToken(username);
             session.removeAttribute("verificationCode");
             Map<String, String> responseMap = new HashMap<>();
@@ -237,7 +248,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-
     @GetMapping("/page")
     public String page() {
         return "user/page";
