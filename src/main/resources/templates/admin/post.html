@@ -41,7 +41,7 @@
             <td><input class="check form-check-input" type="checkbox" th:value="${post.id}"></td>
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <td>
-                <div class="text-truncate text-dark" style="max-width: 100%; overflow: hidden; white-space: nowrap;">
+                <div class="text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap;">
                     <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.content}"></a>
                 </div>
             </td>

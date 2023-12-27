@@ -33,30 +33,40 @@
         </ul>
     </div>
     <!-- 매칭 추천 -->
-    <h3># 매칭 추천</h3>
+    <h3 class="highlight"># 매칭 추천</h3>
     <div class="d-flex justify-content-between my-3">
         <h1 class="border border-dark p-3">추천된 사람 1</h1>
         <h1 class="border border-dark p-3">추천된 사람 2</h1>
         <h1 class="border border-dark p-3">추천된 사람 3</h1>
     </div>
-    <h3># AraQ Talk</h3>
+    <h3 class="highlight"># AraQ Talk</h3>
     <div id="postsContainerWrapper" style="position: relative;">
-        <div class="my-3 border border-dark p-3" id="talkContainer" style="height:800px; overflow:hidden;">
+        <div class="my-3" id="talkContainer" style="height:800px; overflow:hidden;">
             <div class="d-flex justify-content-end">
-                <a th:href="@{/post/create}" class="btn btn-outline-dark">톡 작성하기</a>
+                <a th:href="@{/post/create}" class="btn 버튼-full mb-3">톡 작성하기</a>
             </div>
             <div th:each="post : ${postList}">
-                <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
-                    <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
+                <div class="d-flex align-items-end mb-5" style="width:90%; margin:0 auto;">
+                    <img th:src="@{${post.writer.image}}" alt="" style="width:30px; height:30px; border-radius:50%;"
+                         th:if="${post.writer.username != user.username}" class="me-3">
+                    <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
+                        <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
+                        <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
+                             style="font-size:10pt; color:gray;" th:if="${post.writer.username == user.username}"></div>
+                        <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
+                             style="font-size:10pt; color:gray; text-align:end;" th:if="${post.writer.username != user.username}"></div>
+                    </div>
+                    <img th:src="@{${post.writer.image}}" alt="" style="width:50px; height:50px; border-radius:50%;"
+                         th:if="${post.writer.username == user.username}" class="ms-3">
                 </div>
             </div>
         </div>
-        <div id="scrollButtons" style="position: absolute; top: 50%; right: 0; transform: translateY(-50%);">
-            <button onclick="scrollUp()">▲</button>
-            <button onclick="scrollDown()">▼</button>
+        <div id="scrollButtons" style="position: absolute; top: 50%; right: 1%; transform: translateY(-50%);">
+            <button onclick="scrollUp()" class="btn btn-sm 버튼">▲</button>
+            <button onclick="scrollDown()" class="btn btn-sm 버튼 mt-2">▼</button>
         </div>
     </div>
-    <div class="card" id="onlineUsers">
+    <div class="card mt-5" id="onlineUsers">
         <h3 class="card-header">현재 접속자</h3>
         <div class="card-body">
             <div class="dropdown dropend" th:each="online : ${onlineUsers}">
