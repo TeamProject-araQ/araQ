@@ -7,10 +7,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+    <link href="https://font.elice.io/css?family=Elice+DX+Neolli" rel="stylesheet">
     <title>AraQ</title>
     <style>
+
+        @font-face {
+            font-family: 'nanum-regular';
+            src: url('/font/nanum-regular.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'nanum-light';
+            src: url('/font/nanum-light.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'nanum-bold';
+            src: url('/font/nanum-bold.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'nanum-semiBold';
+            src: url('/font/nanum-semiBold.ttf') format('truetype');
+        }
+
+        html, body {
+            font-family: 'nanum-regular';
+        }
+
         @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
         .rate {
             display: inline-block;
@@ -55,20 +83,41 @@
         <h5 class="offcanvas-title" id="offcanvasRightLabel">내 정보</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body text-center">
-        <img th:src="@{${user.image}}" alt="" style="width:150px; height:150px;">
-        <div th:text="${user.nickName}"></div>
-        <div class="d-flex justify-content-center align-items-center">
-            <div th:text="|내 버블 : ${user.bubble}|"></div>
-            <img src="/image/bubble.jpg" alt="" style="width:20px; height:20px;">
-            <a th:href="@{/payment}" class="badge bg-light text-dark border border-dark">충전하기</a>
+    <div class="offcanvas-body text-center" style="padding:12px;">
+        <img th:src="@{${user.image}}" alt="" style="width:150px; height:150px; border-radius:50%;">
+        <div class="d-flex justify-content-center align-items-center mt-3">
+            <div class="fs-3 pb-1" th:text="${user.nickName}"></div>
+            <div class="ms-1">님</div>
+            <a class="btn btn-sm 버튼" th:href="@{/reset}" th:if="${user.username.equals('njk7740')}">테스트</a>
         </div>
-
-        <div class="d-flex justify-content-center align-items-center">
-            <a th:href="@{/user/update}" class="badge bg-light text-dark border border-dark">프로필 수정</a>
+        <div>환영합니다!</div>
+        <div class="row mt-5">
+            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/bubbles.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">버블</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/user/page}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/person.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">마이페이지</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/inquiry.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">1:1 문의</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/user/updatePw}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/password.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">비밀번호 변경</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/user/update}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/pay.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">결제 관리</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/post.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">나의 톡</div>
+            </a>
         </div>
-
-        <div class="d-flex justify-content-end align-items-center">
+        <div class="d-flex justify-content-end align-items-center mt-5">
             <a th:href="@{/user/logout}">
                 <span>로그아웃</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -84,6 +133,7 @@
 </div>
 <div th:replace="~{layout_modal :: modal}"></div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script type="text/javascript" th:src="@{/bootstrap.bundle.min.js}"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

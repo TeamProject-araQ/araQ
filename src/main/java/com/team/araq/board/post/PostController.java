@@ -57,7 +57,7 @@ public class PostController {
         if (!post.getWriter().getUsername().equals(principal.getName()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         this.postService.modifyPost(post, content);
-        return "redirect:/post/detail" + post.getId();
+        return "redirect:/post/detail/" + post.getId();
     }
 
     @GetMapping("/delete/{id}")

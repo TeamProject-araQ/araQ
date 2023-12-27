@@ -27,4 +27,6 @@ public class PaymentDTO {
     private String pg;
 
     private String status;
+
+    private int bubble;
 }

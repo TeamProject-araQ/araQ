@@ -1,16 +1,28 @@
 function scrollUp() {
     var container = document.getElementById('talkContainer');
-    container.scrollBy({ top: -200, behavior: 'smooth' });
+    container.scrollBy({ top: -500, behavior: 'smooth' });
 }
 
 function scrollDown() {
     var container = document.getElementById('talkContainer');
-    container.scrollBy({ top: 200, behavior: 'smooth' });
+    container.scrollBy({ top: 500, behavior: 'smooth' });
+}
+
+function scrollToTop() {
+    var container = document.getElementById('talkContainer');
+    container.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToBottom() {
+    var container = document.getElementById('talkContainer');
+    container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 }
 
 $(function() {
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+    scrollToBottom();
 
     $("#onlineUsers .chatRequest").on('click', function() {
         var nick = $(this).data("nick");

@@ -1,0 +1,33 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h5 th:text="|${announcement.id}번째 공지사항|"></h5>
+    <div class="my-3">
+        <div class="text-center" style="border-top:2px solid #d8d3e0; border-bottom:2px solid #d8d3e0; padding:20px;">
+            <h3 th:text=" ${announcement.title}"></h3>
+            <div class="d-flex justify-content-center mt-2">
+                <div style="font-family:'nanum-bold';">관리자</div>
+                <span class="mx-4">|</span>
+                <div th:text="${#temporals.format(announcement.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                <span class="mx-4">|</span>
+                <div th:text="|조회수 : ${announcement.view}|"></div>
+            </div>
+        </div>
+        <div class="mt-5 border-bottom pb-4">
+            <div th:utext="${@commonUtil.markdown(announcement.content)}"></div>
+        </div>
+        <div class="d-flex justify-content-end mt-2" style="font-family:'nanum-light';" th:if="${user.username == 'admin'}">
+            <a th:href="@{|/admin/announcement/modify/${announcement.id}|}">수정</a>
+            <span class="mx-2">|</span>
+            <a href="javascript:void(0)" th:data-uri="@{|/announcement/delete/${announcement.id}|}" id="deleteLink">삭제</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    $(function() {
+        $('#deleteLink').on('click', function() {
+            if (confirm ('이 공지를 삭제하시겠습니까?'))
+                location.href = $(this).data('uri');
+        });
+    });
+</script>
+</html>

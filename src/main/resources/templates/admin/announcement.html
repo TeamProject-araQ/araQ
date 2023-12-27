@@ -1,9 +1,10 @@
 <html layout:decorate="~{admin/page}">
 <div layout:fragment="content" class="container-fluid p-5">
-    <h3 class="border-bottom pb-2">게시물 목록</h3>
-    <div class="d-flex justify-content-end my-3">
+    <h3 class="border-bottom pb-2">공지 사항</h3>
+    <div class="d-flex justify-content-between my-3">
+        <a th:href="@{/admin/announcement/create}" class="btn 버튼-full">글쓰기</a>
         <div class="input-group" style="width:30%;">
-            <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="내용, 작성자 검색">
+            <input type="text" id="searchKw" class="form-control" th:value="${kw}" placeholder="제목, 내용 검색">
             <button class="btn 버튼" type="button" id="searchBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                      viewBox="0 0 16 16">
@@ -29,24 +30,20 @@
     <table class="table table-hover text-center" style="width:100%; table-layout: fixed;">
         <thead style="background:#5f566d; color:white;">
         <tr>
-            <th style="width: 5%;">선택</th>
-            <th style="width: 5%;">번호</th>
-            <th style="width: 50%;">내용</th>
-            <th style="width: 20%;">작성자</th>
-            <th style="width: 20%;">작성일</th>
+            <th style="width:10%;">선택</th>
+            <th style="width:10%;">번호</th>
+            <th style="width:50%;">제목</th>
+            <th>작성일시</th>
+            <th>조회수</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="post, loop : ${paging}">
-            <td><input class="check form-check-input" type="checkbox" th:value="${post.id}"></td>
+        <tr th:each="announcement, loop : ${paging}">
+            <td><input class="check form-check-input" type="checkbox" th:value="${announcement.id}"></td>
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-            <td>
-                <div class="text-truncate" style="max-width: 100%; overflow: hidden; white-space: nowrap;">
-                    <a th:href="@{|/post/detail/${post.id}|}" th:text="${post.content}"></a>
-                </div>
-            </td>
-            <td th:text="${post.writer.nickName}"></td>
-            <td th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd')}"></td>
+            <td><a th:href="@{|/announcement/detail/${announcement.id}|}" th:text="${announcement.title}"></a></td>
+            <td th:text="${#temporals.format(announcement.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${announcement.view}"></td>
         </tr>
         </tbody>
     </table>
@@ -68,7 +65,7 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/admin/post}" method="get" id="searchForm">
+        <form th:action="@{/admin/announcement}" method="get" id="searchForm">
             <input type="hidden" id="page" name="page" th:value="${paging.number}">
             <input type="hidden" id="kw" name="kw" th:value="${kw}">
         </form>
@@ -91,19 +88,20 @@
             $('.check').prop('checked', this.checked);
         });
 
+
         $("#deleteBtn").on('click', function() {
             var checkedValues = $(".check:checked").map(function() {
                 return this.value;
             }).get();
 
             if (checkedValues.length === 0) {
-                alert('선택된 게시물이 없습니다.');
+                alert('선택된 공지 사항이 없습니다.');
                 return;
             }
 
-            if (confirm('게시물을 삭제하시겠습니까?')) {
+            if (confirm('공지 사항을 삭제하시겠습니까?')) {
                 $.ajax({
-                    url : '/admin/post/delete',
+                    url : '/admin/announcement/delete',
                     type : 'post',
                     headers : {
                         [csrfHeader] : csrfToken

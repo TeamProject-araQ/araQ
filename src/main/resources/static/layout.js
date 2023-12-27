@@ -1,54 +1,52 @@
 $(function() {
+    var socket = new SockJS("/ws");
+    var stompClient = Stomp.over(socket);
 
-    if($("#hiddenUserName").val() != null && !window.location.pathname.includes("/chat/join")) {
-        var socket = new SockJS("/ws");
-        var stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
 
-        stompClient.connect({}, function(frame) {
+        stompClient.send("/app/online", {}, JSON.stringify({
+            type: "online",
+            target: $("#hiddenUserName").val()
+        }));
 
-            stompClient.send("/app/online", {}, JSON.stringify({
-                type: "online",
-                target: $("#hiddenUserName").val()
-            }));
-
-            stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
-                var data = JSON.parse(message.body);
-                var chatToast = new bootstrap.Toast($('#chatToast'), {
-                    autohide: false
-                });
-
-                if (data.type == "chatRequest") {
-                    $("#chatRequestModal .modal-title").text(data.content);
-                    $("#chatRequestModal .nickName").text(data.nickname);
-                    $("#chatRequestModal .userAge").text(data.age);
-                    $("#chatRequestModal .introduce").text(data.introduce);
-                    $("#chatRequestModal .profileImage").attr("src", data.image);
-                    $("#chatRequestModal").modal("show");
-                }
-
-                else if (data.type == "refuse")
-                    alert(data.content);
-
-                else if (data.type == "acceptChat") {
-                    alert(data.nickname + "님이 수락했습니다. 채팅방으로 이동합니다.");
-                    window.location.href = "/chat/join/" + data.content;
-                }
-
-                else if (data.type == "sendChat") {
-                    $("#chatToast .profile").attr("src", data.image);
-                    $("#chatToast .nickName").text(data.nickname);
-                    $("#chatToast .toast-body > a").text(data.content);
-                    $("#chatToast .toast-body > a").attr("href", "/chat/join/" + data.target);
-                    chatToast.show();
-                }
+        stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function(message) {
+            var data = JSON.parse(message.body);
+            var chatToast = new bootstrap.Toast($('#chatToast'), {
+                autohide: false
             });
+
+            if (data.type == "chatRequest") {
+                $("#requestUsername").val(data.username);
+                $("#chatRequestModal .modal-title").text(data.content);
+                $("#chatRequestModal .nickName").text(data.nickname);
+                $("#chatRequestModal .userAge").text(data.age);
+                $("#chatRequestModal .introduce").text(data.introduce);
+                $("#chatRequestModal .profileImage").attr("src", data.image);
+                $("#chatRequestModal").modal("show");
+            }
+
+            else if (data.type == "refuse")
+                alert(data.content);
+
+            else if (data.type == "acceptChat") {
+                alert(data.nickname + "님이 수락했습니다. 채팅방으로 이동합니다.");
+                window.location.href = "/chat/join/" + data.content;
+            }
+
+            else if (data.type == "sendChat" && !window.location.pathname.includes(data.target)) {
+                $("#chatToast .profile").attr("src", data.image);
+                $("#chatToast .nickName").text(data.nickname);
+                $("#chatToast .toast-body > a").text(data.content);
+                $("#chatToast .toast-body > a").attr("href", "/chat/join/" + data.target);
+                chatToast.show();
+            }
         });
-    }
+    });
 
     $("#chatRequestModal .refuse").on('click', function() {
         stompClient.send("/app/alert", {}, JSON.stringify({
             type: "refuse",
-            target: $("#chatRequestModal .nickName").text()
+            target: $("#requestUsername").val()
         }));
     });
 
@@ -61,7 +59,7 @@ $(function() {
                 [csrfHeader]: csrfToken
             },
             contentType:"text/plain",
-            data: $("#chatRequestModal .nickName").text(),
+            data: $("#requestUsername").val(),
             success: function(data) {
                 window.location.href = "/chat/join/" + data;
             },

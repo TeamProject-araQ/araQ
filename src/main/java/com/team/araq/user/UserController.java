@@ -192,7 +192,8 @@ public class UserController {
 
     @PostMapping("/findId")
     @ResponseBody
-    public String findId(@RequestBody Map<String, String> data, HttpSession session) {
+
+    public String findId(@RequestBody Map<String, String> data, HttpSession session){
         String name = data.get("name");
         String phoneNum = data.get("phoneNum");
         String verKey = data.get("verKey");
@@ -246,5 +247,9 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+    }
+    @GetMapping("/page")
+    public String page() {
+        return "user/page";
     }
 }

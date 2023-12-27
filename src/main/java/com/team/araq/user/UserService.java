@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -145,6 +144,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void logout(List<SiteUser> users) {
+        for (SiteUser user : users){
+            user.setLogin(false);
+            userRepository.save(user);
+        }
+    }
+
     public List<SiteUser> getLoginUsers() {
         return userRepository.findByLogin(true);
     }
@@ -211,10 +217,9 @@ public class UserService {
     }
 
     public SiteUser getByNameAndPhoneNum(String name, String phoneNum) {
-        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name, phoneNum);
-        if (user.isPresent()) {
+        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name,phoneNum);
+        if(user.isPresent()){
             return user.get();
-        }
-        throw new UsernameNotFoundException("그런 사람 없습니다.");
+        } throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
 }

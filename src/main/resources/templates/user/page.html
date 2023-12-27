@@ -1,0 +1,17 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="highlight">마이페이지</h3>
+    <div class="d-flex align-items-center my-3 py-3" style="border-top:1px solid #d8d3e0; border-bottom:1px solid #d8d3e0;">
+        <img th:src="@{${user.image}}" alt=""
+             style="width:100px; height:100px; border:1px solid lightgray; border-radius:50%;">
+        <div class="ms-3">
+            <h4 th:text="|${user.name}님 안녕하세요.|"></h4>
+            <a href="">프로필 변경 ></a>
+        </div>
+    </div>
+    <h4 class="underline-start">나의 문의내역</h4>
+    <div th:each="inquiry : ${user.inquiryList}">
+
+    </div>
+</div>
+</html>

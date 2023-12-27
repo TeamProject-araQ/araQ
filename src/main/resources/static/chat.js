@@ -18,6 +18,50 @@ $(function() {
     var chatBoard = document.getElementById("chatBoard");
     chatBoard.scrollTop = chatBoard.scrollHeight;
 
+    $("#chatImageBtn").on('click', function() {
+        $("#chatImageInput").click();
+    });
+
+    $("#chatImageInput").on('change', function() {
+        var files = this.files;
+        console.log(files);
+        var preview = $("#imagePreview");
+
+        if (files.length > 5) {
+            alert("이미지는 최대 5개만 선택 가능합니다.");
+            $(this).val("");
+            preview.empty();
+            $("#imagePreviewForm").hide();
+            return;
+        }
+
+        for (var i = 0; i < files.length; i++) {
+            if(!files[i].type.startsWith('image/')) {
+                alert("이미지 파일만 선택해주세요.");
+                $(this).val("");
+                preview.empty();
+                $("#imagePreviewForm").hide();
+                return;
+            }
+        }
+
+        preview.empty();
+
+        $.each(files, function(index, file){
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var img = $("<img>").attr("src", e.target.result).css({width: '100px', height: '100px'});
+                preview.append(img);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        if (files.length > 0) $("#imagePreviewForm").show();
+        else $("#imagePreviewForm").hide();
+    });
+
     stompClient.connect({}, function(frame) {
         $.ajax({
             url: "/chat/confirm",
@@ -52,6 +96,15 @@ $(function() {
                     // 날짜
                 }
                 var date = createDate.getHours().toString().padStart(2, '0')+":"+createDate.getMinutes().toString().padStart(2, '0');
+                var imageElement = ""
+                if (data.images != null) {
+                    for (var i = 0; i < data.images.length; i++) {
+                        imageElement +=
+                        '<a href="' + data.images[i] + '">'+
+                            '<img src="' + data.images[i] + '" alt="" style="width:100px; height:100px;">'+
+                        '</a>';
+                    }
+                }
 
                 if (data.writer == user) {
                     element =
@@ -61,6 +114,7 @@ $(function() {
                                 '<small> '+ date +' </small>'+
                                 '<div class="card ourColor">'+
                                     '<span class="confirm"></span>'+
+                                    imageElement+
                                     '<p class="card-body text-start">' + data.content + '</p>'+
                                 '</div>'+
                             '</div>'+
@@ -74,6 +128,7 @@ $(function() {
                             '<p>' + data.writerNick + '</p>'+
                             '<div>'+
                                 '<div class="card">'+
+                                    imageElement+
                                     '<p class="card-body text-start">' + data.content + '</p>'+
                                 '</div>'+
                                 '<small> ' + date + ' </small>'+
@@ -107,13 +162,46 @@ $(function() {
     $("#sendChatForm").submit(function(event) {
         event.preventDefault();
 
-        if($("#msgContent").val().trim() != "") {
-            stompClient.send("/app/send", {}, JSON.stringify({
-                content: $("#msgContent").val(),
-                writer: user,
-                code: roomCode,
-                target: target
-            }));
+        var files = $("#chatImageInput")[0].files;
+        var chatContent = {
+            content: $("#msgContent").val(),
+            writer: user,
+            code: roomCode,
+            target: target
+        };
+
+        if (files.length > 0) {
+            var formData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            formData.append('chatContainer', JSON.stringify(chatContent));
+
+            $.ajax({
+                url: "/chat/uploadImage",
+                type: "post",
+                data: formData,
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                processData: false,
+                contentType: false,
+                success: function(result) {
+                    $("#imagePreview").empty();
+                    $("#imagePreviewForm").hide();
+                    $("#chatImageInput").val("");
+                },
+                error: function(err) {
+                    alert("사진 업로드 실패");
+                    console.log(err);
+                }
+            });
+        } else {
+            if($("#msgContent").val().trim() != "") {
+                stompClient.send("/app/send", {}, JSON.stringify(chatContent));
+            }
         }
 
         $("#msgContent").val("");

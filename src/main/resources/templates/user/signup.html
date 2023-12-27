@@ -42,5 +42,53 @@
         </div>
         <button type="submit" class="btn btn-primary">회원가입</button>
     </form>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </div>
+<script type='text/javascript' layout:fragment="script">
+    function sample5_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = data.address; // 최종 주소 변수
+                document.getElementById("address").value = addr;
+            }
+        }).open();
+    }
+
+    function nextStep(currentStepId, nextStepId) {
+        document.getElementById(currentStepId).style.display = 'none';
+        document.getElementById(nextStepId).style.display = 'block';
+    }
+
+    function prevStep(currentStepId, prevStepId) {
+        document.getElementById(currentStepId).style.display = 'none';
+        document.getElementById(prevStepId).style.display = 'block';
+    }
+
+    function updateMBTI() {
+        var selectedE = document.querySelector('input[name="mbtiE"]:checked').value;
+        var selectedS = document.querySelector('input[name="mbtiS"]:checked').value;
+        var selectedT = document.querySelector('input[name="mbtiT"]:checked').value;
+        var selectedJ = document.querySelector('input[name="mbtiJ"]:checked').value;
+
+        var selectedMBTI = selectedE + selectedS + selectedT + selectedJ;
+
+        document.getElementById('mbtiHidden').value = selectedMBTI;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.querySelectorAll('input[name="personality"]');
+        var maxAllowed = 3;
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                var checkedCount = document.querySelectorAll('input[name="personality"]:checked').length;
+
+                if (checkedCount > maxAllowed) {
+                    alert('최대 3개의 성격을 선택할 수 있습니다.');
+                    this.checked = false; // 체크를 해제합니다.
+                }
+            });
+        });
+    });
+</script>
 </html>
