@@ -20,7 +20,7 @@
     <a th:href="@{/user/signup}">회원가입</a>
 
     <!-- 모달 버튼 -->
-    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findIdModal">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#findIdModal">
         아이디 찾기
     </button>
 
@@ -40,12 +40,13 @@
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">전화 번호</label>
                         <input type="text" id="phoneNumber" class="form-control">
+                        <button type="button" class="btn btn-primary mt-2" onclick="sendVerKey()">인증번호 보내기</button>
                     </div>
                     <div id="verKeySection" class="mb-3" style="display: none;">
                         <label for="authNum" class="form-label">인증 번호</label>
                         <input type="text" id="verKey" class="form-control">
+                        <button type="button" class="btn btn-primary mt-2" onclick="findId()">인증번호 확인</button>
                     </div>
-                    <button type="button" class="btn btn-primary mt-2" onclick="sendVerKey()">인증번호 보내기</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
@@ -55,7 +56,7 @@
         </div>
     </div>
 
-    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#findPwModal">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#findPwModal">
         비밀번호 찾기
     </button>
 
@@ -170,13 +171,26 @@
     $(document).ready(function () {
         $('#findIdModal').on('hidden.bs.modal', function () {
             // 모달이 닫힐 때 입력 필드 초기화
+            $('#name').val('');
+            $('#phoneNumber').val('');
+            $('#verKey').val('');
+            $('#verKeySection').hide();
+        });
+
+        $('#findPwModal').on('hidden.bs.modal', function () {
+            // 모달이 닫힐 때 입력 필드 초기화
+            $('#id').val('');
             $('#email').val('');
-            $('.modal-body').html('<div class="mb-3"><label for="email" class="form-label">이메일</label><input type="email" id="email" class="form-control"></div>');
+            $('#phoneNum').val('');
+            $('#authNum').val('');
+            $('#idSection').hide();
+            $('#emailSection').hide();
+            $('#phoneSection').hide();
+            $('#authNumSection').hide();
         });
     });
 
-
-     function showSection(sectionId) {
+    function showSection(sectionId) {
         // 선택한 라디오 버튼에 따라 해당 섹션을 보이게 처리
         $('#emailSection').hide();
         $('#phoneSection').hide();
@@ -212,7 +226,7 @@
         });
     }
 
-      function verifyFindInfo() {
+    function verifyFindInfo() {
         var selectedMethod = $('input[name="findMethod"]:checked').val();
         var id = $('#id').val();
 
@@ -274,15 +288,6 @@
         $('#findPwModal').modal('hide');
     }
 
-    $(document).ready(function () {
-        // 모달이 닫힐 때 입력 필드 초기화
-        $('#findPwModal').on('hidden.bs.modal', function () {
-            $('#id').val('');
-            $('#email').val('');
-            $('#phoneNum').val('');
-            $('#authNum').val('');
-            $('.modal-body').html('<div class="mb-3"><label class="form-label">찾기 방법</label><div class="form-check"><input class="form-check-input" type="radio" name="findMethod" id="findByEmail" value="email" onclick="showSection(\'emailSection\')" checked><label class="form-check-label" for="findByEmail">이메일로 찾기</label></div><div class="form-check"><input class="form-check-input" type="radio" name="findMethod" id="findByPhone" value="phone" onclick="showSection(\'phoneSection\')"><label class="form-check-label" for="findByPhone">핸드폰 번호 인증으로 찾기</label></div></div><div id="idSection" class="mb-3"><label for="id" class="form-label">아이디</label><input type="text" id="id" class="form-control"></div><div id="emailSection" class="mb-3" style="display: none;"><label for="email" class="form-label">이메일</label><input type="email" id="email" class="form-control"></div><div id="phoneSection" class="mb-3" style="display: none;"><label for="phoneNum" class="form-label">전화 번호</label><input type="text" id="phoneNum" class="form-control"></div><div id="authNumSection" class="mb-3" style="display: none;"><label for="authNum" class="form-label">인증 번호</label><input type="text" id="authNum" class="form-control"></div>');
-        });
-    });
+
 </script>
 </html>

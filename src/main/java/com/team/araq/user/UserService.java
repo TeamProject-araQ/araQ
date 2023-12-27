@@ -35,7 +35,6 @@ public class UserService {
     private String uploadPath = "C:/uploads/user";
 
 
-
     private Specification<SiteUser> search(String kw) {
         return new Specification<SiteUser>() {
             @Override
@@ -54,25 +53,43 @@ public class UserService {
         user.setEmail(userCreateForm.getEmail());
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
-        user.setNickName(userCreateForm.getNickName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        user.setAddress(userCreateForm.getAddress());
-        user.setAge(userCreateForm.getAge());
-        user.setHeight(userCreateForm.getHeight());
-        user.setReligion(userCreateForm.getReligion());
-        user.setDrinking(userCreateForm.getDrinking());
-        user.setSmoking(userCreateForm.getSmoking());
-        user.setEducation(userCreateForm.getEducation());
-        user.setMbti(userCreateForm.getMbti());
-        user.setPersonality(userCreateForm.getPersonality());
-        user.setHobby(userCreateForm.getHobby());
-        user.setCreateDate(LocalDateTime.now());
-        user.setGender(userCreateForm.getGender());
-        user.setIntroduce(userCreateForm.getIntroduce());
+        File uploadDirectory = new File(uploadPath);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
 
-        if (image.isEmpty() && userCreateForm.getGender().equals("남성")) user.setImage("/profile/default-m.jpg");
-        else if (image.isEmpty()) user.setImage("/profile/default-w.jpg");
-        else {
+            String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+            String fileName = user.getUsername() + "." + fileExtension;
+            File dest = new File(uploadPath + File.separator + fileName);
+            FileCopyUtils.copy(image.getBytes(), dest);
+            user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
+        }
+
+        userRepository.save(user);
+        return user;
+    }
+
+    public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
+        user.setNickName(userUpdateForm.getNickName());
+        user.setAddress(userUpdateForm.getAddress());
+        user.setAge(userUpdateForm.getAge());
+        user.setHeight(userUpdateForm.getHeight());
+        user.setReligion(userUpdateForm.getReligion());
+        user.setDrinking(userUpdateForm.getDrinking());
+        user.setSmoking(userUpdateForm.getSmoking());
+        user.setEducation(userUpdateForm.getEducation());
+        user.setMbti(userUpdateForm.getMbti());
+        user.setPersonality(userUpdateForm.getPersonality());
+        user.setHobby(userUpdateForm.getHobby());
+        user.setCreateDate(LocalDateTime.now());
+        user.setGender(userUpdateForm.getGender());
+        user.setIntroduce(userUpdateForm.getIntroduce());
+
+        if (image.isEmpty() && userUpdateForm.getGender().equals("남성")) {
+            user.setImage("/profile/default-m.jpg");
+        } else if (image.isEmpty()) {
+            user.setImage("/profile/default-w.jpg");
+        } else {
             File uploadDirectory = new File(uploadPath);
             if (!uploadDirectory.exists()) {
                 uploadDirectory.mkdirs();
@@ -170,16 +187,16 @@ public class UserService {
     }
 
     public boolean checkUser(SiteUser user, String username, String password) {
-        if(user.getUsername().equals(username) && passwordEncoder.matches(password, user.getPassword())){
+        if (user.getUsername().equals(username) && passwordEncoder.matches(password, user.getPassword())) {
             return true;
         } else {
             return false;
         }
     }
 
-    public SiteUser findUsernameByEmail(String email){
+    public SiteUser findUsernameByEmail(String email) {
         Optional<SiteUser> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
         }
         throw new RuntimeException("그런 사람 없습니다.");
@@ -187,16 +204,17 @@ public class UserService {
 
     public SiteUser getByUserToken(String token) {
         Optional<SiteUser> user = userRepository.findByToken(token);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
         }
         throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
 
     public SiteUser getByNameAndPhoneNum(String name, String phoneNum) {
-        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name,phoneNum);
-        if(user.isPresent()){
+        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name, phoneNum);
+        if (user.isPresent()) {
             return user.get();
-        } throw new UsernameNotFoundException("그런 사람 없습니다.");
+        }
+        throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
 }
