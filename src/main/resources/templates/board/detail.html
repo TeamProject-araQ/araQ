@@ -5,7 +5,7 @@
         <div style="border-top:2px solid #d8d3e0; border-bottom:2px solid #d8d3e0; padding:20px;">
             <h5 th:text="${post.content}" class="my-2"></h5>
             <div class="d-flex align-items-end">
-                <img th:src="@{${post.writer.image}}" alt="" style="width:30px; height:30px; border-radius:10px;">
+                <img th:src="@{${post.writer.image}}" alt="" style="width:30px; height:30px; border-radius:10px;" class="me-2">
                 <div th:text="${post.writer.nickName}" style="font-weight:bold;"></div>
                 <div style="font-size:10pt; font-family:'nanum-light'; color:gray;" class="ms-2"
                      th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></div>
@@ -19,18 +19,19 @@
             </div>
         </div>
         <h5 class="my-3" th:text="|댓글 [${#lists.size(post.commentList)}]|"></h5>
-        <div style="border-bottom:1px solid lightgray;" class="pb-2">
+        <div>
             <form th:action="@{|/comment/create/${post.id}|}" method="post" class="input-group" id="regForm">
                 <input type="text" id="content" name="content" class="form-control">
                 <input type="button" value="등록" class="btn 버튼-full" id="regBtn">
             </form>
         </div>
-        <div th:each="comment : ${post.commentList}" class="my-3 pb-2" style="border-bottom:1px solid lightgray;">
+        <div th:each="comment : ${post.commentList}" class="my-3 py-2" style="border-bottom:1px solid lightgray;">
             <div class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                    <img th:src="@{${comment.writer.image}}" alt="" style="width:25px;height:25px;border-radius:10px;">
-                    <div th:text="|${comment.writer.nickName} : |" style="font-weight:bold;"></div>
-                    <div class="ms-2" th:text="${comment.content}"></div>
+                    <img th:src="@{${comment.writer.image}}" alt="" style="width:25px;height:25px;border-radius:10px;" class="me-2">
+                    <div th:text="${comment.writer.nickName}" style="font-weight:bold;"></div>
+                    <span class="mx-3">:</span>
+                    <div th:text="${comment.content}"></div>
                 </div>
                 <div style="font-size:10pt; font-family:'nanum-light'; color:gray;"
                      th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>

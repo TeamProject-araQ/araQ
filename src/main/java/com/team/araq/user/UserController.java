@@ -275,4 +275,19 @@ public class UserController {
         model.addAttribute("paymentList", paymentList);
         return "user/page";
     }
+
+    @GetMapping("/post")
+    public String post() {
+        return "user/post";
+    }
+
+    @GetMapping("/inquiry")
+    public String inquiry() {
+        return "user/inquiry";
+    }
+
+    @GetMapping("/payment")
+    public String payment() {
+        return "user/payment";
+    }
 }
