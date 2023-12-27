@@ -82,6 +82,7 @@
         <div class="d-flex justify-content-center align-items-center mt-3">
             <div class="fs-3 pb-1" th:text="${user.nickName}"></div>
             <div class="ms-1">님</div>
+            <a class="btn btn-sm 버튼" th:href="@{/reset}" th:if="${user.username.equals('njk7740')}">테스트</a>
         </div>
         <div>환영합니다!</div>
         <div class="row mt-3">

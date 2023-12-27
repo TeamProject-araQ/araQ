@@ -59,5 +59,13 @@ public class MainController {
         return null;
     }
 
+    @GetMapping("/reset")
+    public String reset(Principal principal) {
+        if (!principal.getName().equals("njk7740"))
+            throw new RuntimeException("권한이 없습니다.");
+        userService.logout(userService.getLoginUsers());
+        return "redirect:/";
+    }
+
 
 }

@@ -141,12 +141,21 @@ $(function() {
         event.preventDefault();
 
         var files = $("#chatImageInput")[0].files;
+        var chatContent = {
+            content: $("#msgContent").val(),
+            writer: user,
+            code: roomCode,
+            target: target
+        };
+
         if (files.length > 0) {
             var formData = new FormData();
 
             for (var i = 0; i < files.length; i++) {
                 formData.append('files', files[i]);
             }
+
+            formData.append('chatContainer', JSON.stringify(chatContent));
 
             $.ajax({
                 url: "/chat/uploadImage",
@@ -168,15 +177,10 @@ $(function() {
                     console.log(err);
                 }
             });
-        }
-
-        if($("#msgContent").val().trim() != "") {
-            stompClient.send("/app/send", {}, JSON.stringify({
-                content: $("#msgContent").val(),
-                writer: user,
-                code: roomCode,
-                target: target
-            }));
+        } else {
+            if($("#msgContent").val().trim() != "") {
+                stompClient.send("/app/send", {}, JSON.stringify(chatContent));
+            }
         }
 
         $("#msgContent").val("");

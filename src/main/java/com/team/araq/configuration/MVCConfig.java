@@ -10,11 +10,15 @@ public class MVCConfig implements WebMvcConfigurer {
 
     private String userPath = "C:/uploads/user";
 
+    private String chatPath = "C:/uploads/chat";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/inquiry/image/**")
                 .addResourceLocations("file:" + inquiryPath + "/");
         registry.addResourceHandler("/user/image/**")
                 .addResourceLocations("file:" + userPath + "/");
+        registry.addResourceHandler("/chat/image/**")
+                .addResourceLocations("file:" + chatPath + "/");
     }
 }

@@ -1,5 +1,7 @@
 package com.team.araq.chat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -130,8 +132,21 @@ public class ChatController {
 
     @PostMapping("/uploadImage")
     @ResponseBody
-    public String uploadImage(@RequestParam("files") MultipartFile[] files) {
-        // todo 이미지 업로드
+    public String uploadImage(@RequestParam("files") MultipartFile[] files,
+                              @RequestParam("chatContainer") String chatContainer) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChatDto chatDto = objectMapper.readValue(chatContainer, ChatDto.class);
+
+        SiteUser user = userService.getByUsername(chatDto.getWriter());
+        SiteUser target = userService.getByUsername(chatDto.getTarget());
+        Room room = roomService.get(chatDto.getCode());
+
+        Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
+        roomService.setRecent(room, chat.getCreateDate());
+
+        for (MultipartFile file : files) {
+            String filename = file.getOriginalFilename();
+        }
         return null;
     }
 }
