@@ -5,6 +5,7 @@ import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
 import com.team.araq.inquiry.Inquiry;
+import com.team.araq.like.UserLike;
 import com.team.araq.pay.Payment;
 import com.team.araq.report.Report;
 import com.team.araq.review.Review;
@@ -110,4 +111,10 @@ public class SiteUser {
 
     @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.REMOVE)
     private List<Report> reportedUsers;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserLike> likeUsers;
+
+    @OneToMany(mappedBy = "likedUser")
+    private List<UserLike> likedUsers;
 }

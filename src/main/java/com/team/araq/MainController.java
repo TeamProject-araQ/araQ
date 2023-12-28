@@ -3,6 +3,8 @@ package com.team.araq;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
 import com.team.araq.chat.MessageDto;
+import com.team.araq.like.UserLike;
+import com.team.araq.like.LikeService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,23 +23,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class MainController {
+
     private final UserService userService;
+
     private final PostService postService;
 
+    private final LikeService likeService;
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
-        if (principal != null) {
-            SiteUser user = this.userService.getByUsername(principal.getName());
-            model.addAttribute("user", user);
-        }
         List<Post> postList = this.postService.getList();
         model.addAttribute("postList", postList);
-
         List<SiteUser> onlines = userService.getLoginUsers();
-
         model.addAttribute("onlineUsers", onlines);
-
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<SiteUser> userList = this.userService.getRandomList(user.getGender());
+        model.addAttribute("userList", userList);
+        List<UserLike> likeList = this.likeService.getListByUser(user);
+        model.addAttribute("likeList", likeList);
         return "index";
     }
 

@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     Optional<SiteUser> findByNameAndPhoneNum(String name, String phoneNum);
 
+    List<SiteUser> findByGenderNot(String gender);
+
 }

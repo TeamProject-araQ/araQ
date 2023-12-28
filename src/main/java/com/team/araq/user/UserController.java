@@ -152,7 +152,6 @@ public class UserController {
     @ResponseBody
     public SiteUser getInfo(@RequestBody String username) {
         return userService.getByUsername(username);
-
     }
 
     @PostMapping("/sendEmail")
@@ -290,4 +289,5 @@ public class UserController {
     public String payment() {
         return "user/payment";
     }
+
 }
