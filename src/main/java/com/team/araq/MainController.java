@@ -7,7 +7,6 @@ import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +41,8 @@ public class MainController {
     }
 
     @GetMapping("/test")
-    public String test(Model model) {
+    public String test(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
         return "test";
     }
 
@@ -67,15 +67,5 @@ public class MainController {
         userService.logout(userService.getLoginUsers());
         return "redirect:/";
     }
-
-    // WebRTC 시그널링 메시지 수신
-    @MessageMapping("/signaling")
-    @SendTo("/topic/signaling")
-    public String handleSignalingMessage(String signalingMessage) {
-        // 받은 메시지를 그대로 다른 클라이언트에게 전달
-        System.out.println(signalingMessage);
-        return signalingMessage;
-    }
-
 
 }
