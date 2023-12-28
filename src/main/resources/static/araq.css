@@ -46,7 +46,7 @@ a:hover {
 .option {
     margin-bottom:5px;
     color:dimgray;
-    font-size:15pt;
+    font-size:13pt;
     font-weight:bold;
     position: relative;
 }
@@ -79,7 +79,7 @@ a:hover {
 
 .depth > li {
     padding:10px;
-    font-size:12pt;
+    font-size:11pt;
 }
 
 .depth > li:hover {
@@ -433,5 +433,132 @@ a:hover {
     border-radius:50%;
 }
 
+.arrow-container {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.arrow-line-left {
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    width: 300px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+}
+
+.arrow-head-left {
+    font-size: 20px;
+    margin-left: -5px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+    color:rgb(190, 182, 203);
+}
+
+.arrow-line-right {
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    width: 300px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.arrow-head-right {
+    font-size: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+    margin-right: -5px;
+    color: rgb(190, 182, 203);
+}
+
+.question {
+    transition: transform 0.7s ease;
+    color: rgb(190, 182, 203);
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: rotate(-10deg);
+    }
+    50% {
+        transform: rotate(10deg);
+    }
+}
+
+.matchResult:hover .xLine-right,
+.matchResult:hover .xLine-left,
+.matchResult:hover .arrow-line-left,
+.matchResult:hover .arrow-head-left,
+.matchResult:hover .arrow-line-right,
+.matchResult:hover .arrow-head-right{
+    transform: translateX(0);
+}
+
+.matchResult:hover .question {
+    animation: shake 0.7s ease-in-out;
+}
+
+.xLine-left {
+    position: relative;
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    width: 300px;
+    margin: 0 auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-out;
+}
+
+.xLine-left::before,
+.xLine-left::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease-out;
+}
+
+.xLine-left::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.xLine-left::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.xLine-right {
+    position: relative;
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    width: 300px;
+    margin: 0 auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
+}
+
+.xLine-right::before,
+.xLine-right::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 4px;
+    background-color: rgb(190, 182, 203);
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease-out;
+}
+
+.xLine-right::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.xLine-right::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
 
 
