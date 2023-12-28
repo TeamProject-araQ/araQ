@@ -109,6 +109,7 @@ $(function () {
             },
             error: function (err) {
                 alert("요청이 실패하였습니다.");
+                console.log(err);
             }
         });
     });
@@ -142,6 +143,7 @@ $(function () {
             },
             error: function (err) {
                 alert("요청이 실패하였습니다.");
+                console.log(err);
             }
         });
     });
