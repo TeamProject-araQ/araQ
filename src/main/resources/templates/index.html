@@ -19,6 +19,8 @@
                                     <h5 th:text="${randomUser.nickName}" class="me-1"></h5>
                                     <span th:text="${randomUser.age}" style="font-size: 9pt; color: gray"></span>
                                 </div>
+                            </div>
+                            <div>
                                 <button type="button" class="araQBtn btn btn-sm 버튼"
                                         th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
                                     <div class="d-flex align-items-center">
@@ -32,7 +34,9 @@
                                 </button>
                             </div>
                             <div style="margin-top:auto;">
-                                <button type="button" class="profileBtn w-100 btn 버튼-full" th:data-user="${randomUser.username}">프로필 보기</button>
+                                <button type="button" class="profileBtn w-100 btn 버튼-full"
+                                        th:data-user="${randomUser.username}">프로필 보기
+                                </button>
                             </div>
                         </div>
                     </div>

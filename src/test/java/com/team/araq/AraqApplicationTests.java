@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 @SpringBootTest
@@ -21,8 +19,8 @@ class AraqApplicationTests {
     @Test
     void contextLoads() throws IOException {
         // 관리자 계정 생성
-        // this.userService.createAdmin();
+        this.userService.createAdmin();
 
-        FileInputStream file = new FileInputStream(new File("dummy.xlsx"));
+        // FileInputStream file = new FileInputStream(new File("dummy.xlsx"));
     }
 }
