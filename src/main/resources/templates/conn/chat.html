@@ -8,7 +8,8 @@
                  th:data-date="${#temporals.format(chat.createDate, 'yyyy년 MM월 dd일')}">
                 <img th:if="${!chat.writer.username.equals(user.username)}" th:src="@{${chat.writer.image}}" alt="">
                 <div>
-                    <p th:text="${chat.writer.nickName}" th:if="${!chat.writer.username.equals(user.username)}"></p>
+                    <a href="javascript:void(0)" th:text="${chat.writer.nickName}" class="chatWriterBtn"
+                       th:if="${!chat.writer.username.equals(user.username)}"></a>
                     <div>
                         <small th:text="${#temporals.format(chat.createDate, 'HH:mm')}"
                                th:if="${chat.writer.username.equals(user.username)}"></small>
@@ -36,12 +37,13 @@
             <div class="d-flex justify-content-between align-items-center m-2">
                 <a th:href="@{/chat/list}" class="btn btn-outline-secondary" style="padding:3px 5px;">나가기</a>
                 <a href="javascript:void(0)" id="chatImageBtn">사진첨부</a>
-                <a href="#">1분 통화</a>
+                <a href="javascript:void(0)" id="voiceChatBtn">보이스톡</a>
                 <a href="#">흐음</a>
                 <button type="submit" class="버튼 btn" style="width:80px;">보내기</button>
             </div>
         </form>
         <input type="file" id="chatImageInput" accept="image/*" multiple>
+        <audio autoplay></audio>
     </div>
     <script th:inline="javascript">
         var roomCode = [[${room.code}]];
@@ -50,6 +52,5 @@
         var target = [[${target.username}]];
     </script>
 </div>
-<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script">
-</script>
+<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script"></script>
 </html>

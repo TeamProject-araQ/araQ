@@ -111,6 +111,7 @@ public class PaymentService {
         pay.setImpUid(paymentDTO.getImpUid());
         pay.setStatus(paymentDTO.getStatus());
         pay.setPg(paymentDTO.getPg());
+        pay.setBubble(paymentDTO.getBubble());
         this.paymentRepository.save(pay);
     }
 
@@ -142,5 +143,9 @@ public class PaymentService {
         payment.setStatus(status);
         payment.setCancelDate(LocalDateTime.now());
         this.paymentRepository.save(payment);
+    }
+
+    public List<Payment> getListByUser(SiteUser user) {
+        return this.paymentRepository.findTop3ByUserOrderByDateDesc(user);
     }
 }

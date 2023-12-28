@@ -35,6 +35,7 @@ public class ChatController {
 
         Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
         roomService.setRecent(room, chat.getCreateDate());
+        roomService.setConfirm(room, target.getUsername());
 
         chatDto.setWriterNick(user.getNickName());
         chatDto.setWriterImage(user.getImage());
@@ -118,11 +119,12 @@ public class ChatController {
 
     @PostMapping("/confirm")
     @ResponseBody
-    public String confirm(@RequestBody MessageDto messageDto) {
+    public String confirm(@RequestBody MessageDto messageDto, Principal principal) {
         SiteUser writer = userService.getByUsername(messageDto.getTarget());
         Room room = roomService.get(messageDto.getContent());
         List<Chat> chats = chatService.getByRoomAndWriter(room, writer);
         chatService.confirm(chats);
+        roomService.confirm(room, principal.getName());
 
         ChatDto chatDto = new ChatDto();
         chatDto.setCode("confirm");
@@ -145,6 +147,7 @@ public class ChatController {
 
         Chat chat = chatService.create(room, user, target, chatDto.getContent(), room.getRecentDate());
         roomService.setRecent(room, chat.getCreateDate());
+        roomService.setConfirm(room, target.getUsername());
 
         String dirPath = "C:/uploads/chat/" + chat.getId();
         File dir = new File(dirPath);

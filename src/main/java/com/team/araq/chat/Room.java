@@ -24,4 +24,5 @@ public class Room {
     private String code;
     private LocalDateTime createDate;
     private LocalDateTime recentDate;
+    private String confirm;
 }

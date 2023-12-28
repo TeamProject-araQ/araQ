@@ -68,4 +68,8 @@ public class PostService {
     public void deletePost(Post post) {
         this.postRepository.delete(post);
     }
+
+    public List<Post> getListByWriter(SiteUser user) {
+        return this.postRepository.findTop3ByWriterOrderByCreateDateDesc(user);
+    }
 }
