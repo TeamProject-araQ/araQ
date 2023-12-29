@@ -23,10 +23,10 @@ public class LikeController {
     public String like(@RequestBody String username, Principal principal) {
         SiteUser user = this.userService.getByUsername(principal.getName());
         SiteUser likedUser = this.userService.getByUsername(username);
-        if (!this.likeService.getListForCheck(likedUser, user).isEmpty()) {
+        if (this.likeService.getListForCheck(likedUser, user) != null) {
             return "이미 " + likedUser.getNickName() + "님께 아라큐 요청을 받았습니다. 매칭 상태를 확인해주세요.";
         }
-        else if (!this.likeService.getListForCheck(user, likedUser).isEmpty()) {
+        else if (this.likeService.getListForCheck(user, likedUser) != null) {
             return "이미 " + likedUser.getNickName() + "님께 아라큐 요청을 보냈습니다. 매칭 상태를 확인해주세요.";
         }
         this.likeService.likeUser(user, likedUser);
