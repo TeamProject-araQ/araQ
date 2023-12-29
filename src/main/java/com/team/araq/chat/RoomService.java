@@ -20,6 +20,7 @@ public class RoomService {
         room.setCreateDate(LocalDateTime.now());
         room.setRecentDate(LocalDateTime.now());
         room.setCode(uuid);
+        room.setConfirm("");
         roomRepo.save(room);
     }
 

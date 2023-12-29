@@ -38,16 +38,18 @@ $(function () {
 
             pc.addEventListener('icecandidate', function (event) {
                 if (event.candidate) {
-                    stompClient.send("/app/peer/candidate", {}, JSON.stringify(event.candidate));
+                    console.log(event.candidate);
                 }
             });
 
+            /*
             pc.ontrack = function (event) {
                 if (event.track.kind === 'audio') {
                     var remoteAudio = document.getElementById('remoteAudio');
                     remoteAudio.srcObject = event.streams[0];
                 }
             };
+             */
         });
     });
 

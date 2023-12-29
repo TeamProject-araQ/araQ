@@ -38,7 +38,7 @@
                 <a th:href="@{/chat/list}" class="btn btn-outline-secondary" style="padding:3px 5px;">나가기</a>
                 <a href="javascript:void(0)" id="chatImageBtn">사진첨부</a>
                 <a href="javascript:void(0)" id="voiceChatBtn">보이스톡</a>
-                <a href="#">흐음</a>
+                <a href="javascript:void(0)" id="test">Check</a>
                 <button type="submit" class="버튼 btn" style="width:80px;">보내기</button>
             </div>
         </form>
@@ -50,8 +50,8 @@
         var nickName = [[${user.nickName}]];
         var user = [[${user.username}]];
         var target = [[${target.username}]];
+        var targetNick = [[${target.nickName}]];
     </script>
 </div>
 <script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script"></script>
-<script type="text/javascript" th:src="@{/chat.js}" layout:fragment="script2"></script>
 </html>

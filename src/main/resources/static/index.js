@@ -24,6 +24,15 @@ $(function () {
 
     scrollToBottom();
 
+    $(".voice").on('click', function () {
+        var audio = $('.audio');
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    });
+
     $('.likedModal').on('shown.bs.modal', function () {
         $('.modal-backdrop').remove();
     });
@@ -101,6 +110,7 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
+                $("#profileModal .audio").attr("src", data.audio);
                 $("#profileModal").modal("show");
 
                 $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
@@ -113,12 +123,12 @@ $(function () {
             },
             error: function (err) {
                 alert("요청이 실패하였습니다.");
+                console.log(err);
             }
         });
     });
 
     $(".profileBtn").on('click', function () {
-        console.log($(this).data("user"));
         $.ajax({
             url: "/user/getInfo",
             type: "post",
@@ -134,6 +144,7 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
+                $("#profileModal .audio").attr("src", data.audio);
                 $("#profileModal").modal("show");
 
                 $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
@@ -146,6 +157,7 @@ $(function () {
             },
             error: function (err) {
                 alert("요청이 실패하였습니다.");
+                console.log(err);
             }
         });
     });

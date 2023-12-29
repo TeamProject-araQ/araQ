@@ -344,9 +344,9 @@ public class UserController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         try {
             this.userService.uploadAudio(multipartFile, user);
-            return "파일 업로드 성공";
+            return "녹음이 완료되었습니다.";
         } catch (Exception e) {
-            return "파일 업로드 실패" + e.getMessage();
+            return "녹음 파일 업로드 실패" + e.getMessage();
         }
     }
 }
