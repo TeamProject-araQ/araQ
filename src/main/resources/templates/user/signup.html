@@ -8,7 +8,7 @@
             <h4>회원가입</h4>
         </div>
     </div>
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data" onsubmit="return validateForm">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div id="step1">
             <div class="mb-3">
@@ -34,6 +34,12 @@
             <div class="mb-3">
                 <label for="phoneNum" class="form-label">핸드폰</label>
                 <input type="text" th:field="*{phoneNum}" class="form-control">
+                <button type="button" class="btn btn-primary mt-2" onclick="sendVerKey()">인증번호 보내기</button>
+            </div>
+            <div id="verKeySection" class="mb-3" style="display: none;">
+                <label for="authNum" class="form-label">인증 번호</label>
+                <input type="text" id="verKey" class="form-control">
+                <button type="button" class="btn btn-primary mt-2" onclick="confirmVerKey()">인증번호 확인</button>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">사진 업로드</label>
@@ -45,49 +51,86 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </div>
 <script type='text/javascript' layout:fragment="script">
-    function sample5_execDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                var addr = data.address; // 최종 주소 변수
-                document.getElementById("address").value = addr;
-            }
-        }).open();
-    }
+    var verKeyConfirmed = false;
 
-    function nextStep(currentStepId, nextStepId) {
-        document.getElementById(currentStepId).style.display = 'none';
-        document.getElementById(nextStepId).style.display = 'block';
-    }
+    function sendVerKey() {
+        var phoneNum = $('#phoneNum').val();
 
-    function prevStep(currentStepId, prevStepId) {
-        document.getElementById(currentStepId).style.display = 'none';
-        document.getElementById(prevStepId).style.display = 'block';
-    }
-
-    function updateMBTI() {
-        var selectedE = document.querySelector('input[name="mbtiE"]:checked').value;
-        var selectedS = document.querySelector('input[name="mbtiS"]:checked').value;
-        var selectedT = document.querySelector('input[name="mbtiT"]:checked').value;
-        var selectedJ = document.querySelector('input[name="mbtiJ"]:checked').value;
-
-        var selectedMBTI = selectedE + selectedS + selectedT + selectedJ;
-
-        document.getElementById('mbtiHidden').value = selectedMBTI;
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var checkboxes = document.querySelectorAll('input[name="personality"]');
-        var maxAllowed = 3;
-
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                var checkedCount = document.querySelectorAll('input[name="personality"]:checked').length;
-
-                if (checkedCount > maxAllowed) {
-                    alert('최대 3개의 성격을 선택할 수 있습니다.');
-                    this.checked = false; // 체크를 해제합니다.
+        $.ajax({
+            type: 'POST',
+            url: '/user/signupAuth',
+            contentType: 'application/json',
+            data: JSON.stringify({ phoneNum: phoneNum }),
+            headers: {
+               'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert('인증번호을 발송했습니다. 핸드폰 번호가 정확한지 확인해주세요.');
+                    $('#verKeySection').show();
+                } else {
+                    alert('번호가 정확하지 않습니다.');
                 }
-            });
+            },
+            error: function () {
+                alert('서버 오류');
+            }
+        });
+    }
+
+    function confirmVerKey() {
+        var phoneNum = $('#phoneNumber').val();
+        var verKey = $('#verKey').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/confirmPhoneNum',
+            contentType: 'application/json',
+            data: JSON.stringify({ phoneNum: phoneNum, verKey: verKey }),
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            success: function(response) {
+                if (response === "success") {
+                    alert('인증번호가 확인되었습니다.');
+                    verKeyConfirmed = true;
+                } else {
+                    alert('인증번호가 일치하지 않습니다.');
+                    verKeyConfirmed = false;
+                }
+            },
+            error: function () {
+                alert('서버 오류');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('form').submit(function() {
+            var username = $('#username').val().trim();
+            var name = $('#name').val().trim();
+            var password1 = $('#password1').val().trim();
+            var password2 = $('#password2').val().trim();
+            var email = $('#email').val().trim();
+            var phoneNum = $('#phoneNum').val().trim();
+
+            if (
+                username === "" ||
+                name === "" ||
+                password1 === "" ||
+                password2 === "" ||
+                email === "" ||
+                phoneNum === ""
+            ) {
+                alert("입력되지 않은 항목이 있습니다.");
+                return false;
+            }
+
+            if (!verKeyConfirmed) {
+                alert("핸드폰 번호 인증을 완료해주세요.");
+                return false;
+            }
+            return true;
         });
     });
 </script>
