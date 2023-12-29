@@ -12,6 +12,8 @@ public class MVCConfig implements WebMvcConfigurer {
 
     private String chatPath = "C:/uploads/chat";
 
+    private String audioPath = "C:/uploads/audio";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/inquiry/image/**")
@@ -20,5 +22,7 @@ public class MVCConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + userPath + "/");
         registry.addResourceHandler("/chat/image/**")
                 .addResourceLocations("file:" + chatPath + "/");
+        registry.addResourceHandler("/user/audio/**")
+                .addResourceLocations("file:" + audioPath + "/");
     }
 }

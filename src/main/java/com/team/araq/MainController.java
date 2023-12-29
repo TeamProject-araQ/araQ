@@ -79,4 +79,9 @@ public class MainController {
         return "redirect:/";
     }
 
+    @GetMapping("/YStest")
+    public String YStest() {
+        return "YStest";
+    }
+
 }
