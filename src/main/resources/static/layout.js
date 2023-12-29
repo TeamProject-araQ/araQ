@@ -11,7 +11,9 @@ $(function () {
             },
         ],
     };
+    var iceQueue = [];
     var targetPeer = null;
+    var rtcConnect = false;
 
     stompClient.connect({}, function (frame) {
 
@@ -56,13 +58,22 @@ $(function () {
                     targetPeer = data.sender;
 
                     pc = new RTCPeerConnection(iceServers);
-                    mediaStreaming();
 
                     pc.addEventListener('icecandidate', function (event) {
-                        if (event.candidate) {
-                            console.log("Candidate Find");
+                        if (event.candidate && rtcConnect) {
+                            console.log(event.candidate)
+                            stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
+                            if (iceQueue.length > 0) {
+                                for (var i = 0; i < iceQueue.length; i++) {
+                                    stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(iceQueue.pop()));
+                                }
+                            }
+                        } else if (event.candidate) {
+                            iceQueue.push(event.candidate);
                         }
                     });
+
+
 
 
                 } else {
@@ -75,24 +86,32 @@ $(function () {
                 targetPeer = data.sender;
 
                 pc = new RTCPeerConnection(iceServers);
-                mediaStreaming();
+
+                navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                    .then(function (stream) {
+                        stream.getTracks().forEach(function (track) {
+                            pc.addTrack(track, stream);
+                        });
+                    }).then(function () {
+                    createOffer();
+                })
+                    .catch(function (err) {
+                        alert("스트림 연결 실패\n" + err);
+                    });
 
                 pc.addEventListener('icecandidate', function (event) {
-                    if (event.candidate) {
-                        console.log("Candidate Find");
+                    if (event.candidate && rtcConnect) {
+                        console.log(event.candidate)
+                        stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
+                        if (iceQueue.length > 0) {
+                            for (var i = 0; i < iceQueue.length; i++) {
+                                stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(iceQueue.pop()));
+                            }
+                        }
+                    } else if (event.candidate) {
+                        iceQueue.push(event.candidate);
                     }
                 });
-
-                pc.createOffer()
-                    .then(function (offer) {
-                        return pc.setLocalDescription(offer);
-                    })
-                    .then(function () {
-                        stompClient.send("/app/peer/offer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
-                    })
-                    .catch(function (err) {
-                        console.log("Offer Error:" + err);
-                    });
 
             }
         });
@@ -100,18 +119,16 @@ $(function () {
         stompClient.subscribe("/topic/peer/offer/" + $("#hiddenUserName").val(), function (message) {
             var data = JSON.parse(message.body);
 
-            pc.setRemoteDescription(new RTCSessionDescription(data))
-                .then(function () {
-                    pc.createAnswer()
-                        .then(function (answer) {
-                            return pc.setLocalDescription(answer);
-                        })
-                        .then(function () {
-                            stompClient.send("/app/peer/answer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
-                        })
-                        .catch(function (err) {
-                            console.log("Answer Error:" + err);
-                        });
+            navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                .then(function (stream) {
+                    stream.getTracks().forEach(function (track) {
+                        pc.addTrack(track, stream);
+                    });
+                }).then(function () {
+                createAnswer(data);
+            })
+                .catch(function (err) {
+                    alert("스트림 연결 실패\n" + err);
                 });
         });
 
@@ -119,6 +136,7 @@ $(function () {
             var data = JSON.parse(message.body);
 
             pc.setRemoteDescription(new RTCSessionDescription(data));
+            rtcConnect = true;
         });
 
         stompClient.subscribe("/topic/peer/candidate/" + $("#hiddenUserName").val(), function (message) {
@@ -169,15 +187,33 @@ $(function () {
         console.log(pc);
     });
 
-    function mediaStreaming() {
-        navigator.mediaDevices.getUserMedia({audio: true, video: false})
-            .then(function (stream) {
-                stream.getTracks().forEach(function (track) {
-                    pc.addTrack(track, stream);
-                });
+    function createOffer() {
+        pc.createOffer()
+            .then(function (offer) {
+                return pc.setLocalDescription(offer);
+            })
+            .then(function () {
+                stompClient.send("/app/peer/offer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
             })
             .catch(function (err) {
-                alert("스트림 연결 실패\n" + err);
+                console.log("Offer Error:" + err);
+            });
+    }
+
+    function createAnswer(data) {
+        pc.setRemoteDescription(new RTCSessionDescription(data))
+            .then(function () {
+                pc.createAnswer()
+                    .then(function (answer) {
+                        return pc.setLocalDescription(answer);
+                    })
+                    .then(function () {
+                        stompClient.send("/app/peer/answer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
+                        rtcConnect = true;
+                    })
+                    .catch(function (err) {
+                        console.log("Answer Error:" + err);
+                    });
             });
     }
 });

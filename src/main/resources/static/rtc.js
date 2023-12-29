@@ -38,7 +38,7 @@ $(function () {
 
             pc.addEventListener('icecandidate', function (event) {
                 if (event.candidate) {
-                    console.log("Candidate Find");
+                    console.log(event.candidate);
                 }
             });
 
