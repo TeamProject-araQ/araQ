@@ -20,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,8 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private String uploadPath = "C:/uploads/user";
+
+    private String audioPath = "C:/uploads/audio";
 
 
     private Specification<SiteUser> search(String kw) {
@@ -143,7 +148,7 @@ public class UserService {
     }
 
     public void logout(List<SiteUser> users) {
-        for (SiteUser user : users){
+        for (SiteUser user : users) {
             user.setLogin(false);
             userRepository.save(user);
         }
@@ -215,15 +220,33 @@ public class UserService {
     }
 
     public SiteUser getByNameAndPhoneNum(String name, String phoneNum) {
-        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name,phoneNum);
-        if(user.isPresent()){
+        Optional<SiteUser> user = userRepository.findByNameAndPhoneNum(name, phoneNum);
+        if (user.isPresent()) {
             return user.get();
-        } throw new UsernameNotFoundException("그런 사람 없습니다.");
+        }
+        throw new UsernameNotFoundException("그런 사람 없습니다.");
     }
 
     public List<SiteUser> getRandomList(String gender) {
         List<SiteUser> userList = this.userRepository.findByGenderNot(gender);
         Collections.shuffle(userList);
         return userList.size() > 3 ? userList.subList(0, 3) : userList;
+    }
+
+    public void uploadAudio(MultipartFile multipartFile, SiteUser user) {
+        File uploadDirectory = new File(audioPath);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+        }
+        try {
+            String fileName = user.getUsername() + "_" + multipartFile.getOriginalFilename();
+            File dest = new File(audioPath + File.separator + fileName);
+            multipartFile.transferTo(dest);
+            user.setAudio("/user/audio/" + fileName);
+            this.userRepository.save(user);
+
+        } catch (IOException ex) {
+            throw new RuntimeException("파일 저장 실패: " + multipartFile.getOriginalFilename(), ex);
+        }
     }
 }

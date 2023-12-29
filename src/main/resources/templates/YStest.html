@@ -1,0 +1,15 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="record-wrapper">
+        <button id="recordButton" class="record-button">▶</button>
+        <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
+            <circle class="progress-ring__circle" stroke="black" stroke-width="8" fill="transparent" r="42" cx="60" cy="60"/>
+        </svg>
+    </div>
+    <div>
+        <audio id="audio" controls></audio>
+    </div>
+    <button id="saveButton" disabled>저장</button>
+</div>
+<script src="/record.js" layout:fragment="script"></script>
+</html>

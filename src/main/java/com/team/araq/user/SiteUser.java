@@ -39,6 +39,7 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
+    // @Column(unique = true) 나중에 주석 풀기
     private String phoneNum;
 
     private String address;
@@ -106,15 +107,21 @@ public class SiteUser {
 
     private String token;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reportingUser", cascade = CascadeType.REMOVE)
     private List<Report> reportingUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.REMOVE)
     private List<Report> reportedUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<UserLike> likeUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "likedUser")
     private List<UserLike> likedUsers;
+
+    private String audio;
 }

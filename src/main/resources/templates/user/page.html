@@ -3,13 +3,45 @@
     <div class="d-flex">
         <h3 class="highlight">마이페이지</h3>
     </div>
-    <div class="d-flex align-items-center my-3 py-3"
+    <div class="d-flex align-items-center justify-content-between mb-5 py-3"
          style="border-top:1px solid #d8d3e0; border-bottom:1px solid #d8d3e0;">
-        <img th:src="@{${user.image}}" alt=""
-             style="width:100px; height:100px; border:1px solid lightgray; border-radius:50%;">
-        <div class="ms-3">
-            <h4 th:text="|${user.name}님 안녕하세요.|"></h4>
-            <a href="">프로필 변경 ></a>
+        <div class="d-flex align-items-center">
+            <img th:src="@{${user.image}}" alt=""
+                 style="width:100px; height:100px; border:1px solid lightgray; border-radius:50%;">
+            <div class="ms-3">
+                <h4 th:text="|${user.name}님 안녕하세요.|"></h4>
+                <a href="" class="me-3">프로필 변경 ></a>
+                <a href="" type="button" data-bs-toggle="modal" data-bs-target="#voiceRecord">음성 녹음 ></a>
+            </div>
+        </div>
+        <!-- 음성 녹음 모달 -->
+        <div class="modal fade" id="voiceRecord" tabindex="-1" aria-labelledby="voiceRecordLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="voiceRecordLabel">30초 자기소개</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-around align-items-center">
+                            <div class="record-wrapper">
+                                <button id="recordButton" class="record-button">▶</button>
+                                <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
+                                    <circle class="progress-ring__circle" stroke="black" stroke-width="8"
+                                            fill="transparent" r="42" cx="60" cy="60"/>
+                                </svg>
+                            </div>
+                            <div class="text-center">
+                                <label for="audio" class="form-label"><i class="bi bi-headphones me-1"></i>미리 듣기</label>
+                                <audio id="audio" controls style="border: 2px solid lightgray; border-radius: 20px;"></audio>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="saveButton" class="btn 버튼" disabled>저장</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="d-flex justify-content-between align-items-end my-2">
@@ -88,4 +120,5 @@
         </table>
     </div>
 </div>
+<script src="/record.js" layout:fragment="script"></script>
 </html>

@@ -36,12 +36,25 @@ public class LikeService {
         return this.likeRepository.findByUserOrLikedUser(user);
     }
 
-    public List<UserLike> getListForCheck(SiteUser user1, SiteUser user2) {
-        return this.likeRepository.findByUserAndLikedUser(user1, user2);
+    public UserLike getListForCheck(SiteUser user1, SiteUser user2) {
+        Optional<UserLike> userLike = this.likeRepository.findByUserAndLikedUser(user1, user2);
+        return userLike.orElse(null);
     }
 
     public void refuseLike(UserLike like) {
         like.setStatus("매칭 실패");
         this.likeRepository.save(like);
+    }
+
+    public String checkStatus(SiteUser user, SiteUser likedUser) {
+        if (this.likeRepository.findByUserAndLikedUser(user, likedUser).isPresent()) {
+            return likeRepository.findByUserAndLikedUser(user, likedUser)
+                    .map(UserLike::getStatus).orElse("상태 없음");
+        }
+        if (this.likeRepository.findByUserAndLikedUser(likedUser, user).isPresent()) {
+            return likeRepository.findByUserAndLikedUser(likedUser, user)
+                    .map(UserLike::getStatus).orElse("상태 없음");
+        }
+        return null;
     }
 }

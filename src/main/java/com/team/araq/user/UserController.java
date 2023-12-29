@@ -80,7 +80,7 @@ public class UserController {
             return "user/signup";
         }
 
-        return "user/updateInfo";
+        return "redirect:/user/login";
     }
 
     @PostMapping("/update")
@@ -96,8 +96,10 @@ public class UserController {
     }
 
     @GetMapping("/update")
-    public String modify() {
-        return "user/update";
+    public String update(Model model, Principal principal, UserUpdateForm userUpdateForm) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "user/updateInfo";
     }
 
     @PostMapping("/checkCurrentPw")
@@ -188,6 +190,35 @@ public class UserController {
         return "redirect:/error";
     }
 
+    //회원 가입시 문자 인증번호 보내기
+    @PostMapping("/signupAuth")
+    @ResponseBody
+    public String signupAuth(@RequestBody Map<String, String> data, HttpSession session){
+        String phoneNum = data.get("phoneNum").trim();
+        if (phoneNum.length() != 11 || phoneNum == null) {
+            return "fail";
+        }
+        String verKey = smsService.createRandomNum();
+        session.setAttribute("verKey", verKey);
+        smsService.sendSms(phoneNum,verKey);
+        return "success";
+    }
+
+    // 회원 가입시 문자 인증번호 확인
+    @PostMapping("/confirmPhoneNum")
+    @ResponseBody
+    public String confirmPhoneNum(@RequestBody Map<String, String> data, HttpSession session){
+        String phoneNum = data.get("phoneNum");
+        String verKey = data.get("verKey");
+
+        String storedVerKey = (String) session.getAttribute("verKey");
+        if(verKey.equals(storedVerKey)){
+            return "success";
+        }
+        return "fail";
+    }
+
+    // 아이디 찾기시 문자인증 번호 보내기
     @PostMapping("/sendVerKey")
     @ResponseBody
     public String sendVerKey(@RequestBody Map<String, String> data, HttpSession session) {
@@ -205,10 +236,11 @@ public class UserController {
         return "fail";
     }
 
+
+    // 아이디 찾기시 문자 인증번호 확인 후 아이디 보여주기
     @PostMapping("/findId")
     @ResponseBody
-
-    public String findId(@RequestBody Map<String, String> data, HttpSession session){
+    public String findId(@RequestBody Map<String, String> data, HttpSession session) {
         String name = data.get("name");
         String phoneNum = data.get("phoneNum");
         String verKey = data.get("verKey");
@@ -223,6 +255,7 @@ public class UserController {
         return "fail";
     }
 
+    // 비밀번호 찾기시 문자로 인증번호 보내기
     @PostMapping("/sendVerificationCode")
     @ResponseBody
     public String sendVerificationCod(@RequestBody Map<String, String> data, HttpSession session) {
@@ -241,6 +274,7 @@ public class UserController {
         }
     }
 
+    // 비밀번호 찾기시 문자 인증번호 확인
     @PostMapping("/verifyCode")
     @ResponseBody
     public ResponseEntity<Map<String, String>> verifyCode(@RequestBody Map<String, String> data, HttpSession session) {
@@ -263,6 +297,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
     @GetMapping("/page")
     public String page(Principal principal, Model model) {
         SiteUser user = this.userService.getByUsername(principal.getName());
@@ -290,4 +325,15 @@ public class UserController {
         return "user/payment";
     }
 
+    @ResponseBody
+    @PostMapping("/record")
+    public String record(@RequestParam("audio") MultipartFile multipartFile, Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        try {
+            this.userService.uploadAudio(multipartFile, user);
+            return "녹음이 완료되었습니다.";
+        } catch (Exception e) {
+            return "녹음 파일 업로드 실패" + e.getMessage();
+        }
+    }
 }

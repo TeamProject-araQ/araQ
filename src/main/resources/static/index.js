@@ -24,6 +24,19 @@ $(function () {
 
     scrollToBottom();
 
+    $(".voice").on('click', function () {
+        var audio = $('.audio');
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    });
+
+    $('.likedModal').on('shown.bs.modal', function () {
+        $('.modal-backdrop').remove();
+    });
+
     $('.acceptBtn').on('click', function () {
         if (confirm("아라큐 요청을 수락하시겠습니까?"))
             location.href = $(this).data("uri");
@@ -37,7 +50,7 @@ $(function () {
     $('.araQBtn').on('click', function () {
         var nickname = $(this).data("nick");
         var username = $(this).data("user");
-        if (confirm(nickname + "님에게 아라큐를 보냅니다!")) {
+        if (confirm(nickname + "님에게 아라큐 요청을 보냅니다!")) {
             $.ajax({
                 url: "/like/request",
                 type: "POST",
@@ -57,7 +70,7 @@ $(function () {
         }
     });
 
-    $("#onlineUsers .chatRequest").on('click', function () {
+    $(".chatRequest").on('click', function () {
         var nick = $(this).data("nick");
         var dataValue = $(this).data("value");
 
@@ -97,6 +110,7 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
+                $("#profileModal .audio").attr("src", data.audio);
                 $("#profileModal").modal("show");
 
                 $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
@@ -115,7 +129,6 @@ $(function () {
     });
 
     $(".profileBtn").on('click', function () {
-        console.log($(this).data("user"));
         $.ajax({
             url: "/user/getInfo",
             type: "post",
@@ -131,6 +144,7 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
+                $("#profileModal .audio").attr("src", data.audio);
                 $("#profileModal").modal("show");
 
                 $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
