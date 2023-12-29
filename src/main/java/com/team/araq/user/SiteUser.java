@@ -122,4 +122,6 @@ public class SiteUser {
     @JsonIgnore
     @OneToMany(mappedBy = "likedUser")
     private List<UserLike> likedUsers;
+
+    private String audio;
 }
