@@ -61,87 +61,95 @@
             <h4>프로필 추가</h4>
         </div>
     </div>
-    <form th:action="@{/user/update}" th:object="${userUpdateForm}" method="post" enctype="multipart/form-data" onkeydown="return handleEnterKey(event)">
+    <form th:action="@{/user/update}" th:object="${userUpdateForm}" method="post" enctype="multipart/form-data"
+          onkeydown="return handleEnterKey(event)">
         <input type="hidden" name="username" th:value="${user.username}">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div id="step1">
             <div class="mb-3">
                 <label class="form-label">성별</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="radio" th:field="*{gender}" class="btn-check" name="genderOption"
-                           id="genderOption1" autocomplete="off" value="남성">
+                    <input type="radio" class="btn-check" name="genderOption"
+                           id="genderOption1" autocomplete="off" value="남성" onchange="updateField('gender', '남성')">
                     <label class="btn btn-secondary" for="genderOption1">남성</label>
 
-                    <input type="radio" th:field="*{gender}" class="btn-check" name="genderOption"
-                           id="genderOption2" autocomplete="off" value="여성">
+                    <input type="radio" class="btn-check" name="genderOption"
+                           id="genderOption2" autocomplete="off" value="여성" onchange="updateField('gender', '여서')">
                     <label class="btn btn-secondary" for="genderOption2">여성</label>
                 </div>
+                <input type="hidden" th:field="*{gender}" id="genderHidden" name="gender" value="">
             </div>
             <div class="mb-3">
                 <label class="form-label">종교</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="radio" th:field="*{religion}" class="btn-check" name="religionOption"
-                           id="religionOption1" autocomplete="off" value="기독교">
+                    <input type="radio" class="btn-check" name="religionOption"
+                           id="religionOption1" autocomplete="off" value="기독교"
+                           onchange="updateField('religion', '기독교')">
                     <label class="btn btn-secondary" for="religionOption1">기독교</label>
 
-                    <input type="radio" th:field="*{religion}" class="btn-check" name="religionOption"
-                           id="religionOption2" autocomplete="off" value="천주교">
+                    <input type="radio" class="btn-check" name="religionOption"
+                           id="religionOption2" autocomplete="off" value="천주교"
+                           onchange="updateField('religion', '천주교')">
                     <label class="btn btn-secondary" for="religionOption2">천주교</label>
 
-                    <input type="radio" th:field="*{religion}" class="btn-check" name="religionOption"
-                           id="religionOption3" autocomplete="off" value="불교">
+                    <input type="radio" class="btn-check" name="religionOption"
+                           id="religionOption3" autocomplete="off" value="불교" onchange="updateField('religion', '불교')">
                     <label class="btn btn-secondary" for="religionOption3">불교</label>
 
-                    <input type="radio" th:field="*{religion}" class="btn-check" name="religionOption"
-                           id="religionOption4" autocomplete="off" value="무교">
+                    <input type="radio" class="btn-check" name="religionOption"
+                           id="religionOption4" autocomplete="off" value="무교" onchange="updateField('religion', '무교')">
                     <label class="btn btn-secondary" for="religionOption4">무교</label>
                 </div>
+                <input type="hidden" th:field="*{religion}" id="religionHidden" name="religion" value="">
             </div>
             <div class="mb-3">
                 <label class="form-label">음주</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="radio" th:field="*{drinking}" class="btn-check" name="drinkingOption"
-                           id="drinkingOption1" autocomplete="off" value="전혀안함">
+                    <input type="radio" class="btn-check" name="drinkingOption"
+                           id="drinkingOption1" autocomplete="off" value="전혀안함" onchange="updateField('drinking', '전혀안함')">
                     <label class="btn btn-secondary" for="drinkingOption1">전혀안함</label>
 
-                    <input type="radio" th:field="*{drinking}" class="btn-check" name="drinkingOption"
-                           id="drinkingOption2" autocomplete="off" value="가끔">
+                    <input type="radio" class="btn-check" name="drinkingOption"
+                           id="drinkingOption2" autocomplete="off" value="가끔" onchange="updateField('drinking', '가끔')">
                     <label class="btn btn-secondary" for="drinkingOption2">가끔</label>
 
-                    <input type="radio" th:field="*{drinking}" class="btn-check" name="drinkingOption"
-                           id="drinkingOption3" autocomplete="off" value="자주">
+                    <input type="radio" class="btn-check" name="drinkingOption"
+                           id="drinkingOption3" autocomplete="off" value="자주" onchange="updateField('drinking', '자주')">
                     <label class="btn btn-secondary" for="drinkingOption3">자주</label>
 
-                    <input type="radio" th:field="*{drinking}" class="btn-check" name="drinkingOption"
-                           id="drinkingOption4" autocomplete="off" value="매일">
+                    <input type="radio" class="btn-check" name="drinkingOption"
+                           id="drinkingOption4" autocomplete="off" value="매일" onchange="updateField('drinking', '매일')">
                     <label class="btn btn-secondary" for="drinkingOption4">매일</label>
                 </div>
+                <input type="hidden" th:field="*{drinking}" id="drinkingHidden" name="drinking" value="">
             </div>
             <div class="mb-3">
                 <label class="form-label">흡연</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="radio" th:field="*{smoking}" class="btn-check" name="smokingOption" id="smokingYes"
-                           autocomplete="off" value="흡연">
+                    <input type="radio" class="btn-check" name="smokingOption" id="smokingYes"
+                           autocomplete="off" value="흡연" onchange="updateField('smoking', '흡연')">
                     <label class="btn btn-secondary" for="smokingYes">흡연</label>
-                    <input type="radio" th:field="*{smoking}" class="btn-check" name="smokingOption" id="smokingNo"
-                           autocomplete="off" value="비흡연">
+                    <input type="radio" class="btn-check" name="smokingOption" id="smokingNo"
+                           autocomplete="off" value="비흡연" onchange="updateField('smoking', '비흡연')">
                     <label class="btn btn-secondary" for="smokingNo">비흡연</label>
                 </div>
+                <input type="hidden" th:field="*{smoking}" id="smokingHidden" name="smoking" value="">
             </div>
             <div class="mb-3">
                 <label class="form-label">최종학력</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="radio" th:field="*{education}" class="btn-check" name="educationOption" id="highSchool"
-                           autocomplete="off" value="고등학교 졸업">
+                    <input type="radio" class="btn-check" name="educationOption" id="highSchool"
+                           autocomplete="off" value="고등학교 졸업" onchange="updateField('education', '고등학교 졸업')">
                     <label class="btn btn-secondary" for="highSchool">고등학교 졸업</label>
-                    <input type="radio" th:field="*{education}" class="btn-check" name="educationOption" id="university"
-                           autocomplete="off" value="대학교 졸업">
+                    <input type="radio"  class="btn-check" name="educationOption" id="university"
+                           autocomplete="off" value="대학교 졸업" onchange="updateField('education', '대학교 졸업')">
                     <label class="btn btn-secondary" for="university">대학교 재학</label>
-                    <input type="radio" th:field="*{education}" class="btn-check" name="educationOption"
+                    <input type="radio" class="btn-check" name="educationOption"
                            id="universityGraduation"
-                           autocomplete="off" value="대학교 재학">
+                           autocomplete="off" value="대학교 재학" onchange="updateField('education', '대학교 재학')">
                     <label class="btn btn-secondary" for="universityGraduation">대학교 졸업</label>
                 </div>
+                <input type="hidden" th:field="*{education}" id="educationHidden" name="education" value="">
             </div>
             <div class="mb-3">
                 <label class="form-label">MBTI</label>
@@ -172,34 +180,44 @@
             <div class="mb-3">
                 <label class="form-label">성격</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
-                    <input type="checkbox" class="btn-check" name="personality" id="personality1" autocomplete="off" value="활발한">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality1" autocomplete="off"
+                           value="활발한">
                     <label class="btn btn-secondary" for="personality1">활발한</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality2" autocomplete="off" value="조용한">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality2" autocomplete="off"
+                           value="조용한">
                     <label class="btn btn-secondary" for="personality2">조용한</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality3" autocomplete="off" value="애교가넘치는">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality3" autocomplete="off"
+                           value="애교가넘치는">
                     <label class="btn btn-secondary" for="personality3">애교가넘치는</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality4" autocomplete="off" value="어른스러운">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality4" autocomplete="off"
+                           value="어른스러운">
                     <label class="btn btn-secondary" for="personality4">어른스러운</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality5" autocomplete="off" value="침착한">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality5" autocomplete="off"
+                           value="침착한">
                     <label class="btn btn-secondary" for="personality5">침착한</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality6" autocomplete="off" value="낙천적인">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality6" autocomplete="off"
+                           value="낙천적인">
                     <label class="btn btn-secondary" for="personality6">낙천적인</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality7" autocomplete="off" value="도전적인">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality7" autocomplete="off"
+                           value="도전적인">
                     <label class="btn btn-secondary" for="personality7">도전적인</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality8" autocomplete="off" value="유머러스한">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality8" autocomplete="off"
+                           value="유머러스한">
                     <label class="btn btn-secondary" for="personality8">유머러스한</label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality9" autocomplete="off" value="센스있는 ">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality9" autocomplete="off"
+                           value="센스있는 ">
                     <label class="btn btn-secondary" for="personality9">센스있는 </label>
 
-                    <input type="checkbox" class="btn-check" name="personality" id="personality10" autocomplete="off" value="열정적인">
+                    <input type="checkbox" class="btn-check" name="personality" id="personality10" autocomplete="off"
+                           value="열정적인">
                     <label class="btn btn-secondary" for="personality10">열정적인</label>
                 </div>
             </div>
@@ -236,7 +254,7 @@
                 <input type="file" id="imageFiles" name="image" accept="image/**" class="form-control">
             </div>
             <button type="button" onclick="prevStep('step2', 'step1')">이전</button>
-            <button type="submit" class="btn btn-primary">프로필 추가</button>
+            <button type="submit" class="btn btn-primary" onclick="return checkOptions()">프로필 추가</button>
         </div>
     </form>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -295,5 +313,70 @@
         }
         return true;
     }
+        function checkOptions() {
+        // 라디오 버튼 유효성 검사
+        var genderChecked = document.querySelector('input[name="genderOption"]:checked');
+        var religionChecked = document.querySelector('input[name="religionOption"]:checked');
+        var drinkingChecked = document.querySelector('input[name="drinkingOption"]:checked');
+        var smokingChecked = document.querySelector('input[name="smokingOption"]:checked');
+        var educationChecked = document.querySelector('input[name="educationOption"]:checked');
+        var mbtiEChecked = document.querySelector('input[name="mbtiE"]:checked');
+        var mbtiSChecked = document.querySelector('input[name="mbtiS"]:checked');
+        var mbtiTChecked = document.querySelector('input[name="mbtiT"]:checked');
+        var mbtiJChecked = document.querySelector('input[name="mbtiJ"]:checked');
+
+        var nickName = document.getElementById('nickName').value.trim();
+        var address = document.getElementById('address').value.trim();
+        var height = document.getElementById('height').value.trim();
+        var age = document.getElementById('age').value.trim();
+        var hobby = document.getElementById('hobby').value.trim();
+        var introduce = document.getElementById('introduce').value.trim();
+
+        // 체크박스 유효성 검사
+        var personalityChecked = document.querySelectorAll('input[name="personality"]:checked');
+
+        // 각 그룹에 대해 최소한 하나의 옵션이 선택되었는지 확인
+        if (!genderChecked || !religionChecked || !drinkingChecked || !smokingChecked ||
+            !educationChecked || !mbtiEChecked || !mbtiSChecked || !mbtiTChecked || !mbtiJChecked) {
+            alert('모든 항목을 선택하세요.');
+            return false;
+        }
+
+        // 최소한 하나의 성격 체크박스가 선택되었는지 확인
+        if (personalityChecked.length === 0) {
+            console.log('성격 체크박스 중 적어도 하나가 선택되지 않았습니다.');
+            alert('적어도 하나의 성격 옵션을 선택하세요.');
+            return false;
+        }
+
+        if (nickName === "") {
+            alert('별명을 입력하세요.');
+            return false;
+        } else if (address === "") {
+            alert('주소를 찾아주세요.');
+            return false;
+        } else if (height === "") {
+            alert('키를 입력하세요.');
+            return false;
+        } else if (age === "") {
+            alert('나이를 입력하세요.');
+            return false;
+        } else if (hobby === "") {
+            alert('취미를 입력하세요.');
+            return false;
+        } else if (introduce === "") {
+            alert('자기소개를 입력하세요.');
+            return false;
+        }
+
+        // 모든 유효성 검사가 통과되면 양식 제출 진행
+        updateMBTI();  // 제출 전에 MBTI 업데이트
+        return true;
+    }
+
+    function updateField(fieldName, selectedValue) {
+        document.getElementById(fieldName + 'Hidden').value = selectedValue;
+    }
+
 </script>
 </html>

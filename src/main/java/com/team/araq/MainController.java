@@ -30,6 +30,9 @@ public class MainController {
         if (principal != null) {
             SiteUser user = this.userService.getByUsername(principal.getName());
             model.addAttribute("user", user);
+            if(user.getNickName() == null || user.getNickName().trim().isEmpty()){
+                return "redirect:/user/update";
+            }
         }
         List<Post> postList = this.postService.getList();
         model.addAttribute("postList", postList);
