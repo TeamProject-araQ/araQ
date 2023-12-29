@@ -1,8 +1,8 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">'
+<div layout:fragment="content">
     <button id="startRecord">녹음 시작</button>
     <button id="stopRecord" disabled>녹음 정지</button>
-    <audio id="audio" controls th:src="@{${user.audio}}"></audio>
+    <audio id="audio" controls></audio>
 </div>
 <script src="/record.js" layout:fragment="script"></script>
 </html>
