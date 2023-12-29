@@ -3,11 +3,12 @@ package com.team.araq;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
 import com.team.araq.chat.MessageDto;
+import com.team.araq.like.LikeService;
+import com.team.araq.like.UserLike;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
 public class MainController {
+
     private final UserService userService;
+
     private final PostService postService;
 
+    private final LikeService likeService;
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
@@ -35,17 +41,26 @@ public class MainController {
             }
         }
         List<Post> postList = this.postService.getList();
-        model.addAttribute("postList", postList);
-
         List<SiteUser> onlines = userService.getLoginUsers();
-
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<UserLike> likeList = this.likeService.getListByUser(user);
+        List<SiteUser> userList = this.userService.getRandomList(user.getGender());
+        Map<String, String> likesStatus = new HashMap<>();
+        for (SiteUser siteUser : userList) {
+            String status = likeService.checkStatus(user, siteUser);
+            likesStatus.put(siteUser.getUsername(), status);
+        }
+        model.addAttribute("postList", postList);
         model.addAttribute("onlineUsers", onlines);
-
+        model.addAttribute("userList", userList);
+        model.addAttribute("likeList", likeList);
+        model.addAttribute("likesStatus", likesStatus);
         return "index";
     }
 
     @GetMapping("/test")
-    public String test(Model model) {
+    public String test(Model model, Principal principal) {
+        model.addAttribute("username", principal.getName());
         return "test";
     }
 
@@ -70,15 +85,5 @@ public class MainController {
         userService.logout(userService.getLoginUsers());
         return "redirect:/";
     }
-
-    // WebRTC 시그널링 메시지 수신
-    @MessageMapping("/signaling")
-    @SendTo("/topic/signaling")
-    public String handleSignalingMessage(String signalingMessage) {
-        // 받은 메시지를 그대로 다른 클라이언트에게 전달
-        System.out.println(signalingMessage);
-        return signalingMessage;
-    }
-
 
 }

@@ -14,17 +14,22 @@
     <title>AraQ</title>
     <style>
         @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
         .rate {
             display: inline-block;
             border: 0;
             margin-right: 15px;
         }
+
         .rate > input {
             display: none;
         }
+
         .rate > label {
-            float: right;color: #ddd
+            float: right;
+            color: #ddd
         }
+
         .rate > label:before {
             display: inline-block;
             font-size: 3rem;
@@ -34,14 +39,17 @@
             font-family: FontAwesome;
             content: "\f005 ";
         }
+
         .rate .half:before {
             content: "\f089 ";
             position: absolute;
             padding-right: 0;
         }
-        .rate input:checked ~ label, .rate label:hover,.rate label:hover ~ label {
+
+        .rate input:checked ~ label, .rate label:hover, .rate label:hover ~ label {
             color: #f73c32 !important;
-            }
+        }
+
         .rate input:checked + .rate label:hover, .rate input input:checked ~ label:hover, .rate input:checked ~ .rate label:hover ~ label,
         .rate label:hover ~ input:checked ~ label {
             color: #f73c32 !important;
@@ -98,27 +106,33 @@
         </div>
         <div>환영합니다!</div>
         <div class="row mt-5">
-            <a class="col-4 justify-content-center" th:href="@{/payment}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/payment}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/bubbles.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">버블</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/page}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/page}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/person.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">마이페이지</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/inquiry}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/inquiry}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/inquiry.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">1:1 문의</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/updatePw}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/updatePw}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/password.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">비밀번호 변경</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/payment}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/payment}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/pay.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">결제 관리</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/post}" style="padding:15px; border:1px solid lightgray;">
+            <a class="col-4 justify-content-center" th:href="@{/user/post}"
+               style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/post.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">나의 톡</div>
             </a>
@@ -153,5 +167,6 @@
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.7.js"></script>
 <script th:src="@{/layout.js}" type="text/javascript"></script>
 <th:block layout:fragment="script"></th:block>
+<th:block layout:fragment="script2"></th:block>
 </body>
 </html>

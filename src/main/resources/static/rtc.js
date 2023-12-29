@@ -1,117 +1,105 @@
-var stompClient = null;
-var peerConnection = null;
-var localStream = null;
-var iceCandidatesQueue = [];
+$(function () {
+    var socket = null;
+    var stompClient = null;
+    var userStream = null;
+    var pc = null;
+    var iceServers = {
+        iceServers: [
+            {
+                urls: "stun:stun.l.google.com:19302"
+            },
+        ],
+    };
 
-function connect() {
-    var socket = new SockJS('/ws'); // 서버의 STOMP 엔드포인트 연결
-    stompClient = Stomp.over(socket);
+    $("#socketConnectBtn").on('click', function () {
+        socket = new SockJS("/ws");
+        stompClient = Stomp.over(socket);
+        stompClient.debug = null;
 
-    stompClient.connect({}, function(frame) {
-        console.log('Connected: ' + frame);
+        stompClient.connect({}, function () {
+            pc = new RTCPeerConnection(iceServers);
 
-        stompClient.subscribe('/topic/signaling', function(message) {
-            var signal = JSON.parse(message.body);
-            handleSignalingData(signal);
+            mediaStreaming();
+
+            stompClient.subscribe("/topic/peer/offer/" + username, function (message) {
+                var data = JSON.parse(message.body);
+                peerConnection(data, "offer");
+            });
+
+            stompClient.subscribe("/topic/peer/answer/" + username, function (message) {
+                var data = JSON.parse(message.body);
+                peerConnection(data, "answer");
+            });
+
+            stompClient.subscribe("/topic/peer/candidate/" + username, function (message) {
+                var data = JSON.parse(message.body);
+                pc.addIceCandidate(new RTCIceCandidate(data));
+            });
+
+            pc.addEventListener('icecandidate', function (event) {
+                if (event.candidate) {
+                    stompClient.send("/app/peer/candidate", {}, JSON.stringify(event.candidate));
+                }
+            });
+
+            pc.ontrack = function (event) {
+                if (event.track.kind === 'audio') {
+                    var remoteAudio = document.getElementById('remoteAudio');
+                    remoteAudio.srcObject = event.streams[0];
+                }
+            };
         });
-
-        // 오디오 스트림 요청
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-            .then(stream => {
-                localStream = stream;
-                document.getElementById('localAudio').srcObject = localStream;
-                createPeerConnection();
-            })
-            .catch(error => console.error('MediaStream error: ', error));
-    });
-}
-
-function createPeerConnection() {
-    peerConnection = new RTCPeerConnection();
-
-
-    // 로컬 스트림을 PeerConnection에 추가
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
     });
 
-    // ICE 후보 수집
-    peerConnection.onicecandidate = function(event) {
-        if (event.candidate) {
-            console.log(event.candidate);
-            stompClient.send("/app/signaling", {}, JSON.stringify({"ice": event.candidate}));
-        }
-    };
+    $("#offerSendBtn").on('click', peerConnection);
 
-    // 원격 스트림 수신 대기
-    peerConnection.ontrack = function(event) {
-        document.getElementById('remoteAudio').srcObject = event.streams[0];
-    };
-
-    peerConnection.oniceconnectionstatechange = function(event) {
-        console.log("ICE connection 상태 변경:", peerConnection.iceConnectionState);
-        if (peerConnection.iceConnectionState === "connected" ||
-            peerConnection.iceConnectionState === "completed") {
-            console.log("ICE 연결 성공");
-        }
-    };
-
-    peerConnection.onconnectionstatechange = function(event) {
-        console.log("PeerConnection 상태 변경:", peerConnection.connectionState);
-        if (peerConnection.connectionState === "connected") {
-            console.log("Peer-to-Peer 연결 성공");
-        }
-    };
-}
-
-function handleSignalingData(data) {
-    if (data.ice) {
-        if (peerConnection.remoteDescription) {
-            // 원격 SDP가 설정된 경우, ICE 후보 추가
-            peerConnection.addIceCandidate(new RTCIceCandidate(data.ice));
-        } else {
-            // 원격 SDP가 아직 설정되지 않았다면, 큐에 저장
-            iceCandidatesQueue.push(data.ice);
-        }
-    } else if (data.sdp) {
-        if(peerConnection.signalingState !== 'stable') {
-            peerConnection.setRemoteDescription(new RTCSessionDescription(data.sdp))
-                .then(() => {
-                    // 원격 SDP가 설정된 후, 큐에 저장된 모든 ICE 후보 처리
-                    iceCandidatesQueue.forEach(iceCandidate => {
-                        peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
-                    });
-                    iceCandidatesQueue = [];
-
-                    if (data.sdp.type === 'offer') {
-                        return peerConnection.createAnswer();
-                    }
+    function peerConnection(data, type) {
+        if (data.type === "click") {
+            pc.createOffer()
+                .then(function (offer) {
+                    return pc.setLocalDescription(offer);
                 })
-                .then(answer => {
-                    if (answer) {
-                        return peerConnection.setLocalDescription(answer);
-                    }
+                .then(function () {
+                    stompClient.send("/app/peer/offer", {}, JSON.stringify(pc.localDescription));
                 })
-                .then(() => {
-                    if (peerConnection.localDescription) {
-                        stompClient.send("/app/signaling", {}, JSON.stringify({"sdp": peerConnection.localDescription}));
-                    }
-                })
-                .catch(e => console.error(e));
+                .catch(function (err) {
+                    console.log("Offer Error:" + err);
+                });
+        } else if (data.type === "offer") {
+            pc.setRemoteDescription(new RTCSessionDescription(data))
+                .then(function () {
+                    pc.createAnswer()
+                        .then(function (answer) {
+                            return pc.setLocalDescription(answer);
+                        })
+                        .then(function () {
+                            stompClient.send("/app/peer/answer", {}, JSON.stringify(pc.localDescription));
+                        })
+                        .catch(function (err) {
+                            console.log("Answer Error:" + err);
+                        });
+                });
+        } else if (data.type === "answer") {
+            pc.setRemoteDescription(new RTCSessionDescription(data))
+                .then(function () {
+                });
         }
     }
-}
 
-function startCall() {
-    peerConnection.createOffer()
-        .then(offer => peerConnection.setLocalDescription(offer))
-        .then(() => {
-            stompClient.send("/app/signaling", {}, JSON.stringify({"sdp": peerConnection.localDescription}));
-        });
-}
+    function mediaStreaming() {
+        navigator.mediaDevices.getUserMedia({audio: true, video: false})
+            .then(function (stream) {
+                stream.getTracks().forEach(function (track) {
+                    pc.addTrack(track, stream);
+                });
+            })
+            .catch(function (err) {
+                alert("스트림 연결 실패\n" + err);
+            });
+    }
 
-function endCall() {
-    peerConnection.close();
-    peerConnection = null;
-    // 추가적인 종료 로직
-}
+    $("#checkConnectBtn").on('click', function () {
+        console.log(pc);
+    });
+
+});

@@ -20,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -221,5 +219,11 @@ public class UserService {
         if(user.isPresent()){
             return user.get();
         } throw new UsernameNotFoundException("그런 사람 없습니다.");
+    }
+
+    public List<SiteUser> getRandomList(String gender) {
+        List<SiteUser> userList = this.userRepository.findByGenderNot(gender);
+        Collections.shuffle(userList);
+        return userList.size() > 3 ? userList.subList(0, 3) : userList;
     }
 }

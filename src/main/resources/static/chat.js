@@ -1,5 +1,6 @@
 var socket = new SockJS("/ws");
 var stompClient = Stomp.over(socket);
+stompClient.debug = null;
 
 $(function() {
 
