@@ -1,11 +1,10 @@
-var socket = new SockJS("/ws");
-var stompClient = Stomp.over(socket);
-stompClient.debug = null;
-
 $(function() {
+    var socket = new SockJS("/ws");
+    var stompClient = Stomp.over(socket);
+    stompClient.debug = null;
 
     $("#sendChatForm > textarea").on('keydown', function(e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
+        if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
             $("#sendChatForm").submit();
         }
@@ -87,8 +86,8 @@ $(function() {
 
         stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
             var data = JSON.parse(message.body);
-            if (data.code == "confirm") {
-                if (data.target == user) $(".confirm").remove();
+            if (data.code === "confirm") {
+                if (data.target === user) $(".confirm").remove();
             }
             else {
                 var element = "";
@@ -107,7 +106,7 @@ $(function() {
                     }
                 }
 
-                if (data.writer == user) {
+                if (data.writer === user) {
                     element =
                     '<div class="chatBox text-end">'+
                         '<div>'+
@@ -200,7 +199,7 @@ $(function() {
                 }
             });
         } else {
-            if($("#msgContent").val().trim() != "") {
+            if($("#msgContent").val().trim() !== "") {
                 stompClient.send("/app/send", {}, JSON.stringify(chatContent));
             }
         }
@@ -222,14 +221,17 @@ $(function() {
     });
 
     $("#voiceChatBtn").on('click', function() {
-        navigator.mediaDevices.getUserMedia({audio: true, video: false})
-        .then(stream => {
-            alert("스트림 가져오기 성공");
-        })
-        .catch(error => alert("스트림 가져오기 실패\n" + error));
+        if (confirm(targetNick + "님에게 보이스 채팅을 요청하시겠습니까?")) {
+            stompClient.send("/app/all/" + target, {}, JSON.stringify({
+                type: "requestVoice",
+                sender: user,
+                senderNick: nickName
+            }));
+        }
     });
 
     $(".chatWriterBtn").on('click', function() {
         $("#profileModal").modal("show");
+        // todo 채팅대상 프로필 해야함
     });
 });

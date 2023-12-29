@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -180,5 +182,10 @@ public class ChatController {
         simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
 
         return null;
+    }
+
+    @MessageMapping("/all/{target}")
+    public void handlerAll(@Payload String data, @DestinationVariable("target") String target) {
+        simpMessagingTemplate.convertAndSend("/topic/all/" + target, data);
     }
 }
