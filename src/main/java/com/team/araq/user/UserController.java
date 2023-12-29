@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -323,6 +324,18 @@ public class UserController {
     @GetMapping("/payment")
     public String payment() {
         return "user/payment";
+    }
+
+    @GetMapping("/edit")
+    public String edit(){
+        return "user/edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(UserUpdateForm userUpdateForm, Principal principal, MultipartFile image) throws IOException {
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.update(user,userUpdateForm, image);
+        return "redirect:/";
     }
 
 }
