@@ -338,4 +338,15 @@ public class UserController {
         return "redirect:/";
     }
 
+    @ResponseBody
+    @PostMapping("/record")
+    public String record(@RequestParam("audio") MultipartFile multipartFile, Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        try {
+            this.userService.uploadAudio(multipartFile, user);
+            return "파일 업로드 성공";
+        } catch (Exception e) {
+            return "파일 업로드 실패" + e.getMessage();
+        }
+    }
 }

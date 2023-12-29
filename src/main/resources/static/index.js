@@ -41,7 +41,7 @@ $(function () {
     $('.araQBtn').on('click', function () {
         var nickname = $(this).data("nick");
         var username = $(this).data("user");
-        if (confirm(nickname + "님에게 아라큐를 보냅니다!")) {
+        if (confirm(nickname + "님에게 아라큐 요청을 보냅니다!")) {
             $.ajax({
                 url: "/like/request",
                 type: "POST",
