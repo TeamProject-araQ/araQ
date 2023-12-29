@@ -106,15 +106,19 @@ public class SiteUser {
 
     private String token;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reportingUser", cascade = CascadeType.REMOVE)
     private List<Report> reportingUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.REMOVE)
     private List<Report> reportedUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<UserLike> likeUsers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "likedUser")
     private List<UserLike> likedUsers;
 }

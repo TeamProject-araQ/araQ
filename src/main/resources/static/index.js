@@ -24,6 +24,10 @@ $(function () {
 
     scrollToBottom();
 
+    $('.likedModal').on('shown.bs.modal', function () {
+        $('.modal-backdrop').remove();
+    });
+
     $('.acceptBtn').on('click', function () {
         if (confirm("아라큐 요청을 수락하시겠습니까?"))
             location.href = $(this).data("uri");
@@ -57,7 +61,7 @@ $(function () {
         }
     });
 
-    $("#onlineUsers .chatRequest").on('click', function () {
+    $(".chatRequest").on('click', function () {
         var nick = $(this).data("nick");
         var dataValue = $(this).data("value");
 
