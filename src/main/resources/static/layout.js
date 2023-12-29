@@ -11,9 +11,7 @@ $(function () {
             },
         ],
     };
-    var iceQueue = [];
     var targetPeer = null;
-    var rtcConnect = false;
 
     stompClient.connect({}, function (frame) {
 
@@ -60,22 +58,18 @@ $(function () {
                     pc = new RTCPeerConnection(iceServers);
 
                     pc.addEventListener('icecandidate', function (event) {
-                        if (event.candidate && rtcConnect) {
+                        if (event.candidate) {
                             console.log(event.candidate)
                             stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
-                            if (iceQueue.length > 0) {
-                                for (var i = 0; i < iceQueue.length; i++) {
-                                    stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(iceQueue.pop()));
-                                }
-                            }
-                        } else if (event.candidate) {
-                            iceQueue.push(event.candidate);
                         }
                     });
 
-
-
-
+                    pc.ontrack = function (event) {
+                        if (event.track.kind === 'audio') {
+                            var remoteAudio = document.getElementById('voiceChatPlayer');
+                            remoteAudio.srcObject = event.streams[0];
+                        }
+                    };
                 } else {
                     stompClient.send("/app/all/" + data.sender, {}, JSON.stringify({
                         type: "refuse",
@@ -87,56 +81,70 @@ $(function () {
 
                 pc = new RTCPeerConnection(iceServers);
 
+                pc.ontrack = function (event) {
+                    if (event.track.kind === 'audio') {
+                        var remoteAudio = document.getElementById('voiceChatPlayer');
+                        remoteAudio.srcObject = event.streams[0];
+                    }
+                };
+
                 navigator.mediaDevices.getUserMedia({audio: true, video: false})
                     .then(function (stream) {
                         stream.getTracks().forEach(function (track) {
                             pc.addTrack(track, stream);
                         });
                     }).then(function () {
-                    createOffer();
+                    stompClient.send("/topic/all/" + targetPeer, {}, JSON.stringify({type: "mediaOK"}));
                 })
                     .catch(function (err) {
+                        stompClient.send("/topic/all/" + targetPeer, {}, JSON.stringify({
+                            type: "refuse",
+                            content: "연결이 실패했습니다."
+                        }));
                         alert("스트림 연결 실패\n" + err);
                     });
 
                 pc.addEventListener('icecandidate', function (event) {
-                    if (event.candidate && rtcConnect) {
+                    if (event.candidate) {
                         console.log(event.candidate)
                         stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
-                        if (iceQueue.length > 0) {
-                            for (var i = 0; i < iceQueue.length; i++) {
-                                stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(iceQueue.pop()));
-                            }
-                        }
-                    } else if (event.candidate) {
-                        iceQueue.push(event.candidate);
                     }
                 });
-
+            } else if (data.type === "mediaOK") {
+                navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                    .then(function (stream) {
+                        stream.getTracks().forEach(function (track) {
+                            pc.addTrack(track, stream);
+                        });
+                    }).then(function () {
+                    stompClient.send("/topic/all/" + targetPeer, {}, JSON.stringify({type: "mediaConnect"}));
+                })
+                    .catch(function (err) {
+                        stompClient.send("/topic/all/" + targetPeer, {}, JSON.stringify({
+                            type: "refuse",
+                            content: "연결이 실패했습니다."
+                        }));
+                        alert("스트림 연결 실패\n" + err);
+                    });
+            } else if (data.type === "mediaConnect") {
+                createOffer();
+            } else if (data.type === "RtcClose") {
+                pc.close();
+                pc = null;
+                $("#voiceChatModal").modal("hide");
+                alert("보이스 채팅이 종료되었습니다.");
             }
         });
 
         stompClient.subscribe("/topic/peer/offer/" + $("#hiddenUserName").val(), function (message) {
-            var data = JSON.parse(message.body);
-
-            navigator.mediaDevices.getUserMedia({audio: true, video: false})
-                .then(function (stream) {
-                    stream.getTracks().forEach(function (track) {
-                        pc.addTrack(track, stream);
-                    });
-                }).then(function () {
-                createAnswer(data);
-            })
-                .catch(function (err) {
-                    alert("스트림 연결 실패\n" + err);
-                });
+            createAnswer(JSON.parse(message.body));
         });
 
         stompClient.subscribe("/topic/peer/answer/" + $("#hiddenUserName").val(), function (message) {
             var data = JSON.parse(message.body);
 
             pc.setRemoteDescription(new RTCSessionDescription(data));
-            rtcConnect = true;
+            $("#voiceChatModal").modal("show");
         });
 
         stompClient.subscribe("/topic/peer/candidate/" + $("#hiddenUserName").val(), function (message) {
@@ -187,6 +195,14 @@ $(function () {
         console.log(pc);
     });
 
+    $("#voiceChatModal .closeBtn").on('click', function () {
+        pc.close();
+        pc = null;
+        stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type:"RtcClose"}));
+        $("#voiceChatModal").modal("hide");
+        alert("보이스 채팅이 종료되었습니다.");
+    });
+
     function createOffer() {
         pc.createOffer()
             .then(function (offer) {
@@ -209,7 +225,7 @@ $(function () {
                     })
                     .then(function () {
                         stompClient.send("/app/peer/answer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
-                        rtcConnect = true;
+                        $("#voiceChatModal").modal("show");
                     })
                     .catch(function (err) {
                         console.log("Answer Error:" + err);
