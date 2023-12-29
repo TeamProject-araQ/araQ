@@ -33,6 +33,13 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
+        if (principal != null) {
+            SiteUser user = this.userService.getByUsername(principal.getName());
+            model.addAttribute("user", user);
+            if(user.getNickName() == null || user.getNickName().trim().isEmpty()){
+                return "redirect:/user/update";
+            }
+        }
         List<Post> postList = this.postService.getList();
         List<SiteUser> onlines = userService.getLoginUsers();
         SiteUser user = this.userService.getByUsername(principal.getName());
