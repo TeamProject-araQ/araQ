@@ -200,6 +200,7 @@ public class UserController {
             return "fail";
         }
         String verKey = smsService.createRandomNum();
+        System.out.println(verKey);
         session.setAttribute("verKey", verKey);
         smsService.sendSms(phoneNum,verKey);
         return "success";
