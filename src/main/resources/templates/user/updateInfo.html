@@ -1,64 +1,53 @@
 <html layout:decorate="~{layout}">
 <head>
     <style>
-        .btn-check:checked + .btn-secondary, .btn-check:checked + .btn-secondary:focus, .btn-check:checked + .btn-secondary:hover {
-            background-color: #007bff;
+        .btn-check:checked + .버튼, .btn-check:checked + .버튼:focus, .btn-check:checked + .버튼:hover {
+            background-color: rgb(141, 128, 166);
             color: #fff;
-            border-color: #007bff;
+            border-color: rgb(141, 128, 166);
         }
 
-        .btn-secondary:hover {
-            background-color: #0056b3 !important;
-            color: #fff !important;
-            border-color: #0056b3 !important;
+        .버튼:hover {
+            background:rgb(186, 177, 201) !important;
+            color:white !important;
+            border:1px solid rgb(186, 177, 201) !important;
         }
 
-        .prev-btn {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.3s ease;
+        .passBtn {
+            border:1px solid rgb(141, 128, 166);
+            color:white;
+            background:rgb(141, 128, 166);
+            border-radius:50%;
+            padding:8px 13px 8px 13px;
+            font-size:15pt;
         }
 
-        .prev-btn::before {
-            content: '\00ab'; /* 왼쪽 화살표 유니코드 */
-            font-size: 20px;
-            margin-right: 5px;
+        .passBtn:hover {
+            border:1px solid rgb(96, 83, 119);
+            background:rgb(96, 83, 119);
+            color:white;
         }
 
-        /* 다음 버튼 스타일 */
-        .next-btn {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-            transition: background-color 0.3s ease;
+        .addBtn {
+            border:1px solid rgb(141, 128, 166);
+            color:white;
+            background:rgb(141, 128, 166);
+            border-radius:50%;
+            padding:8px 16px 8px 16px;
+            font-size:15pt;
         }
 
-        .next-btn::after {
-            content: '\00bb'; /* 오른쪽 화살표 유니코드 */
-            font-size: 20px;
-            margin-left: 5px;
-        }
-
-        /* 호버 효과 */
-        .prev-btn:hover,
-        .next-btn:hover {
-            background-color: #0056b3;
+        .addBtn:hover {
+            border:1px solid rgb(96, 83, 119);
+            background:rgb(96, 83, 119);
+            color:white;
         }
     </style>
 </head>
 <div layout:fragment="content" class="container my-3">
     <div class="my-3 border-bottom">
         <div>
-            <h4>프로필 추가</h4>
+            <h4 class="underline-start">프로필 추가</h4>
         </div>
     </div>
     <form th:action="@{/user/update}" th:object="${userUpdateForm}" method="post" enctype="multipart/form-data"
@@ -71,11 +60,11 @@
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" class="btn-check" name="genderOption"
                            id="genderOption1" autocomplete="off" value="남성" onchange="updateField('gender', '남성')">
-                    <label class="btn btn-secondary" for="genderOption1">남성</label>
+                    <label class="btn 버튼" for="genderOption1">남성</label>
 
                     <input type="radio" class="btn-check" name="genderOption"
                            id="genderOption2" autocomplete="off" value="여성" onchange="updateField('gender', '여서')">
-                    <label class="btn btn-secondary" for="genderOption2">여성</label>
+                    <label class="btn 버튼" for="genderOption2">여성</label>
                 </div>
                 <input type="hidden" th:field="*{gender}" id="genderHidden" name="gender" value="">
             </div>
@@ -85,20 +74,20 @@
                     <input type="radio" class="btn-check" name="religionOption"
                            id="religionOption1" autocomplete="off" value="기독교"
                            onchange="updateField('religion', '기독교')">
-                    <label class="btn btn-secondary" for="religionOption1">기독교</label>
+                    <label class="btn 버튼" for="religionOption1">기독교</label>
 
                     <input type="radio" class="btn-check" name="religionOption"
                            id="religionOption2" autocomplete="off" value="천주교"
                            onchange="updateField('religion', '천주교')">
-                    <label class="btn btn-secondary" for="religionOption2">천주교</label>
+                    <label class="btn 버튼" for="religionOption2">천주교</label>
 
                     <input type="radio" class="btn-check" name="religionOption"
                            id="religionOption3" autocomplete="off" value="불교" onchange="updateField('religion', '불교')">
-                    <label class="btn btn-secondary" for="religionOption3">불교</label>
+                    <label class="btn 버튼" for="religionOption3">불교</label>
 
                     <input type="radio" class="btn-check" name="religionOption"
                            id="religionOption4" autocomplete="off" value="무교" onchange="updateField('religion', '무교')">
-                    <label class="btn btn-secondary" for="religionOption4">무교</label>
+                    <label class="btn 버튼" for="religionOption4">무교</label>
                 </div>
                 <input type="hidden" th:field="*{religion}" id="religionHidden" name="religion" value="">
             </div>
@@ -106,20 +95,21 @@
                 <label class="form-label">음주</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" class="btn-check" name="drinkingOption"
-                           id="drinkingOption1" autocomplete="off" value="전혀안함" onchange="updateField('drinking', '전혀안함')">
-                    <label class="btn btn-secondary" for="drinkingOption1">전혀안함</label>
+                           id="drinkingOption1" autocomplete="off" value="전혀안함"
+                           onchange="updateField('drinking', '전혀안함')">
+                    <label class="btn 버튼" for="drinkingOption1">전혀안함</label>
 
                     <input type="radio" class="btn-check" name="drinkingOption"
                            id="drinkingOption2" autocomplete="off" value="가끔" onchange="updateField('drinking', '가끔')">
-                    <label class="btn btn-secondary" for="drinkingOption2">가끔</label>
+                    <label class="btn 버튼" for="drinkingOption2">가끔</label>
 
                     <input type="radio" class="btn-check" name="drinkingOption"
                            id="drinkingOption3" autocomplete="off" value="자주" onchange="updateField('drinking', '자주')">
-                    <label class="btn btn-secondary" for="drinkingOption3">자주</label>
+                    <label class="btn 버튼" for="drinkingOption3">자주</label>
 
                     <input type="radio" class="btn-check" name="drinkingOption"
                            id="drinkingOption4" autocomplete="off" value="매일" onchange="updateField('drinking', '매일')">
-                    <label class="btn btn-secondary" for="drinkingOption4">매일</label>
+                    <label class="btn 버튼" for="drinkingOption4">매일</label>
                 </div>
                 <input type="hidden" th:field="*{drinking}" id="drinkingHidden" name="drinking" value="">
             </div>
@@ -128,10 +118,10 @@
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" class="btn-check" name="smokingOption" id="smokingYes"
                            autocomplete="off" value="흡연" onchange="updateField('smoking', '흡연')">
-                    <label class="btn btn-secondary" for="smokingYes">흡연</label>
+                    <label class="btn 버튼" for="smokingYes">흡연</label>
                     <input type="radio" class="btn-check" name="smokingOption" id="smokingNo"
                            autocomplete="off" value="비흡연" onchange="updateField('smoking', '비흡연')">
-                    <label class="btn btn-secondary" for="smokingNo">비흡연</label>
+                    <label class="btn 버튼" for="smokingNo">비흡연</label>
                 </div>
                 <input type="hidden" th:field="*{smoking}" id="smokingHidden" name="smoking" value="">
             </div>
@@ -140,14 +130,14 @@
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="radio" class="btn-check" name="educationOption" id="highSchool"
                            autocomplete="off" value="고등학교 졸업" onchange="updateField('education', '고등학교 졸업')">
-                    <label class="btn btn-secondary" for="highSchool">고등학교 졸업</label>
-                    <input type="radio"  class="btn-check" name="educationOption" id="university"
+                    <label class="btn 버튼" for="highSchool">고등학교 졸업</label>
+                    <input type="radio" class="btn-check" name="educationOption" id="university"
                            autocomplete="off" value="대학교 졸업" onchange="updateField('education', '대학교 졸업')">
-                    <label class="btn btn-secondary" for="university">대학교 재학</label>
+                    <label class="btn 버튼" for="university">대학교 재학</label>
                     <input type="radio" class="btn-check" name="educationOption"
                            id="universityGraduation"
                            autocomplete="off" value="대학교 재학" onchange="updateField('education', '대학교 재학')">
-                    <label class="btn btn-secondary" for="universityGraduation">대학교 졸업</label>
+                    <label class="btn 버튼" for="universityGraduation">대학교 졸업</label>
                 </div>
                 <input type="hidden" th:field="*{education}" id="educationHidden" name="education" value="">
             </div>
@@ -157,24 +147,24 @@
                     <input type="hidden" th:field="*{mbti}" id="mbtiHidden"/>
                     <!-- E/S 차원 (윗줄) -->
                     <input type="radio" class="btn-check" name="mbtiE" id="mbtiE1" autocomplete="off" value="E">
-                    <label class="btn btn-secondary" for="mbtiE1">E</label>
+                    <label class="btn 버튼" for="mbtiE1">E</label>
                     <input type="radio" class="btn-check" name="mbtiS" id="mbtiS1" autocomplete="off" value="S">
-                    <label class="btn btn-secondary" for="mbtiS1">S</label>
+                    <label class="btn 버튼" for="mbtiS1">S</label>
                     <input type="radio" class="btn-check" name="mbtiT" id="mbtiT1" autocomplete="off" value="T">
-                    <label class="btn btn-secondary" for="mbtiT1">T</label>
+                    <label class="btn 버튼" for="mbtiT1">T</label>
                     <input type="radio" class="btn-check" name="mbtiJ" id="mbtiJ1" autocomplete="off" value="J">
-                    <label class="btn btn-secondary" for="mbtiJ1">J</label>
+                    <label class="btn 버튼" for="mbtiJ1">J</label>
                     <br>
                     <br>
                     <!-- I/N 차원 (아래줄) -->
                     <input type="radio" class="btn-check" name="mbtiE" id="mbtiE2" autocomplete="off" value="I">
-                    <label class="btn btn-secondary" for="mbtiE2">I</label>
+                    <label class="btn 버튼" for="mbtiE2">I</label>
                     <input type="radio" class="btn-check" name="mbtiS" id="mbtiS2" autocomplete="off" value="N">
-                    <label class="btn btn-secondary" for="mbtiS2">N</label>
+                    <label class="btn 버튼" for="mbtiS2">N</label>
                     <input type="radio" class="btn-check" name="mbtiT" id="mbtiT2" autocomplete="off" value="F">
-                    <label class="btn btn-secondary" for="mbtiT2">F</label>
+                    <label class="btn 버튼" for="mbtiT2">F</label>
                     <input type="radio" class="btn-check" name="mbtiJ" id="mbtiJ2" autocomplete="off" value="P">
-                    <label class="btn btn-secondary" for="mbtiJ2">P</label>
+                    <label class="btn 버튼" for="mbtiJ2">P</label>
                 </div>
             </div>
             <div class="mb-3">
@@ -182,46 +172,48 @@
                 <div class="btn-group-toggle" data-toggle="buttons">
                     <input type="checkbox" class="btn-check" name="personality" id="personality1" autocomplete="off"
                            value="활발한">
-                    <label class="btn btn-secondary" for="personality1">활발한</label>
+                    <label class="btn 버튼" for="personality1">활발한</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality2" autocomplete="off"
                            value="조용한">
-                    <label class="btn btn-secondary" for="personality2">조용한</label>
+                    <label class="btn 버튼" for="personality2">조용한</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality3" autocomplete="off"
                            value="애교가넘치는">
-                    <label class="btn btn-secondary" for="personality3">애교가넘치는</label>
+                    <label class="btn 버튼" for="personality3">애교가넘치는</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality4" autocomplete="off"
                            value="어른스러운">
-                    <label class="btn btn-secondary" for="personality4">어른스러운</label>
+                    <label class="btn 버튼" for="personality4">어른스러운</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality5" autocomplete="off"
                            value="침착한">
-                    <label class="btn btn-secondary" for="personality5">침착한</label>
+                    <label class="btn 버튼" for="personality5">침착한</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality6" autocomplete="off"
                            value="낙천적인">
-                    <label class="btn btn-secondary" for="personality6">낙천적인</label>
+                    <label class="btn 버튼" for="personality6">낙천적인</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality7" autocomplete="off"
                            value="도전적인">
-                    <label class="btn btn-secondary" for="personality7">도전적인</label>
+                    <label class="btn 버튼" for="personality7">도전적인</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality8" autocomplete="off"
                            value="유머러스한">
-                    <label class="btn btn-secondary" for="personality8">유머러스한</label>
+                    <label class="btn 버튼" for="personality8">유머러스한</label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality9" autocomplete="off"
                            value="센스있는 ">
-                    <label class="btn btn-secondary" for="personality9">센스있는 </label>
+                    <label class="btn 버튼" for="personality9">센스있는 </label>
 
                     <input type="checkbox" class="btn-check" name="personality" id="personality10" autocomplete="off"
                            value="열정적인">
-                    <label class="btn btn-secondary" for="personality10">열정적인</label>
+                    <label class="btn 버튼" for="personality10">열정적인</label>
                 </div>
             </div>
-            <button type="button" onclick="nextStep('step1', 'step2')">다음</button>
+            <div class="d-flex justify-content-center mt-5">
+                <button type="button" onclick="nextStep('step1', 'step2')" class="passBtn btn">→</button>
+            </div>
         </div>
         <div id="step2" style="display:none;">
             <div class="mb-3">
@@ -230,8 +222,10 @@
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">주소</label>
-                <input type="text" th:field="*{address}" class="form-control" id="address" readonly>
-                <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색"><br>
+                <div class="input-group">
+                    <input type="text" th:field="*{address}" class="form-control" id="address" readonly>
+                    <input class="btn 버튼" type="button" onclick="sample5_execDaumPostcode()" value="주소 검색">
+                </div>
             </div>
             <div class="mb-3">
                 <label for="height" class="form-label">키</label>
@@ -253,8 +247,10 @@
                 <label for="image" class="form-label">사진 업로드</label>
                 <input type="file" id="imageFiles" name="image" accept="image/**" class="form-control">
             </div>
-            <button type="button" onclick="prevStep('step2', 'step1')">이전</button>
-            <button type="submit" class="btn btn-primary" onclick="return checkOptions()">프로필 추가</button>
+            <div class="d-flex justify-content-center">
+            <button type="button" onclick="prevStep('step2', 'step1')" class="passBtn btn me-2">←</button>
+            <button type="submit" class="btn addBtn" onclick="return checkOptions()">+</button>
+            </div>
         </div>
     </form>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
