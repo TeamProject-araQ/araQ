@@ -1,3 +1,81 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3"></div>
+<div layout:fragment="content" class="container my-3">
+    <div>
+        <h3 class="underline my-3">결제 내역</h3>
+        <table class="table table-hover text-center">
+            <thead style="background:#D8D3E0;">
+            <tr>
+                <th style="width: 15%;">주문 번호</th>
+                <th>결제 금액</th>
+                <th>카드사</th>
+                <th>pg사</th>
+                <th style="width: 15%;">결제 일시</th>
+                <th style="width: 15%;">취소 일시</th>
+                <th>결제 상태</th>
+                <th>취소</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="payment, loop : ${user.paymentList}">
+                <td th:text="${payment.orderNum}"></td>
+                <td th:text="${payment.amount}"></td>
+                <td th:text="${payment.card}"></td>
+                <td th:text="${payment.pg}"></td>
+                <td th:text="${#temporals.format(payment.date, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(payment.cancelDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${payment.status == 'paid'} ? '결제 완료' : '결제 취소'"></td>
+                <td th:if="${payment.status != 'cancelled'}">
+                    <button type="button" class="cancelBtn btn btn-sm 버튼" th:data-value="${payment.impUid}">결제취소</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h3 class="underline my-3">버블 사용 내역</h3>
+        <table class="table table-hover text-center">
+            <thead style="background:#D8D3E0;">
+            <tr>
+                <th>번호</th>
+                <th>사용 버블</th>
+                <th>사용 일시</th>
+                <th>잔여 버블</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="history, loop : ${user.historyList}">
+                <td th:text="${loop.count}"></td>
+                <td th:text="|- ${history.spent}|"></td>
+                <td th:text="${#temporals.format(history.date, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${history.balance}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    $(".cancelBtn").on('click', function() {
+        var impUid = $(this).data('value');
+        console.log(impUid);
+        if (confirm('결제를 취소하시겠습니까?')) {
+            $.ajax({
+                url: '/pay/cancel',
+                type: 'POST',
+                data: impUid,
+                contentType: 'text/plain',
+                headers: {
+                    [csrfHeader] : csrfToken
+                },
+                success: function(response) {
+                    alert(response);
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error)
+                    alert('결제 취소에 실패하였습니다.');
+                }
+            });
+        }
+    });
+</script>
 </html>

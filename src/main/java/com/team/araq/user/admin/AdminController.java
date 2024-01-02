@@ -7,13 +7,11 @@ import com.team.araq.board.post.PostService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
-import com.team.araq.pay.PaymentDTO;
 import com.team.araq.pay.PaymentService;
 import com.team.araq.report.BlacklistService;
 import com.team.araq.report.Report;
 import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
-
 import com.team.araq.review.ReviewService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
@@ -24,7 +22,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
