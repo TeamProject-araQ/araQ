@@ -1,8 +1,10 @@
 package com.team.araq.like;
 
+import com.team.araq.chat.Notification;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ public class LikeController {
 
     private final UserService userService;
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
 
     @PostMapping("/request")
     @ResponseBody
@@ -30,6 +34,10 @@ public class LikeController {
             return "이미 " + likedUser.getNickName() + "님께 아라큐 요청을 보냈습니다. 매칭 상태를 확인해주세요.";
         }
         this.likeService.likeUser(user, likedUser);
+
+        Notification notification = new Notification("아라큐 요청", user.getNickName() + "님이 아라큐 요청을 보냈습니다.",
+                user.getUsername(), username, "#");
+        simpMessagingTemplate.convertAndSend("/topic/notification/" + username, notification);
         return "성공적으로 요청되었습니다.";
     }
 

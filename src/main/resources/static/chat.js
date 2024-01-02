@@ -79,11 +79,6 @@ $(function() {
             }
         });
 
-        stompClient.send("/app/online", {}, JSON.stringify({
-            type: "online",
-            target: $("#hiddenUserName").val()
-        }));
-
         stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
             var data = JSON.parse(message.body);
             if (data.code === "confirm") {
@@ -206,18 +201,6 @@ $(function() {
 
         $("#msgContent").val("");
         $("#msgContent").focus();
-    });
-
-    $(window).on('beforeunload', function() {
-        $.ajax({
-            url: "/offline",
-            type: "POST",
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            contentType:"text/plain",
-            data: $("#hiddenUserName").val()
-        });
     });
 
     $("#voiceChatBtn").on('click', function() {

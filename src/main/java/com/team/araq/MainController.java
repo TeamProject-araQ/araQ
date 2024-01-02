@@ -2,19 +2,14 @@ package com.team.araq;
 
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
-import com.team.araq.chat.MessageDto;
 import com.team.araq.like.LikeService;
 import com.team.araq.like.UserLike;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -41,7 +36,7 @@ public class MainController {
             }
         }
         List<Post> postList = this.postService.getList();
-        List<SiteUser> onlines = userService.getLoginUsers();
+        List<SiteUser> onlines = userService.getActiveUsers();
         SiteUser user = this.userService.getByUsername(principal.getName());
         List<UserLike> likeList = this.likeService.getListByUser(user);
         List<SiteUser> userList = this.userService.getRandomList(user.getGender());
@@ -62,20 +57,6 @@ public class MainController {
     public String test(Model model, Principal principal) {
         model.addAttribute("username", principal.getName());
         return "test";
-    }
-
-    @MessageMapping("/online")
-    public void online(MessageDto messageDto) {
-        SiteUser user = userService.getByUsername(messageDto.getTarget());
-        this.userService.login(user);
-    }
-
-    @PostMapping("/offline")
-    @ResponseBody
-    public String offline(@RequestBody String username) {
-        SiteUser user = userService.getByUsername(username);
-        userService.logout(user);
-        return null;
     }
 
     @GetMapping("/reset")
