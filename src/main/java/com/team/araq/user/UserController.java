@@ -22,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -194,7 +193,7 @@ public class UserController {
     //회원 가입시 문자 인증번호 보내기
     @PostMapping("/signupAuth")
     @ResponseBody
-    public String signupAuth(@RequestBody Map<String, String> data, HttpSession session){
+    public String signupAuth(@RequestBody Map<String, String> data, HttpSession session) {
         String phoneNum = data.get("phoneNum").trim();
         if (phoneNum.length() != 11 || phoneNum == null) {
             return "fail";
@@ -202,19 +201,19 @@ public class UserController {
         String verKey = smsService.createRandomNum();
         System.out.println(verKey);
         session.setAttribute("verKey", verKey);
-        smsService.sendSms(phoneNum,verKey);
+        smsService.sendSms(phoneNum, verKey);
         return "success";
     }
 
     // 회원 가입시 문자 인증번호 확인
     @PostMapping("/confirmPhoneNum")
     @ResponseBody
-    public String confirmPhoneNum(@RequestBody Map<String, String> data, HttpSession session){
+    public String confirmPhoneNum(@RequestBody Map<String, String> data, HttpSession session) {
         String phoneNum = data.get("phoneNum");
         String verKey = data.get("verKey");
 
         String storedVerKey = (String) session.getAttribute("verKey");
-        if(verKey.equals(storedVerKey)){
+        if (verKey.equals(storedVerKey)) {
             return "success";
         }
         return "fail";
@@ -314,6 +313,7 @@ public class UserController {
 
     @GetMapping("/post")
     public String post() {
+
         return "user/post";
     }
 
@@ -328,14 +328,14 @@ public class UserController {
     }
 
     @GetMapping("/edit")
-    public String edit(){
+    public String edit() {
         return "user/edit";
     }
 
     @PostMapping("/edit")
     public String edit(UserUpdateForm userUpdateForm, Principal principal, MultipartFile image) throws IOException {
         SiteUser user = userService.getByUsername(principal.getName());
-        userService.update(user,userUpdateForm, image);
+        userService.update(user, userUpdateForm, image);
         return "redirect:/";
     }
 
@@ -349,5 +349,13 @@ public class UserController {
         } catch (Exception e) {
             return "녹음 파일 업로드 실패" + e.getMessage();
         }
+    }
+
+    @PostMapping("/checkAccess")
+    @ResponseBody
+    public boolean checkAccess(Principal principal, @RequestBody String username) {
+        SiteUser user1 = this.userService.getByUsername(principal.getName());
+        return user1.getOpenVoice().stream()
+                .anyMatch(user2 -> user2.getUsername().equals(username));
     }
 }

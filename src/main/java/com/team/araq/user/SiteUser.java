@@ -6,9 +6,11 @@ import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.like.UserLike;
+import com.team.araq.pay.History;
 import com.team.araq.pay.Payment;
 import com.team.araq.report.Report;
 import com.team.araq.review.Review;
+import com.team.araq.taste.Taste;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -129,4 +131,16 @@ public class SiteUser {
     private List<UserLike> likedUsers;
 
     private String audio;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<SiteUser> openVoice;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Taste taste;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<History> historyList;
 }

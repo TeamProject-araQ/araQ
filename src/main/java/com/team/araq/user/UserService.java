@@ -255,6 +255,15 @@ public class UserService {
         }
     }
 
+    public void useBubble(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() - bubble);
+        this.userRepository.save(user);
+    }
+
+    public void openVoice(SiteUser user1, SiteUser user2) {
+        user1.getOpenVoice().add(user2);
+        this.userRepository.save(user1);
+    }
     public List<SiteUser> getActiveUsers() {
         List<String> usernames = sessionRegistry.getAllPrincipals().stream().filter(principal -> principal instanceof UserDetails)
                 .map(principal -> ((UserDetails) principal).getUsername())

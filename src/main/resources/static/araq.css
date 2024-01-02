@@ -25,7 +25,7 @@ body, ul, li {
 }
 
 html, body {
-    font-family: 'nanum-regular';
+    font-family: 'nanum-regular', serif;
 }
 
 a {
@@ -246,7 +246,7 @@ a:hover {
 
 .chatBox .confirm {
     position:absolute;
-    z-index=1;
+    z-index:1;
     top:-5px;
     left:-5px;
     background:rgb(131, 115, 157);
@@ -314,6 +314,7 @@ a:hover {
 
 .kakao.active {
     background:rgb(236, 218, 0);
+    border: none;
 }
 
 .toss {
@@ -601,4 +602,9 @@ a:hover {
 #audioDuration {
     font-size: small;
     margin-left: 5px;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
 }

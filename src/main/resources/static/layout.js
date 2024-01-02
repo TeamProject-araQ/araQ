@@ -291,11 +291,48 @@ $(function () {
 
     $('.listen').on('click', function () {
         var myAudio = $('.audio')[0];
-
-        if (myAudio.paused) {
-            myAudio.play();
-        } else {
-            myAudio.pause();
-        }
+        var username = $('.username').val();
+        $.ajax({
+            url: "/user/checkAccess",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: username,
+            success: function (data) {
+                if (data === true) {
+                    if (myAudio.paused) myAudio.play();
+                    else myAudio.pause();
+                } else
+                    if (confirm("500 버블을 사용하여 음성을 들으시겠습니까?"))
+                        initiatePayment();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
     });
+
+    function initiatePayment(audioOwnerId) {
+        $.ajax({
+            url: "/pay",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: $(".username").val(),
+            success: function (data) {
+                if (data) alert("결제가 완료되었습니다.");
+                else {
+                    if (confirm("보유하신 버블이 부족합니다. 결제 페이지로 이동하시겠습니까?"))
+                        location.href = "/payment";
+                }
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
 });

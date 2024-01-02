@@ -113,6 +113,7 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
+                $("#profileModal .username").val(data.username);
                 if (data.audio) {
                     var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
                     var durationElement = $("#profileModal #audioDuration");
