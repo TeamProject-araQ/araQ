@@ -314,6 +314,7 @@ a:hover {
 
 .kakao.active {
     background:rgb(236, 218, 0);
+    border: none;
 }
 
 .toss {
@@ -601,4 +602,9 @@ a:hover {
 #audioDuration {
     font-size: small;
     margin-left: 5px;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
 }

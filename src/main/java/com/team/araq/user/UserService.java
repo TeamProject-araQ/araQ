@@ -250,4 +250,14 @@ public class UserService {
             throw new RuntimeException("파일 저장 실패: " + multipartFile.getOriginalFilename(), ex);
         }
     }
+
+    public void useBubble(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() - bubble);
+        this.userRepository.save(user);
+    }
+
+    public void openVoice(SiteUser user1, SiteUser user2) {
+        user1.getOpenVoice().add(user2);
+        this.userRepository.save(user1);
+    }
 }

@@ -1,3 +1,30 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3"></div>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">문의 내역</h3>
+    <h5 class="text-center text-secondary p-5" th:if="${user.inquiryList.isEmpty()}">문의 내역 없음</h5>
+    <div th:if="${!user.inquiryList.isEmpty()}" th:each="inquiry : ${user.inquiryList}">
+        <div class="accordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button fs-5" type="button" data-bs-toggle="collapse"
+                            th:data-bs-target="|#inquiry_${inquiry.id}|" aria-expanded="true"
+                            th:aria-controls="|inquiry_${inquiry.id}|" th:text="|Q. ${inquiry.title}|">
+                    </button>
+                </h2>
+                <div th:id="|inquiry_${inquiry.id}|" class="accordion-collapse collapse show">
+                    <div class="accordion-body">
+                        <div class="d-flex m-2">
+                            <i class="bi bi-arrow-return-right me-1"></i>
+                            <div th:text="${inquiry.content}"></div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <div class="badge bg-light text-secondary" th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                        </div>
+                        <h5 th:if="${inquiry.answer != null}" th:text="|A. ${inquiry.answer.content}|"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </html>

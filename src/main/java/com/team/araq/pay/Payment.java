@@ -39,6 +39,7 @@ public class Payment {
 
     private LocalDateTime cancelDate;
 
+    // 충전액
     private int bubble;
 
 }
