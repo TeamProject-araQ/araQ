@@ -32,14 +32,14 @@ imp:
     secret: "y46aKg8JTOLBqyKtcM04uAnLPeJ4PfrIEiHIP1vymIVaK91zGwQNJibao4Dw2mOxAlmvCiv37Yq1ueSc"
 
 
-##SSL
-#server:
-#  ssl:
-#    enabled: true
-#    key-store: keystore.p12
-#    key-store-password: araq1234
-#    key-store-type: PKCS12
-#    key-alias: bns-ssl
-#  port: 8443
+#SSL
+server:
+  ssl:
+    enabled: true
+    key-store: keystore.p12
+    key-store-password: araq1234
+    key-store-type: PKCS12
+    key-alias: bns-ssl
+  port: 8443
 
 

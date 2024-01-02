@@ -14,11 +14,11 @@ $(function () {
     let targetPeer = null;
 
     stompClient.connect({}, function (frame) {
-
-        stompClient.send("/app/online", {}, JSON.stringify({
-            type: "online",
-            target: $("#hiddenUserName").val()
-        }));
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(r => {
+                if (r === "granted") alert("푸시 알람이 설정되었습니다.");
+            });
+        }
 
         stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function (message) {
             const data = JSON.parse(message.body);
@@ -206,18 +206,6 @@ $(function () {
             error: function (err) {
                 alert("채팅방 생성에 실패했습니다.");
             }
-        });
-    });
-
-    $(window).on('beforeunload', function () {
-        $.ajax({
-            url: "/offline",
-            type: "POST",
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            contentType: "text/plain",
-            data: $("#hiddenUserName").val()
         });
     });
 
