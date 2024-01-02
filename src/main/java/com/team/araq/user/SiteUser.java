@@ -72,9 +72,11 @@ public class SiteUser {
     // 사진
     private String image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Post> postList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
@@ -86,9 +88,11 @@ public class SiteUser {
 
     private LocalDateTime createDate;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private Review review;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Payment> paymentList;
 
@@ -100,6 +104,7 @@ public class SiteUser {
     @JsonIgnore
     private List<Room> roomList2;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Inquiry> inquiryList;
 

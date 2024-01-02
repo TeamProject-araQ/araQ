@@ -22,8 +22,9 @@ $(function () {
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
-    if ($('#postList').val() != null) {
-    scrollToBottom();
+    var postListVal = $('#postList').val();
+    if (postListVal !== undefined && postListVal !== null && postListVal !== '') {
+        scrollToBottom();
     }
 
     $(".voice").on('click', function () {
@@ -61,11 +62,11 @@ $(function () {
                 },
                 contentType: "text/plain",
                 data: username,
-                success: function(response) {
+                success: function (response) {
                     alert(response);
                     location.reload();
                 },
-                error: function(error) {
+                error: function (error) {
                     console.error(error);
                 }
             });
@@ -96,7 +97,7 @@ $(function () {
         }
     });
 
-    $("#onlineUsers .viewProfile").on('click', function () {
+    $(".viewProfile").on('click', function () {
         $.ajax({
             url: "/user/getInfo",
             type: "post",
@@ -112,41 +113,24 @@ $(function () {
                 $("#profileModal .card-title").text(data.nickName);
                 $("#profileModal .age").text(data.age);
                 $("#profileModal .introduce").text(data.introduce);
-                $("#profileModal .audio").attr("src", data.audio);
-                $("#profileModal").modal("show");
+                if (data.audio) {
+                    var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
+                    var durationElement = $("#profileModal #audioDuration");
 
-                $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
-                $("#moreInfoForm > table > tbody > tr:nth-child(2) > td").text(data.drinking);
-                $("#moreInfoForm > table > tbody > tr:nth-child(3) > td").text(data.smoking);
-                $("#moreInfoForm > table > tbody > tr:nth-child(4) > td").text(data.personality);
-                $("#moreInfoForm > table > tbody > tr:nth-child(5) > td").text(data.hobby);
-                $("#moreInfoForm > table > tbody > tr:nth-child(6) > td").text(data.mbti);
-                $("#moreInfoForm > table > tbody > tr:nth-child(7) > td").text(data.religion);
-            },
-            error: function (err) {
-                alert("요청이 실패하였습니다.");
-                console.log(err);
-            }
-        });
-    });
+                    audioElement.ontimeupdate = function() {
+                        var currentMinutes = Math.floor(audioElement.currentTime / 60);
+                        var currentSeconds = Math.floor(audioElement.currentTime - currentMinutes * 60);
+                        durationElement.text(pad(currentMinutes) + ":" + pad(currentSeconds));
+                    };
 
-    $(".profileBtn").on('click', function () {
-        $.ajax({
-            url: "/user/getInfo",
-            type: "post",
-            contentType: "text/plain",
-            dataType: "json",
-            data: $(this).data("user"),
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            success: function (data) {
-                $("#profileModal .modal-title").text("프로필");
-                $("#profileModal .profileImage").attr("src", data.image);
-                $("#profileModal .card-title").text(data.nickName);
-                $("#profileModal .age").text(data.age);
-                $("#profileModal .introduce").text(data.introduce);
-                $("#profileModal .audio").attr("src", data.audio);
+                    function pad(value) {
+                        return value > 9 ? value : "0" + value;
+                    }
+
+                    $("#profileModal .listen, #profileModal #audioDuration").show();
+                } else {
+                    $("#profileModal .listen, #profileModal #audioDuration").hide();
+                }
                 $("#profileModal").modal("show");
 
                 $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);

@@ -219,7 +219,7 @@ $(function () {
     $("#voiceChatModal .closeBtn").on('click', function () {
         pc.close();
         pc = null;
-        stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type:"RtcClose"}));
+        stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type: "RtcClose"}));
         $("#voiceChatModal").modal("hide");
         alert("보이스 채팅이 종료되었습니다.");
     });
@@ -265,4 +265,15 @@ $(function () {
                     });
             });
     }
+
+
+    $('.listen').on('click', function () {
+        var myAudio = $('.audio')[0];
+
+        if (myAudio.paused) {
+            myAudio.play();
+        } else {
+            myAudio.pause();
+        }
+    });
 });
