@@ -14,6 +14,8 @@ public class MVCConfig implements WebMvcConfigurer {
 
     private String audioPath = "C:/uploads/audio";
 
+    private String reviewPath = "C:/uploads/review";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/inquiry/image/**")
@@ -24,5 +26,7 @@ public class MVCConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + chatPath + "/");
         registry.addResourceHandler("/user/audio/**")
                 .addResourceLocations("file:" + audioPath + "/");
+        registry.addResourceHandler("/review/image/**")
+                .addResourceLocations("file:" + reviewPath + "/");
     }
 }

@@ -88,7 +88,7 @@ $(document).ready(function () {
         if (audioBlob) {
             uploadAudio(audioBlob);
             $(this).prop("disabled", true);
-            var myModalEl = document.getElementById('voiceRecord'); // 모달의 ID를 'modalId'로 가정
+            var myModalEl = document.getElementById('voiceRecord');
             var modalInstance = bootstrap.Modal.getInstance(myModalEl);
             modalInstance.hide();
         }
