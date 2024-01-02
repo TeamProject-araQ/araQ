@@ -1,17 +1,16 @@
 $(function () {
-    var socket = new SockJS("/ws");
-    var stompClient = Stomp.over(socket);
+    const socket = new SockJS("/ws");
+    const stompClient = Stomp.over(socket);
     stompClient.debug = null;
-    var userStream = null;
-    var pc = null;
-    var iceServers = {
+    let pc = null;
+    const iceServers = {
         iceServers: [
             {
                 urls: "stun:stun.l.google.com:19302"
             },
         ],
     };
-    var targetPeer = null;
+    let targetPeer = null;
 
     stompClient.connect({}, function (frame) {
 
@@ -21,8 +20,8 @@ $(function () {
         }));
 
         stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function (message) {
-            var data = JSON.parse(message.body);
-            var chatToast = new bootstrap.Toast($('#chatToast'), {
+            const data = JSON.parse(message.body);
+            const chatToast = new bootstrap.Toast($('#chatToast'), {
                 autohide: false
             });
 
@@ -59,14 +58,13 @@ $(function () {
 
                     pc.addEventListener('icecandidate', function (event) {
                         if (event.candidate) {
-                            console.log(event.candidate)
                             stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
                         }
                     });
 
                     pc.ontrack = function (event) {
                         if (event.track.kind === 'audio') {
-                            var remoteAudio = document.getElementById('voiceChatPlayer');
+                            const remoteAudio = document.getElementById('voiceChatPlayer');
                             remoteAudio.srcObject = event.streams[0];
                         }
                     };
@@ -83,7 +81,7 @@ $(function () {
 
                 pc.ontrack = function (event) {
                     if (event.track.kind === 'audio') {
-                        var remoteAudio = document.getElementById('voiceChatPlayer');
+                        const remoteAudio = document.getElementById('voiceChatPlayer');
                         remoteAudio.srcObject = event.streams[0];
                     }
                 };
@@ -106,7 +104,6 @@ $(function () {
 
                 pc.addEventListener('icecandidate', function (event) {
                     if (event.candidate) {
-                        console.log(event.candidate)
                         stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
                     }
                 });
@@ -145,6 +142,18 @@ $(function () {
 
             pc.setRemoteDescription(new RTCSessionDescription(data));
             $("#voiceChatModal").modal("show");
+            let width = 0;
+            let count = 60;
+            const interval = setInterval(function () {
+                width += 1.67;
+                count -= 1;
+                $("#voiceChatModal .progress-bar").css("width", width + "%");
+                $("#voiceChatModal .progress-bar").text(count);
+                if (width >= 100) {
+                    clearInterval(interval);
+                    $("#voiceChatModal .closeBtn").click();
+                }
+            }, 1000);
         });
 
         stompClient.subscribe("/topic/peer/candidate/" + $("#hiddenUserName").val(), function (message) {
@@ -161,7 +170,6 @@ $(function () {
     });
 
     $("#chatRequestModal .accept").on('click', function () {
-
         $.ajax({
             url: "/chat/create",
             type: "POST",
@@ -192,7 +200,20 @@ $(function () {
     });
 
     $("#test").on('click', function () {
-        console.log(pc);
+        $("#voiceChatModal").modal("show");
+
+        let width = 0;
+        let count = 60;
+        const interval = setInterval(function () {
+            width += 1.67;
+            count -= 1;
+            $("#voiceChatModal .progress-bar").css("width", width + "%");
+            $("#voiceChatModal .progress-bar").text(count);
+            if (width >= 100) {
+                clearInterval(interval);
+                $("#voiceChatModal .closeBtn").click();
+            }
+        }, 1000);
     });
 
     $("#voiceChatModal .closeBtn").on('click', function () {
@@ -226,6 +247,18 @@ $(function () {
                     .then(function () {
                         stompClient.send("/app/peer/answer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
                         $("#voiceChatModal").modal("show");
+                        let width = 0;
+                        let count = 60;
+                        const interval = setInterval(function () {
+                            width += 1.67;
+                            count -= 1;
+                            $("#voiceChatModal .progress-bar").css("width", width + "%");
+                            $("#voiceChatModal .progress-bar").text(count);
+                            if (width >= 100) {
+                                clearInterval(interval);
+                                $("#voiceChatModal .closeBtn").click();
+                            }
+                        }, 1000);
                     })
                     .catch(function (err) {
                         console.log("Answer Error:" + err);
