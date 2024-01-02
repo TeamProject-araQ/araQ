@@ -3,6 +3,7 @@ $(function () {
     const stompClient = Stomp.over(socket);
     stompClient.debug = null;
     let pc = null;
+    let notifyCheck = false;
     const iceServers = {
         iceServers: [
             {
@@ -130,6 +131,7 @@ $(function () {
                 pc = null;
                 $("#voiceChatModal").modal("hide");
                 alert("보이스 채팅이 종료되었습니다.");
+                window.location.reload();
             }
         });
 
@@ -157,9 +159,29 @@ $(function () {
         });
 
         stompClient.subscribe("/topic/peer/candidate/" + $("#hiddenUserName").val(), function (message) {
-            var data = JSON.parse(message.body);
+            let data = JSON.parse(message.body);
             pc.addIceCandidate(new RTCIceCandidate(data));
         });
+
+        stompClient.subscribe("/topic/notification/" + $("#hiddenUserName").val(), function (message) {
+            let data = JSON.parse(message.body);
+            let permission = Notification.permission;
+            if (permission === "granted" && document.hidden && !notifyCheck) {
+                showNotification(data);
+                notifyCheck = true;
+                setTimeout(function () {
+                    notifyCheck = false;
+                }, 5000);
+            } else Notification.requestPermission().then(r => {
+                if (document.hidden && !notifyCheck) {
+                    showNotification(data);
+                    notifyCheck = true;
+                    setTimeout(function () {
+                        notifyCheck = false;
+                    }, 5000);
+                }
+            });
+        })
     });
 
     $("#chatRequestModal .refuse").on('click', function () {
@@ -222,6 +244,7 @@ $(function () {
         stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type: "RtcClose"}));
         $("#voiceChatModal").modal("hide");
         alert("보이스 채팅이 종료되었습니다.");
+        window.location.reload();
     });
 
     function createOffer() {
@@ -266,6 +289,17 @@ $(function () {
             });
     }
 
+    function showNotification(data) {
+        let notification = new Notification(data.title, {
+            body: data.content,
+            icon: "/image/_logo.png"
+        });
+
+        notification.onclick = function () {
+            window.focus();
+            window.location.href = data.url;
+        };
+    }
 
     $('.listen').on('click', function () {
         var myAudio = $('.audio')[0];
