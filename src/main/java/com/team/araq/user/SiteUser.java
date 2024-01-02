@@ -133,11 +133,14 @@ public class SiteUser {
     private String audio;
 
     @ManyToMany
+    @JsonIgnore
     private List<SiteUser> openVoice;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private Taste taste;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<History> historyList;
 }

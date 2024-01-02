@@ -1,14 +1,234 @@
 <html layout:decorate="~{layout}">
+<head>
+    <style>
+        .nextBtn, .backBtn {
+            border: 1px solid rgb(141, 128, 166);
+            color: white;
+            background: rgb(141, 128, 166);
+            border-radius: 50%;
+            padding: 8px 13px 8px 13px;
+            font-size: 15pt;
+        }
+
+        .nextBtn:hover, .backBtn:hover {
+            border: 1px solid rgb(96, 83, 119);
+            background: rgb(96, 83, 119);
+            color: white;
+        }
+    </style>
+</head>
 <div layout:fragment="content" class="container my-3">
-    <h1 class="text-center my-3">Q1.</h1>
-    <h2 class="text-center my-3">내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</h2>
-    <div class="d-flex justify-content-center">
-        <img src="https://i.namu.wiki/i/E2EGjwM_t4imBtfHHUClMYJfTT8H6Gas_pf0EfBWY7P6nwLvlQxpi9smvqb4d3xzp0xPY7dOSCzFsHLCvMe7-Q.webp"
-             alt="" style="height:200px; width: auto;">
-    </div>
-    <div class="d-flex justify-content-center my-3">
-        <button class="me-3 btn btn-lg btn-success">상관 없다</ button>
-        <button class="btn btn-lg btn-danger">절대 안된다</button>
+    <div class="question-container" style="max-width: 600px; margin:0 auto;">
+        <!-- 질문 1 -->
+        <div class="Q" id="question1">
+            <h1 class="text-center my-3">Q1.</h1>
+            <h2 class="text-center mb-5">내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://i.namu.wiki/i/E2EGjwM_t4imBtfHHUClMYJfTT8H6Gas_pf0EfBWY7P6nwLvlQxpi9smvqb4d3xzp0xPY7dOSCzFsHLCvMe7-Q.webp"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option1" id="1-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="1-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option1" id="1-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="1-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 2 -->
+        <div class="Q" id="question2" style="display:none;">
+            <h1 class="text-center my-3">Q2.</h1>
+            <h2 class="text-center mb-5">집에서 내 애인과 내 친구 셋이서 술을 먹다가 내가 먼저 취해 방으로 들어간다면 친구와 애인 단 둘이 술을 먹어도</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://img.freepik.com/free-vector/soju-bottle-and-shot-glass_1308-131202.jpg?size=626&ext=jpg&ga=GA1.1.1222169770.1704067200&semt=sph"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option2" id="2-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="2-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option2" id="2-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="2-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 3 -->
+        <div class="Q" id="question3" style="display:none;">
+            <h1 class="text-center my-3">Q3.</h1>
+            <h2 class="text-center mb-5">내 애인이 이성이 포함된 오랜 친구들과 1박 2일 여행을 간다면?</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://png.pngtree.com/png-clipart/20210613/original/pngtree-travel-with-suitcases-png-image_6409677.jpg"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option3" id="3-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="3-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option3" id="3-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="3-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 4 -->
+        <div class="Q" id="question4" style="display:none;">
+            <h1 class="text-center my-3">Q4.</h1>
+            <h2 class="text-center mb-5">내 애인의 차에 이성인 직장 동료의 휴대폰이 블루투스 연결되어있다면?</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://ci.encarmagazine.com/2020/05/wi.jpg"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option4" id="4-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="4-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option4" id="4-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="4-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 5 -->
+        <div class="Q" id="question5" style="display:none;">
+            <h1 class="text-center my-3">Q5.</h1>
+            <h2 class="text-center mb-5">내 애인이 여사친/남사친과 넷플릭스 아이디를 공유해도</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option5" id="5-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="5-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option5" id="5-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="5-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 6 -->
+        <div class="Q" id="question6" style="display:none;">
+            <h1 class="text-center my-3">Q6.</h1>
+            <h2 class="text-center mb-5">내 친구가 롱패딩 지퍼를 못 올리고 있을 때, 내 애인이 친구의 패딩 지퍼를 올려준다면?</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://i.pinimg.com/474x/52/4f/08/524f086c4958b622b8a5ddf3622ffe9c.jpg"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option6" id="6-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="6-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option6" id="6-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="6-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 7 -->
+        <div class="Q" id="question7" style="display:none;">
+            <h1 class="text-center my-3">Q7.</h1>
+            <h2 class="text-center mb-5">내 친구와 내 애인과 노래방에서 듀엣곡을 불러도</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://thumb.ac-illust.com/50/503747f25ae8789952f20759452ef2f4_t.jpeg"
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option7" id="7-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="7-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option7" id="7-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="7-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
+        <!-- 질문 8 -->
+        <div class="Q" id="question8" style="display:none;">
+            <h1 class="text-center my-3">Q8.</h1>
+            <h2 class="text-center mb-5">퇴근 후 나를 데리러 온 애인. 그런데 조수석에는 이성인 직장 동료가 타고있다면?</h2>
+            <div class="d-flex justify-content-center mb-5">
+                <img src="https://media.istockphoto.com/id/1014173646/ko/%EB%B2%A1%ED%84%B0/%EB%8F%84-%EB%B2%A1%ED%84%B0-%ED%81%B4%EB%A6%BD-%EC%95%84%ED%8A%B8-%EA%B7%B8%EB%A6%BC%EC%97%90-%EC%9A%B4%EC%A0%84-%ED%95%98%EB%8A%94-%EA%B0%80%EC%A1%B1-%EB%B6%80%EB%B6%80%EC%99%80-%ED%95%A8%EA%BB%98-%EC%84%B8-%EB%8B%A8-%EC%9E%90%EB%8F%99%EC%B0%A8%EC%9D%98-%EB%82%B4%EB%B6%80-%EB%B3%B4%EA%B8%B0.jpg?s=612x612&w=0&k=20&c=5bx4gIaDeJ_i1Rge17l_XJS3FCAAiC2YqHvTgQAV1mE="
+                     alt="" style="height:200px; width: auto;">
+            </div>
+            <div class="d-flex justify-content-center mb-5">
+                <div class="me-2">
+                    <input type="radio" class="btn-check" name="option7" id="7-1" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-success" for="7-1">상관 없다</label>
+                </div>
+                <div>
+                    <input type="radio" class="btn-check" name="option7" id="7-2" autocomplete="off">
+                    <label class="btn btn-lg btn-outline-danger" for="7-2">절대 안된다</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="backBtn me-2">←</button>
+                <button class="nextBtn">→</button>
+            </div>
+        </div>
     </div>
 </div>
+<script type="text/javascript" layout:fragment="script">
+    $(document).ready(function () {
+        var currentQuestion = 1;
+        var totalQuestions = $('.Q').length;
+
+        $('.Q').hide();
+        $('#question' + currentQuestion).show();
+
+        $('.nextBtn').click(function () {
+            $('#question' + currentQuestion).hide();
+
+            currentQuestion++;
+
+            if (currentQuestion <= totalQuestions) {
+                $('#question' + currentQuestion).show();
+            }
+        });
+
+        $('.backBtn').click(function () {
+            if (currentQuestion > 1) {
+                $('#question' + currentQuestion).hide();
+                currentQuestion--;
+                $('#question' + currentQuestion).show();
+            }
+        });
+    });
+</script>
 </html>
