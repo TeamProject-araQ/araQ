@@ -259,6 +259,7 @@ public class UserService {
         List<String> usernames = sessionRegistry.getAllPrincipals().stream().filter(principal -> principal instanceof UserDetails)
                 .map(principal -> ((UserDetails) principal).getUsername())
                 .toList();
+        System.out.println(usernames);
         List<SiteUser> users = new ArrayList<>();
         for (String username : usernames) {
             SiteUser user = getByUsername(username);
