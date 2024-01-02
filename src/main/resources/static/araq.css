@@ -594,7 +594,11 @@ a:hover {
     stroke: red;
     stroke-width: 4px;
     fill: transparent;
-    stroke-dasharray: 289; /* 원의 둘레에 맞게 조정 */
-    stroke-dashoffset: 289; /* 초기 상태에서 선이 보이지 않도록 설정 */
+    stroke-dasharray: 289;
+    stroke-dashoffset: 289;
 }
 
+#audioDuration {
+    font-size: small;
+    margin-left: 5px;
+}

@@ -1,5 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
+    <input type="hidden" th:value="${postList}" id="postList">
     <!-- 매칭 추천 -->
     <div class="d-flex">
         <h3 class="highlight"># 매칭 추천</h3>
@@ -70,8 +71,8 @@
                                 </button>
                             </div>
                             <div style="margin-top:auto;">
-                                <button type="button" class="profileBtn w-100 btn 버튼-full"
-                                        th:data-user="${randomUser.username}">프로필 보기
+                                <button type="button" class="viewProfile w-100 btn 버튼-full"
+                                        th:data-value="${randomUser.username}">프로필 보기
                                 </button>
                             </div>
                         </div>
@@ -146,8 +147,8 @@
                                 <div class="arrow-head-right">◀</div>
                                 <div class="xLine-right"></div>
                             </div>
-                            <a class="profileBtn" type="button" href="javascript:void(0)"
-                               th:data-user="${like.likedUser.username}"><img th:src="@{${like.likedUser.image}}" alt=""
+                            <a class="viewProfile" type="button" href="javascript:void(0)"
+                               th:data-value="${like.likedUser.username}"><img th:src="@{${like.likedUser.image}}" alt=""
                                                                               style="width: 50px; height: 50px; border-radius: 50%;"></a>
                         </div>
                         <!-- 요청 받은 사람이 로그인한 유저일 때 -->
@@ -195,8 +196,8 @@
                                 <div class="arrow-head-right">◀</div>
                                 <div class="arrow-line-right"></div>
                             </div>
-                            <a class="profileBtn" type="button" href="javascript:void(0)"
-                               th:data-user="${like.user.username}"><img th:src="@{${like.user.image}}" alt=""
+                            <a class="viewProfile" type="button" href="javascript:void(0)"
+                               th:data-value="${like.user.username}"><img th:src="@{${like.user.image}}" alt=""
                                                                          style="width: 50px; height: 50px; border-radius: 50%;"></a>
                         </div>
                     </div>
@@ -268,6 +269,5 @@
         </div>
     </div>
 </div>
-<input type="hidden" th:value="${postList}" id="postList">
 <script type="text/javascript" th:src="@{/index.js}" layout:fragment="script"></script>
 </html>

@@ -24,8 +24,7 @@
                            class="btn btn-light" id="deleteBtn" href="javascript:void(0)">삭제</a>
                     </div>
                     <input type="hidden" class="reviewStar" th:value="${review.star}">
-                    <img class="card-img-top" style="height:200px;"
-                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI2SCqH0zF2kry1RYzdpNn40dauN-U9i0huw&usqp=CAU">
+                    <img class="card-img-top" style="height:200px;" th:src="@{${review.image}}">
                     <div class="card-header">
                         <div th:text="|${review.writer.nickName}님의 후기|"></div>
                         <div class="d-flex align-items-center justify-content-end">
