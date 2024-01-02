@@ -50,8 +50,13 @@ public class ChatController {
         messageDto.setImage(user.getImage());
         messageDto.setTarget(chatDto.getCode());
 
+        Notification notification = new Notification("채팅 알림",
+                user.getNickName() + "님이 채팅를 보냈습니다.", user.getUsername(), target.getUsername(),
+                "/chat/join/" + chatDto.getCode());
+
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
         simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
+        simpMessagingTemplate.convertAndSend("/topic/notification/" + target.getUsername(), notification);
     }
 
     @MessageMapping("/alert")
@@ -108,7 +113,10 @@ public class ChatController {
         SiteUser user = userService.getByUsername(principal.getName());
         MessageDto messageDto = new MessageDto("chatRequest", user.getNickName(), user.getUsername(), user.getAge(),
                 user.getIntroduce(), user.getImage(), user.getNickName() + "님이 채팅을 신청했습니다.", username);
+        Notification notification = new Notification("채팅 요청", user.getNickName() + "님이 채팅을 신청했습니다.",
+                user.getUsername(), username, "#");
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
+        simpMessagingTemplate.convertAndSend("/topic/notification/" + username, notification);
         return null;
     }
 
