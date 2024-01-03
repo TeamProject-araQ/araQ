@@ -31,7 +31,7 @@ public class RoomService {
     }
 
     public List<Room> getList(SiteUser user) {
-        return roomRepo.findByParticipant1OrParticipant2(user, user);
+        return roomRepo.findByParticipant1OrParticipant2OrderByRecentDateDesc(user, user);
     }
 
     public boolean check(Room room, SiteUser user) {

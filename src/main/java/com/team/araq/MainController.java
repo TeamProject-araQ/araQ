@@ -28,16 +28,13 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
-        if (principal != null) {
-            SiteUser user = this.userService.getByUsername(principal.getName());
-            model.addAttribute("user", user);
-            if(user.getNickName() == null || user.getNickName().trim().isEmpty()){
-                return "redirect:/user/update";
-            }
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.getNickName() == null || user.getNickName().trim().isEmpty()) {
+            return "redirect:/user/update";
         }
         List<Post> postList = this.postService.getList();
-        List<SiteUser> onlines = userService.getActiveUsers();
-        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<SiteUser> onlines = userService.getLoginUsers();
+        onlines.remove(user);
         List<UserLike> likeList = this.likeService.getListByUser(user);
         List<SiteUser> userList = this.userService.getRandomList(user.getGender());
         Map<String, String> likesStatus = new HashMap<>();

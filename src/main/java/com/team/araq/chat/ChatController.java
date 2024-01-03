@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -195,5 +196,17 @@ public class ChatController {
     @MessageMapping("/all/{target}")
     public void handlerAll(@Payload String data, @DestinationVariable("target") String target) {
         simpMessagingTemplate.convertAndSend("/topic/all/" + target, data);
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void ping() {
+        userService.logout(userService.getLoginUsers());
+        simpMessagingTemplate.convertAndSend("/topic/ping", "ping");
+    }
+
+    @MessageMapping("/pong")
+    public void pong(String username) {
+        SiteUser user = userService.getByUsername(username);
+        userService.login(user);
     }
 }
