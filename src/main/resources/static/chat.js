@@ -236,4 +236,10 @@ $(function() {
             }
         });
     });
+
+    $("#chatReportBtn").on('click', function () {
+        $("#reportedUsername").val(target);
+        $("#reportedRoomCode").val(roomCode);
+        $("#report").modal("show");
+    });
 });

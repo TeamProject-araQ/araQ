@@ -105,20 +105,4 @@ $(function () {
         var reportedUsername = $('#reportedUsername');
         reportedUsername.val($(this).data("value"));
     });
-
-    $('.submitBtn').on('click', function () {
-        if ($('#selectReason').val() == '')
-            alert('신고 사유를 선택해주세요.');
-        else if ($('#selectReason').val() == 4) {
-            if ($('#detailReason').val() == '')
-                alert('신고 내용을 입력해주세요.');
-            else {
-                $('#reportForm').submit();
-                alert("신고가 접수되었습니다.");
-            }
-        } else {
-            $('#reportForm').submit();
-            alert("신고가 접수되었습니다.");
-        }
-    });
 });
