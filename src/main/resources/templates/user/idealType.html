@@ -21,15 +21,17 @@
 <div layout:fragment="content" class="container my-3">
     <div style="max-width: 700px; margin: 0 auto;">
         <h3 class="underline my-3">내 이상형</h3>
-        <form action="">
+        <form method="post" th:object="${idealTypeDTO}" id="idealTypeForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <div class="mb-3 border-bottom pb-3">
                 <label for="age" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
                        class="form-label my-2">나이</label>
                 <div class="range-slider">
                     <label for="ageRangeMin" class="form-label">최소 나이</label>
-                    <input type="range" id="ageRangeMin" name="minAge" min="18" max="100" value="20">
-                    <label for="ageRangeMin" class="form-label">최대 나이</label>
-                    <input type="range" id="ageRangeMax" name="maxAge" min="18" max="100" value="30">
+                    <input type="range" id="ageRangeMin" th:field="*{minAge}" min="18" max="100">
+                    <label for="ageRangeMax" class="form-label">최대 나이</label>
+                    <input type="range" id="ageRangeMax" th:field="*{maxAge}" min="18" max="100">
                     <div class="slider-values">
                         <span id="ageMin">20</span> - <span id="ageMax">30</span> 세
                     </div>
@@ -40,19 +42,23 @@
                        class="form-label my-2">음주</label>
                 <div class="d-flex justify-content-around">
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="drinking" id="none" autocomplete="off">
+                        <input type="radio" class="btn-check" id="none" autocomplete="off" value="전혀"
+                               th:field="*{drinking}">
                         <label class="btn 버튼" for="none">전혀</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="drinking" id="sometimes" autocomplete="off">
+                        <input type="radio" class="btn-check" value="가끔" th:field="*{drinking}" id="sometimes"
+                               autocomplete="off">
                         <label class="btn 버튼" for="sometimes">가끔</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="drinking" id="often" autocomplete="off">
+                        <input type="radio" class="btn-check" value="자주" th:field="*{drinking}" id="often"
+                               autocomplete="off">
                         <label class="btn 버튼" for="often">자주</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="drinking" id="everyday" autocomplete="off">
+                        <input type="radio" class="btn-check" value="매일" th:field="*{drinking}" id="everyday"
+                               autocomplete="off">
                         <label class="btn 버튼" for="everyday">매일</label>
                     </div>
                 </div>
@@ -62,15 +68,18 @@
                        class="form-label my-2">학력</label>
                 <div class="d-flex justify-content-around">
                     <div style="width: 32%;">
-                        <input type="radio" class="btn-check" name="drinking" id="고졸" autocomplete="off">
+                        <input type="radio" class="btn-check" value="고등학교 졸업" th:field="*{education}" id="고졸"
+                               autocomplete="off">
                         <label class="btn 버튼" for="고졸">고등학교 졸업</label>
                     </div>
                     <div style="width: 32%;">
-                        <input type="radio" class="btn-check" name="drinking" id="대재" autocomplete="off">
+                        <input type="radio" class="btn-check" value="대학교 재학" th:field="*{education}" id="대재"
+                               autocomplete="off">
                         <label class="btn 버튼" for="대재">대학교 재학</label>
                     </div>
                     <div style="width: 32%;">
-                        <input type="radio" class="btn-check" name="drinking" id="대졸" autocomplete="off">
+                        <input type="radio" class="btn-check" value="대학교 졸업" th:field="*{education}" id="대졸"
+                               autocomplete="off">
                         <label class="btn 버튼" for="대졸">대학교 졸업</label>
                     </div>
                 </div>
@@ -81,12 +90,11 @@
                 <div class="d-flex align-items-center justify-content-around">
                     <div>
                         <label for="minHeight" class="form-label">최소 키(cm)</label>
-                        <input type="number" class="form-control" id="minHeight">
+                        <input type="number" class="form-control" id="minHeight" th:field="*{minHeight}">
                     </div>
-                    <div>~</div>
                     <div>
                         <label for="maxHeight" class="form-label">최대 키(cm)</label>
-                        <input type="number" class="form-control" id="maxHeight">
+                        <input type="number" class="form-control" id="maxHeight" th:field="*{maxHeight}">
                     </div>
                 </div>
             </div>
@@ -95,11 +103,13 @@
                        class="form-label my-2">흡연</label>
                 <div class="d-flex justify-content-around">
                     <div style="width: 49%;">
-                        <input type="radio" class="btn-check" name="smoking" id="noSmoking" autocomplete="off">
+                        <input type="radio" class="btn-check" value="비흡연" id="noSmoking"
+                               autocomplete="off" th:field="*{smoking}">
                         <label class="btn 버튼" for="noSmoking">비흡연</label>
                     </div>
                     <div style="width: 49%;">
-                        <input type="radio" class="btn-check" name="smoking" id="yesSmoking" autocomplete="off">
+                        <input type="radio" class="btn-check" value="흡연" id="yesSmoking"
+                               autocomplete="off" th:field="*{smoking}">
                         <label class="btn 버튼" for="yesSmoking">흡연</label>
                     </div>
                 </div>
@@ -109,22 +119,29 @@
                        class="form-label my-2">종교</label>
                 <div class="d-flex justify-content-around">
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="religion" id="Christian" autocomplete="off">
+                        <input type="radio" class="btn-check" value="기독교" th:field="*{religion}" id="Christian"
+                               autocomplete="off">
                         <label class="btn 버튼" for="Christian">기독교</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="religion" id="Catholic" autocomplete="off">
+                        <input type="radio" class="btn-check" value="천주교" th:field="*{religion}" id="Catholic"
+                               autocomplete="off">
                         <label class="btn 버튼" for="Catholic">천주교</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="religion" id="buddhism" autocomplete="off">
+                        <input type="radio" class="btn-check" value="불교" th:field="*{religion}" id="buddhism"
+                               autocomplete="off">
                         <label class="btn 버튼" for="buddhism">불교</label>
                     </div>
                     <div style="width: 24%;">
-                        <input type="radio" class="btn-check" name="religion" id="atheism" autocomplete="off">
+                        <input type="radio" class="btn-check" value="무교" th:field="*{religion}" id="atheism"
+                               autocomplete="off">
                         <label class="btn 버튼" for="atheism">무교</label>
                     </div>
                 </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="버튼-full btn saveBtn" type="button">저장</button>
             </div>
         </form>
     </div>
@@ -145,6 +162,17 @@
 
         $("#ageRangeMin, #ageRangeMax").on("input", setSliderHandles);
         setSliderHandles();
+
+        $('.saveBtn').on('click', function () {
+            if ($('#ageRangeMin').val() === $('#ageRangeMax').val())
+                alert("최소 나이와 최대 나이가 같습니다.");
+            else if ($('#minHeight').val() >= $('#maxHeight').val())
+                alert("최소 키와 최대 키를 확인해주세요.");
+            else {
+                    $('#idealTypeForm').submit();
+            }
+        });
+
     });
 </script>
 </html>
