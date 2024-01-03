@@ -1,7 +1,7 @@
 body, ul, li {
-    margin:0;
-    list-style:none;
-    padding:0;
+    margin: 0;
+    list-style: none;
+    padding: 0;
 }
 
 @font-face {
@@ -29,25 +29,25 @@ html, body {
 }
 
 a {
-    color:inherit;
-    text-decoration:none;
+    color: inherit;
+    text-decoration: none;
 }
 
 a:hover {
-    color:rgb(91, 79, 113);
+    color: rgb(91, 79, 113);
 }
 
 .menu {
-    position:relative;
-    width:13%;
-    background:white;
+    position: relative;
+    width: 13%;
+    background: white;
 }
 
 .option {
-    margin-bottom:5px;
-    color:dimgray;
-    font-size:13pt;
-    font-weight:bold;
+    margin-bottom: 5px;
+    color: dimgray;
+    font-size: 13pt;
+    font-weight: bold;
     position: relative;
 }
 
@@ -68,74 +68,74 @@ a:hover {
 }
 
 .depth {
-    position:absolute;
-    width:100%;
-    background:white;
-    z-index:99;
+    position: absolute;
+    width: 100%;
+    background: white;
+    z-index: 99;
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.7s ease-in-out;
 }
 
 .depth > li {
-    padding:10px;
-    font-size:11pt;
+    padding: 10px;
+    font-size: 11pt;
 }
 
 .depth > li:hover {
-    background:rgb(231,227,236);
+    background: rgb(231, 227, 236);
 }
 
 .menu:hover .depth {
-  max-height: 500px;
+    max-height: 500px;
 }
 
 .you {
-	position: relative;
-	background: rgb(223, 219, 230);
-	border-radius: .4em;
-	width:80%;
-	margin-right:auto;
-	padding:15px;
+    position: relative;
+    background: rgb(223, 219, 230);
+    border-radius: .4em;
+    width: 80%;
+    margin-right: auto;
+    padding: 15px;
 }
 
 .you:after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 10%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-top-color: rgb(223, 219, 230);
-	border-bottom: 0;
-	border-left: 0;
-	margin-left: -10px;
-	margin-bottom: -20px;
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: rgb(223, 219, 230);
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-bottom: -20px;
 }
 
 .me {
-	position: relative;
-	background: rgb(168, 156, 186);
-	border-radius: .4em;
-	width:80%;
-	margin-left:auto;
-	padding:15px;
-	text-align:end;
+    position: relative;
+    background: rgb(168, 156, 186);
+    border-radius: .4em;
+    width: 80%;
+    margin-left: auto;
+    padding: 15px;
+    text-align: end;
 }
 
 .me:after {
-	content: '';
-	position: absolute;
-	bottom: 0;
-	left: 90%;
-	width: 0;
-	height: 0;
-	border: 20px solid transparent;
-	border-top-color: rgb(168, 156, 186);
-	border-bottom: 0;
-	border-right: 0;
-	margin-left: -10px;
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 90%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: rgb(168, 156, 186);
+    border-bottom: 0;
+    border-right: 0;
+    margin-left: -10px;
     margin-bottom: -20px;
 }
 
@@ -169,7 +169,7 @@ a:hover {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    display:none;
+    display: none;
 }
 
 .reviewCard:hover .cardOverlay {
@@ -177,7 +177,7 @@ a:hover {
 }
 
 .reviewCard:hover .button {
-    display:block;
+    display: block;
     z-index: 3;
 }
 
@@ -212,223 +212,224 @@ a:hover {
 }
 
 .chatBox {
-    display:flex;
-    margin:10px 0;
+    display: flex;
+    margin: 10px 0;
 }
 
 .chatBox > img {
-    width:50px;
-    height:50px;
-    border-radius:10px;
-    margin:0 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin: 0 10px;
 }
 
 .chatBox .card > p {
-    padding:2px 10px;
-    margin:0;
-    white-space:pre-line;
+    padding: 2px 10px;
+    margin: 0;
+    white-space: pre-line;
 }
 
 .chatBox > div {
-    width:100%;
+    width: 100%;
 }
 
-.chatBox .card{
-    display:inline-block;
-    max-width:70%;
+.chatBox .card {
+    display: inline-block;
+    max-width: 70%;
 }
 
 .chatBox > div > p {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     font-weight: bold;
 }
 
 .chatBox .confirm {
-    position:absolute;
-    z-index:1;
-    top:-5px;
-    left:-5px;
-    background:rgb(131, 115, 157);
-    width:10px;
-    height:10px;
-    border-radius:50%;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: -5px;
+    background: rgb(131, 115, 157);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
 }
 
 .버튼 {
-    border:1px solid rgb(146, 132, 168);
-    color:rgb(146, 132, 168);
-    background:white;
+    border: 1px solid rgb(146, 132, 168);
+    color: rgb(146, 132, 168);
+    background: white;
 }
 
 .버튼:hover {
-    border:1px solid rgb(141, 128, 166);
-    color:white;
-    background:rgb(141, 128, 166);
+    border: 1px solid rgb(141, 128, 166);
+    color: white;
+    background: rgb(141, 128, 166);
 }
 
 .버튼-full {
-    border:1px solid rgb(141, 128, 166);
-    color:white;
-    background:rgb(141, 128, 166);
+    border: 1px solid rgb(141, 128, 166);
+    color: white;
+    background: rgb(141, 128, 166);
 }
 
 .버튼-full:hover {
-    border:1px solid rgb(96, 83, 119);
-    background:rgb(96, 83, 119);
-    color:white;
+    border: 1px solid rgb(96, 83, 119);
+    background: rgb(96, 83, 119);
+    color: white;
 }
 
-.ourColor{
-    background:#d8d3e0;
+.ourColor {
+    background: #d8d3e0;
 }
 
 #chatBoard .date {
-    width:150px;
-    margin:auto;
-    text-align:center;
+    width: 150px;
+    margin: auto;
+    text-align: center;
 }
 
 #chatImageInput {
-    display:none;
+    display: none;
 }
 
 #imagePreviewForm {
-    width:700px;
-    margin:auto;
-    display:none;
-    text-align:center;
+    width: 700px;
+    margin: auto;
+    display: none;
+    text-align: center;
 }
 
 #imagePreview > img {
-    margin:0 10px;
+    margin: 0 10px;
 }
 
 .kakao {
-    background:white;;
+    background: white;;
 }
 
 .kakao:hover {
-    background:rgb(255, 235, 0);
+    background: rgb(255, 235, 0);
 }
 
 .kakao.active {
-    background:rgb(236, 218, 0);
+    background: rgb(236, 218, 0);
     border: none;
 }
 
 .toss {
-    background:white;
+    background: white;
 }
 
 .toss:hover {
-    background:rgb(0, 77, 255);
-    color:white;
+    background: rgb(0, 77, 255);
+    color: white;
 }
 
 .toss.active {
-    background:rgb(0, 58, 196);
-    color:white;
+    background: rgb(0, 58, 196);
+    color: white;
 }
 
 .phone {
-    background:white;
+    background: white;
 }
 
 .phone:hover {
-    background:rgb(57, 50, 144);
-    color:white;
+    background: rgb(57, 50, 144);
+    color: white;
 }
 
 .phone.active {
-    background:rgb(45, 39, 112);
-    color:white;
+    background: rgb(45, 39, 112);
+    color: white;
 }
 
 .bubble {
-    padding:20px;
-    border-bottom:1px solid lightgray;
+    padding: 20px;
+    border-bottom: 1px solid lightgray;
 }
 
 .bubble:hover {
-    background:rgba(219, 214, 226, 0.6);
+    background: rgba(219, 214, 226, 0.6);
 }
 
 .뱃지 {
-    border:1px solid rgb(103, 88, 126);
-    font-family:'nanum-semiBold';
-    color:rgb(103, 88, 126);
-    padding:5px 15px 5px 15px;
-    border-radius:10px;
+    border: 1px solid rgb(103, 88, 126);
+    font-family: 'nanum-semiBold';
+    color: rgb(103, 88, 126);
+    padding: 5px 15px 5px 15px;
+    border-radius: 10px;
 }
 
 .underline-start {
-  display: inline-block;
-  position: relative;
-  text-decoration: none;
-  cursor: pointer;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .underline-start::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 2px;
-  background: #d8d3e0;
-  transition: width .3s;
-  position: absolute;
-  bottom: -5px;
-  left: 0;
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #d8d3e0;
+    transition: width .3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
 }
 
 .underline-start:hover::after {
-  width: 100%;
+    width: 100%;
 }
 
 .highlight {
-  display: inline-block;
-  position: relative;
-  color: #000;
-  cursor: pointer;
-  overflow: hidden;
-  background: transparent;
-  transition: color .3s;
-  border-radius:10px;
-  padding:5px 10px 5px 10px;
+    display: inline-block;
+    position: relative;
+    color: #000;
+    cursor: pointer;
+    overflow: hidden;
+    background: transparent;
+    transition: color .3s;
+    border-radius: 10px;
+    padding: 5px 10px 5px 10px;
 }
 
 .highlight::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background: url('/image/araQ/crayon.png');
-  width: 0%;
-  transition: width .3s;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: url('/image/araQ/crayon.png');
+    width: 0%;
+    transition: width .3s;
 }
 
 .highlight:hover::after {
-  width: 100%;
+    width: 100%;
 }
 
 .truncate {
-  overflow: hidden;
-  white-space: normal;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  word-break: keep-all;   // 문단으로 끊어져서 줄바꿈 됨
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+/ / 문단으로 끊어져서 줄바꿈 됨
 }
 
 .roomConfirm {
-    background:rgb(131, 115, 157);
-    width:10px;
-    height:10px;
-    border-radius:50%;
+    background: rgb(131, 115, 157);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
 }
 
 .arrow-container {
@@ -451,7 +452,7 @@ a:hover {
     margin-left: -5px;
     transform: translateX(-100%);
     transition: transform 0.3s ease-out;
-    color:rgb(190, 182, 203);
+    color: rgb(190, 182, 203);
 }
 
 .arrow-line-right {
@@ -489,7 +490,7 @@ a:hover {
 .matchResult:hover .arrow-line-left,
 .matchResult:hover .arrow-head-left,
 .matchResult:hover .arrow-line-right,
-.matchResult:hover .arrow-head-right{
+.matchResult:hover .arrow-head-right {
     transform: translateX(0);
 }
 
@@ -620,4 +621,14 @@ table {
 .slider-values {
     text-align: center;
     margin-top: 10px;
+}
+
+#plazaBoard {
+    height: 80vh;
+    position: relative;
+}
+
+.avatar > img {
+    width: 50px;
+    height: 50px;
 }

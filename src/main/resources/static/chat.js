@@ -1,6 +1,6 @@
 $(function() {
-    var socket = new SockJS("/ws");
-    var stompClient = Stomp.over(socket);
+    const socket = new SockJS("/ws");
+    const stompClient = Stomp.over(socket);
     stompClient.debug = null;
 
     $("#sendChatForm > textarea").on('keydown', function(e) {
@@ -80,7 +80,7 @@ $(function() {
         });
 
         stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-            var data = JSON.parse(message.body);
+            const data = JSON.parse(message.body);
             if (data.code === "confirm") {
                 if (data.target === user) $(".confirm").remove();
             }
