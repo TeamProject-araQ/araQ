@@ -1,5 +1,6 @@
 package com.team.araq.user;
 
+import com.team.araq.idealType.IdealType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -259,5 +260,29 @@ public class UserService {
     public void openVoice(SiteUser user1, SiteUser user2) {
         user1.getOpenVoice().add(user2);
         this.userRepository.save(user1);
+    }
+
+    public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
+        return this.userRepository.findMatchingUsersByIdealType(idealType, gender);
+    }
+
+    public List<SiteUser> getBySmoking(String gender, String smoking) {
+        return this.userRepository.findByGenderNotAndSmoking(gender, smoking);
+    }
+
+    public List<SiteUser> getByDrinking(String gender, String drinking) {
+        return this.userRepository.findByGenderNotAndDrinking(gender, drinking);
+    }
+
+    public List<SiteUser> getByHobby(String gender, String hobby) {
+        return this.userRepository.findByGenderNotAndHobbyContaining(gender, hobby);
+    }
+
+    public List<SiteUser> getByMbti(String gender, String mbti) {
+        return this.userRepository.findByGenderNotAndMbti(gender, mbti);
+    }
+
+    public List<SiteUser> getByReligion(String gender, String religion) {
+        return this.userRepository.findByGenderNotAndReligion(gender, religion);
     }
 }

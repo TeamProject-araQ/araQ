@@ -5,9 +5,20 @@
             <img src="/image/etc/checklist.jpg" alt="" style="height: 300px; width: auto;">
             <h2 class="my-3 text-center">연애 취향 조사를 시작합니다.</h2>
             <div class="d-flex justify-content-center">
-                <a th:href="@{/taste/check}" class="btn btn-lg 버튼">시작하기 →</a>
+                <a th:data-uri="@{/taste/check}" class="btn btn-lg 버튼" id="tasteLink">시작하기 →</a>
             </div>
         </div>
     </div>
+    <input type="hidden" id="userTaste" th:value="${user.taste}">
 </div>
+<script layout:fragment="script">
+    $('#tasteLink').on('click', function () {
+        if ($('#userTaste').val() == null || $('#userTaste').val() === "")
+            location.href = $(this).data("uri");
+        else {
+            if (confirm("이미 취향 조사가 끝났습니다. 결과를 수정하시겠습니까?"))
+                location.href = "/taste/modify";
+        }
+    });
+</script>
 </html>
