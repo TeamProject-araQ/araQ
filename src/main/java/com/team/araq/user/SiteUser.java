@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
+import com.team.araq.idealType.IdealType;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.like.UserLike;
 import com.team.araq.pay.History;
@@ -143,4 +144,7 @@ public class SiteUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<History> historyList;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private IdealType idealType;
 }

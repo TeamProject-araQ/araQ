@@ -1,0 +1,150 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        .btn-check:checked + .버튼, .btn-check:checked + .버튼:focus, .btn-check:checked + .버튼:hover {
+            background-color: rgb(141, 128, 166);
+            color: #fff;
+            border-color: rgb(141, 128, 166);
+        }
+
+        .버튼:hover {
+            background: rgb(186, 177, 201) !important;
+            color: white !important;
+            border: 1px solid rgb(186, 177, 201) !important;
+        }
+
+        .버튼 {
+            width: 100%;
+        }
+    </style>
+</head>
+<div layout:fragment="content" class="container my-3">
+    <div style="max-width: 700px; margin: 0 auto;">
+        <h3 class="underline my-3">내 이상형</h3>
+        <form action="">
+            <div class="mb-3 border-bottom pb-3">
+                <label for="age" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">나이</label>
+                <div class="range-slider">
+                    <label for="ageRangeMin" class="form-label">최소 나이</label>
+                    <input type="range" id="ageRangeMin" name="minAge" min="18" max="100" value="20">
+                    <label for="ageRangeMin" class="form-label">최대 나이</label>
+                    <input type="range" id="ageRangeMax" name="maxAge" min="18" max="100" value="30">
+                    <div class="slider-values">
+                        <span id="ageMin">20</span> - <span id="ageMax">30</span> 세
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 border-bottom pb-3">
+                <label for="drinking" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">음주</label>
+                <div class="d-flex justify-content-around">
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="drinking" id="none" autocomplete="off">
+                        <label class="btn 버튼" for="none">전혀</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="drinking" id="sometimes" autocomplete="off">
+                        <label class="btn 버튼" for="sometimes">가끔</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="drinking" id="often" autocomplete="off">
+                        <label class="btn 버튼" for="often">자주</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="drinking" id="everyday" autocomplete="off">
+                        <label class="btn 버튼" for="everyday">매일</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 border-bottom pb-3">
+                <label for="education" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">학력</label>
+                <div class="d-flex justify-content-around">
+                    <div style="width: 32%;">
+                        <input type="radio" class="btn-check" name="drinking" id="고졸" autocomplete="off">
+                        <label class="btn 버튼" for="고졸">고등학교 졸업</label>
+                    </div>
+                    <div style="width: 32%;">
+                        <input type="radio" class="btn-check" name="drinking" id="대재" autocomplete="off">
+                        <label class="btn 버튼" for="대재">대학교 재학</label>
+                    </div>
+                    <div style="width: 32%;">
+                        <input type="radio" class="btn-check" name="drinking" id="대졸" autocomplete="off">
+                        <label class="btn 버튼" for="대졸">대학교 졸업</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 border-bottom pb-3">
+                <label for="height" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">키</label>
+                <div class="d-flex align-items-center justify-content-around">
+                    <div>
+                        <label for="minHeight" class="form-label">최소 키(cm)</label>
+                        <input type="number" class="form-control" id="minHeight">
+                    </div>
+                    <div>~</div>
+                    <div>
+                        <label for="maxHeight" class="form-label">최대 키(cm)</label>
+                        <input type="number" class="form-control" id="maxHeight">
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 border-bottom pb-3">
+                <label for="smoking" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">흡연</label>
+                <div class="d-flex justify-content-around">
+                    <div style="width: 49%;">
+                        <input type="radio" class="btn-check" name="smoking" id="noSmoking" autocomplete="off">
+                        <label class="btn 버튼" for="noSmoking">비흡연</label>
+                    </div>
+                    <div style="width: 49%;">
+                        <input type="radio" class="btn-check" name="smoking" id="yesSmoking" autocomplete="off">
+                        <label class="btn 버튼" for="yesSmoking">흡연</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 border-bottom pb-3">
+                <label for="religion" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
+                       class="form-label my-2">종교</label>
+                <div class="d-flex justify-content-around">
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="religion" id="Christian" autocomplete="off">
+                        <label class="btn 버튼" for="Christian">기독교</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="religion" id="Catholic" autocomplete="off">
+                        <label class="btn 버튼" for="Catholic">천주교</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="religion" id="buddhism" autocomplete="off">
+                        <label class="btn 버튼" for="buddhism">불교</label>
+                    </div>
+                    <div style="width: 24%;">
+                        <input type="radio" class="btn-check" name="religion" id="atheism" autocomplete="off">
+                        <label class="btn 버튼" for="atheism">무교</label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" layout:fragment="script">
+    $(function () {
+        function setSliderHandles() {
+            var $minSlider = $("#ageRangeMin");
+            var $maxSlider = $("#ageRangeMax");
+            var minValue = parseInt($minSlider.val());
+            var maxValue = parseInt($maxSlider.val());
+            if (minValue > maxValue - 1) {
+                $minSlider.val(maxValue - 1);
+            }
+            $("#ageMin").text($minSlider.val());
+            $("#ageMax").text($maxSlider.val());
+        }
+
+        $("#ageRangeMin, #ageRangeMax").on("input", setSliderHandles);
+        setSliderHandles();
+    });
+</script>
+</html>

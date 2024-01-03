@@ -608,3 +608,16 @@ table {
     table-layout: fixed;
     width: 100%;
 }
+
+.range-slider {
+    position: relative;
+}
+
+.range-slider input[type=range] {
+    width: 100%;
+}
+
+.slider-values {
+    text-align: center;
+    margin-top: 10px;
+}
