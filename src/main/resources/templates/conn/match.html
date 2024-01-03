@@ -1,63 +1,95 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <div id="carouselExample" class="carousel slide">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="card mb-3">
-                    <div th:text="|총 ${#lists.size(userList)}명의 유저가 추천되었습니다.|" style="height:800px;"></div>
+    <div class="matchCon"
+         style="margin: 0; padding: 0; height: 100%; display: flex; justify-content: center; align-items: center;">
+        <div>
+            <h3 class="underline my-3">내 위치 주변 매칭</h3>
+            <div class="my-3 text-center">
+                <div class="d-flex justify-content-center">
+                    <img src="/image/quote/left.png" alt="" style="height: 20px; width: auto;">
+                    <h5 th:text="${address}" class="mx-1"></h5>
+                    <img src="/image/quote/right.png" alt="" style="height: 20px; width: auto;">
                 </div>
+                <div class="ms-1" th:text="|에 거주하는 ${#lists.size(userList)}명의 회원이 추천되었습니다.|"></div>
             </div>
-            <div class="carousel-item" th:each="user : ${userList}">
-                <div class="card mb-3">
-                    <div class="row g-0">
-                        <div class="col-md-8">
-                            <img th:src="@{${user.image}}" class="img-fluid rounded-start" alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-body">
-                                <h1 class="card-title" th:text="${user.nickName}"></h1>
-                                <p class="card-text" th:text="${user.age}"></p>
-                                <a href="javascript:void(0)" class="btn btn-primary chatRequestBtn"
-                                   th:data-value="${user.username}">채팅 신청</a>
+            <div id="carouselExample" class="carousel slide mt-5" style="max-width: 700px;">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" th:each="user : ${userList}">
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-7">
+                                    <img th:src="@{${user.image}}" class="img-fluid rounded-start" alt="...">
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="card-body" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                                        <h3 class="card-title text-center my-2"
+                                            style="font-family: 'nanum-semiBold',serif"
+                                            th:text="${user.nickName}"></h3>
+                                        <div>
+                                            <div class="my-2">
+                                                <button type="button" class="araQBtn btn 버튼 w-100"
+                                                        th:if="${likesStatus[user.username] == null}"
+                                                        th:data-nick="${user.nickName}" th:data-user="${user.username}">
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-suit-heart-fill me-1"
+                                                             viewBox="0 0 16 16">
+                                                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                                                        </svg>
+                                                        <div>아라큐</div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-outline-dark w-100" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal">
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-file-person me-1"></i>
+                                                        <div>프로필</div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon text-dark" aria-hidden="false"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
 </div>
 <script layout:fragment="script">
-    $(function() {
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
-
-        $(".chatRequestBtn").on('click', function() {
-            if (confirm("채팅 신청을 하시겠습니까?")) {
-                var dataValue = $(this).data("value");
-
+    $(function () {
+        $('.araQBtn').on('click', function () {
+            var nickname = $(this).data("nick");
+            var username = $(this).data("user");
+            if (confirm(nickname + "님에게 아라큐 요청을 보냅니다!")) {
                 $.ajax({
-                    url: "/chat/request",
+                    url: "/like/request",
                     type: "POST",
                     headers: {
                         [csrfHeader]: csrfToken
                     },
-                    contentType:"text/plain",
-                    data: dataValue,
-                    success: function() {
-                        alert("성공적으로 요청이 완료되었습니다.");
+                    contentType: "text/plain",
+                    data: username,
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
                     },
-                    error: function(err) {
-                        alert("요청이 실패하였습니다.");
+                    error: function (error) {
+                        console.error(error);
                     }
                 });
             }
