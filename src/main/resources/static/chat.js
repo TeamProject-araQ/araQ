@@ -214,7 +214,6 @@ $(function() {
     });
 
     $(".chatWriterBtn").on('click', function() {
-        $("#profileModal").modal("show");
-        // todo 채팅대상 프로필 해야함
+        showProfile(target);
     });
 });

@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface RoomRepo extends JpaRepository<Room, Integer> {
     Optional<Room> findByCode(String code);
-    List<Room> findByParticipant1OrParticipant2(SiteUser user1, SiteUser user2);
+    List<Room> findByParticipant1OrParticipant2OrderByRecentDateDesc(SiteUser user1, SiteUser user2);
 }
