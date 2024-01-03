@@ -33,7 +33,7 @@ public class MainController {
             return "redirect:/user/update";
         }
         List<Post> postList = this.postService.getList();
-        List<SiteUser> onlines = userService.getActiveUsers();
+        List<SiteUser> onlines = userService.getLoginUsers();
         onlines.remove(user);
         List<UserLike> likeList = this.likeService.getListByUser(user);
         List<SiteUser> userList = this.userService.getRandomList(user.getGender());

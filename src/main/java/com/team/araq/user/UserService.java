@@ -10,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,8 +35,6 @@ public class UserService {
     private String uploadPath = "C:/uploads/user";
 
     private String audioPath = "C:/uploads/audio";
-
-    private final SessionRegistry sessionRegistry;
 
 
     private Specification<SiteUser> search(String kw) {
@@ -263,17 +259,5 @@ public class UserService {
     public void openVoice(SiteUser user1, SiteUser user2) {
         user1.getOpenVoice().add(user2);
         this.userRepository.save(user1);
-    }
-    public List<SiteUser> getActiveUsers() {
-        List<String> usernames = sessionRegistry.getAllPrincipals().stream().filter(principal -> principal instanceof UserDetails)
-                .map(principal -> ((UserDetails) principal).getUsername())
-                .toList();
-        System.out.println(usernames);
-        List<SiteUser> users = new ArrayList<>();
-        for (String username : usernames) {
-            SiteUser user = getByUsername(username);
-            users.add(user);
-        }
-        return users;
     }
 }

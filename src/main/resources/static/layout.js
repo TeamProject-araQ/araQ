@@ -19,6 +19,9 @@ $(function () {
                 if (r === "granted") alert("푸시 알람이 설정되었습니다.");
             });
         }
+        stompClient.subscribe("/topic/ping", function () {
+            stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
+        });
 
         stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function (message) {
             const data = JSON.parse(message.body);
