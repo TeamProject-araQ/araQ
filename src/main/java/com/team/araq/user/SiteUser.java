@@ -146,5 +146,6 @@ public class SiteUser {
     private List<History> historyList;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private IdealType idealType;
 }

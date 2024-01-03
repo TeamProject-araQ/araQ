@@ -117,16 +117,16 @@ $(document).ready(function () {
     };
 
     $('#tasteLink').on('click', function () {
-        if ($('#userTaste').val() == null)
+        if ($('#userTaste').val() == null || $('#userTaste').val() === "")
             location.href = $(this).data("uri");
         else {
             if (confirm("이미 취향 조사가 끝났습니다. 결과를 수정하시겠습니까?"))
-                location.href = "/";
+                location.href = "/taste/modify";
         }
     });
 
     $('#idealTypeLink').on('click', function () {
-        if ($('#userIdealType').val() == null)
+        if ($('#userIdealType').val() == null || $('#userIdealType').val() === "")
             location.href = $(this).data("uri");
         else {
             if (confirm("이미 이상형 선택이 끝났습니다. 정보를 수정하시겠습니까?"))

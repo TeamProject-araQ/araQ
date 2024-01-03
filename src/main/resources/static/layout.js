@@ -1,4 +1,12 @@
 $(function () {
+
+    $('#idealTypeMatchLink').on('click', function () {
+        if ($('#userIdealType').val() === "") {
+            if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
+                location.href = "/idealType/create";
+        } else location.href = $(this).data("uri");
+    });
+
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
     stompClient.debug = null;
@@ -309,9 +317,8 @@ $(function () {
                 if (data === true) {
                     if (myAudio.paused) myAudio.play();
                     else myAudio.pause();
-                } else
-                    if (confirm("500 버블을 사용하여 음성을 들으시겠습니까?"))
-                        initiatePayment();
+                } else if (confirm("500 버블을 사용하여 음성을 들으시겠습니까?"))
+                    initiatePayment();
             },
             error: function (err) {
                 console.log(err);
@@ -341,6 +348,7 @@ $(function () {
         });
     }
 });
+
 function showProfile(username) {
     $.ajax({
         url: "/user/getInfo",
@@ -362,7 +370,7 @@ function showProfile(username) {
                 var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
                 var durationElement = $("#profileModal #audioDuration");
 
-                audioElement.ontimeupdate = function() {
+                audioElement.ontimeupdate = function () {
                     var currentMinutes = Math.floor(audioElement.currentTime / 60);
                     var currentSeconds = Math.floor(audioElement.currentTime - currentMinutes * 60);
                     durationElement.text(pad(currentMinutes) + ":" + pad(currentSeconds));

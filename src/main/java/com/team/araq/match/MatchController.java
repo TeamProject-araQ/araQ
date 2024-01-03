@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/match")
@@ -42,12 +40,53 @@ public class MatchController {
         model.addAttribute("likeList", likeList);
         model.addAttribute("likesStatus", likesStatus);
         model.addAttribute("address", addressSplit);
-        return "conn/match";
+        return "conn/around";
     }
 
-    @GetMapping("/personality")
-    public String personality() {
-        return "conn/match";
+    @GetMapping("/idealType")
+    public String idealType(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<SiteUser> userList = this.userService.getByIdealType(user.getIdealType(), user.getGender());
+        List<UserLike> likeList = this.likeService.getListByUser(user);
+        Map<String, String> likesStatus = new HashMap<>();
+        for (SiteUser siteUser : userList) {
+            String status = likeService.checkStatus(user, siteUser);
+            likesStatus.put(siteUser.getUsername(), status);
+        }
+        model.addAttribute("userList", userList);
+        model.addAttribute("likeList", likeList);
+        model.addAttribute("likesStatus", likesStatus);
+        return "conn/idealType";
+    }
+
+    @GetMapping("/personalityType")
+    public String personalityType(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<SiteUser> smokingList = this.userService.getBySmoking(user.getGender(), user.getSmoking());
+        List<SiteUser> drinkingList = this.userService.getByDrinking(user.getGender(), user.getDrinking());
+        List<SiteUser> hobbyList = this.userService.getByHobby(user.getGender(), user.getHobby());
+        List<SiteUser> mbtiList = this.userService.getByMbti(user.getGender(), user.getMbti());
+        List<SiteUser> religionList = this.userService.getByReligion(user.getGender(), user.getReligion());
+        List<UserLike> likeList = this.likeService.getListByUser(user);
+        Set<SiteUser> uniqueUsers = new HashSet<>();
+        uniqueUsers.addAll(smokingList);
+        uniqueUsers.addAll(drinkingList);
+        uniqueUsers.addAll(hobbyList);
+        uniqueUsers.addAll(mbtiList);
+        uniqueUsers.addAll(religionList);
+        Map<String, String> likesStatus = new HashMap<>();
+        for (SiteUser siteUser : uniqueUsers) {
+            String status = likeService.checkStatus(user, siteUser);
+            likesStatus.put(siteUser.getUsername(), status);
+        }
+        model.addAttribute("smokingList", smokingList);
+        model.addAttribute("drinkingList", drinkingList);
+        model.addAttribute("hobbyList", hobbyList);
+        model.addAttribute("mbtiList", mbtiList);
+        model.addAttribute("religionList", religionList);
+        model.addAttribute("likeList", likeList);
+        model.addAttribute("likesStatus", likesStatus);
+        return "conn//personalityType";
     }
 
 }
