@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -124,6 +125,8 @@ public class ChatController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@RequestBody String code) {
+        File file = new File("C:/uploads/chat/" + code);
+        if (file.exists()) deleteFiles(file);
         roomService.delete(roomService.get(code));
         return null;
     }
@@ -160,7 +163,7 @@ public class ChatController {
         roomService.setRecent(room, chat.getCreateDate());
         roomService.setConfirm(room, target.getUsername());
 
-        String dirPath = "C:/uploads/chat/" + chat.getId();
+        String dirPath = "C:/uploads/chat/" + room.getCode() + "/" + chat.getId();
         File dir = new File(dirPath);
         List<String> images = new ArrayList<>();
 
@@ -170,7 +173,7 @@ public class ChatController {
             String filename = file.getOriginalFilename();
             File image = new File(dirPath + "/" + filename);
             file.transferTo(image);
-            images.add("/chat/image/" + chat.getId() + "/" + filename);
+            images.add("/chat/image/" + room.getCode() + "/" + chat.getId() + "/" + filename);
         }
 
         chatService.setImages(chat, images);
@@ -208,5 +211,14 @@ public class ChatController {
     public void pong(String username) {
         SiteUser user = userService.getByUsername(username);
         userService.login(user);
+    }
+
+    public void deleteFiles(File file) {
+        if (file.isDirectory()) {
+            for (File subfile : Objects.requireNonNull(file.listFiles())) {
+                deleteFiles(subfile);
+            }
+        }
+        file.delete();
     }
 }

@@ -215,23 +215,6 @@ $(function () {
         });
     });
 
-    $("#test").on('click', function () {
-        $("#voiceChatModal").modal("show");
-
-        let width = 0;
-        let count = 60;
-        const interval = setInterval(function () {
-            width += 1.67;
-            count -= 1;
-            $("#voiceChatModal .progress-bar").css("width", width + "%");
-            $("#voiceChatModal .progress-bar").text(count);
-            if (width >= 100) {
-                clearInterval(interval);
-                $("#voiceChatModal .closeBtn").click();
-            }
-        }, 1000);
-    });
-
     $("#voiceChatModal .closeBtn").on('click', function () {
         pc.close();
         pc = null;
@@ -239,6 +222,22 @@ $(function () {
         $("#voiceChatModal").modal("hide");
         alert("보이스 채팅이 종료되었습니다.");
         window.location.reload();
+    });
+
+    $('#reportForm .submitBtn').on('click', function () {
+        if ($('#selectReason').val() == '')
+            alert('신고 사유를 선택해주세요.');
+        else if ($('#selectReason').val() == 4) {
+            if ($('#detailReason').val() == '')
+                alert('신고 내용을 입력해주세요.');
+            else {
+                $('#reportForm').submit();
+                alert("신고가 접수되었습니다.");
+            }
+        } else {
+            $('#reportForm').submit();
+            alert("신고가 접수되었습니다.");
+        }
     });
 
     function createOffer() {
