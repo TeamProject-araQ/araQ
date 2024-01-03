@@ -215,23 +215,6 @@ $(function () {
         });
     });
 
-    $("#test").on('click', function () {
-        $("#voiceChatModal").modal("show");
-
-        let width = 0;
-        let count = 60;
-        const interval = setInterval(function () {
-            width += 1.67;
-            count -= 1;
-            $("#voiceChatModal .progress-bar").css("width", width + "%");
-            $("#voiceChatModal .progress-bar").text(count);
-            if (width >= 100) {
-                clearInterval(interval);
-                $("#voiceChatModal .closeBtn").click();
-            }
-        }, 1000);
-    });
-
     $("#voiceChatModal .closeBtn").on('click', function () {
         pc.close();
         pc = null;

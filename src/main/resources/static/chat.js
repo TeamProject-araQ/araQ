@@ -120,7 +120,7 @@ $(function() {
                     '<div class="chatBox">'+
                         '<img src="' + data.writerImage + '" alt="">'+
                         '<div>'+
-                            '<p>' + data.writerNick + '</p>'+
+                            '<a href="javascript:void(0)" onclick="window.location.reload()">' + data.writerNick + '</a>'+
                             '<div>'+
                                 '<div class="card">'+
                                     imageElement+
@@ -135,21 +135,23 @@ $(function() {
                 $("#chatBoard").append(element);
                 chatBoard.scrollTop = chatBoard.scrollHeight;
 
-                $.ajax({
-                    url: "/chat/confirm",
-                    type: "post",
-                    contentType: "application/json",
-                    headers: {
-                        [csrfHeader]: csrfToken
-                    },
-                    data: JSON.stringify({
-                        target: target,
-                        content: roomCode
-                    }),
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
+                if (!document.hidden) {
+                    $.ajax({
+                        url: "/chat/confirm",
+                        type: "post",
+                        contentType: "application/json",
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        },
+                        data: JSON.stringify({
+                            target: target,
+                            content: roomCode
+                        }),
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                }
             }
         });
     });
@@ -215,5 +217,23 @@ $(function() {
 
     $(".chatWriterBtn").on('click', function() {
         showProfile(target);
+    });
+
+    $(window).on("focus", function() {
+        $.ajax({
+            url: "/chat/confirm",
+            type: "post",
+            contentType: "application/json",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            data: JSON.stringify({
+                target: target,
+                content: roomCode
+            }),
+            error: function(err) {
+                console.log(err);
+            }
+        });
     });
 });
