@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row mb-5">
-        <a class="col-3" th:href="@{/idealType/choose}">
+        <a class="col-3" th:data-uri="@{/idealType/create}" href="javascript:void(0)" id="idealTypeLink">
             <div class="card text-center">
                 <div class="card-body">
                     <img src="/image/user/이상형.png" alt="" style="height: 70px; width: 70px;">
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </a>
-        <a class="col-3" th:href="@{/taste/check}">
+        <a class="col-3" th:data-uri="@{/taste/check}" id="tasteLink" href="javascript:void(0)">
             <div class="card text-center">
                 <div class="card-body">
                     <img src="/image/user/조사.png" alt="" style="height: 70px; width: 70px;">
@@ -152,6 +152,8 @@
             </tbody>
         </table>
     </div>
+    <input type="hidden" id="userIdealType" th:value="${user.idealType}">
+    <input type="hidden" id="userTaste" th:value="${user.taste}">
 </div>
 <script src="/record.js" layout:fragment="script"></script>
 </html>
