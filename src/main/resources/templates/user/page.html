@@ -11,9 +11,42 @@
             <div class="ms-3">
                 <h4 th:text="|${user.name}님 안녕하세요.|"></h4>
                 <a href="/user/edit" class="me-3">프로필 변경 ></a>
-                <a href="" type="button" data-bs-toggle="modal" data-bs-target="#voiceRecord">음성 녹음 ></a>
             </div>
         </div>
+    </div>
+    <div class="row mb-5">
+        <a class="col-3" th:href="@{/idealType/choose}">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="/image/user/이상형.png" alt="" style="height: 70px; width: 70px;">
+                    <h5 class="card-text mt-3">내 이상형 선택 ></h5>
+                </div>
+            </div>
+        </a>
+        <a class="col-3" th:href="@{/taste/check}">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="/image/user/조사.png" alt="" style="height: 70px; width: 70px;">
+                    <h5 class="card-text mt-3">내 취향 조사 ></h5>
+                </div>
+            </div>
+        </a>
+        <a class="col-3" data-bs-toggle="modal" data-bs-target="#voiceRecord">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="/image/user/녹음.png" alt="" style="height: 70px; width: 70px;">
+                    <h5 class="card-text mt-3">음성 녹음 ></h5>
+                </div>
+            </div>
+        </a>
+        <a class="col-3" th:href="@{/user/out}">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="/image/user/탈퇴.png" alt="" style="height: 70px; width: 70px;">
+                    <h5 class="card-text mt-3">회원 탈퇴 ></h5>
+                </div>
+            </div>
+        </a>
         <!-- 음성 녹음 모달 -->
         <div class="modal fade" id="voiceRecord" tabindex="-1" aria-labelledby="voiceRecordLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -118,9 +151,6 @@
             </tr>
             </tbody>
         </table>
-    </div>
-    <div class="d-flex justify-content-end mb-3">
-        <a th:href="@{/user/out}" class="btn btn-secondary">회원탈퇴</a>
     </div>
 </div>
 <script src="/record.js" layout:fragment="script"></script>
