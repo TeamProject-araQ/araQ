@@ -1,6 +1,6 @@
 $(function () {
 
-    $('#idealTypeMatchLink').on('click', function () {
+    $('.idealTypeMatchLink').on('click', function () {
         if ($('#userIdealType').val() === "") {
             if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
                 location.href = "/idealType/create";
