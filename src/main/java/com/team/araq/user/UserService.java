@@ -1,5 +1,6 @@
 package com.team.araq.user;
 
+import com.team.araq.idealType.IdealType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -77,38 +78,38 @@ public class UserService {
         List<MultipartFile> images = userUpdateForm.getImages();
         List<String> updatedImages = new ArrayList<>();
 
-            for (MultipartFile image : images) {
-                if (!image.isEmpty()) {
-                    File uploadDirectory = new File(uploadPath);
-                    if (!uploadDirectory.exists()) {
-                        uploadDirectory.mkdirs();
-                    }
-                    // 새로운 이미지 저장
-                    String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-                    String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                    String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
-                    File dest = new File(uploadPath + File.separator + fileName);
-                    FileCopyUtils.copy(image.getBytes(), dest);
+        for (MultipartFile image : images) {
+            if (!image.isEmpty()) {
+                File uploadDirectory = new File(uploadPath);
+                if (!uploadDirectory.exists()) {
+                    uploadDirectory.mkdirs();
+                }
+                // 새로운 이미지 저장
+                String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
+                File dest = new File(uploadPath + File.separator + fileName);
+                FileCopyUtils.copy(image.getBytes(), dest);
 
-                    // 이미지 경로를 사용자의 이미지 목록에 추가
-                    updatedImages.add("/user/image/" + fileName);
-                }
+                // 이미지 경로를 사용자의 이미지 목록에 추가
+                updatedImages.add("/user/image/" + fileName);
             }
-            // 새로운 이미지 목록으로 업데이트
-            if (!updatedImages.isEmpty()) {
-                user.setImages(updatedImages);
-                user.setImage(updatedImages.get(0));
+        }
+        // 새로운 이미지 목록으로 업데이트
+        if (!updatedImages.isEmpty()) {
+            user.setImages(updatedImages);
+            user.setImage(updatedImages.get(0));
+        } else {
+            // 이미지를 업로드하지 않은 경우 기본 이미지 설정
+            List<String> defaultImages = new ArrayList<>();
+            if (userUpdateForm.getGender().equals("남성")) {
+                defaultImages.add("/profile/default-m.jpg");
             } else {
-                // 이미지를 업로드하지 않은 경우 기본 이미지 설정
-                List<String> defaultImages = new ArrayList<>();
-                if (userUpdateForm.getGender().equals("남성")) {
-                    defaultImages.add("/profile/default-m.jpg");
-                } else {
-                    defaultImages.add("/profile/default-w.jpg");
-                }
-                user.setImages(defaultImages);
-                user.setImage(defaultImages.get(0));
+                defaultImages.add("/profile/default-w.jpg");
             }
+            user.setImages(defaultImages);
+            user.setImage(defaultImages.get(0));
+        }
         userRepository.save(user);
         return user;
     }
@@ -302,5 +303,56 @@ public class UserService {
             e.printStackTrace(); // 또는 로그에 기록 등을 수행할 수 있음
             return null;
         }
+    }
+
+    public void useBubble(SiteUser user, int bubble) {
+        user.setBubble(user.getBubble() - bubble);
+        this.userRepository.save(user);
+    }
+
+    public void openVoice(SiteUser user1, SiteUser user2) {
+        user1.getOpenVoice().add(user2);
+        this.userRepository.save(user1);
+    }
+
+    public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
+        return this.userRepository.findMatchingUsersByIdealType(idealType, gender);
+    }
+
+    public List<SiteUser> getBySmoking(String gender, String smoking) {
+        return this.userRepository.findByGenderNotAndSmoking(gender, smoking);
+    }
+
+    public List<SiteUser> getByDrinking(String gender, String drinking) {
+        return this.userRepository.findByGenderNotAndDrinking(gender, drinking);
+    }
+
+    public List<SiteUser> getByHobby(String gender, String hobby) {
+        return this.userRepository.findByGenderNotAndHobbyContaining(gender, hobby);
+    }
+
+    public List<SiteUser> getByMbti(String gender, String mbti) {
+        return this.userRepository.findByGenderNotAndMbti(gender, mbti);
+    }
+
+    public List<SiteUser> getByReligion(String gender, String religion) {
+        return this.userRepository.findByGenderNotAndReligion(gender, religion);
+    }
+
+    public List<SiteUser> getByPersonalities(SiteUser loginUser) {
+        List<SiteUser> matchingUsers = new ArrayList<>();
+        List<SiteUser> userList = this.userRepository.findByGenderNot(loginUser.getGender());
+        for (SiteUser user : userList) {
+            List<String> userPersonality = user.getPersonality();
+            int matchCount = 0;
+            for (String personality : loginUser.getPersonality()) {
+                if (userPersonality.contains(personality)) {
+                    matchCount++;
+                }
+            }
+            if (matchCount >= 2)
+                matchingUsers.add(user);
+        }
+        return matchingUsers;
     }
 }

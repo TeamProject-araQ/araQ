@@ -1,28 +1,42 @@
 $(function () {
-    var socket = new SockJS("/ws");
-    var stompClient = Stomp.over(socket);
+
+    $('#idealTypeMatchLink').on('click', function () {
+        if ($('#userIdealType').val() === "") {
+            if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
+                location.href = "/idealType/create";
+        } else location.href = $(this).data("uri");
+    });
+
+    const socket = new SockJS("/ws");
+    const stompClient = Stomp.over(socket);
     stompClient.debug = null;
-    var userStream = null;
-    var pc = null;
-    var iceServers = {
+    let pc = null;
+    let notifyCheck = false;
+    const iceServers = {
         iceServers: [
             {
                 urls: "stun:stun.l.google.com:19302"
             },
         ],
     };
-    var targetPeer = null;
+    let targetPeer = null;
 
     stompClient.connect({}, function (frame) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(r => {
+                if (r === "granted") alert("푸시 알람이 설정되었습니다.");
+            });
+        }
 
-        stompClient.send("/app/online", {}, JSON.stringify({
-            type: "online",
-            target: $("#hiddenUserName").val()
-        }));
+        stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
+
+        stompClient.subscribe("/topic/ping", function () {
+            stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
+        });
 
         stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function (message) {
-            var data = JSON.parse(message.body);
-            var chatToast = new bootstrap.Toast($('#chatToast'), {
+            const data = JSON.parse(message.body);
+            const chatToast = new bootstrap.Toast($('#chatToast'), {
                 autohide: false
             });
 
@@ -59,14 +73,13 @@ $(function () {
 
                     pc.addEventListener('icecandidate', function (event) {
                         if (event.candidate) {
-                            console.log(event.candidate)
                             stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
                         }
                     });
 
                     pc.ontrack = function (event) {
                         if (event.track.kind === 'audio') {
-                            var remoteAudio = document.getElementById('voiceChatPlayer');
+                            const remoteAudio = document.getElementById('voiceChatPlayer');
                             remoteAudio.srcObject = event.streams[0];
                         }
                     };
@@ -83,7 +96,7 @@ $(function () {
 
                 pc.ontrack = function (event) {
                     if (event.track.kind === 'audio') {
-                        var remoteAudio = document.getElementById('voiceChatPlayer');
+                        const remoteAudio = document.getElementById('voiceChatPlayer');
                         remoteAudio.srcObject = event.streams[0];
                     }
                 };
@@ -106,7 +119,6 @@ $(function () {
 
                 pc.addEventListener('icecandidate', function (event) {
                     if (event.candidate) {
-                        console.log(event.candidate)
                         stompClient.send("/app/peer/candidate/" + targetPeer, {}, JSON.stringify(event.candidate));
                     }
                 });
@@ -133,6 +145,7 @@ $(function () {
                 pc = null;
                 $("#voiceChatModal").modal("hide");
                 alert("보이스 채팅이 종료되었습니다.");
+                window.location.reload();
             }
         });
 
@@ -145,12 +158,44 @@ $(function () {
 
             pc.setRemoteDescription(new RTCSessionDescription(data));
             $("#voiceChatModal").modal("show");
+            let width = 0;
+            let count = 60;
+            const interval = setInterval(function () {
+                width += 1.67;
+                count -= 1;
+                $("#voiceChatModal .progress-bar").css("width", width + "%");
+                $("#voiceChatModal .progress-bar").text(count);
+                if (width >= 100) {
+                    clearInterval(interval);
+                    $("#voiceChatModal .closeBtn").click();
+                }
+            }, 1000);
         });
 
         stompClient.subscribe("/topic/peer/candidate/" + $("#hiddenUserName").val(), function (message) {
-            var data = JSON.parse(message.body);
+            let data = JSON.parse(message.body);
             pc.addIceCandidate(new RTCIceCandidate(data));
         });
+
+        stompClient.subscribe("/topic/notification/" + $("#hiddenUserName").val(), function (message) {
+            let data = JSON.parse(message.body);
+            let permission = Notification.permission;
+            if (permission === "granted" && document.hidden && !notifyCheck) {
+                showNotification(data);
+                notifyCheck = true;
+                setTimeout(function () {
+                    notifyCheck = false;
+                }, 5000);
+            } else Notification.requestPermission().then(r => {
+                if (document.hidden && !notifyCheck) {
+                    showNotification(data);
+                    notifyCheck = true;
+                    setTimeout(function () {
+                        notifyCheck = false;
+                    }, 5000);
+                }
+            });
+        })
     });
 
     $("#chatRequestModal .refuse").on('click', function () {
@@ -161,7 +206,6 @@ $(function () {
     });
 
     $("#chatRequestModal .accept").on('click', function () {
-
         $.ajax({
             url: "/chat/create",
             type: "POST",
@@ -179,28 +223,29 @@ $(function () {
         });
     });
 
-    $(window).on('beforeunload', function () {
-        $.ajax({
-            url: "/offline",
-            type: "POST",
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            contentType: "text/plain",
-            data: $("#hiddenUserName").val()
-        });
-    });
-
-    $("#test").on('click', function () {
-        console.log(pc);
-    });
-
     $("#voiceChatModal .closeBtn").on('click', function () {
         pc.close();
         pc = null;
-        stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type:"RtcClose"}));
+        stompClient.send("/app/all/" + targetPeer, {}, JSON.stringify({type: "RtcClose"}));
         $("#voiceChatModal").modal("hide");
         alert("보이스 채팅이 종료되었습니다.");
+        window.location.reload();
+    });
+
+    $('#reportForm .submitBtn').on('click', function () {
+        if ($('#selectReason').val() == '')
+            alert('신고 사유를 선택해주세요.');
+        else if ($('#selectReason').val() == 4) {
+            if ($('#detailReason').val() == '')
+                alert('신고 내용을 입력해주세요.');
+            else {
+                $('#reportForm').submit();
+                alert("신고가 접수되었습니다.");
+            }
+        } else {
+            $('#reportForm').submit();
+            alert("신고가 접수되었습니다.");
+        }
     });
 
     function createOffer() {
@@ -226,10 +271,132 @@ $(function () {
                     .then(function () {
                         stompClient.send("/app/peer/answer/" + targetPeer, {}, JSON.stringify(pc.localDescription));
                         $("#voiceChatModal").modal("show");
+                        let width = 0;
+                        let count = 60;
+                        const interval = setInterval(function () {
+                            width += 1.67;
+                            count -= 1;
+                            $("#voiceChatModal .progress-bar").css("width", width + "%");
+                            $("#voiceChatModal .progress-bar").text(count);
+                            if (width >= 100) {
+                                clearInterval(interval);
+                                $("#voiceChatModal .closeBtn").click();
+                            }
+                        }, 1000);
                     })
                     .catch(function (err) {
                         console.log("Answer Error:" + err);
                     });
             });
     }
+
+    function showNotification(data) {
+        let notification = new Notification(data.title, {
+            body: data.content,
+            icon: "/image/_logo.png"
+        });
+
+        notification.onclick = function () {
+            window.focus();
+            window.location.href = data.url;
+        };
+    }
+
+    $('.listen').on('click', function () {
+        var myAudio = $('.audio')[0];
+        var username = $('.username').val();
+        $.ajax({
+            url: "/user/checkAccess",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: username,
+            success: function (data) {
+                if (data === true) {
+                    if (myAudio.paused) myAudio.play();
+                    else myAudio.pause();
+                } else if (confirm("500 버블을 사용하여 음성을 들으시겠습니까?"))
+                    initiatePayment();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
+    function initiatePayment(audioOwnerId) {
+        $.ajax({
+            url: "/pay",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: $(".username").val(),
+            success: function (data) {
+                if (data) alert("결제가 완료되었습니다.");
+                else {
+                    if (confirm("보유하신 버블이 부족합니다. 결제 페이지로 이동하시겠습니까?"))
+                        location.href = "/payment";
+                }
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    }
 });
+
+function showProfile(username) {
+    $.ajax({
+        url: "/user/getInfo",
+        type: "post",
+        contentType: "text/plain",
+        dataType: "json",
+        data: username,
+        headers: {
+            [csrfHeader]: csrfToken
+        },
+        success: function (data) {
+            $("#profileModal .modal-title").text("프로필");
+            $("#profileModal .profileImage").attr("src", data.image);
+            $("#profileModal .card-title").text(data.nickName);
+            $("#profileModal .age").text(data.age);
+            $("#profileModal .introduce").text(data.introduce);
+            $("#profileModal .username").val(data.username);
+            if (data.audio) {
+                var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
+                var durationElement = $("#profileModal #audioDuration");
+
+                audioElement.ontimeupdate = function () {
+                    var currentMinutes = Math.floor(audioElement.currentTime / 60);
+                    var currentSeconds = Math.floor(audioElement.currentTime - currentMinutes * 60);
+                    durationElement.text(pad(currentMinutes) + ":" + pad(currentSeconds));
+                };
+
+                function pad(value) {
+                    return value > 9 ? value : "0" + value;
+                }
+
+                $("#profileModal .listen, #profileModal #audioDuration").show();
+            } else {
+                $("#profileModal .listen, #profileModal #audioDuration").hide();
+            }
+            $("#profileModal").modal("show");
+
+            $("#moreInfoForm > table > tbody > tr:nth-child(1) > td").text(data.height);
+            $("#moreInfoForm > table > tbody > tr:nth-child(2) > td").text(data.drinking);
+            $("#moreInfoForm > table > tbody > tr:nth-child(3) > td").text(data.smoking);
+            $("#moreInfoForm > table > tbody > tr:nth-child(4) > td").text(data.personality);
+            $("#moreInfoForm > table > tbody > tr:nth-child(5) > td").text(data.hobby);
+            $("#moreInfoForm > table > tbody > tr:nth-child(6) > td").text(data.mbti);
+            $("#moreInfoForm > table > tbody > tr:nth-child(7) > td").text(data.religion);
+        },
+        error: function (err) {
+            alert("요청이 실패하였습니다.");
+            console.log(err);
+        }
+    });
+}

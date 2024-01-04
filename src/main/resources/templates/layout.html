@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
-    <link rel="icon" href="/image/icon.jpg">
+    <link rel="icon" href="/image/araQ/icon.jpg">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -55,34 +55,79 @@
         .rate label:hover ~ input:checked ~ label {
             color: #f73c32 !important;
         }
+
+        #optionBar {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .nav-link {
+            font-size: 13pt;
+            font-family: nanum-semiBold,serif;
+        }
+
+        .navbar {
+            background: white;
+        }
+
+        @media (min-width: 996px) {
+            .navbar-toggler,
+            .navbar-collapse,
+            .navbar-nav {
+                display: none !important;
+            }
+
+            .navbar {
+                display: flex;
+                justify-content: center;
+                position: relative;
+                height: 81px;
+            }
+
+            .navbar-brand {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 995px) {
+            #optionBar {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
 <!-- 옵션 바 -->
-<div class="d-flex justify-content-around my-3 text-center container">
+<div class="container" id="optionBar">
     <ul class="menu">
         <li class="option"><a href="#">매칭</a></li>
         <ul class="depth">
             <li><a th:href="@{/match/around}">내 위치 주변</a></li>
-            <li><a href="#">내 이상형</a></li>
-            <li><a href="#">성향 및 관심사</a></li>
+            <li><a href="javascript:void(0)" th:data-uri="@{/match/idealType}" id="idealTypeMatchLink">내 이상형</a></li>
+            <li><a th:href="@{/match/personalityType}">성향 및 관심사</a></li>
         </ul>
     </ul>
     <ul class="menu">
         <li class="option"><a href="#">채팅</a></li>
         <ul class="depth">
             <li><a th:href="@{/chat/list}">채팅 목록</a></li>
+            <li><a th:href="@{/plaza/join}">만남의 광장</a></li>
         </ul>
     </ul>
     <ul class="menu">
         <li class="option"><a href="#">설문</a></li>
         <ul class="depth">
-            <li><a href="#">설문 참여</a></li>
+            <li><a th:href="@{/taste/main}">설문 참여</a></li>
         </ul>
     </ul>
     <ul class="menu">
-        <li class="option"><a href="#">고객센터</a></li>
+        <li class="option"><a href="#">고객지원</a></li>
         <ul class="depth">
             <li><a th:href="@{/announcement/list}">공지사항</a></li>
             <li><a href="#">자주 묻는 질문</a></li>
@@ -109,32 +154,37 @@
         <div class="row mt-5">
             <a class="col-4 justify-content-center" th:href="@{/payment}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/bubbles.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/araQ/bubbles.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">버블</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/page}"
+            <a class="col-4 justify-content-center" th:href="@{/user/page}" th:if="${user.username != 'admin'}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/person.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/etc/person.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">마이페이지</div>
+            </a>
+            <a class="col-4 justify-content-center" th:href="@{/admin}" th:if="${user.username == 'admin'}"
+               style="padding:15px; border:1px solid lightgray;">
+                <img src="/image/etc/person.png" alt="" style="width:40px; height:40px;">
+                <div class="mt-2">관리페이지</div>
             </a>
             <a class="col-4 justify-content-center" th:href="@{/user/inquiry}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/inquiry.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/etc/inquiry.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">1:1 문의</div>
             </a>
             <a class="col-4 justify-content-center" th:href="@{/user/updatePw}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/password.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/etc/password.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">비밀번호 변경</div>
             </a>
             <a class="col-4 justify-content-center" th:href="@{/user/payment}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/pay.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/etc/pay.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">결제 관리</div>
             </a>
             <a class="col-4 justify-content-center" th:href="@{/user/post}"
                style="padding:15px; border:1px solid lightgray;">
-                <img src="/image/post.png" alt="" style="width:40px; height:40px;">
+                <img src="/image/etc/post.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">나의 톡</div>
             </a>
         </div>
@@ -151,6 +201,7 @@
             </a>
         </div>
     </div>
+    <input type="hidden" id="userIdealType" th:value="${user.idealType}">
 </div>
 <div th:replace="~{layout_modal :: modal}"></div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">

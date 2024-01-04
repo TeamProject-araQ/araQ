@@ -8,10 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.security.Principal;
 
 @Controller
@@ -37,9 +38,10 @@ public class ReviewController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid ReviewDTO reviewDTO, Principal principal) {
+    public String create(@Valid ReviewDTO reviewDTO, Principal principal, MultipartFile image) throws IOException {
         SiteUser user = this.userService.getByUsername(principal.getName());
-        this.reviewService.createReview(reviewDTO, user);
+        Review review = this.reviewService.createReview(reviewDTO, user);
+        this.reviewService.uploadImage(review, image);
         return "redirect:/review/list";
     }
 
@@ -54,15 +56,17 @@ public class ReviewController {
         reviewDTO.setAnswer4(review.getAnswer4());
         reviewDTO.setAnswer5(review.getAnswer5());
         reviewDTO.setStar(review.getStar());
+
         return "review/write";
     }
 
     @PostMapping("/modify/{id}")
-    public String modify(@PathVariable("id") Integer id, Principal principal, @Valid ReviewDTO reviewDTO, BindingResult bindingResult) {
+    public String modify(@PathVariable("id") Integer id, Principal principal, @Valid ReviewDTO reviewDTO, MultipartFile image) throws IOException {
         Review review = this.reviewService.getReview(id);
         if (!review.getWriter().getUsername().equals(principal.getName()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         this.reviewService.modifyReview(review, reviewDTO);
+        this.reviewService.uploadImage(review, image);
         return "redirect:/review/list";
     }
 

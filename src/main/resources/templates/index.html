@@ -1,77 +1,127 @@
 <html layout:decorate="~{layout}">
+<head>
+    <style>
+        .img-fluid {
+            height: 170px;
+        }
+
+        #matchStatus {
+            width:68%;
+        }
+
+        #accessor {
+            width: 30%;
+        }
+
+        @media (max-width: 995px) {
+            .randomMatch {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .randomMatch .col-4 {
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .img-fluid {
+                height: auto;
+                max-width: 100%;
+            }
+
+            #box {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #matchStatus {
+                width:100%;
+            }
+
+            #accessor {
+                width:100%;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
 <div layout:fragment="content" class="container my-3">
+    <input type="hidden" th:value="${postList}" id="postList">
     <!-- 매칭 추천 -->
     <div class="d-flex">
-        <h3 class="highlight"># 매칭 추천</h3>
+        <h3 class="highlight"># 랜덤 매칭</h3>
     </div>
-    <div class="row mt-3">
+    <div class="randomMatch row mt-3">
         <div class="col-4" th:each="randomUser : ${userList}">
-            <div class="card mb-3" style="max-width: 540px;">
+            <div class="card mb-3" style="max-width: 700px;">
                 <div class="row g-0">
                     <div class="col-md-5">
-                        <img th:src="@{${randomUser.image}}" class="img-fluid rounded-start" alt="..."
-                             style="height: 180px;">
+                        <img th:src="@{${randomUser.image}}" class="img-fluid rounded-start" alt="...">
                     </div>
                     <div class="col-md-7">
                         <div class="card-body d-flex flex-column justify-content-between" style="height: 100%;">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex align-items-center">
-                                    <h5 th:text="${randomUser.nickName}" class="me-1"></h5>
-                                    <span th:text="${randomUser.age}" style="font-size: 9pt; color: gray"></span>
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <h5 th:text="${randomUser.nickName}" class="me-1"></h5>
+                                        <span th:text="${randomUser.age}" style="font-size: 9pt; color: gray"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" class="araQBtn btn btn-sm 버튼"
+                                            th:if="${likesStatus[randomUser.username] == null}"
+                                            th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
+                                        <div class="d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-suit-heart-fill me-1"
+                                                 viewBox="0 0 16 16">
+                                                <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                                            </svg>
+                                            <div>아라큐</div>
+                                        </div>
+                                    </button>
+                                    <button type="button" class="araQBtn btn btn-sm 버튼" disabled
+                                            th:if="${likesStatus[randomUser.username] == '매칭 성공'}"
+                                            th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
+                                        <div class="d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-arrow-through-heart-fill me-1"
+                                                 viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                      d="M2.854 15.854A.5.5 0 0 1 2 15.5V14H.5a.5.5 0 0 1-.354-.854l1.5-1.5A.5.5 0 0 1 2 11.5h1.793l3.103-3.104a.5.5 0 1 1 .708.708L4.5 12.207V14a.5.5 0 0 1-.146.354l-1.5 1.5ZM16 3.5a.5.5 0 0 1-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845.562 1.096.585 2.517-.213 4.092-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182A23.825 23.825 0 0 1 5.8 12.323L8.31 9.81a1.5 1.5 0 0 0-2.122-2.122L3.657 10.22a8.827 8.827 0 0 1-1.039-1.57c-.798-1.576-.775-2.997-.213-4.093C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2 12.147.854A.5.5 0 0 1 12.5 0h3a.5.5 0 0 1 .5.5v3Z"/>
+                                            </svg>
+                                            <div>매칭 완료</div>
+                                        </div>
+                                    </button>
+                                    <button type="button" class="araQBtn btn btn-sm 버튼" disabled
+                                            th:if="${likesStatus[randomUser.username] == '매칭 대기'}"
+                                            th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
+                                        <div class="d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-suit-heart me-1" viewBox="0 0 16 16">
+                                                <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                                            </svg>
+                                            <div>매칭 대기</div>
+                                        </div>
+                                    </button>
+                                    <button type="button" class="araQBtn btn btn-sm 버튼" disabled
+                                            th:if="${likesStatus[randomUser.username] == '매칭 실패'}"
+                                            th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
+                                        <div class="d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-suit-heart me-1" viewBox="0 0 16 16">
+                                                <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                                            </svg>
+                                            <div>매칭 실패</div>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
-                            <div>
-                                <button type="button" class="araQBtn btn btn-sm 버튼"
-                                        th:if="${likesStatus[randomUser.username] == null}"
-                                        th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-suit-heart-fill me-1"
-                                             viewBox="0 0 16 16">
-                                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
-                                        </svg>
-                                        <div>아라큐</div>
-                                    </div>
-                                </button>
-                                <button type="button" class="araQBtn btn btn-sm 버튼" disabled
-                                        th:if="${likesStatus[randomUser.username] == '매칭 성공'}"
-                                        th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-arrow-through-heart-fill me-1"
-                                             viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                  d="M2.854 15.854A.5.5 0 0 1 2 15.5V14H.5a.5.5 0 0 1-.354-.854l1.5-1.5A.5.5 0 0 1 2 11.5h1.793l3.103-3.104a.5.5 0 1 1 .708.708L4.5 12.207V14a.5.5 0 0 1-.146.354l-1.5 1.5ZM16 3.5a.5.5 0 0 1-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845.562 1.096.585 2.517-.213 4.092-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182A23.825 23.825 0 0 1 5.8 12.323L8.31 9.81a1.5 1.5 0 0 0-2.122-2.122L3.657 10.22a8.827 8.827 0 0 1-1.039-1.57c-.798-1.576-.775-2.997-.213-4.093C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2 12.147.854A.5.5 0 0 1 12.5 0h3a.5.5 0 0 1 .5.5v3Z"/>
-                                        </svg>
-                                        <div>매칭 완료</div>
-                                    </div>
-                                </button>
-                                <button type="button" class="araQBtn btn btn-sm 버튼" disabled
-                                        th:if="${likesStatus[randomUser.username] == '매칭 대기'}"
-                                        th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-suit-heart me-1" viewBox="0 0 16 16">
-                                            <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
-                                        </svg>
-                                        <div>매칭 대기</div>
-                                    </div>
-                                </button>
-                                <button type="button" class="araQBtn btn btn-sm 버튼" disabled
-                                        th:if="${likesStatus[randomUser.username] == '매칭 실패'}"
-                                        th:data-nick="${randomUser.nickName}" th:data-user="${randomUser.username}">
-                                    <div class="d-flex align-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-suit-heart me-1" viewBox="0 0 16 16">
-                                            <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
-                                        </svg>
-                                        <div>매칭 실패</div>
-                                    </div>
-                                </button>
-                            </div>
-                            <div style="margin-top:auto;">
-                                <button type="button" class="profileBtn w-100 btn 버튼-full"
-                                        th:data-user="${randomUser.username}">프로필 보기
+                            <div style="margin-top:auto;" class="mt-2">
+                                <button type="button" class="viewProfile w-100 btn 버튼-full"
+                                        th:data-value="${randomUser.username}">프로필 보기
                                 </button>
                             </div>
                         </div>
@@ -80,124 +130,133 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-between mt-3">
-        <div class="card" id="onlineUsers" style="width: 30%;">
-            <h5 class="card-header">현재 접속자</h5>
-            <div class="card-body">
-                <div class="dropdown dropend" th:each="online : ${onlineUsers}">
-                    <a href="#" th:text="${online.nickName}" data-bs-toggle="dropdown" aria-expanded="false"></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="viewProfile dropdown-item" href="javascript:void(0)"
-                               th:data-value="${online.username}">프로필</a></li>
-                        <li><a class="chatRequest dropdown-item" href="javascript:void(0)"
-                               th:data-nick="${online.nickName}"
-                               th:data-value="${online.username}">채팅 신청</a></li>
-                        <li>
-                            <button class="reportBtn dropdown-item text-danger" type="button" data-bs-toggle="modal"
-                                    data-bs-target="#report" th:data-value="${online.username}">신고
-                            </button>
-                        </li>
-                    </ul>
+    <div class="d-flex justify-content-between mt-3" id="box">
+        <div id="accessor">
+            <h3 class="highlight"># 현재 접속자</h3>
+            <div class="card" id="onlineUsers">
+                <div class="card-body" th:if="${!onlineUsers.isEmpty()}">
+                    <div class="dropdown dropend" th:each="online : ${onlineUsers}">
+                        <a href="#" th:text="${online.nickName}" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="viewProfile dropdown-item" href="javascript:void(0)"
+                                   th:data-value="${online.username}">프로필</a></li>
+                            <li><a class="chatRequest dropdown-item" href="javascript:void(0)"
+                                   th:data-nick="${online.nickName}"
+                                   th:data-value="${online.username}">채팅 신청</a></li>
+                            <li>
+                                <button class="reportBtn dropdown-item text-danger" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#report" th:data-value="${online.username}">신고
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card" style="width:68%;">
-            <h5 class="card-header text-center">매칭 상태</h5>
-            <div class="card-body">
-                <div class="card-text">
-                    <div class="matchResult" th:each="like : ${likeList}">
-                        <!-- 요청 보낸 사람이 로그인한 유저일 때 -->
-                        <div th:if="${like.user.username == user.username}"
-                             class="d-flex justify-content-between align-items-center my-3">
-                            <img th:src="@{${like.user.image}}" alt=""
-                                 style="width: 50px; height: 50px; border-radius: 50%;">
-                            <div class="arrow-container">
-                                <div class="arrow-line-left"></div>
-                                <div class="arrow-head-left">▶</div>
+        <div id="matchStatus">
+            <h3 class="highlight"># 매칭 상태</h3>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-text">
+                        <div class="matchResult" th:each="like : ${likeList}">
+                            <!-- 요청 보낸 사람이 로그인한 유저일 때 -->
+                            <div th:if="${like.user.username == user.username}"
+                                 class="d-flex justify-content-between align-items-center my-3">
+                                <img th:src="@{${like.user.image}}" alt=""
+                                     style="width: 50px; height: 50px; border-radius: 50%;">
+                                <div class="arrow-container">
+                                    <div class="arrow-line-left"></div>
+                                    <div class="arrow-head-left">▶</div>
+                                </div>
+                                <i class="bi bi bi-heart fs-1" style="color: pink;"
+                                   th:if="${like.status == '매칭 대기'}"></i>
+                                <div th:if="${like.status == '매칭 성공'}" class="dropdown-center">
+                                    <button class="bi bi bi-heart-fill fs-1" style="color: pink; border: none;"
+                                            type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false"></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
+                                               th:data-nick="${like.likedUser.nickName}"
+                                               th:data-value="${like.likedUser.username}">채팅 신청</a></li>
+                                        <li><a class="dropdown-item" href="#">취향 테스트</a></li>
+                                        <li>
+                                            <button class="reportBtn dropdown-item text-danger" type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#report" th:data-value="${like.likedUser.username}">
+                                                신고
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <i class="bi bi-heartbreak fs-1" style="color: pink;"
+                                   th:if="${like.status == '매칭 실패'}"></i>
+                                <div class="arrow-container" th:if="${like.status == '매칭 성공'}">
+                                    <div class="arrow-head-right">◀</div>
+                                    <div class="arrow-line-right"></div>
+                                </div>
+                                <div th:if="${like.status == '매칭 대기'}"
+                                     style="width: 315px; text-align: center;">
+                                    <div class="question fs-2 fw-bold">?</div>
+                                </div>
+                                <div class="arrow-container" th:if="${like.status == '매칭 실패'}">
+                                    <div class="arrow-head-right">◀</div>
+                                    <div class="xLine-right"></div>
+                                </div>
+                                <a class="viewProfile" type="button" href="javascript:void(0)"
+                                   th:data-value="${like.likedUser.username}"><img th:src="@{${like.likedUser.image}}"
+                                                                                   alt=""
+                                                                                   style="width: 50px; height: 50px; border-radius: 50%;"></a>
                             </div>
-                            <i class="bi bi bi-heart fs-1" style="color: pink;" th:if="${like.status == '매칭 대기'}"></i>
-                            <div th:if="${like.status == '매칭 성공'}" class="dropdown-center">
-                                <button class="bi bi bi-heart-fill fs-1" style="color: pink; border: none;"
-                                        type="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false"></button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
-                                           th:data-nick="${like.likedUser.nickName}"
-                                           th:data-value="${like.likedUser.username}">채팅 신청</a></li>
-                                    <li><a class="dropdown-item" href="#">취향 테스트</a></li>
-                                    <li>
-                                        <button class="reportBtn dropdown-item text-danger" type="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#report" th:data-value="${like.likedUser.username}">신고
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                            <i class="bi bi-heartbreak fs-1" style="color: pink;" th:if="${like.status == '매칭 실패'}"></i>
-                            <div class="arrow-container" th:if="${like.status == '매칭 성공'}">
-                                <div class="arrow-head-right">◀</div>
-                                <div class="arrow-line-right"></div>
-                            </div>
-                            <div th:if="${like.status == '매칭 대기'}"
-                                 style="width: 315px; text-align: center;">
-                                <div class="question fs-2 fw-bold">?</div>
-                            </div>
-                            <div class="arrow-container" th:if="${like.status == '매칭 실패'}">
-                                <div class="arrow-head-right">◀</div>
-                                <div class="xLine-right"></div>
-                            </div>
-                            <a class="profileBtn" type="button" href="javascript:void(0)"
-                               th:data-user="${like.likedUser.username}"><img th:src="@{${like.likedUser.image}}" alt=""
+                            <!-- 요청 받은 사람이 로그인한 유저일 때 -->
+                            <div th:if="${like.likedUser.username == user.username}"
+                                 class="d-flex justify-content-between align-items-center my-3">
+                                <img th:src="@{${like.likedUser.image}}" alt=""
+                                     style="width: 50px; height: 50px; border-radius: 50%;">
+                                <div class="arrow-container" th:if="${like.status == '매칭 성공'}">
+                                    <div class="arrow-line-left"></div>
+                                    <div class="arrow-head-left">▶</div>
+                                </div>
+                                <div th:if="${like.status == '매칭 대기' || like.status == '대기'}"
+                                     style="width: 315px; text-align: center;">
+                                    <div class="question fs-2 fw-bold">?</div>
+                                </div>
+                                <div class="arrow-container" th:if="${like.status == '매칭 실패'}">
+                                    <div class="xLine-left"></div>
+                                    <div class="arrow-head-left">▶</div>
+                                </div>
+                                <div th:if="${like.status == '매칭 성공'}" class="dropdown-center">
+                                    <button class="bi bi bi-heart-fill fs-1" style="color: pink; border: none;"
+                                            type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false"></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
+                                               th:data-nick="${like.user.nickName}"
+                                               th:data-value="${like.user.username}">채팅 신청</a></li>
+                                        <li><a class="dropdown-item" href="#">취향 테스트</a></li>
+                                        <li>
+                                            <button class="reportBtn dropdown-item text-danger" type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#report" th:data-value="${like.user.username}">신고
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div th:if="${like.status == '매칭 대기'}">
+                                    <a type="button" class="버튼-full btn btn-sm acceptBtn" href="javascript:void(0)"
+                                       th:data-uri="@{|/like/accept/${like.id}|}">수락</a>
+                                    <a type="button" class="btn 버튼 btn-sm refuseBtn" href="javascript:void(0)"
+                                       th:data-uri="@{|/like/refuse/${like.id}|}">거절</a>
+                                </div>
+                                <i class="bi bi-heartbreak fs-1" style="color: pink;"
+                                   th:if="${like.status == '매칭 실패'}"></i>
+                                <div class="arrow-container">
+                                    <div class="arrow-head-right">◀</div>
+                                    <div class="arrow-line-right"></div>
+                                </div>
+                                <a class="viewProfile" type="button" href="javascript:void(0)"
+                                   th:data-value="${like.user.username}"><img th:src="@{${like.user.image}}" alt=""
                                                                               style="width: 50px; height: 50px; border-radius: 50%;"></a>
-                        </div>
-                        <!-- 요청 받은 사람이 로그인한 유저일 때 -->
-                        <div th:if="${like.likedUser.username == user.username}"
-                             class="d-flex justify-content-between align-items-center my-3">
-                            <img th:src="@{${like.likedUser.image}}" alt=""
-                                 style="width: 50px; height: 50px; border-radius: 50%;">
-                            <div class="arrow-container" th:if="${like.status == '매칭 성공'}">
-                                <div class="arrow-line-left"></div>
-                                <div class="arrow-head-left">▶</div>
                             </div>
-                            <div th:if="${like.status == '매칭 대기' || like.status == '대기'}"
-                                 style="width: 315px; text-align: center;">
-                                <div class="question fs-2 fw-bold">?</div>
-                            </div>
-                            <div class="arrow-container" th:if="${like.status == '매칭 실패'}">
-                                <div class="xLine-left"></div>
-                                <div class="arrow-head-left">▶</div>
-                            </div>
-                            <div th:if="${like.status == '매칭 성공'}" class="dropdown-center">
-                                <button class="bi bi bi-heart-fill fs-1" style="color: pink; border: none;"
-                                        type="button" data-bs-toggle="dropdown"
-                                        aria-expanded="false"></button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
-                                           th:data-nick="${like.user.nickName}"
-                                           th:data-value="${like.user.username}">채팅 신청</a></li>
-                                    <li><a class="dropdown-item" href="#">취향 테스트</a></li>
-                                    <li>
-                                        <button class="reportBtn dropdown-item text-danger" type="button"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#report" th:data-value="${like.user.username}">신고
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div th:if="${like.status == '매칭 대기'}">
-                                <a type="button" class="버튼-full btn btn-sm acceptBtn" href="javascript:void(0)"
-                                   th:data-uri="@{|/like/accept/${like.id}|}">수락</a>
-                                <a type="button" class="btn 버튼 btn-sm refuseBtn" href="javascript:void(0)"
-                                   th:data-uri="@{|/like/refuse/${like.id}|}">거절</a>
-                            </div>
-                            <i class="bi bi-heartbreak fs-1" style="color: pink;" th:if="${like.status == '매칭 실패'}"></i>
-                            <div class="arrow-container">
-                                <div class="arrow-head-right">◀</div>
-                                <div class="arrow-line-right"></div>
-                            </div>
-                            <a class="profileBtn" type="button" href="javascript:void(0)"
-                               th:data-user="${like.user.username}"><img th:src="@{${like.user.image}}" alt=""
-                                                                         style="width: 50px; height: 50px; border-radius: 50%;"></a>
                         </div>
                     </div>
                 </div>
@@ -238,36 +297,6 @@
             <button onclick="scrollToBottom()" class="btn btn-sm 버튼"><i class="bi bi-arrow-bar-down"></i></button>
         </div>
     </div>
-    <!-- 신고 모달 -->
-    <div class="modal fade" id="report" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="reportModalLabel">신고하기</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-                <form th:action="@{/report/create}" method="post" id="reportForm">
-                    <input type="hidden" id="reportedUsername" name="reportedUsername">
-                    <div class="modal-body">
-                        <select class="form-select" aria-label="reportReason" name="reason" id="selectReason">
-                            <option value="">신고 사유 선택</option>
-                            <option value="1">채팅방 도배 및 광고</option>
-                            <option value="2">욕설 / 폭언 / 비속어 등</option>
-                            <option value="3">음란성 / 선정성</option>
-                            <option value="4">기타</option>
-                        </select>
-                        <label for="detailReason" class="form-label mt-3">신고 내용</label>
-                        <textarea id="detailReason" name="detailReason" rows="5" class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="submitBtn btn 버튼 btn-sm" value="제출">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
-<input type="hidden" th:value="${postList}" id="postList">
 <script type="text/javascript" th:src="@{/index.js}" layout:fragment="script"></script>
 </html>

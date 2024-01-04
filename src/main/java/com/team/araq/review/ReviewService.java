@@ -1,6 +1,5 @@
 package com.team.araq.review;
 
-import com.team.araq.board.post.Post;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+
+    private String uploadPath = "C:/uploads/review";
 
     private Specification<Review> search(String kw) {
         return new Specification<Review>() {
@@ -53,7 +58,7 @@ public class ReviewService {
         return this.reviewRepository.findAll(specification, pageable);
     }
 
-    public void createReview(ReviewDTO reviewDTO, SiteUser user) {
+    public Review createReview(ReviewDTO reviewDTO, SiteUser user) {
         Review review = new Review();
         review.setAnswer1(reviewDTO.getAnswer1());
         review.setAnswer2(reviewDTO.getAnswer2());
@@ -63,7 +68,7 @@ public class ReviewService {
         review.setStar(reviewDTO.getStar());
         review.setWriter(user);
         review.setCreateDate(LocalDateTime.now());
-        this.reviewRepository.save(review);
+        return this.reviewRepository.save(review);
     }
 
     public void modifyReview(Review review, ReviewDTO reviewDTO) {
@@ -85,5 +90,20 @@ public class ReviewService {
         Optional<Review> review = this.reviewRepository.findById(id);
         if (review.isPresent()) return review.get();
         else throw new RuntimeException("그런 리뷰 없습니다.");
+    }
+
+    public void uploadImage(Review review, MultipartFile image) throws IOException {
+        if (image.isEmpty()) review.setImage("/image/etc/defaultReview.jpg");
+        else {
+            File uploadDirectory = new File(uploadPath);
+            if (!uploadDirectory.exists()) {
+                uploadDirectory.mkdirs();
+            }
+            String fileName = review.getId() + "_" + image.getOriginalFilename();
+            File dest = new File(uploadPath + File.separator + fileName);
+            FileCopyUtils.copy(image.getBytes(), dest);
+            review.setImage("/review/image/" + fileName);
+        }
+        this.reviewRepository.save(review);
     }
 }

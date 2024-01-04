@@ -1,0 +1,9 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="card" id="plazaBoard"></div>
+    <script th:inline="javascript">
+        var user = [[${user.username}]];
+    </script>
+</div>
+<script type="text/javascript" th:src="@{/plaza.js}" layout:fragment="script"></script>
+</html>

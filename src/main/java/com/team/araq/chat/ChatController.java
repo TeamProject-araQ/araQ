@@ -8,6 +8,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -50,8 +52,13 @@ public class ChatController {
         messageDto.setImage(user.getImage());
         messageDto.setTarget(chatDto.getCode());
 
+        Notification notification = new Notification("채팅 알림",
+                user.getNickName() + "님이 채팅를 보냈습니다.", user.getUsername(), target.getUsername(),
+                "/chat/join/" + chatDto.getCode());
+
         simpMessagingTemplate.convertAndSend("/topic/chat/" + chatDto.getCode(), chatDto);
         simpMessagingTemplate.convertAndSend("/topic/all/" + target.getUsername(), messageDto);
+        simpMessagingTemplate.convertAndSend("/topic/notification/" + target.getUsername(), notification);
     }
 
     @MessageMapping("/alert")
@@ -108,13 +115,18 @@ public class ChatController {
         SiteUser user = userService.getByUsername(principal.getName());
         MessageDto messageDto = new MessageDto("chatRequest", user.getNickName(), user.getUsername(), user.getAge(),
                 user.getIntroduce(), user.getImage(), user.getNickName() + "님이 채팅을 신청했습니다.", username);
+        Notification notification = new Notification("채팅 요청", user.getNickName() + "님이 채팅을 신청했습니다.",
+                user.getUsername(), username, "#");
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
+        simpMessagingTemplate.convertAndSend("/topic/notification/" + username, notification);
         return null;
     }
 
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@RequestBody String code) {
+        File file = new File("C:/uploads/chat/" + code);
+        if (file.exists()) deleteFiles(file);
         roomService.delete(roomService.get(code));
         return null;
     }
@@ -151,7 +163,7 @@ public class ChatController {
         roomService.setRecent(room, chat.getCreateDate());
         roomService.setConfirm(room, target.getUsername());
 
-        String dirPath = "C:/uploads/chat/" + chat.getId();
+        String dirPath = "C:/uploads/chat/" + room.getCode() + "/" + chat.getId();
         File dir = new File(dirPath);
         List<String> images = new ArrayList<>();
 
@@ -161,7 +173,7 @@ public class ChatController {
             String filename = file.getOriginalFilename();
             File image = new File(dirPath + "/" + filename);
             file.transferTo(image);
-            images.add("/chat/image/" + chat.getId() + "/" + filename);
+            images.add("/chat/image/" + room.getCode() + "/" + chat.getId() + "/" + filename);
         }
 
         chatService.setImages(chat, images);
@@ -187,5 +199,26 @@ public class ChatController {
     @MessageMapping("/all/{target}")
     public void handlerAll(@Payload String data, @DestinationVariable("target") String target) {
         simpMessagingTemplate.convertAndSend("/topic/all/" + target, data);
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void ping() {
+        userService.logout(userService.getLoginUsers());
+        simpMessagingTemplate.convertAndSend("/topic/ping", "ping");
+    }
+
+    @MessageMapping("/pong")
+    public void pong(String username) {
+        SiteUser user = userService.getByUsername(username);
+        userService.login(user);
+    }
+
+    public void deleteFiles(File file) {
+        if (file.isDirectory()) {
+            for (File subfile : Objects.requireNonNull(file.listFiles())) {
+                deleteFiles(subfile);
+            }
+        }
+        file.delete();
     }
 }

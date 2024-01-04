@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
+import com.team.araq.idealType.IdealType;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.like.UserLike;
+import com.team.araq.pay.History;
 import com.team.araq.pay.Payment;
 import com.team.araq.report.Report;
 import com.team.araq.review.Review;
+import com.team.araq.taste.Taste;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,9 +75,11 @@ public class SiteUser {
     // 대표 사진
     private String image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Post> postList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Comment> commentList;
 
@@ -86,9 +91,11 @@ public class SiteUser {
 
     private LocalDateTime createDate;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private Review review;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Payment> paymentList;
 
@@ -100,6 +107,7 @@ public class SiteUser {
     @JsonIgnore
     private List<Room> roomList2;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
     private List<Inquiry> inquiryList;
 
@@ -127,4 +135,21 @@ public class SiteUser {
 
     // 사진 목록
     private List<String> images;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<SiteUser> openVoice;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private Taste taste;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<History> historyList;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private IdealType idealType;
+
 }

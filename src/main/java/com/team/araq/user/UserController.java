@@ -22,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -314,6 +313,7 @@ public class UserController {
 
     @GetMapping("/post")
     public String post() {
+
         return "user/post";
     }
 
@@ -350,6 +350,7 @@ public class UserController {
             return "녹음 파일 업로드 실패" + e.getMessage();
         }
     }
+
 
     @ResponseBody
     @PostMapping("/deleteImage")
@@ -388,5 +389,14 @@ public class UserController {
             e.printStackTrace(); // 또는 로그에 기록 등을 수행할 수 있음
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 실패");
         }
+    }
+
+    @PostMapping("/checkAccess")
+    @ResponseBody
+    public boolean checkAccess(Principal principal, @RequestBody String username) {
+        SiteUser user1 = this.userService.getByUsername(principal.getName());
+        return user1.getOpenVoice().stream()
+                .anyMatch(user2 -> user2.getUsername().equals(username));
+
     }
 }

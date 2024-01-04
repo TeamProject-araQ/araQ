@@ -36,10 +36,18 @@
             <textarea type="text" id="msgContent" class="form-control"></textarea>
             <div class="d-flex justify-content-between align-items-center m-2">
                 <a th:href="@{/chat/list}" class="btn btn-outline-secondary" style="padding:3px 5px;">나가기</a>
-                <a href="javascript:void(0)" id="chatImageBtn">사진첨부</a>
-                <a href="javascript:void(0)" id="voiceChatBtn">보이스톡</a>
-                <a href="javascript:void(0)" id="test">Check</a>
-                <button type="submit" class="버튼 btn" style="width:80px;">보내기</button>
+                <a href="javascript:void(0)" id="chatImageBtn">
+                    <i class="bi bi-images" style="font-size: 30px;"></i>
+                </a>
+                <a href="javascript:void(0)" id="voiceChatBtn">
+                    <i class="bi bi-telephone-fill" style="font-size: 30px;"></i>
+                </a>
+                <a href="javascript:void(0)" id="chatReportBtn">
+                    <img th:src="@{/image/etc/siren.png}" alt="" style="height: 30px; width: 30px; margin-bottom: 10px;">
+                </a>
+                <button type="submit" style="border:0;">
+                    <i class="bi bi-send-fill" style="font-size: 30px; color: rgb(146, 132, 168)"></i>
+                </button>
             </div>
         </form>
         <input type="file" id="chatImageInput" accept="image/*" multiple>

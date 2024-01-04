@@ -1,6 +1,6 @@
 $(function() {
-    var socket = new SockJS("/ws");
-    var stompClient = Stomp.over(socket);
+    const socket = new SockJS("/ws");
+    const stompClient = Stomp.over(socket);
     stompClient.debug = null;
 
     $("#sendChatForm > textarea").on('keydown', function(e) {
@@ -79,13 +79,8 @@ $(function() {
             }
         });
 
-        stompClient.send("/app/online", {}, JSON.stringify({
-            type: "online",
-            target: $("#hiddenUserName").val()
-        }));
-
         stompClient.subscribe("/topic/chat/" + roomCode, function(message) {
-            var data = JSON.parse(message.body);
+            const data = JSON.parse(message.body);
             if (data.code === "confirm") {
                 if (data.target === user) $(".confirm").remove();
             }
@@ -125,7 +120,7 @@ $(function() {
                     '<div class="chatBox">'+
                         '<img src="' + data.writerImage + '" alt="">'+
                         '<div>'+
-                            '<p>' + data.writerNick + '</p>'+
+                            '<a href="javascript:void(0)" onclick="window.location.reload()">' + data.writerNick + '</a>'+
                             '<div>'+
                                 '<div class="card">'+
                                     imageElement+
@@ -140,21 +135,23 @@ $(function() {
                 $("#chatBoard").append(element);
                 chatBoard.scrollTop = chatBoard.scrollHeight;
 
-                $.ajax({
-                    url: "/chat/confirm",
-                    type: "post",
-                    contentType: "application/json",
-                    headers: {
-                        [csrfHeader]: csrfToken
-                    },
-                    data: JSON.stringify({
-                        target: target,
-                        content: roomCode
-                    }),
-                    error: function(err) {
-                        console.log(err);
-                    }
-                });
+                if (!document.hidden) {
+                    $.ajax({
+                        url: "/chat/confirm",
+                        type: "post",
+                        contentType: "application/json",
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        },
+                        data: JSON.stringify({
+                            target: target,
+                            content: roomCode
+                        }),
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                }
             }
         });
     });
@@ -208,18 +205,6 @@ $(function() {
         $("#msgContent").focus();
     });
 
-    $(window).on('beforeunload', function() {
-        $.ajax({
-            url: "/offline",
-            type: "POST",
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            contentType:"text/plain",
-            data: $("#hiddenUserName").val()
-        });
-    });
-
     $("#voiceChatBtn").on('click', function() {
         if (confirm(targetNick + "님에게 보이스 채팅을 요청하시겠습니까?")) {
             stompClient.send("/app/all/" + target, {}, JSON.stringify({
@@ -231,7 +216,30 @@ $(function() {
     });
 
     $(".chatWriterBtn").on('click', function() {
-        $("#profileModal").modal("show");
-        // todo 채팅대상 프로필 해야함
+        showProfile(target);
+    });
+
+    $(window).on("focus", function() {
+        $.ajax({
+            url: "/chat/confirm",
+            type: "post",
+            contentType: "application/json",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            data: JSON.stringify({
+                target: target,
+                content: roomCode
+            }),
+            error: function(err) {
+                console.log(err);
+            }
+        });
+    });
+
+    $("#chatReportBtn").on('click', function () {
+        $("#reportedUsername").val(target);
+        $("#reportedRoomCode").val(roomCode);
+        $("#report").modal("show");
     });
 });
