@@ -30,7 +30,7 @@
         <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png" style="height:70px; width:auto;">
     </a></div>
     <h4 class="underline-start mb-3">회원가입</h4>
-    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post" enctype="multipart/form-data"
+    <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post"
           onsubmit="return validateForm">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div id="step1">
@@ -67,10 +67,6 @@
                     <input type="text" id="verKey" class="form-control">
                     <input type="button" class="btn 버튼" onclick="confirmVerKey()" value="인증번호 확인">
                 </div>
-            </div>
-            <div class="mb-3">
-                <label for="image" class="form-label">사진 업로드</label>
-                <input type="file" id="imageFiles" name="image" accept="image/**" class="form-control">
             </div>
         </div>
         <button type="submit" class="btn 버튼-full w-100">회원가입</button>
