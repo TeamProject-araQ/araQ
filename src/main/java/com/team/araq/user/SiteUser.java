@@ -148,4 +148,7 @@ public class SiteUser {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private IdealType idealType;
+
+    @JsonIgnore
+    private boolean plaza;
 }

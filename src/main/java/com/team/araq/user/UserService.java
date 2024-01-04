@@ -285,4 +285,13 @@ public class UserService {
     public List<SiteUser> getByReligion(String gender, String religion) {
         return this.userRepository.findByGenderNotAndReligion(gender, religion);
     }
+
+    public void setStatusInPlaza(SiteUser user, boolean status) {
+        user.setPlaza(status);
+        userRepository.save(user);
+    }
+
+    public List<SiteUser> getOnlineInPlaza() {
+        return userRepository.findByPlazaTrue();
+    }
 }
