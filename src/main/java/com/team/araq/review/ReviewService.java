@@ -93,7 +93,7 @@ public class ReviewService {
     }
 
     public void uploadImage(Review review, MultipartFile image) throws IOException {
-        if (image.isEmpty()) review.setImage("/image/defaultReview.jpg");
+        if (image.isEmpty()) review.setImage("/image/etc/defaultReview.jpg");
         else {
             File uploadDirectory = new File(uploadPath);
             if (!uploadDirectory.exists()) {

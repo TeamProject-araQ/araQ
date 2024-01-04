@@ -72,7 +72,7 @@ public class SiteUser {
     // 취미
     private String hobby;
 
-    // 사진
+    // 대표 사진
     private String image;
 
     @JsonIgnore
@@ -132,6 +132,9 @@ public class SiteUser {
     private List<UserLike> likedUsers;
 
     private String audio;
+
+    // 사진 목록
+    private List<String> images;
 
     @ManyToMany
     @JsonIgnore
