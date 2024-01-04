@@ -63,7 +63,7 @@
                     <label class="btn 버튼" for="genderOption1">남성</label>
 
                     <input type="radio" class="btn-check" name="genderOption"
-                           id="genderOption2" autocomplete="off" value="여성" onchange="updateField('gender', '여서')">
+                           id="genderOption2" autocomplete="off" value="여성" onchange="updateField('gender', '여성')">
                     <label class="btn 버튼" for="genderOption2">여성</label>
                 </div>
                 <input type="hidden" th:field="*{gender}" id="genderHidden" name="gender" value="">
@@ -245,7 +245,9 @@
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">사진 업로드</label>
-                <input type="file" id="imageFiles" name="image" accept="image/**" class="form-control">
+                <input type="file" id="imageFiles1" name="images" accept="image/**" class="form-control" multiple>
+                <input type="file" id="imageFiles2" name="images" accept="image/**" class="form-control" multiple>
+                <input type="file" id="imageFiles3" name="images" accept="image/**" class="form-control" multiple>
             </div>
             <div class="d-flex justify-content-center">
             <button type="button" onclick="prevStep('step2', 'step1')" class="passBtn btn me-2">←</button>
@@ -373,6 +375,5 @@
     function updateField(fieldName, selectedValue) {
         document.getElementById(fieldName + 'Hidden').value = selectedValue;
     }
-
 </script>
 </html>
