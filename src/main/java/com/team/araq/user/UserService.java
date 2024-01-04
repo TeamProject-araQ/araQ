@@ -285,4 +285,20 @@ public class UserService {
     public List<SiteUser> getByReligion(String gender, String religion) {
         return this.userRepository.findByGenderNotAndReligion(gender, religion);
     }
+
+    public List<SiteUser> getByPersonalities(SiteUser loginUser) {
+        List<SiteUser> matchingUsers = new ArrayList<>();
+        List<SiteUser> userList = this.userRepository.findByGenderNot(loginUser.getGender());
+        for (SiteUser user : userList) {
+            List<String> userPersonality = user.getPersonality();
+            int matchCount = 0;
+            for (String personality : loginUser.getPersonality()) {
+                if (userPersonality.contains(personality)) {
+                    matchCount++;
+                }
+            }
+            if (matchCount >= 2)
+                matchingUsers.add(user);
+        } return matchingUsers;
+    }
 }

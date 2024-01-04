@@ -55,12 +55,56 @@
         .rate label:hover ~ input:checked ~ label {
             color: #f73c32 !important;
         }
+
+        #optionBar {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .nav-link {
+            font-size: 13pt;
+            font-family: nanum-semiBold,serif;
+        }
+
+        .navbar {
+            background: white;
+        }
+
+        @media (min-width: 996px) {
+            .navbar-toggler,
+            .navbar-collapse,
+            .navbar-nav {
+                display: none !important;
+            }
+
+            .navbar {
+                display: flex;
+                justify-content: center;
+                position: relative;
+                height: 81px;
+            }
+
+            .navbar-brand {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 995px) {
+            #optionBar {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
 <!-- 옵션 바 -->
-<div class="d-flex justify-content-around my-3 text-center container">
+<div class="container" id="optionBar">
     <ul class="menu">
         <li class="option"><a href="#">매칭</a></li>
         <ul class="depth">
@@ -83,7 +127,7 @@
         </ul>
     </ul>
     <ul class="menu">
-        <li class="option"><a href="#">고객센터</a></li>
+        <li class="option"><a href="#">고객지원</a></li>
         <ul class="depth">
             <li><a th:href="@{/announcement/list}">공지사항</a></li>
             <li><a href="#">자주 묻는 질문</a></li>

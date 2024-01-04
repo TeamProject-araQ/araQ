@@ -44,4 +44,5 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
     List<SiteUser> findByGenderNotAndHobbyContaining(String gender, String hobby);
 
     List<SiteUser> findByGenderNotAndMbti(String gender, String mbti);
+
 }
