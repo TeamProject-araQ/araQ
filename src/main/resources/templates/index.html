@@ -178,7 +178,7 @@
                                         <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
                                                th:data-nick="${like.likedUser.nickName}"
                                                th:data-value="${like.likedUser.username}">채팅 신청</a></li>
-                                        <li><a class="dropdown-item" href="#">취향 테스트</a></li>
+                                        <li><a class="dropdown-item testLink" href="javascript:void(0)" th:data-value="${like.likedUser.taste}" th:data-uri="@{|/taste/test/${like.likedUser.username}|}">취향 테스트</a></li>
                                         <li>
                                             <button class="reportBtn dropdown-item text-danger" type="button"
                                                     data-bs-toggle="modal"
@@ -232,7 +232,7 @@
                                         <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
                                                th:data-nick="${like.user.nickName}"
                                                th:data-value="${like.user.username}">채팅 신청</a></li>
-                                        <li><a class="dropdown-item" href="#">취향 테스트</a></li>
+                                        <li><a class="dropdown-item testLink" href="javascript:void(0)" th:data-value="${like.user.taste}" th:data-uri="@{|/taste/test/${like.user.username}|}">취향 테스트</a></li>
                                         <li>
                                             <button class="reportBtn dropdown-item text-danger" type="button"
                                                     data-bs-toggle="modal"

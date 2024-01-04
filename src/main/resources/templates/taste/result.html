@@ -1,0 +1,110 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        #me, #you {
+            width: 49%;
+        }
+
+        @media(max-width: 995px) {
+            .d-flex {
+                flex-direction: column;
+            }
+
+            #me, #you {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">결과 확인</h3>
+    <div class="d-flex justify-content-between">
+        <div id="me" class="my-3">
+            <h5 class="highlight" th:text="|${user.nickName}님의 답변|"></h5>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q1. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A1. ${answers[0]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q2. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A2. ${answers[1]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q3. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A3. ${answers[2]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q4. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A4. ${answers[3]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q5. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A5. ${answers[4]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q6. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A6. ${answers[5]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q7. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A7. ${answers[6]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q8. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A8. ${answers[7]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q9. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A9. ${answers[8]}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q10. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A10. ${answers[9]}|" class="mt-2"></div>
+            </div>
+        </div>
+        <div id="you" class="my-3">
+            <h5 class="highlight" th:text="|${target.nickName}님의 답변|"></h5>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q1. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A1. ${target.taste.option1}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q2. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A2. ${target.taste.option2}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q3. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A3. ${target.taste.option3}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q4. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A4. ${target.taste.option4}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q5. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A5. ${target.taste.option5}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q6. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A6. ${target.taste.option6}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q7. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A7. ${target.taste.option7}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q8. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A8. ${target.taste.option8}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q9. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A9. ${target.taste.option9}|" class="mt-2"></div>
+            </div>
+            <div class="border-bottom pb-3 mb-3">
+                <div>Q10. 내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</div>
+                <div th:text="|A10. ${target.taste.option10}|" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
