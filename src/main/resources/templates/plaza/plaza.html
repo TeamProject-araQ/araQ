@@ -1,6 +1,16 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <div class="card" id="plazaBoard"></div>
+    <div class="card" id="plazaBoard">
+        <div th:each="online : ${onlinePlazaUsers}" th:class="|avatar ${online.username}|">
+            <div class="talkBox card"></div>
+            <img class="userImage" th:src="${online.image}">
+            <div class="nickname" th:text="${online.nickName}"></div>
+        </div>
+    </div>
+    <form id="plazaChatForm" class="input-group">
+        <input type="text" class="form-control" id="plazaChatParam">
+        <button type="submit" class="btn 버튼">전송</button>
+    </form>
     <script th:inline="javascript">
         var user = [[${user.username}]];
     </script>

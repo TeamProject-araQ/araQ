@@ -39,7 +39,7 @@ public class UserUpdateForm {
     // 취미
     private String hobby;
 
-    // 사진
+    // 대표 사진
     private MultipartFile image;
 
     // 성별
@@ -47,4 +47,7 @@ public class UserUpdateForm {
 
     // 자기소개
     private String introduce;
+
+    // 사진
+    private List<MultipartFile> images;
 }

@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, @RequestParam("image") MultipartFile image, Model model) {
+    public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "user/signup";
         }
@@ -67,7 +67,7 @@ public class UserController {
             return "user/blacklist";
         }
         try {
-            SiteUser user = userService.create(userCreateForm, image);
+            SiteUser user = userService.create(userCreateForm);
             model.addAttribute("user", user);
             model.addAttribute("userUpdateForm", new UserUpdateForm());
         } catch (DataIntegrityViolationException e) {
@@ -86,7 +86,7 @@ public class UserController {
     @PostMapping("/update")
     public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
         SiteUser user = userService.getByUsername(username);
-        userService.update(user, userUpdateForm, image);
+        userService.update(user, userUpdateForm);
         return "redirect:/";
     }
 
@@ -333,9 +333,9 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String edit(UserUpdateForm userUpdateForm, Principal principal, MultipartFile image) throws IOException {
+    public String edit(UserUpdateForm userUpdateForm, Principal principal) throws IOException {
         SiteUser user = userService.getByUsername(principal.getName());
-        userService.update(user, userUpdateForm, image);
+        userService.update(user, userUpdateForm);
         return "redirect:/";
     }
 
@@ -351,11 +351,52 @@ public class UserController {
         }
     }
 
+
+    @ResponseBody
+    @PostMapping("/deleteImage")
+    public String deleteImage(@RequestBody String imageUrl, Principal principal) {
+        try {
+            SiteUser user = userService.getByUsername(principal.getName());
+            List<String> images = user.getImages();
+            userService.deleteImage(images, imageUrl, user);
+            return "이미지가 성공적으로 삭제되었습니다.";
+        } catch (Exception e) {
+            return "이미지 삭제에 실패했습니다.";
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/setProfileImage")
+    public String setProfileImage(@RequestBody String imageUrl, Principal principal) {
+        try {
+            SiteUser user = userService.getByUsername(principal.getName());
+            userService.setProfileImage(imageUrl, user);
+            return "이미지가 성공적으로 수정되었습니다.";
+        } catch (Exception e) {
+            return "이미지 수정에 실패했습니다.";
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/addImage")
+    public ResponseEntity<?> addImage(@RequestParam("image") MultipartFile image, Principal principal) {
+        try {
+            SiteUser user = userService.getByUsername(principal.getName());
+            List<String> images = userService.addImage(image, user);
+
+            return ResponseEntity.ok().body(images);
+        } catch (Exception e) {
+            e.printStackTrace(); // 또는 로그에 기록 등을 수행할 수 있음
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 실패");
+        }
+    }
+
     @PostMapping("/checkAccess")
     @ResponseBody
     public boolean checkAccess(Principal principal, @RequestBody String username) {
         SiteUser user1 = this.userService.getByUsername(principal.getName());
         return user1.getOpenVoice().stream()
                 .anyMatch(user2 -> user2.getUsername().equals(username));
+
     }
 }

@@ -20,11 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,29 +48,18 @@ public class UserService {
     }
 
 
-    public SiteUser create(UserCreateForm userCreateForm, MultipartFile image) throws IOException {
+    public SiteUser create(UserCreateForm userCreateForm) throws IOException {
         SiteUser user = new SiteUser();
         user.setUsername(userCreateForm.getUsername());
         user.setEmail(userCreateForm.getEmail());
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        File uploadDirectory = new File(uploadPath);
-        if (!uploadDirectory.exists()) {
-            uploadDirectory.mkdirs();
-
-            String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-            String fileName = user.getUsername() + "." + fileExtension;
-            File dest = new File(uploadPath + File.separator + fileName);
-            FileCopyUtils.copy(image.getBytes(), dest);
-            user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
-        }
-
         userRepository.save(user);
         return user;
     }
 
-    public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
+    public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -88,22 +75,41 @@ public class UserService {
         user.setGender(userUpdateForm.getGender());
         user.setIntroduce(userUpdateForm.getIntroduce());
 
-        if (image.isEmpty() && userUpdateForm.getGender().equals("남성")) {
-            user.setImage("/profile/default-m.jpg");
-        } else if (image.isEmpty()) {
-            user.setImage("/profile/default-w.jpg");
-        } else {
-            File uploadDirectory = new File(uploadPath);
-            if (!uploadDirectory.exists()) {
-                uploadDirectory.mkdirs();
-            }
-            String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-            String fileName = user.getUsername() + "." + fileExtension;
-            File dest = new File(uploadPath + File.separator + fileName);
-            FileCopyUtils.copy(image.getBytes(), dest);
-            user.setImage("/user/image/" + user.getUsername() + "." + fileExtension);
-        }
+        List<MultipartFile> images = userUpdateForm.getImages();
+        List<String> updatedImages = new ArrayList<>();
 
+        for (MultipartFile image : images) {
+            if (!image.isEmpty()) {
+                File uploadDirectory = new File(uploadPath);
+                if (!uploadDirectory.exists()) {
+                    uploadDirectory.mkdirs();
+                }
+                // 새로운 이미지 저장
+                String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
+                File dest = new File(uploadPath + File.separator + fileName);
+                FileCopyUtils.copy(image.getBytes(), dest);
+
+                // 이미지 경로를 사용자의 이미지 목록에 추가
+                updatedImages.add("/user/image/" + fileName);
+            }
+        }
+        // 새로운 이미지 목록으로 업데이트
+        if (!updatedImages.isEmpty()) {
+            user.setImages(updatedImages);
+            user.setImage(updatedImages.get(0));
+        } else {
+            // 이미지를 업로드하지 않은 경우 기본 이미지 설정
+            List<String> defaultImages = new ArrayList<>();
+            if (userUpdateForm.getGender().equals("남성")) {
+                defaultImages.add("/profile/default-m.jpg");
+            } else {
+                defaultImages.add("/profile/default-w.jpg");
+            }
+            user.setImages(defaultImages);
+            user.setImage(defaultImages.get(0));
+        }
         userRepository.save(user);
         return user;
     }
@@ -252,6 +258,53 @@ public class UserService {
         }
     }
 
+    public void deleteImage(List<String> images, String imageUrl, SiteUser user) {
+        for (Iterator<String> iterator = images.iterator(); iterator.hasNext(); ) {
+            String image = iterator.next();
+            if (image.equals(imageUrl)) {
+                iterator.remove();
+            }
+        }
+        if (user.getImage() != null && user.getImage().equals(imageUrl)) {
+            if (user.getGender().equals("남성")) {
+                user.setImage("/profile/default-m.jpg");
+            } else if (user.getGender().equals("여성")) {
+                user.setImage("/profile/default-w.jpg");
+            }
+        }
+        user.setImages(images);
+        userRepository.save(user);
+    }
+
+    public void setProfileImage(String imageUrl, SiteUser user) {
+        user.setImage(imageUrl);
+        userRepository.save(user);
+    }
+
+    public List<String> addImage(MultipartFile image, SiteUser user) {
+        String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
+        File dest = new File(uploadPath + File.separator + fileName);
+        try {
+            // 파일 복사
+            FileCopyUtils.copy(image.getBytes(), dest);
+
+            List<String> updatedImages = user.getImages();
+            // 이미지 경로를 사용자의 이미지 목록에 추가
+            updatedImages.add("/user/image/" + fileName);
+
+            // 이미지 목록을 사용자 객체에 저장
+            user.setImages(updatedImages);
+            userRepository.save(user);
+            return user.getImages();
+        } catch (IOException e) {
+            // IOException이 발생한 경우 처리
+            e.printStackTrace(); // 또는 로그에 기록 등을 수행할 수 있음
+            return null;
+        }
+    }
+
     public void useBubble(SiteUser user, int bubble) {
         user.setBubble(user.getBubble() - bubble);
         this.userRepository.save(user);
@@ -286,6 +339,15 @@ public class UserService {
         return this.userRepository.findByGenderNotAndReligion(gender, religion);
     }
 
+    public void setStatusInPlaza(SiteUser user, boolean status) {
+        user.setPlaza(status);
+        userRepository.save(user);
+    }
+
+    public List<SiteUser> getOnlineInPlaza() {
+        return userRepository.findByPlazaTrue();
+    }
+
     public List<SiteUser> getByPersonalities(SiteUser loginUser) {
         List<SiteUser> matchingUsers = new ArrayList<>();
         List<SiteUser> userList = this.userRepository.findByGenderNot(loginUser.getGender());
@@ -299,6 +361,7 @@ public class UserService {
             }
             if (matchCount >= 2)
                 matchingUsers.add(user);
-        } return matchingUsers;
+        }
+        return matchingUsers;
     }
 }
