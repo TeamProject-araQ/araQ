@@ -413,4 +413,11 @@ public class UserService {
         user.setPersonality(personality);
         userRepository.save(user);
     }
+
+    public void deleteFriend(SiteUser user1, SiteUser user2) {
+        user1.getFriendList().remove(user2);
+        user2.getFriendList().remove(user1);
+        this.userRepository.save(user1);
+        this.userRepository.save(user2);
+    }
 }

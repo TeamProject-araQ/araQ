@@ -7,6 +7,7 @@
             <th style="width: 10%;">성별</th>
             <th>닉네임</th>
             <th>활동 상태</th>
+            <th style="width: 10%;">삭제</th>
         </tr>
         </thead>
         <tbody>
@@ -29,8 +30,24 @@
                     <span class="ms-1">오프라인</span>
                 </div>
             </td>
+            <td><a href="javascript:void(0)" th:data-value="${friend.nickName}"
+                   th:data-uri="@{|/user/friend/delete/${friend.username}|}" class="deleteBtn btn btn-danger btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-lg"
+                     viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </a></td>
         </tr>
         </tbody>
     </table>
 </div>
+<script layout:framgnet="script">
+    $(function () {
+        $('.deleteBtn').on('click', function () {
+            var friendNick = $(this).data("value");
+            if (confirm(friendNick + "님을 친구 목록에서 삭제하시겠습니까?"))
+                location.href = $(this).data("uri");
+        });
+    });
+</script>
 </html>
