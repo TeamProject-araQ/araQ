@@ -1,18 +1,25 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <div class="card" id="plazaBoard">
-        <div th:each="online : ${onlinePlazaUsers}" th:class="|avatar ${online.username}|">
+        <div th:each="online : ${onlinePlazaUsers}" th:class="|avatar ${online.username}|"
+             th:classappend="${online.plazaFocus.equals('focus')} ? 'statusFocus' : 'statusBlur'">
             <div class="talkBox card"></div>
             <img class="userImage" th:src="${online.image}">
             <div class="nickname" th:text="${online.nickName}"></div>
+            <div class="status" th:classappend="${online.plazaFocus.equals('focus')} ? 'focus' : 'blur'"></div>
+            <input type="hidden" th:value="${online.locationTop}">
+            <input type="hidden" th:value="${online.locationLeft}">
+        </div>
+        <div id="plazaChatContainer">
+            <div id="plazaChatBoard"></div>
+            <form id="plazaChatForm">
+                <input type="text" class="form-control" id="plazaChatParam">
+            </form>
         </div>
     </div>
-    <form id="plazaChatForm" class="input-group">
-        <input type="text" class="form-control" id="plazaChatParam">
-        <button type="submit" class="btn 버튼">전송</button>
-    </form>
     <script th:inline="javascript">
-        var user = [[${user.username}]];
+        let user = [[${user.username}]];
+        let nick = [[${user.nickName}]];
     </script>
 </div>
 <script type="text/javascript" th:src="@{/plaza.js}" layout:fragment="script"></script>

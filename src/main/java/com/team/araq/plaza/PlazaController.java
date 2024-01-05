@@ -1,5 +1,6 @@
 package com.team.araq.plaza;
 
+import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -20,6 +21,8 @@ public class PlazaController {
 
     @GetMapping("/join")
     public String join(Model model, Principal principal) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.setUserLocationInPlaza(user, "0px", "0px");
         model.addAttribute("onlinePlazaUsers", userService.getOnlineInPlaza());
         return "plaza/plaza";
     }

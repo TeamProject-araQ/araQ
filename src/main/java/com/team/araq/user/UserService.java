@@ -397,6 +397,16 @@ public class UserService {
         return matchingUsers;
     }
 
+    public void setUserLocationInPlaza(SiteUser user, String top, String left) {
+        user.setLocationTop(top);
+        user.setLocationLeft(left);
+        userRepository.save(user);
+    }
+
+    public void setFocusInPlaza(SiteUser user, String status) {
+        user.setPlazaFocus(status);
+    }
+
     public void addFriend(SiteUser sender, SiteUser receiver) {
         sender.getFriendList().add(receiver);
         receiver.getFriendList().add(sender);
