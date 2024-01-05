@@ -12,9 +12,13 @@ import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,6 +51,9 @@ public class UserController {
     private final PostService postService;
 
     private final PaymentService paymentService;
+
+    private final SimpMessageSendingOperations messagingTemplate;
+
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -398,5 +405,43 @@ public class UserController {
         return user1.getOpenVoice().stream()
                 .anyMatch(user2 -> user2.getUsername().equals(username));
 
+    }
+
+    @MessageMapping("/user/friend/request")
+    public void requestFriend(@Payload String username) {
+        System.out.println(username);
+        JSONObject jsonObject = new JSONObject(username);
+        SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
+        SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
+        boolean isFriend = false;
+        for (SiteUser user : sender.getFriendList()) {
+            if (user.getUsername().equals(receiver.getUsername())) {
+                isFriend = true;
+                break;
+            }
+        }
+        if (!isFriend)
+            messagingTemplate.convertAndSend("/topic/user/request/possible/" + receiver.getUsername(), username);
+        else
+            messagingTemplate.convertAndSend("/topic/user/request/impossible/" + sender.getUsername(),
+                    receiver.getNickName() + "님이 이미 친구 목록에 존재합니다.");
+    }
+
+    @ResponseBody
+    @PostMapping("/accept")
+    public String acceptRequest(@RequestBody String username) {
+        JSONObject jsonObject = new JSONObject(username);
+        SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
+        SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
+        this.userService.addFriend(sender, receiver);
+        return sender.getNickName() + "님이 친구로 등록되었습니다.";
+    }
+
+    @GetMapping("/friend")
+    public String friendList(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<SiteUser> friendList = user.getFriendList();
+        model.addAttribute("friendList", friendList);
+        return "user/friend";
     }
 }

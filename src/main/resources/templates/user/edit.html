@@ -6,7 +6,7 @@
         }
 
         #profileImage {
-            cursor : pointer;
+            cursor: pointer;
         }
 
         .carousel-item img {
@@ -14,6 +14,7 @@
             max-height: 450px; /* Set your desired height */
             margin: auto;
         }
+
         .button-container {
             position: absolute;
             top: 50%;
@@ -22,7 +23,7 @@
         }
 
         .add-image-button {
-        cursor: pointer;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -33,7 +34,8 @@
         <!-- Button trigger modal -->
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -52,11 +54,14 @@
                                      th:classappend="${iterStat.index == 0} ? 'active': ''">
                                     <img class="d-block w-100" th:src="${image}" alt="">
                                 </div>
-                                <div id="imageAddCarousel" class="carousel-item" th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
+                                <div id="imageAddCarousel" class="carousel-item"
+                                     th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
                                     <!-- 이미지로 변경된 버튼 -->
-                                    <img class="add-image-button" src="/profile/default-m.jpg" alt="이미지 추가" onclick="openImageInput()">
+                                    <img class="add-image-button" src="/profile/default-m.jpg" alt="이미지 추가"
+                                         onclick="openImageInput()">
                                     <!-- 파일 입력 상자 및 이미지 미리보기 -->
-                                    <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="addImageToCarousel()"/>
+                                    <input type="file" id="imageInput" style="display: none;" accept="image/*"
+                                           onchange="addImageToCarousel()"/>
                                     <div id="imagePreview" style="max-width: 100%; overflow: hidden;"></div>
                                 </div>
                             </div>
@@ -210,21 +215,21 @@
 <script layout:fragment="script" type="text/javascript">
     function sample5_execDaumPostcode() {
         new daum.Postcode({
-            oncomplete: function(data) {
+            oncomplete: function (data) {
                 var addr = data.address; // 최종 주소 변수
                 document.getElementById("address").value = addr;
             }
         }).open();
     }
 
-    document.getElementById('editForm').addEventListener('submit', function(event){
+    document.getElementById('editForm').addEventListener('submit', function (event) {
         var nickName = document.getElementById('nickName').value.trim();
         var height = document.getElementById('height').value.trim();
         var age = document.getElementById('age').value.trim();
         var hobby = document.getElementById('hobby').value.trim();
         var introduce = document.getElementById('introduce').value.trim();
 
-        if(nickName === '' || height === '' || age === '' || hobby === '' || introduce === '') {
+        if (nickName === '' || height === '' || age === '' || hobby === '' || introduce === '') {
             alert('모든 필수 입력 항목을 채워주세요.');
             event.preventDefault();
         }
@@ -248,7 +253,7 @@
 
                 var indicators = $(' .carousel-indicators');
                 var indicatorsLength = indicators.children('button').length;
-                if(indicatorsLength > 1) {
+                if (indicatorsLength > 1) {
                     var nextItem = activeItem.next('.carousel-item');
                     if (nextItem.length === 0) {
                         // 다음 이미지가 없으면 첫 번째 이미지를 활성화
