@@ -459,4 +459,12 @@ public class UserController {
         model.addAttribute("friendList", friendList);
         return "user/friend";
     }
+
+    @GetMapping("/friend/delete/{username}")
+    public String deleteFriend(@PathVariable("username") String username, Principal principal) {
+        SiteUser user1 = this.userService.getByUsername(username);
+        SiteUser user2 = this.userService.getByUsername(principal.getName());
+        this.userService.deleteFriend(user1, user2);
+        return "redirect:/user/friend";
+    }
 }
