@@ -144,6 +144,10 @@
                                    th:data-nick="${online.nickName}"
                                    th:data-value="${online.username}">채팅 신청</a></li>
                             <li>
+                            <li><a class="friendRequest dropdown-item" href="javascript:void(0)"
+                                   th:data-nick="${online.nickName}"
+                                   th:data-value="${online.username}">친구 신청</a></li>
+                            <li>
                                 <button class="reportBtn dropdown-item text-danger" type="button" data-bs-toggle="modal"
                                         data-bs-target="#report" th:data-value="${online.username}">신고
                                 </button>
@@ -156,7 +160,7 @@
         <div id="matchStatus">
             <h3 class="highlight"># 매칭 상태</h3>
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" th:if="${!likeList.isEmpty()}">
                     <div class="card-text">
                         <div class="matchResult" th:each="like : ${likeList}">
                             <!-- 요청 보낸 사람이 로그인한 유저일 때 -->
@@ -297,6 +301,8 @@
             <button onclick="scrollToBottom()" class="btn btn-sm 버튼"><i class="bi bi-arrow-bar-down"></i></button>
         </div>
     </div>
+    <input type="hidden" th:value="${user.username}" id="loginUser">
+    <input type="hidden" th:value="${user.nickName}" id="loginUserNick">
 </div>
 <script type="text/javascript" th:src="@{/index.js}" layout:fragment="script"></script>
 </html>

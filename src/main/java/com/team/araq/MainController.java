@@ -65,7 +65,9 @@ public class MainController {
     }
 
     @GetMapping("/YStest")
-    public String YStest() {
+    public String YStest(Model model) {
+        SiteUser target = this.userService.getByUsername("user");
+        model.addAttribute("target", target);
         return "YStest";
     }
 

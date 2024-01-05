@@ -1,0 +1,36 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">친구 목록</h3>
+    <table class="table table-hover text-center">
+        <thead class="table-light">
+        <tr>
+            <th style="width: 10%;">성별</th>
+            <th>닉네임</th>
+            <th>활동 상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="friend : ${friendList}">
+            <td>
+                <img src="/image/user/man.png" alt="" style="width: 20px; height: 20px;"
+                     th:if="${friend.gender == '남성'}">
+                <img src="/image/user/woman.png" alt="" style="width: 20px; height: 20px;"
+                     th:if="${friend.gender == '여성'}">
+            </td>
+            <td th:text="${friend.nickName}"></td>
+            <td>
+                <div th:if="${friend.login}">
+                    <img th:src="@{${friend.image}}" alt="" style="width: 30px; height: 30px;">
+                    <span class="ms-1">온라인</span>
+                </div>
+                <div th:if="${!friend.login}">
+                    <img th:src="@{${friend.image}}" alt=""
+                         style="opacity: 0.3; width: 30px; height: 30px;">
+                    <span class="ms-1">오프라인</span>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</html>

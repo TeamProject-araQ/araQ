@@ -397,6 +397,13 @@ public class UserService {
         return matchingUsers;
     }
 
+    public void addFriend(SiteUser sender, SiteUser receiver) {
+        sender.getFriendList().add(receiver);
+        receiver.getFriendList().add(sender);
+        this.userRepository.save(receiver);
+        this.userRepository.save(sender);
+    }
+
     public List<String> getUserPersonality(SiteUser user) {
         List<String> userPersonality = user.getPersonality();
         return userPersonality;
