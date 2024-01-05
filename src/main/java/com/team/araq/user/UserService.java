@@ -20,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -110,6 +113,26 @@ public class UserService {
             user.setImages(defaultImages);
             user.setImage(defaultImages.get(0));
         }
+        userRepository.save(user);
+        return user;
+    }
+
+    public SiteUser edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+        user.setNickName(userUpdateForm.getNickName());
+        user.setAddress(userUpdateForm.getAddress());
+        user.setAge(userUpdateForm.getAge());
+        user.setHeight(userUpdateForm.getHeight());
+        user.setReligion(userUpdateForm.getReligion());
+        user.setDrinking(userUpdateForm.getDrinking());
+        user.setSmoking(userUpdateForm.getSmoking());
+        user.setEducation(userUpdateForm.getEducation());
+        user.setMbti(userUpdateForm.getMbti());
+//        user.setPersonality(userUpdateForm.getPersonality());
+        user.setHobby(userUpdateForm.getHobby());
+        user.setCreateDate(LocalDateTime.now());
+        user.setGender(userUpdateForm.getGender());
+        user.setIntroduce(userUpdateForm.getIntroduce());
+
         userRepository.save(user);
         return user;
     }
@@ -262,7 +285,14 @@ public class UserService {
         for (Iterator<String> iterator = images.iterator(); iterator.hasNext(); ) {
             String image = iterator.next();
             if (image.equals(imageUrl)) {
-                iterator.remove();
+                String imageName = Paths.get(imageUrl).getFileName().toString(); // 이미지 파일의 이름만 추출
+                String deleteImage = uploadPath + "/" + imageName;
+                try {
+                    Files.deleteIfExists(Path.of(deleteImage));
+                    iterator.remove();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         if (user.getImage() != null && user.getImage().equals(imageUrl)) {

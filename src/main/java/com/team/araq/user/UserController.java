@@ -335,7 +335,7 @@ public class UserController {
     @PostMapping("/edit")
     public String edit(UserUpdateForm userUpdateForm, Principal principal) throws IOException {
         SiteUser user = userService.getByUsername(principal.getName());
-        userService.update(user, userUpdateForm);
+        userService.edit(user, userUpdateForm);
         return "redirect:/";
     }
 

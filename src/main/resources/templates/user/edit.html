@@ -22,6 +22,9 @@
         }
 
         .add-image-button {
+        display: block;
+        margin: 0 auto;
+        margin-left: auto;
         cursor: pointer;
         }
     </style>
@@ -54,7 +57,7 @@
                                 </div>
                                 <div id="imageAddCarousel" class="carousel-item" th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
                                     <!-- 이미지로 변경된 버튼 -->
-                                    <img class="add-image-button" src="/profile/default-m.jpg" alt="이미지 추가" onclick="openImageInput()">
+                                    <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가" onclick="openImageInput()">
                                     <!-- 파일 입력 상자 및 이미지 미리보기 -->
                                     <input type="file" id="imageInput" style="display: none;" accept="image/*" onchange="addImageToCarousel()"/>
                                     <div id="imagePreview" style="max-width: 100%; overflow: hidden;"></div>
@@ -198,11 +201,11 @@
                         <label for="address">주소</label>
                         <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
                                readonly>
-                        <button type="button" onclick="sample5_execDaumPostcode()">주소 찾기</button>
+                        <input type="button" class="btn 버튼"  onclick="sample5_execDaumPostcode()" value="주소 찾기">
                     </div>
                 </div>
             </div>
-            <button type="submit">저장</button>
+            <button class="btn 버튼" type="submit">저장</button>
         </form>
     </div>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
