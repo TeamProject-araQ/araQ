@@ -154,4 +154,5 @@ public class SiteUser {
 
     @JsonIgnore
     private boolean plaza;
+
 }

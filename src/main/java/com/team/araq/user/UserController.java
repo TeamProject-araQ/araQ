@@ -335,7 +335,7 @@ public class UserController {
     @PostMapping("/edit")
     public String edit(UserUpdateForm userUpdateForm, Principal principal) throws IOException {
         SiteUser user = userService.getByUsername(principal.getName());
-        userService.update(user, userUpdateForm);
+        userService.edit(user, userUpdateForm);
         return "redirect:/";
     }
 
@@ -397,6 +397,21 @@ public class UserController {
         SiteUser user1 = this.userService.getByUsername(principal.getName());
         return user1.getOpenVoice().stream()
                 .anyMatch(user2 -> user2.getUsername().equals(username));
+    }
 
+    @GetMapping("/personality")
+    @ResponseBody
+    public ResponseEntity<List<String>> getUserPersonality(Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        List<String> userPersonality = userService.getUserPersonality(user);
+        return ResponseEntity.ok(userPersonality);
+    }
+
+    @PostMapping("/savePersonality")
+    @ResponseBody
+    public String savePersonality(@RequestBody List<String> personality, Principal principal){
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.savePersonality(user, personality);
+        return "success";
     }
 }
