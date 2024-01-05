@@ -167,4 +167,5 @@ public class SiteUser {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     private List<SiteUser> friendList;
+
 }

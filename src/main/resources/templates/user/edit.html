@@ -23,7 +23,16 @@
         }
 
         .add-image-button {
+            display: block;
+            margin: 0 auto;
+            margin-left: auto;
             cursor: pointer;
+        }
+
+        .btn-check:checked + .버튼, .btn-check:checked + .버튼:focus, .btn-check:checked + .버튼:hover {
+            background-color: rgb(141, 128, 166);
+            color: #fff;
+            border-color: rgb(141, 128, 166);
         }
     </style>
 </head>
@@ -57,8 +66,7 @@
                                 <div id="imageAddCarousel" class="carousel-item"
                                      th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
                                     <!-- 이미지로 변경된 버튼 -->
-                                    <img class="add-image-button" src="/profile/default-m.jpg" alt="이미지 추가"
-                                         onclick="openImageInput()">
+                                    <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가" onclick="openImageInput()">
                                     <!-- 파일 입력 상자 및 이미지 미리보기 -->
                                     <input type="file" id="imageInput" style="display: none;" accept="image/*"
                                            onchange="addImageToCarousel()"/>
@@ -203,14 +211,78 @@
                         <label for="address">주소</label>
                         <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
                                readonly>
-                        <button type="button" onclick="sample5_execDaumPostcode()">주소 찾기</button>
+                        <input type="button" class="btn 버튼"  onclick="sample5_execDaumPostcode()" value="주소 찾기">
                     </div>
                 </div>
             </div>
-            <button type="submit">저장</button>
+            <button class="btn 버튼" type="submit">저장</button>
         </form>
     </div>
+
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+        누르지마세요
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <input type="checkbox" class="btn-check" name="personality" id="personality1" autocomplete="off"
+                               value="활발한">
+                        <label class="btn 버튼" for="personality1">활발한</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality2" autocomplete="off"
+                               value="조용한">
+                        <label class="btn 버튼" for="personality2">조용한</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality3" autocomplete="off"
+                               value="애교가넘치는">
+                        <label class="btn 버튼" for="personality3">애교가넘치는</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality4" autocomplete="off"
+                               value="어른스러운">
+                        <label class="btn 버튼" for="personality4">어른스러운</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality5" autocomplete="off"
+                               value="침착한">
+                        <label class="btn 버튼" for="personality5">침착한</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality6" autocomplete="off"
+                               value="낙천적인">
+                        <label class="btn 버튼" for="personality6">낙천적인</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality7" autocomplete="off"
+                               value="도전적인">
+                        <label class="btn 버튼" for="personality7">도전적인</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality8" autocomplete="off"
+                               value="유머러스한">
+                        <label class="btn 버튼" for="personality8">유머러스한</label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality9" autocomplete="off"
+                               value="센스있는 ">
+                        <label class="btn 버튼" for="personality9">센스있는 </label>
+
+                        <input type="checkbox" class="btn-check" name="personality" id="personality10" autocomplete="off"
+                               value="열정적인">
+                        <label class="btn 버튼" for="personality10">열정적인</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="savePersonality()">저장하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script layout:fragment="script" type="text/javascript">
     function sample5_execDaumPostcode() {
@@ -375,6 +447,78 @@
     toggleModalButtons();
     $('#carouselExampleIndicators').on('slid.bs.carousel', toggleModalButtons);
 
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.querySelectorAll('input[name="personality"]');
+        var maxAllowed = 3;
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                var checkedCount = document.querySelectorAll('input[name="personality"]:checked').length;
+
+                if (checkedCount > maxAllowed) {
+                    alert('최대 3개의 성격을 선택할 수 있습니다.');
+                    this.checked = false; // 체크를 해제합니다.
+                }
+            });
+        });
+    });
+
+    function getUserPersonality() {
+        $.ajax({
+            type: 'GET',
+            url: '/user/personality',
+            success: function (data) {
+                checkUserPersonality(data);
+            },
+            error: function (error) {
+                console.error('서버에서 성격 데이터를 가져오는데 실패했습니다.');
+                console.error(error);
+            }
+        });
+    }
+
+    function checkUserPersonality(data){
+        var checkboxes = document.querySelectorAll('input[name="personality"]');
+
+        checkboxes.forEach(function(checkbox) {
+            if(data.includes(checkbox.value)) {
+                checkbox.checked = true;
+            }
+        });
+    }
+
+    $('#exampleModal2').on('show.bs.modal', function(){
+        getUserPersonality();
+    });
+
+    function savePersonality() {
+        var checkedPersonality = document.querySelectorAll('input[name=personality]:checked');
+
+        var selectedPersonality = Array.from(checkedPersonality).map(function (checkbox){
+            return checkbox.value;
+        });
+
+        var formData = {
+            personality : selectedPersonality
+        };
+        console.log(formData);
+
+        $.ajax({
+            type:'POST',
+            url: '/user/savePersonality',
+            data: JSON.stringify(formData),
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: 'application/json',
+            success: function (data) {
+                console.log('Data save');
+            },
+            error:function (error){
+                console.error('Error', error);
+            }
+        });
+    }
 
 </script>
 </html>

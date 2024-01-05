@@ -1,6 +1,7 @@
 $(function () {
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
+    stompClient.debug = null;
     let keydown = false;
     let interval = null;
 
