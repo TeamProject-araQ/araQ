@@ -1,10 +1,10 @@
 $(function () {
-    var loginUser = $('#loginUser').val();
+    var loginUser = $('#hiddenUserName').val();
     var loginUserNick = $('#loginUserNick').val();
-    var userNick = $('.chatRequest').data("nick");
-    var username = $('.chatRequest').data("value");
 
     $('.friendRequest').on('click', function () {
+        var userNick = $(this).data("nick");
+        var username = $(this).data("value");
         if (confirm(userNick + "님에게 친구 신청을 보냅니다.")) {
             if (stompClient) {
                 stompClient.send("/app/user/friend/request", {}, JSON.stringify({

@@ -217,6 +217,7 @@
         </div>
     </div>
     <input type="hidden" id="userIdealType" th:value="${user.idealType}">
+    <input type="hidden" th:value="${user.nickName}" id="loginUserNick">
 </div>
 <div th:replace="~{layout_modal :: modal}"></div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
