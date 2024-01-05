@@ -152,6 +152,11 @@ public class SiteUser {
     @JsonIgnore
     private IdealType idealType;
 
-    @JsonIgnore
     private boolean plaza;
+
+    private String locationTop;
+
+    private String locationLeft;
+
+    private String plazaFocus;
 }
