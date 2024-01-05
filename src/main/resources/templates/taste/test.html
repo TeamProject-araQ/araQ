@@ -1,0 +1,219 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3" style="min-width: 350px;">
+    <h3 th:text="|${target.nickName}님의 취향 테스트|" class="underline my-3"></h3>
+    <table class="table text-center table-hover mt-3">
+        <thead style="background:#D8D3E0;">
+        <tr>
+            <th style="width: 5%;">번호</th>
+            <th style="width: 65%;">문제</th>
+            <th>답변</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>1</th>
+            <td class="text-start">내 애인과 내 친구 셋이서 밥을 먹는데 내 친구가 깻잎을 못 떼고 있을 때 내 애인이 친구의 깻잎을 떼어준다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option1" id="1-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="1-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option1" id="1-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="1-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>2</th>
+            <td class="text-start">집에서 내 애인과 내 친구 셋이서 술을 먹다가 내가 먼저 취해 방으로 들어간다면 친구와 애인 단 둘이 술을 먹어도?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option2" id="2-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="2-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option2" id="2-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="2-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>3</th>
+            <td class="text-start">내 애인이 이성이 포함된 오랜 친구들과 1박 2일 여행을 간다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option3" id="3-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="3-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option3" id="3-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="3-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>4</th>
+            <td class="text-start">내 애인의 차에 이성인 직장 동료의 휴대폰이 블루투스 연결되어있다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option4" id="4-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="4-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option4" id="4-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="4-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>5</th>
+            <td class="text-start">내 애인이 여사친/남사친과 넷플릭스 아이디를 공유해도?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option5" id="5-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="5-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option5" id="5-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="5-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>6</th>
+            <td class="text-start">내 친구가 롱패딩 지퍼를 못 올리고 있을 때, 내 애인이 친구의 패딩 지퍼를 올려준다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option6" id="6-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="6-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option6" id="6-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="6-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>7</th>
+            <td class="text-start">내 친구와 내 애인과 노래방에서 듀엣곡을 불러도?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option7" id="7-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="7-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option7" id="7-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="7-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>8</th>
+            <td class="text-start">퇴근 후 나를 데리러 온 애인. 그런데 조수석에는 이성인 직장 동료가 타고있다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option8" id="8-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="8-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option8" id="8-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="8-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>9</th>
+            <td class="text-start">내 친구와 애인과 함께 식사 중, 내 애인이 친구의 얼굴에 묻은 양념을 휴지로 직접 닦아준다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option9" id="9-1" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="9-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option9" id="9-2" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="9-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>10</th>
+            <td class="text-start">내 애인이 나를 위해 이벤트를 준비했다. 그런데 내 친구와 단 둘이 한달 동안 준비했다는 사실을 알게 된다면?</td>
+            <td>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="상관 없다" name="option10" id="10-1"
+                               autocomplete="off">
+                        <label class="btn btn-sm btn-outline-success" for="10-1">상관 없다</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="btn-check" value="절대 안된다" name="option10" id="10-2"
+                               autocomplete="off">
+                        <label class="btn btn-sm btn-outline-danger" for="10-2">절대 안된다</label>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end mt-5">
+        <button type="button" class="btn 버튼 submitBtn">제출</button>
+    </div>
+    <form th:action="@{/taste/result}" method="post" id="resultForm">
+        <input type="hidden" th:value="${target.username}" id="targetName" name="username">
+        <input type="hidden" id="options" name="options">
+    </form>
+</div>
+<script layout:fragment="script">
+    $(function () {
+        $('.submitBtn').on('click', function () {
+            var options = {};
+            for(var i = 1; i <= 10; i++) {
+                options["option" + i] = $('input[name="option' + i + '"]:checked').val();
+            }
+
+            options['username'] = $('#targetName').val();
+            console.log(options);
+
+            $.ajax({
+                url: "/taste/test",
+                type: "POST",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType: "application/json",
+                data: JSON.stringify(options),
+                success: function (response) {
+                    alert("당신의 점수는 " + response + "점 입니다");
+                    options["score"] = response;
+                    if (confirm("결과를 확인하시겠습니까?")) {
+                        $('#options').val(JSON.stringify(options));
+                        $('#resultForm').submit();
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+    });
+</script>
+</html>

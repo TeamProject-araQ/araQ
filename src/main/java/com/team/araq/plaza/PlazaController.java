@@ -20,6 +20,7 @@ public class PlazaController {
 
     @GetMapping("/join")
     public String join(Model model, Principal principal) {
+        model.addAttribute("onlinePlazaUsers", userService.getOnlineInPlaza());
         return "plaza/plaza";
     }
 }

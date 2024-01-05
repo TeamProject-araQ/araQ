@@ -152,4 +152,7 @@ public class SiteUser {
     @JsonIgnore
     private IdealType idealType;
 
+    @JsonIgnore
+    private boolean plaza;
+
 }

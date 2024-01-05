@@ -105,4 +105,11 @@ $(function () {
         var reportedUsername = $('#reportedUsername');
         reportedUsername.val($(this).data("value"));
     });
+
+    $('.testLink').on('click', function () {
+       if ($(this).data("value") === "" || $(this).data("value") == null)
+           alert("취향 조사가 진행되지 않은 회원입니다.")
+        else
+            location.href = $(this).data("uri");
+    });
 });

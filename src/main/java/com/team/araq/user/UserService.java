@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -81,6 +80,7 @@ public class UserService {
         List<MultipartFile> images = userUpdateForm.getImages();
         List<String> updatedImages = new ArrayList<>();
 
+
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {
                 File uploadDirectory = new File(uploadPath);
@@ -132,7 +132,6 @@ public class UserService {
         user.setCreateDate(LocalDateTime.now());
         user.setGender(userUpdateForm.getGender());
         user.setIntroduce(userUpdateForm.getIntroduce());
-
         userRepository.save(user);
         return user;
     }
@@ -285,6 +284,7 @@ public class UserService {
         for (Iterator<String> iterator = images.iterator(); iterator.hasNext(); ) {
             String image = iterator.next();
             if (image.equals(imageUrl)) {
+
                 String imageName = Paths.get(imageUrl).getFileName().toString(); // 이미지 파일의 이름만 추출
                 String deleteImage = uploadPath + "/" + imageName;
                 try {
@@ -293,6 +293,7 @@ public class UserService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                iterator.remove();
             }
         }
         if (user.getImage() != null && user.getImage().equals(imageUrl)) {
@@ -367,6 +368,15 @@ public class UserService {
 
     public List<SiteUser> getByReligion(String gender, String religion) {
         return this.userRepository.findByGenderNotAndReligion(gender, religion);
+    }
+
+    public void setStatusInPlaza(SiteUser user, boolean status) {
+        user.setPlaza(status);
+        userRepository.save(user);
+    }
+
+    public List<SiteUser> getOnlineInPlaza() {
+        return userRepository.findByPlazaTrue();
     }
 
     public List<SiteUser> getByPersonalities(SiteUser loginUser) {
