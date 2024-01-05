@@ -1,15 +1,47 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container my-3">
-    <div class="record-wrapper">
-        <button id="recordButton" class="record-button">▶</button>
-        <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
-            <circle class="progress-ring__circle" stroke="black" stroke-width="8" fill="transparent" r="42" cx="60" cy="60"/>
-        </svg>
-    </div>
-    <div>
-        <audio id="audio" controls></audio>
-    </div>
-    <button id="saveButton" disabled>저장</button>
+<div layout:fragment="content" class="container">
+    <button type="button" th:text="${target.nickName}" th:data-value="${target.username}" id="requestBtn"></button>
+    <input type="hidden" th:value="${user.username}" id="loginUser">
+    <input type="hidden" th:value="${user.nickName}" id="loginUserNick">
 </div>
-<script src="/record.js" layout:fragment="script"></script>
+<script layout:fragment="script">
+
+    $(function () {
+        const socket = new SockJS("/ws");
+        const stompClient = Stomp.over(socket);
+        var username = $('#requestBtn').data("value");
+        var loginUser = $('#loginUser').val();
+        var loginUserNick = $('#loginUserNick').val();
+
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/user/queue/notifications/' + loginUser, function (notification) {
+                const data = JSON.parse(notification.body);
+                if(confirm(data.senderNick + "님이 친구 요청을 보냈습니다. 수락하시겠습니까?")) {
+                    $.ajax({
+                        url: "/user/accept",
+                        type: "POST",
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        },
+                        contentType: "application/json",
+                        data: JSON.stringify({sender : data.sender, receiver : data.receiver}),
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                }
+            });
+        });
+
+        $('#requestBtn').on('click', function () {
+            if (stompClient) {
+                stompClient.send("/app/user/friend/request", {}, JSON.stringify({sender : loginUser, receiver : username, senderNick : loginUserNick}));
+            }
+        });
+    });
+
+</script>
 </html>

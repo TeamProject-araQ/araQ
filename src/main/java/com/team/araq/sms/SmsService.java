@@ -17,8 +17,8 @@ public class SmsService {
         Message coolsms = new Message(api_key, api_secret);
         HashMap<String, String> params = new HashMap<String, String>();
 
-        params.put("to", "01081261630");
-        params.put("from", phoneNum);
+        params.put("to", phoneNum);
+        params.put("from", "01081261630");
         params.put("type", "SMS");
         params.put("text", "araQ 인증번호는" + "[" + verificationCode + "]" + "입니다.");
 
