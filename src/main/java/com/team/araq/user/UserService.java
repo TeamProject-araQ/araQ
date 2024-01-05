@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -394,5 +395,15 @@ public class UserService {
                 matchingUsers.add(user);
         }
         return matchingUsers;
+    }
+
+    public List<String> getUserPersonality(SiteUser user) {
+        List<String> userPersonality = user.getPersonality();
+        return userPersonality;
+    }
+
+    public void savePersonality(SiteUser user, List<String> personality) {
+        user.setPersonality(personality);
+        userRepository.save(user);
     }
 }
