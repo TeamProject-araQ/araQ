@@ -397,6 +397,5 @@ public class UserController {
         SiteUser user1 = this.userService.getByUsername(principal.getName());
         return user1.getOpenVoice().stream()
                 .anyMatch(user2 -> user2.getUsername().equals(username));
-
     }
 }
