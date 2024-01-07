@@ -3,6 +3,7 @@ package com.team.araq.plaza;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -40,6 +41,18 @@ public class MessageHandler {
     @MessageMapping("/plaza/location")
     @SendTo("/topic/plaza/location")
     public String handleLocation(@Payload String message) {
+        JSONObject data = new JSONObject(message);
+        SiteUser user = userService.getByUsername(data.get("sender").toString());
+        userService.setUserLocationInPlaza(user, data.get("top").toString(), data.get("left").toString());
+        return message;
+    }
+
+    @MessageMapping("/plaza/focus")
+    @SendTo("/topic/plaza/focus")
+    public String handleStatus(@Payload String message) {
+        JSONObject data = new JSONObject(message);
+        SiteUser user = userService.getByUsername(data.get("sender").toString());
+        userService.setFocusInPlaza(user, data.get("status").toString());
         return message;
     }
 }

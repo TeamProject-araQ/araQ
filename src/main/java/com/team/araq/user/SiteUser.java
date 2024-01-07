@@ -7,6 +7,7 @@ import com.team.araq.chat.Room;
 import com.team.araq.idealType.IdealType;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.like.UserLike;
+import com.team.araq.message.Message;
 import com.team.araq.pay.History;
 import com.team.araq.pay.Payment;
 import com.team.araq.report.Report;
@@ -152,7 +153,24 @@ public class SiteUser {
     @JsonIgnore
     private IdealType idealType;
 
-    @JsonIgnore
     private boolean plaza;
+
+    private String locationTop;
+
+    private String locationLeft;
+
+    private String plazaFocus;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
+    private List<Message> sendList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
+    private List<Message> receiveList;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<SiteUser> friendList;
 
 }

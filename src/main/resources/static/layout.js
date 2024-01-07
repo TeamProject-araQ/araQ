@@ -1,4 +1,20 @@
 $(function () {
+    var loginUser = $('#hiddenUserName').val();
+    var loginUserNick = $('#loginUserNick').val();
+
+    $('.friendRequest').on('click', function () {
+        var userNick = $(this).data("nick");
+        var username = $(this).data("value");
+        if (confirm(userNick + "님에게 친구 신청을 보냅니다.")) {
+            if (stompClient) {
+                stompClient.send("/app/user/friend/request", {}, JSON.stringify({
+                    sender: loginUser,
+                    receiver: username,
+                    senderNick: loginUserNick
+                }));
+            }
+        }
+    });
 
     $('.idealTypeMatchLink').on('click', function () {
         if ($('#userIdealType').val() === "") {
@@ -27,6 +43,31 @@ $(function () {
                 if (r === "granted") alert("푸시 알람이 설정되었습니다.");
             });
         }
+
+        stompClient.subscribe('/topic/user/request/impossible/' + loginUser, function (notification) {
+            alert(notification.body);
+        });
+
+        stompClient.subscribe('/topic/user/request/possible/' + loginUser, function (notification) {
+            const data = JSON.parse(notification.body);
+            if (confirm(data.senderNick + "님이 친구 요청을 보냈습니다. 수락하시겠습니까?")) {
+                $.ajax({
+                    url: "/user/accept",
+                    type: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify({sender: data.sender, receiver: data.receiver}),
+                    success: function (response) {
+                        alert(response);
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
 
         stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
 

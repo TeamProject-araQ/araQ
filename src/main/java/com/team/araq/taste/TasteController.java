@@ -94,7 +94,6 @@ public class TasteController {
 
     @PostMapping("/result")
     public String result(String username, String options, Model model) {
-        System.out.println(options);
         SiteUser user = this.userService.getByUsername(username);
         JSONObject jsonObject = new JSONObject(options);
         List<String> answers = new ArrayList<>();
@@ -102,6 +101,7 @@ public class TasteController {
             String value = "option" + i;
             answers.add((String) jsonObject.get(value));
         }
+        System.out.println(answers );
         model.addAttribute("target", user);
         model.addAttribute("answers", answers);
         model.addAttribute("score", jsonObject.get("score"));
