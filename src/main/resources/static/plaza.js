@@ -10,25 +10,25 @@ $(function () {
 
     stompClient.connect({}, function (frame) {
 
-        stompClient.send("/app/plaza/join", {}, user);
+        stompClient.send("/app/plaza/join/" + code, {}, user);
 
-        stompClient.subscribe("/topic/plaza/join", function (message) {
+        stompClient.subscribe("/topic/plaza/join/" + code, function (message) {
             createAvatar(JSON.parse(message.body));
         });
 
-        stompClient.subscribe("/topic/plaza/exit", function (message) {
+        stompClient.subscribe("/topic/plaza/exit/" + code, function (message) {
             $("." + message.body).remove();
         });
 
-        stompClient.subscribe("/topic/plaza/message", function (message) {
+        stompClient.subscribe("/topic/plaza/message/" + code, function (message) {
             showMessage(JSON.parse(message.body));
         });
 
-        stompClient.subscribe("/topic/plaza/location", function (message) {
+        stompClient.subscribe("/topic/plaza/location/" + code, function (message) {
             moveLocation(JSON.parse(message.body));
         });
 
-        stompClient.subscribe("/topic/plaza/focus", function (message) {
+        stompClient.subscribe("/topic/plaza/focus/" + code, function (message) {
             const data = JSON.parse(message.body);
             const element = $("." + data.sender);
             if (data.status === "blur") {
@@ -47,7 +47,7 @@ $(function () {
     });
 
     $(window).on("beforeunload", function () {
-        stompClient.send("/app/plaza/exit", {}, user);
+        stompClient.send("/app/plaza/exit/" + code, {}, user);
     });
 
     $("#plazaChatForm").submit(function (e) {
@@ -67,7 +67,7 @@ $(function () {
                 nick: nick
             };
 
-            stompClient.send("/app/plaza/message", {}, JSON.stringify(message));
+            stompClient.send("/app/plaza/message/" + code, {}, JSON.stringify(message));
         }
 
         $("#plazaChatParam").val("");
@@ -105,14 +105,14 @@ $(function () {
     });
 
     $(window).blur(function () {
-        stompClient.send("/app/plaza/focus", {}, JSON.stringify({
+        stompClient.send("/app/plaza/focus/" + code, {}, JSON.stringify({
             sender: user,
             status: "blur"
         }));
     });
 
     $(window).focus(function () {
-        stompClient.send("/app/plaza/focus", {}, JSON.stringify({
+        stompClient.send("/app/plaza/focus/" + code, {}, JSON.stringify({
             sender: user,
             status: "focus"
         }));
@@ -147,7 +147,7 @@ $(function () {
             top: element.css("top")
         };
 
-        stompClient.send("/app/plaza/location", {}, JSON.stringify(data));
+        stompClient.send("/app/plaza/location/" + code, {}, JSON.stringify(data));
     }
 
     function showMessage(data) {

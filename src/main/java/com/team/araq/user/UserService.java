@@ -375,15 +375,6 @@ public class UserService {
         return this.userRepository.findByGenderNotAndReligion(gender, religion);
     }
 
-    public void setStatusInPlaza(SiteUser user, boolean status) {
-        user.setPlaza(status);
-        userRepository.save(user);
-    }
-
-    public List<SiteUser> getOnlineInPlaza() {
-        return userRepository.findByPlazaTrue();
-    }
-
     public List<SiteUser> getByPersonalities(SiteUser loginUser) {
         List<SiteUser> matchingUsers = new ArrayList<>();
         List<SiteUser> userList = this.userRepository.findByGenderNot(loginUser.getGender());
@@ -409,6 +400,7 @@ public class UserService {
 
     public void setFocusInPlaza(SiteUser user, String status) {
         user.setPlazaFocus(status);
+        userRepository.save(user);
     }
 
     public List<String> getUserPersonality(SiteUser user) {
@@ -419,5 +411,14 @@ public class UserService {
     public void savePersonality(SiteUser user, List<String> personality) {
         user.setPersonality(personality);
         userRepository.save(user);
+    }
+
+    public void setLocation(SiteUser user, String location) {
+        user.setLocation(location);
+        userRepository.save(user);
+    }
+
+    public List<SiteUser> getByLocation(String location) {
+        return userRepository.findByLocation(location);
     }
 }

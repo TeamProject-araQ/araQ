@@ -18,8 +18,9 @@
         </div>
     </div>
     <script th:inline="javascript">
-        let user = [[${user.username}]];
-        let nick = [[${user.nickName}]];
+        const user = [[${user.username}]];
+        const nick = [[${user.nickName}]];
+        const code = [[${plaza.code}]];
     </script>
 </div>
 <script type="text/javascript" th:src="@{/plaza.js}" layout:fragment="script"></script>
