@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -314,6 +315,11 @@ public class UserService {
     }
 
     public List<String> addImage(MultipartFile image, SiteUser user) {
+        File uploadDirectory = new File(uploadPath);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+        }
+
         String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
@@ -430,4 +436,5 @@ public class UserService {
         this.userRepository.save(user1);
         this.userRepository.save(user2);
     }
+
 }

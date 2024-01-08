@@ -34,6 +34,16 @@
             color: #fff;
             border-color: rgb(141, 128, 166);
         }
+
+        .btn-group-toggle {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .btn-check + .btn {
+            margin-right: 10px; /* 원하는 간격으로 조절 */
+            margin-bottom: 10px; /* 원하는 간격으로 조절 */
+        }
     </style>
 </head>
 <div layout:fragment="content" class="container my-3 d-flex align-items-center justify-content-center"
@@ -66,7 +76,8 @@
                                 <div id="imageAddCarousel" class="carousel-item"
                                      th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
                                     <!-- 이미지로 변경된 버튼 -->
-                                    <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가" onclick="openImageInput()">
+                                    <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가"
+                                         onclick="openImageInput()">
                                     <!-- 파일 입력 상자 및 이미지 미리보기 -->
                                     <input type="file" id="imageInput" style="display: none;" accept="image/*"
                                            onchange="addImageToCarousel()"/>
@@ -211,19 +222,19 @@
                         <label for="address">주소</label>
                         <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
                                readonly>
-                        <input type="button" class="btn 버튼"  onclick="sample5_execDaumPostcode()" value="주소 찾기">
+                        <input type="button" class="btn 버튼" onclick="sample5_execDaumPostcode()" value="주소 찾기">
                     </div>
                 </div>
             </div>
+            <button type="button" class="btn 버튼" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                성격
+            </button>
             <button class="btn 버튼" type="submit">저장</button>
         </form>
     </div>
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-        누르지마세요
-    </button>
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -271,14 +282,15 @@
                                value="센스있는 ">
                         <label class="btn 버튼" for="personality9">센스있는 </label>
 
-                        <input type="checkbox" class="btn-check" name="personality" id="personality10" autocomplete="off"
+                        <input type="checkbox" class="btn-check" name="personality" id="personality10"
+                               autocomplete="off"
                                value="열정적인">
                         <label class="btn 버튼" for="personality10">열정적인</label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="savePersonality()">저장하기</button>
+                    <button type="button" class="btn 버튼" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn 버튼" onclick="savePersonality()">저장하기</button>
                 </div>
             </div>
         </div>
@@ -487,8 +499,19 @@
         });
     }
 
+    function resetPersonalityCheckboxes() {
+        var checkboxes = document.querySelectorAll('input[name="personality"]');
+    checkboxes.forEach(function (checkbox) {
+        checkbox.checked = false;
+        });
+    }
+
     $('#exampleModal2').on('show.bs.modal', function(){
         getUserPersonality();
+    });
+
+    $('#exampleModal2').on('hide.bs.modal', function(){
+        resetPersonalityCheckboxes();
     });
 
     function savePersonality() {
@@ -498,10 +521,7 @@
             return checkbox.value;
         });
 
-        var formData = {
-            personality : selectedPersonality
-        };
-        console.log(formData);
+        var formData = selectedPersonality;
 
         $.ajax({
             type:'POST',
@@ -512,7 +532,8 @@
             },
             contentType: 'application/json',
             success: function (data) {
-                console.log('Data save');
+                alert('저장되었습니다.');
+                $('#exampleModal2').modal('hide');
             },
             error:function (error){
                 console.error('Error', error);
