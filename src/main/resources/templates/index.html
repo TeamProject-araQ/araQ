@@ -68,6 +68,10 @@
                                         <h5 th:text="${randomUser.nickName}" class="me-1"></h5>
                                         <span th:text="${randomUser.age}" style="font-size: 9pt; color: gray"></span>
                                     </div>
+                                    <button type="button" class="friendRequest" style="border:none;"
+                                            th:data-nick="${randomUser.nickName}"
+                                            th:data-value="${randomUser.username}"><i
+                                            class="bi bi-person-fill-add fs-5"></i></button>
                                 </div>
                                 <div>
                                     <button type="button" class="araQBtn btn btn-sm 버튼"
@@ -182,7 +186,9 @@
                                         <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
                                                th:data-nick="${like.likedUser.nickName}"
                                                th:data-value="${like.likedUser.username}">채팅 신청</a></li>
-                                        <li><a class="dropdown-item testLink" href="javascript:void(0)" th:data-value="${like.likedUser.taste}" th:data-uri="@{|/taste/test/${like.likedUser.username}|}">취향 테스트</a></li>
+                                        <li><a class="dropdown-item testLink" href="javascript:void(0)"
+                                               th:data-value="${like.likedUser.taste}"
+                                               th:data-uri="@{|/taste/test/${like.likedUser.username}|}">취향 테스트</a></li>
                                         <li>
                                             <button class="reportBtn dropdown-item text-danger" type="button"
                                                     data-bs-toggle="modal"
@@ -236,7 +242,9 @@
                                         <li><a class="dropdown-item chatRequest" href="javascript:void(0)"
                                                th:data-nick="${like.user.nickName}"
                                                th:data-value="${like.user.username}">채팅 신청</a></li>
-                                        <li><a class="dropdown-item testLink" href="javascript:void(0)" th:data-value="${like.user.taste}" th:data-uri="@{|/taste/test/${like.user.username}|}">취향 테스트</a></li>
+                                        <li><a class="dropdown-item testLink" href="javascript:void(0)"
+                                               th:data-value="${like.user.taste}"
+                                               th:data-uri="@{|/taste/test/${like.user.username}|}">취향 테스트</a></li>
                                         <li>
                                             <button class="reportBtn dropdown-item text-danger" type="button"
                                                     data-bs-toggle="modal"

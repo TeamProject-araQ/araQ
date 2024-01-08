@@ -407,13 +407,6 @@ public class UserService {
         user.setPlazaFocus(status);
     }
 
-    public void addFriend(SiteUser sender, SiteUser receiver) {
-        sender.getFriendList().add(receiver);
-        receiver.getFriendList().add(sender);
-        this.userRepository.save(receiver);
-        this.userRepository.save(sender);
-    }
-
     public List<String> getUserPersonality(SiteUser user) {
         List<String> userPersonality = user.getPersonality();
         return userPersonality;
@@ -422,12 +415,5 @@ public class UserService {
     public void savePersonality(SiteUser user, List<String> personality) {
         user.setPersonality(personality);
         userRepository.save(user);
-    }
-
-    public void deleteFriend(SiteUser user1, SiteUser user2) {
-        user1.getFriendList().remove(user2);
-        user2.getFriendList().remove(user1);
-        this.userRepository.save(user1);
-        this.userRepository.save(user2);
     }
 }
