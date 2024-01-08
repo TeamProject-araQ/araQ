@@ -405,6 +405,7 @@ public class UserService {
 
     public void setFocusInPlaza(SiteUser user, String status) {
         user.setPlazaFocus(status);
+        userRepository.save(user);
     }
 
     public void addFriend(SiteUser sender, SiteUser receiver) {
