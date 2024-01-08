@@ -87,4 +87,14 @@ public class MessageController {
         this.messageService.updateStatus(message);
         return null;
     }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestBody List<String> messages) {
+        for (String messageId : messages) {
+            Message message = this.messageService.getMessage(Integer.parseInt(messageId));
+            this.messageService.deleteMessage(message);
+        }
+        return "쪽지가 삭제되었습니다.";
+    }
 }

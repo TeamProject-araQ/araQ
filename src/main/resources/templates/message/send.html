@@ -8,20 +8,9 @@
 </head>
 <div layout:fragment="content" class="container my-3">
     <h3 class="underline my-3">보낸 쪽지함</h3>
-    <div class="d-flex justify-content-between">
-        <button type="button" class="btn 버튼-full" data-bs-toggle="modal" data-bs-target="#sendMessage">
-            쪽지 보내기
-        </button>
-        <div class="input-group" style="width:30%;">
-            <input type="text" id="searchKw" class="form-control" th:value="${keyword}" placeholder="내용, 수신자 검색">
-            <button class="btn 버튼" type="button" id="searchBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-                     viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
-            </button>
-        </div>
-    </div>
+    <button type="button" class="btn 버튼-full" data-bs-toggle="modal" data-bs-target="#sendMessage">
+        쪽지 보내기
+    </button>
     <!-- 쪽지 보내기 모달 -->
     <div class="modal" id="sendMessage" tabindex="-1" aria-labelledby="sendMessageLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -51,10 +40,21 @@
             </div>
         </div>
     </div>
-    <table class="table table-hover text-center my-5">
-        <thead class="table-light">
+    <div class="d-flex justify-content-between mt-3 mb-1">
+        <div class="input-group" style="width:30%;">
+            <input type="text" id="searchKw" class="form-control" th:value="${keyword}" placeholder="내용, 수신자 검색">
+            <button class="btn 버튼" type="button" id="searchBtn">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        <button type="button" class="deleteBtn btn btn-danger btn-sm">삭제</button>
+    </div>
+    <table class="table table-hover text-center mb-5">
+        <thead class="table-secondary">
         <tr>
-            <th style="width:10%;"><input class="form-check-input" type="checkbox" id="checkAll"></th>
+            <th style="width:10%;">
+                <input class="form-check-input" type="checkbox" id="checkAll">
+            </th>
             <th style="width: 10%;">읽음</th>
             <th>이름</th>
             <th style="width: 50%;">내용</th>
@@ -66,7 +66,7 @@
             <td><input class="check form-check-input" type="checkbox" th:value="${message.id}"></td>
             <td>
                 <i class="bi bi-envelope-heart" th:if="${message.status == false}"></i>
-                <i class="bi bi-envelope-open-heart text-secondary" th:if="${message.status == true}"></i>
+                <i class="bi bi-envelope-open-heart" style="color: silver;" th:if="${message.status == true}"></i>
             </td>
             <td th:text="${message.receiver.nickName}"></td>
             <td style="text-align: start" th:text="${message.content}"></td>
@@ -99,7 +99,7 @@
     </div>
 </div>
 <script layout:fragment="script">
-    $(function() {
+    $(function () {
         $(".page-link").on('click', function () {
             $("#page").val(this.dataset.page);
             $("#searchForm").submit();
@@ -109,6 +109,40 @@
             $("#keyword").val($("#searchKw").val());
             $("#page").val("0");
             $("#searchForm").submit();
+        });
+
+        $("#checkAll").on('click', function () {
+            $('.check').prop('checked', this.checked);
+        });
+
+        $(".deleteBtn").on('click', function () {
+            var checkedValues = $(".check:checked").map(function () {
+                return this.value;
+            }).get();
+
+            if (checkedValues.length === 0) {
+                alert('선택된 쪽지가 없습니다.');
+                return;
+            }
+
+            if (confirm('쪽지를 삭제하시겠습니까?')) {
+                $.ajax({
+                    url: '/message/delete',
+                    type: 'post',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(checkedValues),
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
         });
     });
 </script>
