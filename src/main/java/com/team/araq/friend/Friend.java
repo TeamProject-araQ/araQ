@@ -20,5 +20,6 @@ public class Friend {
     @ManyToOne
     private SiteUser receiver;
 
-    private boolean status;
+    public boolean status;
+
 }

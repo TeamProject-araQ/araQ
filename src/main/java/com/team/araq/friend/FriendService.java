@@ -29,11 +29,10 @@ public class FriendService {
         else throw new RuntimeException("그런 친구 없습니다.");
 
     }
-    public boolean checkFriend(SiteUser sender, SiteUser receiver) {
+    public Friend checkFriend(SiteUser sender, SiteUser receiver) {
         Optional<Friend> friend1 = this.friendRepository.findBySenderAndReceiver(sender, receiver);
         Optional<Friend> friend2 = this.friendRepository.findBySenderAndReceiver(receiver, sender);
-        if (friend1.isPresent() || friend2.isPresent()) return true;
-        else return false;
+        return friend1.orElseGet(() -> friend2.orElse(null));
     }
 
     public void acceptFriend(Friend friend) {
@@ -46,10 +45,10 @@ public class FriendService {
     }
 
     public List<Friend> getList(SiteUser user) {
-        return this.friendRepository.findBySenderOrReceiverAndStatus(user, user, true);
+        return this.friendRepository.findFriendsByUserAndStatus(user, true);
     }
 
     public List<Friend> requestList(SiteUser user) {
-        return this.friendRepository.findByReceiverAndStatus(user, false);
+        return this.friendRepository.findFriendsByUserAndStatus(user, false);
     }
 }

@@ -2,30 +2,9 @@ $(function () {
     var loginUser = $('#hiddenUserName').val();
     var loginUserNick = $('#loginUserNick').val();
 
-    $('.friendRequest').on('click', function () {
-        var userNick = $(this).data("nick");
-        var username = $(this).data("value");
-        if (confirm(userNick + "님에게 친구 신청을 보냅니다.")) {
-            if (stompClient) {
-                stompClient.send("/app/friend/request", {}, JSON.stringify({
-                    sender: loginUser,
-                    receiver: username,
-                    senderNick: loginUserNick
-                }));
-            }
-        }
-    });
-
-    $('.idealTypeMatchLink').on('click', function () {
-        if ($('#userIdealType').val() === "") {
-            if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
-                location.href = "/idealType/create";
-        } else location.href = $(this).data("uri");
-    });
-
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
-    stompClient.debug = null;
+    // stompClient.debug = null;
     let pc = null;
     let notifyCheck = false;
     const iceServers = {
@@ -46,6 +25,33 @@ $(function () {
 
         stompClient.subscribe('/topic/friend/request/impossible/' + loginUser, function (notification) {
             alert(notification.body);
+        });
+
+        stompClient.subscribe('/topic/send/message/' + loginUser, function (notification) {
+            const data = JSON.parse(notification.body);
+            var image = data.image;
+            var senderNick = data.senderNick;
+            var sender = data.sender;
+            var content = data.content;
+            var datetime = data.datetime;
+            var messageId = data.messageId;
+            const messageToast = new bootstrap.Toast($('#messageToast'), {
+                autohide: false
+            });
+            $('#messageToast .image').attr('src', image);
+            $('#messageToast .nickname').text(senderNick);
+            $('#messageToast .datetime').text(datetime);
+            $('#messageToast .message').data("value", messageId);
+            $('#messageToast .message').text(senderNick + "님으로부터 쪽지가 도착했습니다.");
+            $('#messageModal #image').attr('src', image);
+            $('#messageModal #messageModalLabel').text(senderNick);
+            $('#messageModal .messageContent').text(content);
+            $('#messageModal .datetime').text(datetime);
+            $('#messageModal .receiver').val(sender);
+            messageToast.show();
+            setTimeout(function () {
+                $('#messageToast').fadeOut();
+            }, 5000);
         });
 
         stompClient.subscribe('/topic/friend/request/possible/' + loginUser, function (notification) {
@@ -388,6 +394,73 @@ $(function () {
             }
         });
     }
+
+    $('.friendRequest').on('click', function () {
+        var userNick = $(this).data("nick");
+        var username = $(this).data("value");
+        if (confirm(userNick + "님에게 친구 신청을 보냅니다.")) {
+            if (stompClient) {
+                stompClient.send("/app/friend/request", {}, JSON.stringify({
+                    sender: loginUser,
+                    receiver: username,
+                    senderNick: loginUserNick
+                }));
+            }
+        }
+    });
+
+    $('.sendBtn').on('click', function () {
+        var sender = $('#hiddenUserName').val();
+        var receiver = $('.receiver').val();
+        var content = $('#content').val();
+        if (stompClient) {
+            stompClient.send("/app/send/message", {}, JSON.stringify({
+                sender: sender,
+                receiver: receiver,
+                content: content
+            }));
+            location.reload();
+        }
+    });
+
+    $('.answerBtn').on('click', function () {
+        var sender = $('#hiddenUserName').val();
+        var receiver = $('#messageModal .receiver').val();
+        var content = $('#messageModal .answerContent').val();
+        if (stompClient) {
+            stompClient.send("/app/send/message", {}, JSON.stringify({
+                sender: sender,
+                receiver: receiver,
+                content: content
+            }));
+            location.reload();
+        }
+    });
+
+    $('.idealTypeMatchLink').on('click', function () {
+        if ($('#userIdealType').val() === "") {
+            if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
+                location.href = "/idealType/create";
+        } else location.href = $(this).data("uri");
+    });
+
+    $('#messageToast .message').on('click', function () {
+        var messageId = $(this).data("value");
+        $.ajax({
+            url: "/message/read",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: messageId,
+            success: function (data) {
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    });
 });
 
 function showProfile(username) {

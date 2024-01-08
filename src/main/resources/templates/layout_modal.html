@@ -1,4 +1,5 @@
 <div th:fragment="modal">
+    <!-- 채팅 요청 모달 -->
     <div class="modal fade" id="chatRequestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="chatRequestModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -32,6 +33,7 @@
         </div>
         <input id="requestUsername" type="hidden">
     </div>
+    <!-- 챗 토스트 -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="chatToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -44,6 +46,7 @@
             </div>
         </div>
     </div>
+    <!-- 프로필 모달 -->
     <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -116,6 +119,7 @@
             </div>
         </div>
     </div>
+    <!-- 보이스챗 모달 -->
     <div class="modal fade" id="voiceChatModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="voiceChatModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="width:200px;">
@@ -162,6 +166,42 @@
                         <input type="button" class="submitBtn btn 버튼 btn-sm" value="제출">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <!-- 쪽지 토스트 -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="messageToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img class="image rounded me-2" alt="..." style="width:30px;height:30px;">
+                <strong class="me-auto nickname"></strong>
+                <small class="datetime"></small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body message" type="button" data-bs-toggle="modal" data-bs-target="#messageModal"></div>
+        </div>
+    </div>
+    <!-- 쪽지 상세 모달 -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="" alt="" id="image" style="width:30px;height:30px;" class="me-2">
+                    <h5 class="modal-title" id="messageModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="messageContent"></div>
+                    <div class="d-flex justify-content-end">
+                        <div class="badge text-dark bg-light datetime"></div>
+                    </div>
+                    <input type="hidden" class="receiver">
+                    <label for="answerMessage" class="form-label mt-3" style="border-bottom: 2px solid #D8D3E0">답장</label>
+                    <div class="input-group">
+                        <input type="text" class="answerContent form-control">
+                        <input type="button" class="answerBtn btn 버튼-full btn-sm" value="전송">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

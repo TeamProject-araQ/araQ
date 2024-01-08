@@ -30,18 +30,24 @@ public class FriendController {
         JSONObject jsonObject = new JSONObject(username);
         SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
         SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
-        boolean isFriend = this.friendService.checkFriend(sender, receiver);
-        if (!isFriend) {
+        Friend friend = this.friendService.checkFriend(sender, receiver);
+        if (friend == null) {
             messagingTemplate.convertAndSend("/topic/friend/request/possible/" + receiver.getUsername(), username);
             this.friendService.requestFriend(sender, receiver);
-        } else
-            messagingTemplate.convertAndSend("/topic/friend/request/impossible/" + sender.getUsername(),
-                    receiver.getNickName() + "님이 이미 친구 목록에 존재합니다.");
+        } else {
+            if (friend.isStatus())
+                messagingTemplate.convertAndSend("/topic/friend/request/impossible/" + sender.getUsername(),
+                        receiver.getNickName() + "님이 이미 친구 목록에 존재합니다.");
+            else messagingTemplate.convertAndSend("/topic/friend/request/impossible/" + sender.getUsername(),
+                    receiver.getNickName() + "님이 이미 친구 요청 목록에 존재합니다.");
+        }
+
     }
 
     @ResponseBody
     @PostMapping("/accept")
     public String acceptRequest(@RequestBody String username) {
+        System.out.println(username);
         JSONObject jsonObject = new JSONObject(username);
         SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
         SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
@@ -58,10 +64,6 @@ public class FriendController {
         model.addAttribute("requestList", requestList);
         model.addAttribute("friendList", friendList);
         return "user/friend";
-    }
-
-    public String refuseFriend() {
-        return "redirect:/friend/list";
     }
 
     @GetMapping("/delete/{username}")
