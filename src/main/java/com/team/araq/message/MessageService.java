@@ -53,4 +53,8 @@ public class MessageService {
         if (message.isPresent()) return message.get();
         else throw new RuntimeException("그런 쪽지 없습니다.");
     }
+
+    public void deleteMessage(Message message) {
+        this.messageRepository.delete(message);
+    }
 }
