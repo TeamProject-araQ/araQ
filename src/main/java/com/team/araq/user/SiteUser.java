@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
+import com.team.araq.friend.Friend;
 import com.team.araq.idealType.IdealType;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.like.UserLike;
@@ -171,8 +172,12 @@ public class SiteUser {
     private List<Message> receiveList;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<SiteUser> friendList;
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
+    private List<Friend> senderList;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
+    private List<Friend> receiverList;
 
     public SiteUser(String username, String name, String email,LocalDateTime createDate) {
         this.username = username;
