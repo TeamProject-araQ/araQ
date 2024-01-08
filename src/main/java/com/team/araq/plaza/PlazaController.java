@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -20,18 +22,10 @@ public class PlazaController {
     private final UserService userService;
     private final PlazaService plazaService;
 
-    @GetMapping("/join")
-    public String join(Model model, Principal principal) {
-        SiteUser user = userService.getByUsername(principal.getName());
-        userService.setUserLocationInPlaza(user, "0px", "0px");
-        userService.setFocusInPlaza(user, "focus");
-        model.addAttribute("onlinePlazaUsers", userService.getOnlineInPlaza());
-        return "plaza/plaza";
-    }
-
     @GetMapping("/list")
     public String list(Model model) {
         model.addAttribute("plazaList", plazaService.getAll());
+        model.addAttribute("alarm", "");
         return "plaza/list";
     }
 
@@ -45,14 +39,36 @@ public class PlazaController {
         return "redirect:/plaza/list";
     }
 
-    @GetMapping("/join/{code}")
-    public String joinPlaza(Model model, @PathVariable("code") String code, Principal principal) {
-        SiteUser user = userService.getByUsername(principal.getName());
-        userService.setUserLocationInPlaza(user, "0px", "0px");
-        userService.setFocusInPlaza(user, "focus");
-        model.addAttribute("onlinePlazaUsers", userService.getOnlineInPlaza());
+    @PostMapping("/join")
+    public String joinPlaza(Model model, @RequestParam("code") String code,
+                            Principal principal) {
         Plaza plaza = plazaService.getByCode(code);
         model.addAttribute("plaza", plaza);
+        if (plaza.getPeople() >= plaza.getMaxPeople()) {
+            model.addAttribute("plazaList", plazaService.getAll());
+            model.addAttribute("alarm", "해당 광장의 정원이 가득 찼습니다.");
+            return "plaza/list";
+        };
+        SiteUser user = userService.getByUsername(principal.getName());
+        userService.setLocation(user, code);
+        userService.setUserLocationInPlaza(user, "0px", "0px");
+        userService.setFocusInPlaza(user, "focus");
+        List<SiteUser> joinUsers = userService.getByLocation(code);
+        model.addAttribute("onlinePlazaUsers", joinUsers);
         return "plaza/plaza";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("code") String code) {
+        plazaService.delete(plazaService.getByCode(code));
+        return "redirect:/plaza/list";
+    }
+
+    @PostMapping("/check")
+    @ResponseBody
+    public String check(@RequestBody Map<String, String> data) {
+        Plaza plaza = plazaService.getByCode(data.get("code"));
+        if (plaza.getPassword().equals(data.get("input"))) return "access";
+        return "deny";
     }
 }

@@ -44,10 +44,6 @@ $(function () {
                 element.find(".status").addClass("focus");
             }
         });
-
-        stompClient.subscribe("/topic/plaza/ping", function () {
-            stompClient.send("/app/plaza/pong", {}, user);
-        });
     });
 
     $(window).on("beforeunload", function () {

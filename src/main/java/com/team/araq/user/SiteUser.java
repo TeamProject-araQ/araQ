@@ -154,8 +154,6 @@ public class SiteUser {
     @JsonIgnore
     private IdealType idealType;
 
-    private boolean plaza;
-
     private String locationTop;
 
     private String locationLeft;
@@ -177,5 +175,7 @@ public class SiteUser {
     @JsonIgnore
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
     private List<Friend> receiverList;
+
+    private String location;
 
 }

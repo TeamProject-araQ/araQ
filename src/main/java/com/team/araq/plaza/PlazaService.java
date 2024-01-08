@@ -33,4 +33,13 @@ public class PlazaService {
         if (plaza.isPresent()) return plaza.get();
         throw new RuntimeException("그런 광장 없습니다.");
     }
+
+    public void setPeople(Plaza plaza, Integer people) {
+        plaza.setPeople(people);
+        plazaRepo.save(plaza);
+    }
+
+    public void delete(Plaza plaza) {
+        plazaRepo.delete(plaza);
+    }
 }

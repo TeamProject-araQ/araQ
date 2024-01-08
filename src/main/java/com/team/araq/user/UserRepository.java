@@ -45,5 +45,5 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     List<SiteUser> findByGenderNotAndMbti(String gender, String mbti);
 
-    List<SiteUser> findByPlazaTrue();
+    List<SiteUser> findByLocation(String location);
 }
