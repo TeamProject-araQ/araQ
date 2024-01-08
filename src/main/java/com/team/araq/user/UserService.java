@@ -314,6 +314,11 @@ public class UserService {
     }
 
     public List<String> addImage(MultipartFile image, SiteUser user) {
+        File uploadDirectory = new File(uploadPath);
+        if (!uploadDirectory.exists()) {
+            uploadDirectory.mkdirs();
+        }
+
         String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
