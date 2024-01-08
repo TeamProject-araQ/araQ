@@ -421,25 +421,26 @@
                 // "이미지 추가" 버튼을 마지막으로 이동
                 $('#imageAddCarousel').appendTo(carouselInner);
 
-                // 캐러셀 인디케이터 추가
-                var newIndicator = $('<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="' + (carouselInner.children('.carousel-item').length - 1) + '"></button>');
-                indicators.append(newIndicator);
-
                 // 모든 이미지의 'active' 클래스 제거
                 carouselInner.children('.carousel-item').removeClass('active');
 
                 // 새 이미지에 'active' 클래스 추가
                 newCarouselItem.addClass('active');
 
+                // 캐러셀 인디케이터 추가
+                var newIndicator = $('<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="' + (carouselInner.children('.carousel-item').length - 1) + '"></button>');
+                indicators.append(newIndicator);
+
                 // 캐러셀 재설정
                 $('#carouselExampleIndicators').carousel();
+
+                // 모달 버튼 상태 업데이트
+                toggleModalButtons();
             },
             error: function (error) {
                 alert('이미지 추가에 실패했습니다. 에러: ' + error.responseText);
             }
         });
-        // 모달 버튼 상태 업데이트
-        toggleModalButtons();
     }
 
     function toggleModalButtons() {
