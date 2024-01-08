@@ -295,7 +295,6 @@ public class UserService {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                iterator.remove();
             }
         }
         if (user.getImage() != null && user.getImage().equals(imageUrl)) {
