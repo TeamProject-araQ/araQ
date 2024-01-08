@@ -6,21 +6,41 @@
         <tr>
             <th>성별</th>
             <th>닉네임</th>
-            <th>수락/거절</th>
+            <th>요청 상태</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="request : ${requestList}">
             <td>
-                <img src="/image/user/man.png" alt="" style="width: 20px; height: 20px;"
-                     th:if="${request.sender.gender == '남성'}">
-                <img src="/image/user/woman.png" alt="" style="width: 20px; height: 20px;"
-                     th:if="${request.sender.gender == '여성'}">
+                <div th:if="${request.sender != user}">
+                    <img src="/image/user/man.png" alt="" style="width: 20px; height: 20px;"
+                         th:if="${request.sender.gender == '남성'}">
+                    <img src="/image/user/woman.png" alt="" style="width: 20px; height: 20px;"
+                         th:if="${request.sender.gender == '여성'}">
+                </div>
+                <div th:if="${request.sender == user}">
+                    <img src="/image/user/man.png" alt="" style="width: 20px; height: 20px;"
+                         th:if="${request.receiver.gender == '남성'}">
+                    <img src="/image/user/woman.png" alt="" style="width: 20px; height: 20px;"
+                         th:if="${request.receiver.gender == '여성'}">
+                </div>
             </td>
             <td>
-                <a th:text="${request.sender.nickName}" type="button" href="javascript:void(0)" class="viewProfile"></a>
+                <a th:if="${request.sender != user}" th:text="${request.sender.nickName}" type="button"
+                   href="javascript:void(0)" class="viewProfile" th:data-value="${request.sender.username}"></a>
+                <a th:if="${request.sender == user}" th:text="${request.receiver.nickName}" type="button"
+                   href="javascript:void(0)" class="viewProfile" th:data-value="${request.receiver.username}"></a>
             </td>
-            <td></td>
+            <td>
+                <div th:if="${request.sender != user}">
+                    <button type="button" class="acceptBtn btn btn-sm btn-outline-success"
+                            th:data-sender="${request.sender.username}" th:data-receiver="${user.username}">수락
+                    </button>
+                    <a type="button" class="refuseBtn btn btn-sm btn-outline-danger" href="javascript:void(0)"
+                       th:data-uri="@{|/friend/delete/${request.sender.username}|}">거절</a>
+                </div>
+                <div th:if="${request.sender == user}">요청 대기</div>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -51,8 +71,10 @@
                 </div>
             </td>
             <td>
-                <div th:if="${friend.sender != user}" th:text="${friend.sender.nickName}"></div>
-                <div th:if="${friend.receiver != user}" th:text="${friend.receiver.nickName}"></div>
+                <a class="viewProfile" th:if="${friend.sender != user}" th:text="${friend.sender.nickName}"
+                   th:data-value="${friend.sender.username}" href="javascript:void(0)"></a>
+                <a class="viewProfile" th:if="${friend.receiver != user}" th:text="${friend.receiver.nickName}"
+                   th:data-value="${friend.receiver.username}" href="javascript:void(0)"></a>
             </td>
             <td>
                 <div th:if="${friend.receiver != user}">
@@ -113,10 +135,37 @@
             if (confirm(friendNick + "님을 친구 목록에서 삭제하시겠습니까?"))
                 location.href = $(this).data("uri");
         });
-    });
 
-    $(".viewProfile").on('click', function () {
-        showProfile($(this).data("value"));
+        $(".refuseBtn").on('click', function () {
+            if (confirm("친구 요청을 거절하시겠습니까?"))
+                location.href = $(this).data("uri");
+        });
+
+
+        $(".viewProfile").on('click', function () {
+            showProfile($(this).data("value"));
+        });
+
+        $(".acceptBtn").on('click', function () {
+            if (confirm("친구 요청을 수락하시겠습니까?")) {
+                $.ajax({
+                    url: "/friend/accept",
+                    type: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify({sender: $(this).data("sender"), receiver: $(this).data("receiver")}),
+                    success: function (response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
     });
 </script>
 </html>
