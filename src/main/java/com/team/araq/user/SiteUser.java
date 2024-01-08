@@ -136,6 +136,7 @@ public class SiteUser {
     private String audio;
 
     // 사진 목록
+    @Column(length = 1000)
     private List<String> images;
 
     @ManyToMany
@@ -177,5 +178,21 @@ public class SiteUser {
     private List<Friend> receiverList;
 
     private String location;
+
+    public SiteUser(String username, String name, String email,LocalDateTime createDate) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.createDate = createDate;
+    }
+
+    public SiteUser() {
+    }
+
+    public SiteUser update(String name, String email) {
+        this.name = name;
+        this.email = email;
+        return this;
+    }
 
 }
