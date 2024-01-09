@@ -1,5 +1,6 @@
 package com.team.araq.plaza;
 
+import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,10 @@ public class PlazaService {
 
     public void delete(Plaza plaza) {
         plazaRepo.delete(plaza);
+    }
+
+    public void changeManager(Plaza plaza, SiteUser user) {
+        plaza.setManager(user);
+        plazaRepo.save(plaza);
     }
 }

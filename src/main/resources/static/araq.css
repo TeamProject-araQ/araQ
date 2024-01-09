@@ -713,6 +713,12 @@ table {
     display: none;
 }
 
+.noticeMessage {
+    color: #d8d3e0;
+    padding: 0;
+    margin: 0;
+}
+
 .customMenu {
     position: absolute;
     z-index: 1000;
@@ -728,23 +734,27 @@ table {
     thead {
         display: none;
     }
+
     tr {
         margin-bottom: 10px;
         display: block;
         border-bottom: 2px solid #ddd;
     }
+
     td {
         display: block;
         text-align: right;
         font-size: 0.8em;
         border-bottom: 1px dotted #ccc;
     }
+
     td::before {
         content: attr(data-label);
         float: left;
         font-weight: bold;
         text-transform: uppercase;
     }
+
     td:last-child {
         border-bottom: 0;
     }
