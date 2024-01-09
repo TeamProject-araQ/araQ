@@ -23,7 +23,7 @@ $(function () {
     const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
 
     var postListVal = $('#postList').val();
-    if (postListVal !== undefined && postListVal !== null && postListVal !== '') {
+    if (!postListVal === "") {
         scrollToBottom();
     }
 

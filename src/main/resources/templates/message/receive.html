@@ -1,5 +1,194 @@
 <html layout:decorate="~{layout}">
+<head>
+    <style>
+        .modal-backdrop {
+            background-color: transparent;
+        }
+    </style>
+</head>
 <div layout:fragment="content" class="container my-3">
-
+    <h3 class="underline my-3">받은 쪽지함</h3>
+    <div class="d-flex justify-content-between align-items-center my-3">
+        <div class="input-group" style="width:30%;">
+            <input type="text" id="searchKw" class="form-control" th:value="${keyword}" placeholder="내용, 발신자 검색">
+            <button class="btn 버튼" type="button" id="searchBtn">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        <div>
+            <button type="button" class="unread btn btn-sm 버튼-full">안읽음</button>
+            <button type="button" class="deleteBtn btn btn-danger btn-sm">삭제</button>
+        </div>
+    </div>
+    <table class="table table-hover text-center mb-5">
+        <thead class="table-secondary">
+        <tr>
+            <th style="width:10%;">
+                <input class="form-check-input" type="checkbox" id="checkAll">
+            </th>
+            <th style="width: 10%;">읽음</th>
+            <th>이름</th>
+            <th style="width: 50%;">내용</th>
+            <th><i class="bi bi-clock"></i></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="message : ${paging}">
+            <td><input class="check form-check-input" type="checkbox" th:value="${message.id}"></td>
+            <td>
+                <i class="bi bi-envelope-heart" th:if="${message.status == false}"></i>
+                <i class="bi bi-envelope-open-heart" style="color: silver;" th:if="${message.status == true}"></i>
+            </td>
+            <td th:text="${message.sender.nickName}"></td>
+            <td style="text-align: start">
+                <div th:text="${message.content}" type="button" data-bs-toggle="modal"
+                     th:data-bs-target="|#detailModal_${message.id}|" th:data-value="${message.id}" class="readMessage"></div>
+            </td>
+            <td th:text="${#temporals.format(message.dateTime, 'yyyy-MM-dd HH:mm')}"></td>
+            <!-- 쪽지 상세 -->
+            <div class="modal" th:id="|detailModal_${message.id}|" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="d-flex align-items-center border-bottom pb-2">
+                                <div class="badge me-2" style="background: rgb(121,104,149); color: white;">수신자</div>
+                                <img th:src="@{${message.sender.image}}" class="me-1" alt="" style="width: 25px; height: 25px; border-radius: 10px;">
+                                <div th:text="${message.sender.nickName}" style="font-size: 13pt;"></div>
+                            </div>
+                            <div th:text="${message.content}" class="mt-2"></div>
+                            <div class="d-flex justify-content-end">
+                                <div class="badge bg-light text-dark" th:text="${#temporals.format(message.dateTime, 'yyyy-MM-dd HH:mm')}"></div>
+                            </div>
+                            <label for="answerMessage" class="form-label mt-2" style="border-bottom: 2px solid #D8D3E0">답장</label>
+                            <div class="input-group">
+                                <input type="text" class="answerMessage form-control">
+                                <input type="hidden" class="receiver">
+                                <input type="button" class="answerSend btn 버튼-full btn-sm" value="전송">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+        <form th:action="@{/message/receive}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+            <input type="hidden" id="keyword" name="keyword" th:value="${keyword}">
+        </form>
+    </div>
 </div>
+<script layout:fragment="script">
+    $(function () {
+        $('.unread').on('click', function () {
+            var checkedValues = $(".check:checked").map(function () {
+                return this.value;
+            }).get();
+
+            if (checkedValues.length === 0) {
+                alert('선택된 쪽지가 없습니다.');
+                return;
+            }
+
+            if (confirm("선택된 쪽지를 '안읽음' 상태로 변경합니다."))
+                $.ajax({
+                    url: "/message/unread",
+                    type: "POST",
+                    headers: {
+                      [csrfHeader] : csrfToken
+                    },
+                    contentType: "application/json",
+                    data:JSON.stringify(checkedValues),
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+        })
+
+        $('.readMessage').on('click', function () {
+            var messageId = $(this).data("value");
+            $.ajax({
+                url: "/message/read",
+                type: "POST",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType: "text/plain",
+                data: messageId.toString(),
+                success: function (data) {
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        });
+
+        $(".page-link").on('click', function () {
+            $("#page").val(this.dataset.page);
+            $("#searchForm").submit();
+        });
+
+        $("#searchBtn").on('click', function () {
+            $("#keyword").val($("#searchKw").val());
+            $("#page").val("0");
+            $("#searchForm").submit();
+        });
+
+        $("#checkAll").on('click', function () {
+            $('.check').prop('checked', this.checked);
+        });
+
+        $(".deleteBtn").on('click', function () {
+            var checkedValues = $(".check:checked").map(function () {
+                return this.value;
+            }).get();
+
+            if (checkedValues.length === 0) {
+                alert('선택된 쪽지가 없습니다.');
+                return;
+            }
+
+            if (confirm('쪽지를 삭제하시겠습니까?')) {
+                $.ajax({
+                    url: '/message/delete',
+                    type: 'post',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(checkedValues),
+                    success: function (data) {
+                        alert(data);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>
 </html>
