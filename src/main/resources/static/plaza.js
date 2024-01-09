@@ -13,11 +13,16 @@ $(function () {
         stompClient.send("/app/plaza/join/" + code, {}, user);
 
         stompClient.subscribe("/topic/plaza/join/" + code, function (message) {
-            createAvatar(JSON.parse(message.body));
+            const data = JSON.parse(message.body);
+            if (user !== data.username) {
+                createAvatar(data);
+                createParticipantList(data);
+            }
         });
 
         stompClient.subscribe("/topic/plaza/exit/" + code, function (message) {
             $("." + message.body).remove();
+            $(".p_" + message.body).remove();
         });
 
         stompClient.subscribe("/topic/plaza/message/" + code, function (message) {
@@ -44,6 +49,22 @@ $(function () {
                 element.find(".status").addClass("focus");
             }
         });
+
+        stompClient.subscribe("/topic/plaza/notice/" + code, function (message) {
+            $("#plazaChatBoard").append("<p class='noticeMessage'>" + message.body + "</p>");
+
+            const chatBoard = document.getElementById("plazaChatBoard");
+            chatBoard.scrollTop = chatBoard.scrollHeight;
+        });
+
+        stompClient.subscribe("/topic/plaza/fire/" + code + "/" + user, function () {
+            window.location.href = "/plaza/list";
+        });
+
+        stompClient.subscribe("/topic/plaza/delegate/" + code + "/" + user, function () {
+            alert("방장을 위임받으셨습니다.");
+            window.location.reload();
+        });
     });
 
     $(window).on("beforeunload", function () {
@@ -55,7 +76,7 @@ $(function () {
         const text = $("#plazaChatParam").val();
 
         $("#plazaChatBoard").css("height", "80px");
-        var chatBoard = document.getElementById("plazaChatBoard");
+        const chatBoard = document.getElementById("plazaChatBoard");
         chatBoard.scrollTop = chatBoard.scrollHeight;
 
         $("#plazaChatParam").hide();
@@ -118,6 +139,23 @@ $(function () {
         }));
     });
 
+    $("#plazaManageBtn").click(function () {
+        $("#plazaManageModal").modal("show");
+    });
+
+    $("#participant-tab-pane").on("click", ".fire", function () {
+        if (confirm($(this).data("nick") + "님을 강퇴하시겠습니까?")) {
+            stompClient.send("/app/plaza/fire/" + code, {}, $(this).data("value"));
+        }
+    });
+
+    $("#participant-tab-pane").on("click", ".delegate", function () {
+        if (confirm($(this).data("nick") + "님에게 방장을 위임하시겠습니까?")) {
+            stompClient.send("/app/plaza/delegate/" + code, {}, $(this).data("value"));
+            $("#plazaManageBtn").remove();
+        }
+    });
+
     function changeLocation(e) {
         const element = $("." + user);
         const left = parseInt(element.css("left"));
@@ -163,7 +201,7 @@ $(function () {
 
         $("#plazaChatBoard").append("<p class='normalMessage'>" + data.nick + ": " + data.content + "</p>");
 
-        var chatBoard = document.getElementById("plazaChatBoard");
+        const chatBoard = document.getElementById("plazaChatBoard");
         chatBoard.scrollTop = chatBoard.scrollHeight;
     }
 });
@@ -222,4 +260,22 @@ function correctLocation() {
         element.css("transition", "none");
         element.css("top", parentHeight - 50);
     }
+}
+
+function createParticipantList(data) {
+    const element =
+        "<div class='dropdown dropend p_" + data.username + "'>" +
+            "<a href='#' data-bs-toggle='dropdown' aria-expanded='false'>" + data.nickname + "</a>" +
+            "<ul class='dropdown-menu'>" +
+                "<li><a class='delegate dropdown-item' href='javascript:void(0)' " +
+                       "data-nick='" + data.nickname + "' " +
+                       "data-value='" + data.username + "'>방장위임</a></li>" +
+                "<li>" +
+                    "<li><a class='fire dropdown-item text-danger' href='javascript:void(0)' " +
+                            "data-nick='" + data.nickname + "' " +
+                           "data-value='" + data.username + "'>강제퇴장</a></li>" +
+            "</ul>" +
+        "</div>";
+
+$("#participant-tab-pane > .card").append(element);
 }

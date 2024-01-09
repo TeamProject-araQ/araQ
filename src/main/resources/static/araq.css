@@ -711,3 +711,9 @@ table {
 #plazaChatParam {
     display: none;
 }
+
+.noticeMessage {
+    color: #d8d3e0;
+    padding: 0;
+    margin: 0;
+}
