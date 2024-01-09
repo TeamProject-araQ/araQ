@@ -117,7 +117,7 @@
         <li class="option"><a href="#">채팅</a></li>
         <ul class="depth">
             <li><a th:href="@{/chat/list}">채팅 목록</a></li>
-            <li><a th:href="@{/plaza/join}">만남의 광장</a></li>
+            <li><a th:href="@{/plaza/list}">만남의 광장</a></li>
         </ul>
     </ul>
     <ul class="menu">
@@ -192,12 +192,12 @@
                 <img src="/image/etc/friend.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">친구 목록</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/post}"
+            <a class="col-4 justify-content-center" th:href="@{/message/send}"
                style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/message/sent.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">보낸 쪽지함</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/post}"
+            <a class="col-4 justify-content-center" th:href="@{/message/receive}"
                style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/message/receive.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">받은 쪽지함</div>
