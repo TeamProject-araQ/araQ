@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
+    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm) throws IOException {
         SiteUser user = userService.getByUsername(username);
         userService.update(user, userUpdateForm);
         return "redirect:/";
