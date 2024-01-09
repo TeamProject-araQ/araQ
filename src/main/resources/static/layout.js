@@ -4,7 +4,7 @@ $(function () {
 
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
-    // stompClient.debug = null;
+    stompClient.debug = null;
     let pc = null;
     let notifyCheck = false;
     const iceServers = {
@@ -457,7 +457,7 @@ $(function () {
             success: function (data) {
             },
             error: function (err) {
-                alert(err);
+                console.log(err);
             }
         });
     });
