@@ -179,6 +179,10 @@ public class SiteUser {
 
     private String location;
 
+    private boolean preference;
+
+    private LocalDateTime getPreferenceTime;
+
     public SiteUser(String username, String name, String email,LocalDateTime createDate) {
         this.username = username;
         this.name = name;

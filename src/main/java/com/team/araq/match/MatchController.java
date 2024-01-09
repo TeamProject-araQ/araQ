@@ -92,4 +92,20 @@ public class MatchController {
         return "conn//personalityType";
     }
 
+    @GetMapping("/random")
+    public String random(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        List<UserLike> likeList = this.likeService.getListByUser(user);
+        List<SiteUser> userList = this.userService.getRandomList(user.getGender());
+        Map<String, String> likesStatus = new HashMap<>();
+        for (SiteUser siteUser : userList) {
+            String status = likeService.checkStatus(user, siteUser);
+            likesStatus.put(siteUser.getUsername(), status);
+        }
+        model.addAttribute("userList", userList);
+        model.addAttribute("likeList", likeList);
+        model.addAttribute("likesStatus", likesStatus);
+        return "conn/random";
+    }
+
 }

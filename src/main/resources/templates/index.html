@@ -51,7 +51,7 @@
     <input type="hidden" th:value="${postList}" id="postList">
     <!-- 매칭 추천 -->
     <div class="d-flex">
-        <h3 class="highlight"># 랜덤 매칭</h3>
+        <h3 class="highlight" style="font-family: 'nanum-regular', serif" data-bs-toggle="popover" id="recommendedMatches"># 추천 매칭</h3>
     </div>
     <div class="randomMatch row mt-3">
         <div class="col-4" th:each="randomUser : ${userList}">
