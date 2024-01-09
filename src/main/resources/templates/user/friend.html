@@ -1,8 +1,8 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <div class="text-end mt-3 text-secondary">※ 친구의 닉네임을 우클릭하면 쪽지를 보낼 수 있습니다.</div>
+    <div class="text-end mt-5 text-secondary">※ 친구의 닉네임을 우클릭하면 쪽지를 보낼 수 있습니다.</div>
     <div th:if="${!requestList.isEmpty()}">
-        <h3 class="underline-start my-3">친구 요청</h3>
+        <h3 class="underline-start mb-3">친구 요청</h3>
         <table class="table table-hover text-center">
             <thead class="table-secondary">
             <tr>
@@ -138,7 +138,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="d-flex align-items-center border-bottom pb-2">
-                        <div class="badge me-2" style="background: rgb(121,104,149); color: white;">수신자</div>
+                        <div class="badge me-2" style="background: rgb(121,104,149); color: white;">받는 사람</div>
                         <img class="friendImage me-1" alt="" style="width: 25px; height: 25px; border-radius: 10px;">
                         <div class="friendNick" style="font-size: 13pt;"></div>
                     </div>

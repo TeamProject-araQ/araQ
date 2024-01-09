@@ -36,7 +36,7 @@ public class MainController {
         List<SiteUser> onlines = userService.getLoginUsers();
         onlines.remove(user);
         List<UserLike> likeList = this.likeService.getListByUser(user);
-        List<SiteUser> userList = this.userService.getRandomList(user.getGender());
+        List<SiteUser> userList = this.userService.getListByPreference(user.getGender());
         Map<String, String> likesStatus = new HashMap<>();
         for (SiteUser siteUser : userList) {
             String status = likeService.checkStatus(user, siteUser);

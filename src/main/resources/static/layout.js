@@ -423,6 +423,12 @@ $(function () {
         }
     });
 
+    $('#content').keypress(function(e) {
+        if (e.keyCode == 13) {
+            $('.sendBtn').click();
+        }
+    });
+
     $('.answerBtn').on('click', function () {
         var sender = $('#hiddenUserName').val();
         var receiver = $('#messageModal .receiver').val();
@@ -434,6 +440,12 @@ $(function () {
                 content: content
             }));
             location.reload();
+        }
+    });
+
+    $('.answerContent').keypress(function(e) {
+        if (e.keyCode == 13) {
+            $('.answerBtn').click();
         }
     });
 

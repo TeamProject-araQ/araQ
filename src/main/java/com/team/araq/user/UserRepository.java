@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,15 +36,26 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             "(CASE WHEN :#{#idealType.religion} IS NULL OR u.religion = :#{#idealType.religion} THEN 1 ELSE 0 END) >= 3")
     List<SiteUser> findMatchingUsersByIdealType(@Param("idealType") IdealType idealType, @Param("gender") String gender);
 
-    List<SiteUser> findByGenderNotAndReligion(String gender, String religion);
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND religion = :religion ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndReligion(@Param("gender") String gender, @Param("religion") String religion);
 
-    List<SiteUser> findByGenderNotAndDrinking(String gender, String drinking);
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND drinking = :drinking ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndDrinking(@Param("gender") String gender, @Param("drinking") String drinking);
 
-    List<SiteUser> findByGenderNotAndSmoking(String gender, String Smoking);
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND Smoking = :Smoking ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndSmoking(@Param("gender") String gender, @Param("Smoking") String Smoking);
 
-    List<SiteUser> findByGenderNotAndHobbyContaining(String gender, String hobby);
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND hobby LIKE %:hobby% ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndHobbyContaining(@Param("gender") String gender, @Param("hobby") String hobby);
 
-    List<SiteUser> findByGenderNotAndMbti(String gender, String mbti);
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND mbti = :mbti ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndMbti(@Param("gender") String gender, @Param("mbti") String mbti);
 
     List<SiteUser> findByLocation(String location);
+
+    List<SiteUser> findByGetPreferenceTimeBefore(LocalDateTime time);
+
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND preference = :status ORDER BY RAND() LIMIT 3", nativeQuery = true)
+    List<SiteUser> findByGenderNotAndPreferenceRandomly(@Param("gender") String gender, @Param("status") boolean status);
+
 }
