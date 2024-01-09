@@ -41,6 +41,7 @@ public class MessageController {
                              @RequestParam(value = "keyword", defaultValue = "") String keyword) {
         SiteUser user = this.userService.getByUsername(principal.getName());
         Page<Message> receiveList = this.messageService.getListByReceiver(user, keyword, page);
+        model.addAttribute("paging", receiveList);
         model.addAttribute("receiveList", receiveList);
         return "message/receive";
     }
@@ -82,10 +83,20 @@ public class MessageController {
 
     @PostMapping("/read")
     @ResponseBody
-    public String updateStatus(@RequestBody String messageId) {
+    public String updateStatusRead(@RequestBody String messageId) {
         Message message = this.messageService.getMessage(Integer.parseInt(messageId));
-        this.messageService.updateStatus(message);
+        this.messageService.updateStatus(message, true);
         return null;
+    }
+
+    @PostMapping("/unread")
+    @ResponseBody
+    public String updateStatusUnread(@RequestBody List<String> messages) {
+        for (String messageId : messages)  {
+            Message message = this.messageService.getMessage(Integer.parseInt(messageId));
+            this.messageService.updateStatus(message, false);
+        }
+        return "쪽지의 상태가 변경되었습니다.";
     }
 
     @PostMapping("/delete")

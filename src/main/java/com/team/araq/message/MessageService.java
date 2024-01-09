@@ -32,19 +32,19 @@ public class MessageService {
     public Page<Message> getListByReceiver(SiteUser receiver, String keyword, int page) {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("dateTime"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(sort));
         return this.messageRepository.findByReceiver(receiver, keyword, pageable);
     }
 
     public Page<Message> getListBySender(SiteUser sender, String keyword, int page) {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("dateTime"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(sort));
         return this.messageRepository.findBySender(sender, keyword, pageable);
     }
 
-    public void updateStatus(Message message) {
-        message.setStatus(true);
+    public void updateStatus(Message message, boolean value) {
+        message.setStatus(value);
         this.messageRepository.save(message);
     }
 

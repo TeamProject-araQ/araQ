@@ -313,7 +313,6 @@ public class UserController {
 
     @GetMapping("/post")
     public String post() {
-
         return "user/post";
     }
 
