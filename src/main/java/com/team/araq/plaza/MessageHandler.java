@@ -82,7 +82,7 @@ public class MessageHandler {
         SiteUser user = userService.getByUsername(message);
         Plaza plaza = plazaService.getByCode(code);
         plazaService.changeManager(plaza, user);
-        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, "delegate");
+        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
     }
 
 }

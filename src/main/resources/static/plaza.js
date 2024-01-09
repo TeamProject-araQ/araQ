@@ -41,8 +41,7 @@ $(function () {
                 element.addClass("statusBlur");
                 element.find(".status").removeClass("focus");
                 element.find(".status").addClass("blur");
-            }
-            else {
+            } else {
                 element.removeClass("statusBlur");
                 element.addClass("statusFocus");
                 element.find(".status").removeClass("blur");
@@ -152,7 +151,57 @@ $(function () {
     $("#participant-tab-pane").on("click", ".delegate", function () {
         if (confirm($(this).data("nick") + "님에게 방장을 위임하시겠습니까?")) {
             stompClient.send("/app/plaza/delegate/" + code, {}, $(this).data("value"));
-            $("#plazaManageBtn").remove();
+            window.location.reload();
+        }
+    });
+
+    $("#peopleRange").on('change', function () {
+        $(".peopleRangeNumber").text($(this).val());
+    });
+
+    $("#plazaPublic").on('change', function () {
+        if (this.checked) {
+            const passwordElement = $("#plazaPassword");
+            passwordElement.prop("disabled", true);
+        }
+    });
+
+    $("#plazaPrivate").on('change', function () {
+        if (this.checked) {
+            const passwordElement = $("#plazaPassword");
+            passwordElement.prop("disabled", false);
+            passwordElement.focus();
+        }
+    });
+
+    $("#plazaModifyBtn").click(function () {
+        const title = $("#plazaTitle").val();
+        const people = $("#peopleRange").val();
+        const password = ($("#plazaPrivate").is(":checked")) ? $("#plazaPassword").val() : "";
+        if ($("#plazaPrivate").is(":checked") && password  === "")
+            alert("비밀번호를 입력해주세요");
+        else if (title.trim() === "") alert("광장 이름을 입력해주세요");
+        else {
+            $.ajax({
+                url: "/plaza/modify",
+                type: "post",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    title: title,
+                    people: people,
+                    password: password,
+                    code: code
+                }),
+                success: function () {
+                    alert("변경이 완료되었습니다.");
+                },
+                error: function (err) {
+                    alert("변경 실패\n사유 : " + err);
+                }
+            });
         }
     });
 
@@ -247,16 +296,14 @@ function correctLocation() {
     if (left < -75) {
         element.css("transition", "none");
         element.css("left", -75);
-    }
-    else if (left > parentWidth - 125) {
+    } else if (left > parentWidth - 125) {
         element.css("transition", "none");
         element.css("left", parentWidth - 125);
     }
     if (top < 0) {
         element.css("transition", "none");
         element.css("top", 0);
-    }
-    else if (top > parentHeight - 50) {
+    } else if (top > parentHeight - 50) {
         element.css("transition", "none");
         element.css("top", parentHeight - 50);
     }
@@ -265,17 +312,17 @@ function correctLocation() {
 function createParticipantList(data) {
     const element =
         "<div class='dropdown dropend p_" + data.username + "'>" +
-            "<a href='#' data-bs-toggle='dropdown' aria-expanded='false'>" + data.nickname + "</a>" +
-            "<ul class='dropdown-menu'>" +
-                "<li><a class='delegate dropdown-item' href='javascript:void(0)' " +
-                       "data-nick='" + data.nickname + "' " +
-                       "data-value='" + data.username + "'>방장위임</a></li>" +
-                "<li>" +
-                    "<li><a class='fire dropdown-item text-danger' href='javascript:void(0)' " +
-                            "data-nick='" + data.nickname + "' " +
-                           "data-value='" + data.username + "'>강제퇴장</a></li>" +
-            "</ul>" +
+        "<a href='#' data-bs-toggle='dropdown' aria-expanded='false'>" + data.nickname + "</a>" +
+        "<ul class='dropdown-menu'>" +
+        "<li><a class='delegate dropdown-item' href='javascript:void(0)' " +
+        "data-nick='" + data.nickname + "' " +
+        "data-value='" + data.username + "'>방장위임</a></li>" +
+        "<li>" +
+        "<li><a class='fire dropdown-item text-danger' href='javascript:void(0)' " +
+        "data-nick='" + data.nickname + "' " +
+        "data-value='" + data.username + "'>강제퇴장</a></li>" +
+        "</ul>" +
         "</div>";
 
-$("#participant-tab-pane > .card").append(element);
+    $("#participant-tab-pane > .card").append(element);
 }

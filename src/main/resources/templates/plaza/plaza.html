@@ -5,7 +5,9 @@
              th:classappend="${online.plazaFocus.equals('focus')} ? 'statusFocus' : 'statusBlur'">
             <div class="talkBox card"></div>
             <img class="userImage" th:src="${online.image}">
-            <div class="nickname" th:text="${online.nickName}"></div>
+            <div class="d-flex">
+                <div class="nickname" th:text="${online.nickName}"></div>
+            </div>
             <div class="status" th:classappend="${online.plazaFocus.equals('focus')} ? 'focus' : 'blur'"></div>
             <input type="hidden" th:value="${online.locationTop}">
             <input type="hidden" th:value="${online.locationLeft}">
@@ -36,13 +38,7 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="plaza-tab" data-bs-toggle="tab"
                                     data-bs-target="#plaza-tab-pane" type="button" role="tab"
-                                    aria-controls="plaza-tab-pane" aria-selected="false">광장 설정
-                            </button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
-                                    data-bs-target="#contact-tab-pane" type="button" role="tab"
-                                    aria-controls="contact-tab-pane" aria-selected="false">Contact
+                                    aria-controls="plaza-tab-pane" aria-selected="false">방 설정 변경
                             </button>
                         </li>
                     </ul>
@@ -58,7 +54,9 @@
                                      th:each="online : ${onlinePlazaUsers}">
                                     <a href="#" th:text="${online.nickName}" data-bs-toggle="dropdown"
                                        aria-expanded="false"></a>
-                                    <ul class="dropdown-menu">
+                                    <i class="bi bi-award-fill"
+                                       th:if="${plaza.manager.username.equals(online.username)}"></i>
+                                    <ul class="dropdown-menu" th:if="${!online.username.equals(user.username)}">
                                         <li><a class="delegate dropdown-item" href="javascript:void(0)"
                                                th:data-nick="${online.nickName}"
                                                th:data-value="${online.username}">방장위임</a></li>
@@ -71,16 +69,60 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="plaza-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
-                             tabindex="0">...
-                        </div>
-                        <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
-                             tabindex="0">...
+                             tabindex="0">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="plazaTitle" placeholder="광장 이름"
+                                       th:value="${plaza.title}">
+                                <label for="plazaTitle">광장 이름</label>
+                            </div>
+                            <label for="peopleRange" class="form-label">인원수</label>
+                            <div class="d-flex">
+                                <input type="range" class="form-range" min="1" max="8" id="peopleRange"
+                                       th:value="${plaza.maxPeople}">
+                                <span class="mx-3 peopleRangeNumber" th:text="${plaza.maxPeople}"></span>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="plazaPublic"
+                                       th:checked="${plaza.password.isEmpty()}">
+                                <label class="form-check-label" for="plazaPublic">
+                                    공개
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="plazaPrivate"
+                                       th:checked="${!plaza.password.isEmpty()}">
+                                <div>
+                                    <label class="form-check-label" for="plazaPrivate">
+                                        비공개
+                                    </label>
+                                    <label for="plazaPassword"></label>
+                                    <input type="password" id="plazaPassword" class="form-control" placeholder="비밀번호"
+                                           th:value="${plaza.password}">
+                                </div>
+                            </div>
+                            <div class="mt-3">배경 설정</div>
+                            <div class="row">
+                                <a href="#" class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class="m-auto">기본</div>
+                                </a>
+                                <a href="#" class="col-3">
+                                    <img th:src="@{/image/araQ/_logo.png}" alt="" style="width: 100%">
+                                </a>
+                                <a href="#" class="col-3">
+                                    <img th:src="@{/image/araQ/_logo.png}" alt="" style="width: 100%">
+                                </a>
+                                <a href="#" class="col-3">
+                                    <img th:src="@{/image/araQ/_logo.png}" alt="" style="width: 100%">
+                                </a>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-sm 버튼" id="plazaModifyBtn">변경</button>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>

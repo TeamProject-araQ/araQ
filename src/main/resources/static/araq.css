@@ -757,4 +757,8 @@ table {
     td:last-child {
         border-bottom: 0;
     }
+
+    .selectedImg {
+        border: 5px solid rgb(131, 115, 157);
+    }
 }

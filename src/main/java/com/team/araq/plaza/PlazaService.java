@@ -48,4 +48,11 @@ public class PlazaService {
         plaza.setManager(user);
         plazaRepo.save(plaza);
     }
+
+    public void modify(Plaza plaza, String title, String password, Integer maxPeople) {
+        plaza.setTitle(title);
+        plaza.setPassword(password);
+        plaza.setMaxPeople(maxPeople);
+        plazaRepo.save(plaza);
+    }
 }

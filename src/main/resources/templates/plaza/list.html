@@ -136,6 +136,8 @@
             const people = $("#peopleRange").val();
             const password = $("#plazaPassword").val();
             if (title.trim() === "") alert("광장 이름을 입력해주세요");
+            else if ($("#plazaPrivate").is(":checked") && password  === "")
+                alert("비밀번호를 입력해주세요");
             else {
                 $("#plazaCreateForm > input[name='title']").val(title);
                 $("#plazaCreateForm > input[name='people']").val(people);
