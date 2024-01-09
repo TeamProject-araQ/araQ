@@ -349,12 +349,12 @@ a:hover {
     color: white;
 }
 
-.bubble {
+.bubble, .ticket {
     padding: 20px;
     border-bottom: 1px solid lightgray;
 }
 
-.bubble:hover {
+.bubble:hover, .ticket:hover {
     background: rgba(219, 214, 226, 0.6);
 }
 
@@ -364,6 +364,7 @@ a:hover {
     color: rgb(103, 88, 126);
     padding: 5px 15px 5px 15px;
     border-radius: 10px;
+    background: white;
 }
 
 .underline-start {

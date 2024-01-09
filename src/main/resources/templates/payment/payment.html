@@ -36,7 +36,8 @@
         </div>
         <div class="bubble d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">5500 <span>버블</span>
+                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">5500
+                    <span>버블</span>
                 </div>
                 <div class="badge bg-danger text-light ms-3">+ 10%</div>
             </div>
@@ -44,7 +45,8 @@
         </div>
         <div class="bubble d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">11000 <span>버블</span>
+                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">11000
+                    <span>버블</span>
                 </div>
                 <div class="badge bg-danger text-light ms-3">+ 10%</div>
             </div>
@@ -52,7 +54,8 @@
         </div>
         <div class="bubble d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">33000 <span>버블</span>
+                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">33000
+                    <span>버블</span>
                 </div>
                 <div class="badge bg-danger text-light ms-3">+ 10%</div>
             </div>
@@ -60,7 +63,8 @@
         </div>
         <div class="bubble d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">55000 <span>버블</span>
+                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">55000
+                    <span>버블</span>
                 </div>
                 <div class="badge bg-danger text-light ms-3">+ 10%</div>
             </div>
@@ -68,21 +72,27 @@
         </div>
         <div class="bubble d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">110000 <span>버블</span>
+                <div><img src="/image/araQ/bubble.jpg" alt="" style="width:30px; height:30px; margin-right:10px;">110000
+                    <span>버블</span>
                 </div>
                 <div class="badge bg-danger text-light ms-3">+ 10%</div>
             </div>
             <div class="뱃지">￦ 100000</div>
         </div>
     </div>
+    <h4 class="mb-3 mt-4">이용권 구매</h4>
+    <div class="ticket d-flex justify-content-between align-items-center"
+         style="border-top:1px solid lightgray;">
+        <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket.png" alt=""
+                                                              style="width:40px; height:40px; margin-right:20px;">우선 매칭권
+        </div>
+        <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">1000
+        </div>
+    </div>
 </div>
 <input type="hidden" th:value="${user}">
 <script type="text/javascript" layout:fragment="script">
-
-    IMP.init('imp65467420');
-
     var selectedPg = '';
-
     var amount = '';
 
     function selectPg(pg) {
@@ -97,62 +107,91 @@
         selectedPg = pg;
     }
 
-    $('.bubble').on('click', function() {
-        if (!selectedPg) {
-            alert('결제 수단을 선택해주세요.');
-            return;
-        }
+    $(function () {
+        IMP.init('imp65467420');
 
-        var bubbleValueElement = $(this).find('div:first-child');
-        var bubbleValue = bubbleValueElement.text();
-        var bubbleNumber = parseInt(bubbleValue.match(/\d+/)[0]);
+        $('.ticket').click(function () {
+            var ticketName = $(this).find('.ticketName').text().trim();
+            var bubble = $(this).find('.뱃지').text().trim();
 
-        var badgeElement = $(this).find('.뱃지');
-        var text = badgeElement.text();
-        var matchResult = text.match(/\d+/);
-        amount = parseInt(matchResult[0]);
-
-        IMP.request_pay({
-            pg: selectedPg,
-            pay_method: 'card',
-            merchant_uid: '[[${user.id}]]' + new Date().getTime(),
-            name: 'AraQ_Bubble 결제',
-            amount: amount,
-            buyer_email: '[[${user.email}]]',
-            buyer_name: '[[${user.username}]]',
-            buyer_tel: '[[${user.phoneNum}]]',
-            buyer_addr: '[[${user.address}]]',
-            status: status
-        }, function (rsp) {
-            if (rsp.success) {
-                var data = {
-                    orderNum: rsp.merchant_uid,
-                    amount: rsp.paid_amount,
-                    method: rsp.pay_method,
-                    username: rsp.buyer_name,
-                    card: rsp.card_name,
-                    impUid: rsp.imp_uid,
-                    status: rsp.status,
-                    pg: rsp.pg_provider,
-                    bubble : bubbleNumber
-                };
+            if (confirm(bubble + " 버블을 사용하여 '" + ticketName + "' 을 구매합니다."))
                 $.ajax({
-                    url: '/charge',
-                    type: 'POST',
+                    url: "/purchase",
+                    type: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
                         [csrfHeader]: csrfToken
                     },
-                    data: JSON.stringify(data),
-                    success: function(response) {
-                        alert(response);
-                        location.reload();
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        ticketName: ticketName,
+                        bubble: bubble
+                    }),
+                    success: function (data) {
+                        alert(data);
                     },
-                    error: function(error) {
-                        console.error('Error:', error);
+                    error: function (err) {
+                        console.log(err);
                     }
                 });
+        });
+
+        $('.bubble').on('click', function () {
+            if (!selectedPg) {
+                alert('결제 수단을 선택해주세요.');
+                return;
             }
+
+            var bubbleValueElement = $(this).find('div:first-child');
+            var bubbleValue = bubbleValueElement.text();
+            var bubbleNumber = parseInt(bubbleValue.match(/\d+/)[0]);
+
+            var badgeElement = $(this).find('.뱃지');
+            var text = badgeElement.text();
+            var matchResult = text.match(/\d+/);
+            amount = parseInt(matchResult[0]);
+
+            IMP.request_pay({
+                pg: selectedPg,
+                pay_method: 'card',
+                merchant_uid: '[[${user.id}]]' + new Date().getTime(),
+                name: 'AraQ_Bubble 결제',
+                amount: amount,
+                buyer_email: '[[${user.email}]]',
+                buyer_name: '[[${user.username}]]',
+                buyer_tel: '[[${user.phoneNum}]]',
+                buyer_addr: '[[${user.address}]]',
+                status: status
+            }, function (rsp) {
+                if (rsp.success) {
+                    var data = {
+                        orderNum: rsp.merchant_uid,
+                        amount: rsp.paid_amount,
+                        method: rsp.pay_method,
+                        username: rsp.buyer_name,
+                        card: rsp.card_name,
+                        impUid: rsp.imp_uid,
+                        status: rsp.status,
+                        pg: rsp.pg_provider,
+                        bubble: bubbleNumber
+                    };
+                    $.ajax({
+                        url: '/charge',
+                        type: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            [csrfHeader]: csrfToken
+                        },
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            alert(response);
+                            location.reload();
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

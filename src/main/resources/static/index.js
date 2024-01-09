@@ -19,8 +19,11 @@ function scrollToBottom() {
 }
 
 $(function () {
-    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+    $('#recommendedMatches').popover({
+        html: true,
+        content: "<strong><추천 매칭></strong> 에는 매칭 우선권을 구매한 회원만 표시됩니다."
+    });
 
     var postListVal = $('#postList').val();
     if (!postListVal === "") {
@@ -107,8 +110,8 @@ $(function () {
     });
 
     $('.testLink').on('click', function () {
-       if ($(this).data("value") === "" || $(this).data("value") == null)
-           alert("취향 조사가 진행되지 않은 회원입니다.")
+        if ($(this).data("value") === "" || $(this).data("value") == null)
+            alert("취향 조사가 진행되지 않은 회원입니다.")
         else
             location.href = $(this).data("uri");
     });

@@ -3,6 +3,7 @@ package com.team.araq.pay;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,7 @@ public class PaymentController {
 
     @GetMapping("/payment")
     public String charge() {
-        return "payment";
+        return "payment/payment";
     }
 
     @PostMapping("/charge")
@@ -63,5 +64,23 @@ public class PaymentController {
         }
 
         return "결제가 취소되었습니다.";
+    }
+
+    @PostMapping("/purchase")
+    @ResponseBody
+    public String purchase(@RequestBody String purchase, Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        JSONObject jsonObject = new JSONObject(purchase);
+        String ticketName = jsonObject.getString("ticketName");
+        System.out.println(ticketName);
+        int bubble = jsonObject.getInt("bubble");
+        if (bubble > user.getBubble()) return "보유하신 버블이 부족합니다.";
+        else {
+            if (ticketName.equals("우선 매칭권")) {
+                this.userService.getPreference(user);
+                this.userService.useBubble(user, bubble);
+            }
+        }
+        return "구매가 완료되었습니다.";
     }
 }

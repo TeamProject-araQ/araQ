@@ -11,7 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final TaskScheduler taskScheduler;
+
     private String uploadPath = "C:/uploads/user";
 
     private String audioPath = "C:/uploads/audio";
@@ -264,6 +268,10 @@ public class UserService {
         return userList.size() > 3 ? userList.subList(0, 3) : userList;
     }
 
+    public List<SiteUser> getListByPreference(String gender) {
+        return this.userRepository.findByGenderNotAndPreferenceRandomly(gender, true);
+    }
+
     public void uploadAudio(MultipartFile multipartFile, SiteUser user) {
         File uploadDirectory = new File(audioPath);
         if (!uploadDirectory.exists()) {
@@ -421,4 +429,23 @@ public class UserService {
     public List<SiteUser> getByLocation(String location) {
         return userRepository.findByLocation(location);
     }
+
+    public void getPreference(SiteUser user) {
+        user.setPreference(true);
+        user.setGetPreferenceTime(LocalDateTime.now());
+        this.userRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 3600000)
+    public void checkPurchaseTime() {
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        List<SiteUser> users = userRepository.findByGetPreferenceTimeBefore(oneWeekAgo);
+        for (SiteUser user : users) {
+            user.setPreference(false);
+            user.setGetPreferenceTime(null);
+            userRepository.save(user);
+        }
+        System.out.println("매칭 우선권 시간 체크 완료...");
+    }
+
 }
