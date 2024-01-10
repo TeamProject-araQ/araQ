@@ -229,11 +229,13 @@
             </div>
             <div class="mb-3">
                 <label for="height" class="form-label">키</label>
-                <input type="text" th:field="*{height}" class="form-control">
+                <input type="text" th:field="*{height}" class="form-control" oninput="validateNumberInput(this, '키는 숫자로 입력해주세요.')">
+                <small class="text-muted">숫자로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="age" class="form-label">나이</label>
-                <input type="text" th:field="*{age}" class="form-control">
+                <input type="text" th:field="*{age}" class="form-control" oninput="validateNumberInput(this, '나이는 숫자로 입력해주세요.')">
+                <small class="text-muted">숫자로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="hobby" class="form-label">취미</label>
@@ -265,6 +267,21 @@
                 document.getElementById("address").value = addr;
             }
         }).open();
+    }
+
+    function validateNumberInput(inputField, errorMessage) {
+        // 입력값이 숫자가 아니면 제거
+        inputField.value = inputField.value.replace(/[^0-9]/g, '');
+
+        // 에러 메시지 표시
+        var errorElement = inputField.nextElementSibling;
+        if (!/^\d+$/.test(inputField.value)) {
+            errorElement.textContent = errorMessage;
+            inputField.setCustomValidity(errorMessage);
+        } else {
+            errorElement.textContent = '';  // 에러 메시지 지우기
+            inputField.setCustomValidity('');
+        }
     }
 
     function nextStep(currentStepId, nextStepId) {

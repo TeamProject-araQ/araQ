@@ -414,4 +414,24 @@ public class UserController {
         userService.savePersonality(user, personality);
         return "success";
     }
+
+    @GetMapping("/checkUsername")
+    @ResponseBody
+    public ResponseEntity<String> checkUsername(@RequestParam String username){
+        if(userService.checkUsername(username)){
+            return ResponseEntity.ok("available");
+        } else{
+            return ResponseEntity.ok("unavailable");
+        }
+    }
+
+    @GetMapping("/checkEmail")
+    @ResponseBody
+    public ResponseEntity<String> checkEmail(@RequestParam String email){
+        if(userService.checkEmail(email)){
+            return ResponseEntity.ok("available");
+        } else {
+            return ResponseEntity.ok("unavailable");
+        }
+    }
 }

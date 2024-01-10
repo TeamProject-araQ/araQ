@@ -426,4 +426,14 @@ public class UserService {
     public List<SiteUser> getByLocation(String location) {
         return userRepository.findByLocation(location);
     }
+
+    public boolean checkUsername(String username) {
+        Optional<SiteUser> user = userRepository.findByusername(username);
+        return user.isEmpty();
+    }
+
+    public boolean checkEmail(String email) {
+        Optional<SiteUser> user = userRepository.findByEmail(email);
+        return user.isEmpty();
+    }
 }

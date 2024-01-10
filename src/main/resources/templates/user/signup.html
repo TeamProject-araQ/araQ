@@ -22,12 +22,35 @@
             align-items: center;
             font-family: 'NanumSquareNeoBold';
         }
+
+        #usernameCheckResult span {
+            font-size: 13px;
+        }
+
+        #emailCheckResult span {
+            font-size: 13px;
+        }
+
+        #password1CheckResult span {
+            font-size: 13px;
+        }
+
+        #password2CheckResult span {
+            font-size: 13px;
+        }
+
+        #username::placeholder,
+        #password1::placeholder,
+        #email::placeholder {
+            color: #a5a5a5; /* Set the desired lighter color */
+        }
     </style>
 </head>
 <body>
 <div class="container my-3">
     <div class="d-flex justify-content-center mb-3"><a href="/">
-        <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png" style="height:70px; width:auto;">
+        <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png"
+             style="height:70px; width:auto;">
     </a></div>
     <h4 class="underline-start mb-3">회원가입</h4>
     <form th:action="@{/user/signup}" th:object="${userCreateForm}" method="post"
@@ -35,8 +58,9 @@
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div id="step1">
             <div class="mb-3">
-                <label for="username" class="form-label">사용자ID</label>
-                <input type="text" th:field="*{username}" class="form-control">
+                <label for="username" class="form-label">아이디</label>
+                <input type="text" th:field="*{username}" id="username" class="form-control" placeholder="아이디 (6-20자 이내, 영문, 숫자 사용가능)">
+                <div id="usernameCheckResult"></div>
             </div>
             <div class="mb-3">
                 <label for="name" class="form-label">이름</label>
@@ -44,15 +68,18 @@
             </div>
             <div class="mb-3">
                 <label for="password1" class="form-label">비밀번호</label>
-                <input type="password" th:field="*{password1}" class="form-control">
+                <input type="password" th:field="*{password1}" id="password1" class="form-control"  placeholder="비밀번호 (8자 이상,문자/숫자/기호 사용가능)">
+                <div id="password1CheckResult"></div>
             </div>
             <div class="mb-3">
                 <label for="password2" class="form-label">비밀번호 확인</label>
-                <input type="password" th:field="*{password2}" class="form-control">
+                <input type="password" th:field="*{password2}" id="password2" class="form-control">
+                <div id="password2CheckResult"></div>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">이메일</label>
-                <input type="email" th:field="*{email}" class="form-control">
+                <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="example@example.com">
+                <div id="emailCheckResult"></div>
             </div>
             <div class="mb-3">
                 <label for="phoneNum" class="form-label">핸드폰</label>
@@ -85,6 +112,8 @@
 
     function sendVerKey() {
         var phoneNum = $('#phoneNum').val();
+
+        phoneNum = phoneNum.replace(/-/g, '');
 
         $.ajax({
             type: 'POST',
@@ -136,34 +165,151 @@
         });
     }
 
+    function validationForm() {
+        var username = $('#username').val().trim();
+        var name = $('#name').val().trim();
+        var password1 = $('#password1').val().trim();
+        var password2 = $('#password2').val().trim();
+        var email = $('#email').val().trim();
+        var phoneNum = $('#phoneNum').val().trim();
+
+        if (
+            username === "" ||
+            name === "" ||
+            password1 === "" ||
+            password2 === "" ||
+            email === "" ||
+            phoneNum === "" ||
+            $('#username').hasClass('is-invalid') ||
+            $('#email').hasClass('is-invalid') ||
+            $('#password1').hasClass('is-invalid') ||
+            $('#password2').hasClass('is-invalid')
+        ) {
+            alert("입력되지 않은 항목이 있거나 올바르지 않은 값이 있습니다.");
+            return false;
+        }
+        if (!verKeyConfirmed) {
+            alert("핸드폰 번호 인증을 완료해주세요.");
+            return false;
+        }
+        return true;
+    }
+
     $(document).ready(function() {
+        $('#password2').prop('disabled', true);
         $('form').submit(function() {
-            var username = $('#username').val().trim();
-            var name = $('#name').val().trim();
-            var password1 = $('#password1').val().trim();
-            var password2 = $('#password2').val().trim();
-            var email = $('#email').val().trim();
-            var phoneNum = $('#phoneNum').val().trim();
-
-            if (
-                username === "" ||
-                name === "" ||
-                password1 === "" ||
-                password2 === "" ||
-                email === "" ||
-                phoneNum === ""
-            ) {
-                alert("입력되지 않은 항목이 있습니다.");
-                return false;
-            }
-
-            if (!verKeyConfirmed) {
-                alert("핸드폰 번호 인증을 완료해주세요.");
-                return false;
-            }
-            return true;
+            return validationForm();
         });
-    });
+
+        $('#username').on('blur', function(){
+            var username = $(this).val().trim();
+
+            if(username === "") {
+                $('#usernameCheckResult').html("");
+                $(this).removeClass('is-invalid');
+                return;
+            }
+
+            if(username.length < 6 || username.length > 20 || !/^[a-zA-Z0-9]+$/.test(username)){
+                $('#usernameCheckResult').html('<span style="color: red;">아이디는 6-20자 이내의 영문, 숫자만 사용 가능합니다.</span>');
+                $('#username').addClass('is-invalid');
+                return;
+            }
+
+            $.ajax({
+                type:'GET',
+                url: '/user/checkUsername',
+                data: {username:username},
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                success: function(response){
+                    if(response === "available") {
+                        $('#usernameCheckResult').html('<span style="color: green;">사용 가능한 아이디입니다.</span>');
+                        $('#username').removeClass('is-invalid');
+                    } else {
+                        $('#usernameCheckResult').html('<span style="color: red;">이미 사용중인 아이디입니다.</span>');
+                        $('#username').addClass('is-invalid');
+                    }
+                },
+                error: function(){
+                    $('#usernameCheckResult').html('<span style="color: red;">서버 오류</span>');
+                }
+            });
+        });
+
+        $('#email').on('blur', function(){
+            var email = $(this).val().trim();
+
+            if(email === "") {
+                $('#emailCheckResult').html("");
+                $(this).removeClass('is-invalid');
+                return;
+            }
+
+            $.ajax({
+                type:'GET',
+                url: '/user/checkEmail',
+                data: {email:email},
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                success: function(response){
+                    if(response === "available") {
+                        $('#emailCheckResult').html('<span style="color: green;">사용 가능한 이메일입니다.</span>');
+                        $('#email').removeClass('is-invalid');
+                    } else {
+                        $('#emailCheckResult').html('<span style="color: red;">이미 등록된 이메일입니다.</span>')
+                        $('#email').addClass('is-invalid');
+                    }
+                },
+                error: function(){
+                    $('#emailCheckResult').html('<span style="color: red;">서버 오류</span>');
+                }
+            });
+        });
+
+        $('#password1').on('blur', function(){
+            var password1 = $(this).val().trim();
+
+            if(password1 === ""){
+                $('#password1CheckResult').html("");
+                $(this).removeClass('is-invalid');
+                $('#password2').prop('disabled', true);
+                return;
+            }
+
+            if(password1.length < 8 || !/[a-zA-Z]/.test(password1) || !/\d/.test(password1)) {
+                $('#password1CheckResult').html('<span style="color: red;">비밀번호는 8자 이상, 문자 및 숫자를 포함하여 사용 가능합니다.</span>');
+                $('#password1').addClass('is-invalid');
+                $('#password2').prop('disabled', true);
+            } else {
+                $('#password1CheckResult').html('<span style="color: green;">유효한 비밀번호입니다.</span>');
+                $('#password1').removeClass('is-invalid');
+                $('#password2').prop('disabled', false).focus();
+            }
+        });
+
+        $('#password2').on('blur', function(){
+            var password1 = $('#password1').val().trim();
+            var password2 = $(this).val().trim();
+
+            if (password2 === ""){
+                $('#password2CheckResult').html("");
+                $(this).removeClass('is-invalid');
+                    return;
+                }
+
+                if (password1 !== password2) {
+                    $('#password2CheckResult').html('<span style="color : red;">비밀번호가 일치하지 않습니다.</span>');
+                    $('#password2').addClass('is-invalid');
+                } else {
+                    $('#password2CheckResult').html('<span style="color : green;">비밀번호가 일치합니다.</span>');
+                    $('#password2').removeClass('is-invalid');
+                }
+            });
+        });
+
 </script>
 </body>
 </html>
