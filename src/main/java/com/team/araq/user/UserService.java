@@ -471,26 +471,49 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    public void changeColor(SiteUser user, String background, String color) {
+        user.setChatBackground(background);
+        user.setChatColor(color);
+        user.setGetChatColor(LocalDateTime.now());
+        this.userRepository.save(user);
+    }
+
     @Scheduled(fixedRate = 3600000)
     public void checkPurchaseTime() {
         LocalDateTime now = LocalDateTime.now();
-
         List<SiteUser> users = this.userRepository.findAll();
         for (SiteUser user : users) {
             LocalDateTime getPreferenceTime = user.getGetPreferenceTime();
+            LocalDateTime getListenVoiceTime = user.getGetListenVoice();
+            LocalDateTime getChatColorTime = user.getGetChatColor();
             if (getPreferenceTime != null) {
                 if (user.isPreference1Day() && getPreferenceTime.plusDays(1).isBefore(now) ||
                         user.isPreference7Day() && getPreferenceTime.plusDays(7).isBefore(now) ||
                         user.isPreference30Day() && getPreferenceTime.plusDays(30).isBefore(now)) {
-
                     user.setPreference(false);
                     user.setPreference1Day(false);
                     user.setPreference7Day(false);
                     user.setPreference30Day(false);
                     user.setGetPreferenceTime(null);
-                    userRepository.save(user);
+                }
+            } else if (getListenVoiceTime != null) {
+                if (user.isListenVoice1Day() && getListenVoiceTime.plusDays(1).isBefore(now) ||
+                        user.isListenVoice7Day() && getListenVoiceTime.plusDays(7).isBefore(now) ||
+                        user.isListenVoice30Day() && getListenVoiceTime.plusDays(30).isBefore(now)) {
+                    user.setListenVoice(false);
+                    user.setListenVoice1Day(false);
+                    user.setListenVoice7Day(false);
+                    user.setListenVoice30Day(false);
+                    user.setGetListenVoice(null);
+                }
+            } else if (getChatColorTime != null) {
+                if (getChatColorTime.plusDays(7).isBefore(now)) {
+                    user.setChatColor(null);
+                    user.setChatBackground(null);
+                    user.setGetChatColor(null);
                 }
             }
+            this.userRepository.save(user);
         }
         System.out.println("스케줄러 잘 돌아가유");
     }

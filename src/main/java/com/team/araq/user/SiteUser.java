@@ -199,6 +199,12 @@ public class SiteUser {
 
    private int chatPass;
 
+   private String chatBackground;
+
+   private String chatColor;
+
+   private LocalDateTime getChatColor;
+
     public SiteUser(String username, String name, String email,LocalDateTime createDate) {
         this.username = username;
         this.name = name;

@@ -729,7 +729,6 @@ table {
     border-radius: 15px;
 }
 
-
 @media (max-width: 700px) {
     thead {
         display: none;
