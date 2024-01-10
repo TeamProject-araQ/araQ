@@ -32,9 +32,9 @@ public class LikeController {
         }
         else if (this.likeService.getListForCheck(user, likedUser) != null) {
             return "이미 " + likedUser.getNickName() + "님께 아라큐 요청을 보냈습니다. 매칭 상태를 확인해주세요.";
-        }
+        } else if (user.getAraQPass() == 0) return "아라큐 신청권이 필요합니다.";
         this.likeService.likeUser(user, likedUser);
-
+        this.userService.useAraQPass(user);
         Notification notification = new Notification("아라큐 요청", user.getNickName() + "님이 아라큐 요청을 보냈습니다.",
                 user.getUsername(), username, "#");
         simpMessagingTemplate.convertAndSend("/topic/notification/" + username, notification);

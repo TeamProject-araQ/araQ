@@ -392,10 +392,9 @@ public class UserController {
 
     @PostMapping("/checkAccess")
     @ResponseBody
-    public boolean checkAccess(Principal principal, @RequestBody String username) {
-        SiteUser user1 = this.userService.getByUsername(principal.getName());
-        return user1.getOpenVoice().stream()
-                .anyMatch(user2 -> user2.getUsername().equals(username));
+    public boolean checkAccess(Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        return user.isListenVoice();
     }
 
     @GetMapping("/personality")
@@ -412,5 +411,13 @@ public class UserController {
         SiteUser user = userService.getByUsername(principal.getName());
         userService.savePersonality(user, personality);
         return "success";
+    }
+
+    @PostMapping("/check/chatPass")
+    @ResponseBody
+    public boolean checkChatPass(Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.getChatPass() == 0) return false;
+        else return true;
     }
 }

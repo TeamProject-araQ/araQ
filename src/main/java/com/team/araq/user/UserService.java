@@ -354,11 +354,6 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    public void openVoice(SiteUser user1, SiteUser user2) {
-        user1.getOpenVoice().add(user2);
-        this.userRepository.save(user1);
-    }
-
     public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
         return this.userRepository.findMatchingUsersByIdealType(idealType, gender);
     }
@@ -430,22 +425,73 @@ public class UserService {
         return userRepository.findByLocation(location);
     }
 
-    public void getPreference(SiteUser user) {
+    public void getPreference(SiteUser user, int days) {
+        if (days == 1) {
+            user.setPreference1Day(true);
+        } else if (days == 7) {
+            user.setPreference7Day(true);
+        } else if (days == 30) {
+            user.setPreference30Day(true);
+        }
         user.setPreference(true);
         user.setGetPreferenceTime(LocalDateTime.now());
         this.userRepository.save(user);
     }
 
-    @Scheduled(fixedRate = 3600000)
-    public void checkPurchaseTime() {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        List<SiteUser> users = userRepository.findByGetPreferenceTimeBefore(oneWeekAgo);
-        for (SiteUser user : users) {
-            user.setPreference(false);
-            user.setGetPreferenceTime(null);
-            userRepository.save(user);
+    public void getListenVoice(SiteUser user, int days) {
+        if (days == 1) {
+            user.setListenVoice1Day(true);
+        } else if (days == 7) {
+            user.setListenVoice7Day(true);
+        } else if (days == 30) {
+            user.setListenVoice30Day(true);
         }
-        System.out.println("매칭 우선권 시간 체크 완료...");
+        user.setListenVoice(true);
+        user.setGetListenVoice(LocalDateTime.now());
+        this.userRepository.save(user);
     }
 
+    public void addAraQPass(SiteUser user, int pass) {
+        user.setAraQPass(user.getAraQPass() + pass);
+        this.userRepository.save(user);
+    }
+
+    public void useAraQPass(SiteUser user) {
+        user.setAraQPass(user.getAraQPass() - 1);
+        this.userRepository.save(user);
+    }
+
+    public void addChatPass(SiteUser user, int pass) {
+        user.setChatPass(user.getChatPass() + pass);
+        this.userRepository.save(user);
+    }
+
+    public void useChatPass(SiteUser user) {
+        user.setChatPass(user.getChatPass() - 1);
+        this.userRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 3600000)
+    public void checkPurchaseTime() {
+        LocalDateTime now = LocalDateTime.now();
+
+        List<SiteUser> users = this.userRepository.findAll();
+        for (SiteUser user : users) {
+            LocalDateTime getPreferenceTime = user.getGetPreferenceTime();
+            if (getPreferenceTime != null) {
+                if (user.isPreference1Day() && getPreferenceTime.plusDays(1).isBefore(now) ||
+                        user.isPreference7Day() && getPreferenceTime.plusDays(7).isBefore(now) ||
+                        user.isPreference30Day() && getPreferenceTime.plusDays(30).isBefore(now)) {
+
+                    user.setPreference(false);
+                    user.setPreference1Day(false);
+                    user.setPreference7Day(false);
+                    user.setPreference30Day(false);
+                    user.setGetPreferenceTime(null);
+                    userRepository.save(user);
+                }
+            }
+        }
+        System.out.println("스케줄러 잘 돌아가유");
+    }
 }
