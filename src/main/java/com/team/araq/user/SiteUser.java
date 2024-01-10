@@ -139,10 +139,6 @@ public class SiteUser {
     @Column(length = 1000)
     private List<String> images;
 
-    @ManyToMany
-    @JsonIgnore
-    private List<SiteUser> openVoice;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Taste taste;
@@ -178,6 +174,30 @@ public class SiteUser {
     private List<Friend> receiverList;
 
     private String location;
+
+    private boolean preference1Day;
+
+    private boolean preference7Day;
+
+    private boolean preference30Day;
+
+    private boolean preference;
+
+    private LocalDateTime getPreferenceTime;
+
+    private boolean listenVoice1Day;
+
+    private boolean listenVoice7Day;
+
+    private boolean listenVoice30Day;
+
+    private boolean listenVoice;
+
+   private LocalDateTime getListenVoice;
+
+   private int araQPass;
+
+   private int chatPass;
 
     public SiteUser(String username, String name, String email,LocalDateTime createDate) {
         this.username = username;

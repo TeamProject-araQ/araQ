@@ -117,6 +117,7 @@ public class ChatController {
                 user.getIntroduce(), user.getImage(), user.getNickName() + "님이 채팅을 신청했습니다.", username);
         Notification notification = new Notification("채팅 요청", user.getNickName() + "님이 채팅을 신청했습니다.",
                 user.getUsername(), username, "#");
+        this.userService.useChatPass(user);
         simpMessagingTemplate.convertAndSend("/topic/all/" + username, messageDto);
         simpMessagingTemplate.convertAndSend("/topic/notification/" + username, notification);
         return null;

@@ -4,7 +4,7 @@ $(function () {
 
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
-    // stompClient.debug = null;
+    stompClient.debug = null;
     let pc = null;
     let notifyCheck = false;
     const iceServers = {
@@ -280,10 +280,10 @@ $(function () {
     });
 
     $('#reportForm .submitBtn').on('click', function () {
-        if ($('#selectReason').val() == '')
+        if ($('#selectReason').val() === '')
             alert('신고 사유를 선택해주세요.');
-        else if ($('#selectReason').val() == 4) {
-            if ($('#detailReason').val() == '')
+        else if ($('#selectReason').val() === 4) {
+            if ($('#detailReason').val() === '')
                 alert('신고 내용을 입력해주세요.');
             else {
                 $('#reportForm').submit();
@@ -351,21 +351,17 @@ $(function () {
 
     $('.listen').on('click', function () {
         var myAudio = $('.audio')[0];
-        var username = $('.username').val();
         $.ajax({
             url: "/user/checkAccess",
             type: "POST",
             headers: {
                 [csrfHeader]: csrfToken
             },
-            contentType: "text/plain",
-            data: username,
             success: function (data) {
                 if (data === true) {
                     if (myAudio.paused) myAudio.play();
                     else myAudio.pause();
-                } else if (confirm("500 버블을 사용하여 음성을 들으시겠습니까?"))
-                    initiatePayment();
+                } else alert("음성 이용권이 필요합니다.");
             },
             error: function (err) {
                 console.log(err);
@@ -423,6 +419,12 @@ $(function () {
         }
     });
 
+    $('#content').keypress(function(e) {
+        if (e.keyCode == 13) {
+            $('.sendBtn').click();
+        }
+    });
+
     $('.answerBtn').on('click', function () {
         var sender = $('#hiddenUserName').val();
         var receiver = $('#messageModal .receiver').val();
@@ -434,6 +436,12 @@ $(function () {
                 content: content
             }));
             location.reload();
+        }
+    });
+
+    $('.answerContent').keypress(function(e) {
+        if (e.keyCode == 13) {
+            $('.answerBtn').click();
         }
     });
 
@@ -457,7 +465,7 @@ $(function () {
             success: function (data) {
             },
             error: function (err) {
-                alert(err);
+                console.log(err);
             }
         });
     });
@@ -479,7 +487,6 @@ function showProfile(username) {
             $("#profileModal .card-title").text(data.nickName);
             $("#profileModal .age").text(data.age);
             $("#profileModal .introduce").text(data.introduce);
-            $("#profileModal .username").val(data.username);
             if (data.audio) {
                 var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
                 var durationElement = $("#profileModal #audioDuration");

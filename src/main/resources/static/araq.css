@@ -349,12 +349,12 @@ a:hover {
     color: white;
 }
 
-.bubble {
+.bubble, .ticket {
     padding: 20px;
     border-bottom: 1px solid lightgray;
 }
 
-.bubble:hover {
+.bubble:hover, .ticket:hover {
     background: rgba(219, 214, 226, 0.6);
 }
 
@@ -364,6 +364,7 @@ a:hover {
     color: rgb(103, 88, 126);
     padding: 5px 15px 5px 15px;
     border-radius: 10px;
+    background: white;
 }
 
 .underline-start {
@@ -710,4 +711,55 @@ table {
 
 #plazaChatParam {
     display: none;
+}
+
+.noticeMessage {
+    color: #d8d3e0;
+    padding: 0;
+    margin: 0;
+}
+
+.customMenu {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 5px 8px 5px 8px;
+    font-size: 11pt;
+    border-radius: 15px;
+}
+
+
+@media (max-width: 700px) {
+    thead {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+    }
+
+    td {
+        display: block;
+        text-align: right;
+        font-size: 0.8em;
+        border-bottom: 1px dotted #ccc;
+    }
+
+    td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    td:last-child {
+        border-bottom: 0;
+    }
+
+    .selectedImg {
+        border: 5px solid rgb(131, 115, 157);
+    }
 }

@@ -1,5 +1,6 @@
 package com.team.araq.plaza;
 
+import com.team.araq.chat.MessageDto;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,22 +20,25 @@ public class MessageHandler {
     private final PlazaService plazaService;
 
     @MessageMapping("/plaza/join/{code}")
-    @SendTo("/topic/plaza/join/{code}")
-    public Avatar join(@Payload String username, @DestinationVariable String code) {
+    public void join(@Payload String username, @DestinationVariable String code) {
         SiteUser user = userService.getByUsername(username);
         userService.setLocation(user, code);
         plazaService.setPeople(plazaService.getByCode(code), userService.getByLocation(code).size());
-        return new Avatar(user.getUsername(), user.getNickName(), user.getImage());
+        simpMessagingTemplate.convertAndSend("/topic/plaza/join/" + code,
+                new Avatar(user.getUsername(), user.getNickName(), user.getImage()));
+        simpMessagingTemplate.convertAndSend("/topic/plaza/notice/" + code,
+                user.getNickName() + "님이 입장하셨습니다.");
     }
 
     @MessageMapping("/plaza/exit/{code}")
-    @SendTo("/topic/plaza/exit/{code}")
-    public String exit(@Payload String username, @DestinationVariable String code) {
+    public void exit(@Payload String username, @DestinationVariable String code) {
         Plaza plaza = plazaService.getByCode(code);
         SiteUser user = userService.getByUsername(username);
         userService.setLocation(user, "");
         plazaService.setPeople(plaza, userService.getByLocation(code).size());
-        return username;
+        simpMessagingTemplate.convertAndSend("/topic/plaza/exit/" + code, username);
+        simpMessagingTemplate.convertAndSend("/topic/plaza/notice/" + code,
+                user.getNickName() + "님이 퇴장하셨습니다.");
     }
 
     @MessageMapping("/plaza/message/{code}")
@@ -60,4 +64,25 @@ public class MessageHandler {
         userService.setFocusInPlaza(user, data.get("status").toString());
         return message;
     }
+
+    @MessageMapping("/plaza/fire/{code}")
+    public void fire(@Payload String message, @DestinationVariable String code) {
+        SiteUser user = userService.getByUsername(message);
+        simpMessagingTemplate.convertAndSend("/topic/plaza/fire/" + code + "/" + message, "fire");
+        simpMessagingTemplate.convertAndSend("/topic/plaza/notice/" + code,
+                user.getNickName() + "님이 강제퇴장 당하였습니다.");
+        MessageDto messageDto = new MessageDto();
+        messageDto.setType("refuse");
+        messageDto.setContent("강제퇴장 당하였습니다.");
+        simpMessagingTemplate.convertAndSend("/topic/all/" + message, messageDto);
+    }
+
+    @MessageMapping("/plaza/delegate/{code}")
+    public void delegate(@Payload String message, @DestinationVariable String code) {
+        SiteUser user = userService.getByUsername(message);
+        Plaza plaza = plazaService.getByCode(code);
+        plazaService.changeManager(plaza, user);
+        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
+    }
+
 }

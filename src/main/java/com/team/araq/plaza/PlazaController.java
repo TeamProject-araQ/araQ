@@ -71,4 +71,12 @@ public class PlazaController {
         if (plaza.getPassword().equals(data.get("input"))) return "access";
         return "deny";
     }
+
+    @PostMapping("/modify")
+    @ResponseBody
+    public String modify(@RequestBody Map<String, String> data) {
+        Plaza plaza = plazaService.getByCode(data.get("code"));
+        plazaService.modify(plaza, data.get("title"), data.get("password"), Integer.valueOf(data.get("people")));
+        return null;
+    }
 }

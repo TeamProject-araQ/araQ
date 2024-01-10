@@ -22,4 +22,5 @@ public class Plaza {
     private Integer People;
     private LocalDateTime createDate;
     private String password;
+    private String background;
 }

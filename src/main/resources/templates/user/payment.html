@@ -39,6 +39,7 @@
                 <th>번호</th>
                 <th>사용 버블</th>
                 <th>사용 일시</th>
+                <th>사용 이유</th>
                 <th>잔여 버블</th>
             </tr>
             </thead>
@@ -47,6 +48,7 @@
                 <td th:text="${loop.count}"></td>
                 <td th:text="|- ${history.spent}|"></td>
                 <td th:text="${#temporals.format(history.date, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${history.reason}"></td>
                 <td th:text="${history.balance}"></td>
             </tr>
             </tbody>
