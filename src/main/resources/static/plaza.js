@@ -278,7 +278,6 @@ function createAvatar(data) {
         "</div>"
     );
     $("#plazaBoard").append(element);
-    $(".njk7740 > .talkBox").addClass("talkBoxBlack");
 }
 
 function moveLocation(data) {
