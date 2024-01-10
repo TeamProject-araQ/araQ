@@ -64,6 +64,10 @@ $(function () {
             alert("방장을 위임받으셨습니다.");
             window.location.reload();
         });
+
+        stompClient.subscribe("/topic/plaza/modify/" + code, function (message) {
+            $("#plazaBoard").css("background-image", `url('${message.body}')`);
+        });
     });
 
     $(window).on("beforeunload", function () {
@@ -95,6 +99,7 @@ $(function () {
     });
 
     $(document).keydown(function (e) {
+        $(window).focus();
         if (keydown === false) {
             keydown = true;
             changeLocation(e);
@@ -178,7 +183,8 @@ $(function () {
         const title = $("#plazaTitle").val();
         const people = $("#peopleRange").val();
         const password = ($("#plazaPrivate").is(":checked")) ? $("#plazaPassword").val() : "";
-        if ($("#plazaPrivate").is(":checked") && password  === "")
+        const bgImg = $(".selectedImg > *").attr("src");
+        if ($("#plazaPrivate").is(":checked") && password === "")
             alert("비밀번호를 입력해주세요");
         else if (title.trim() === "") alert("광장 이름을 입력해주세요");
         else {
@@ -193,7 +199,8 @@ $(function () {
                     title: title,
                     people: people,
                     password: password,
-                    code: code
+                    code: code,
+                    img: bgImg
                 }),
                 success: function () {
                     alert("변경이 완료되었습니다.");
@@ -203,6 +210,11 @@ $(function () {
                 }
             });
         }
+    });
+
+    $("#bgImgList > a").click(function () {
+        $("#bgImgList > a").removeClass("selectedImg");
+        $(this).addClass("selectedImg");
     });
 
     function changeLocation(e) {
@@ -284,6 +296,8 @@ function init() {
             left: $(element).find("input:last").val()
         });
     });
+
+    $("#plazaBoard").css("background-image", `url('${background}')`);
 }
 
 function correctLocation() {

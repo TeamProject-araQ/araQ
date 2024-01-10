@@ -12,4 +12,5 @@ public class PlazaDto {
     private String password;
     private String code;
     private SiteUser manager;
+    private String img;
 }

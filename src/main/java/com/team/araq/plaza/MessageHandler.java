@@ -84,5 +84,4 @@ public class MessageHandler {
         plazaService.changeManager(plaza, user);
         simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
     }
-
 }

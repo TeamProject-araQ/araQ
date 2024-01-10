@@ -630,6 +630,9 @@ table {
 
 #plazaBoard {
     height: 80vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 
 .avatar {
@@ -729,6 +732,25 @@ table {
     border-radius: 15px;
 }
 
+.selectedImg {
+    border: 3px solid rgb(131, 115, 157);
+}
+
+#bgImgList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+}
+
+#bgImgList > a {
+    display: block;
+    width: 100%;
+}
+
+#bgImgList > a > * {
+    width: 100%;
+    height: 100%;
+}
 
 @media (max-width: 700px) {
     thead {
@@ -757,9 +779,5 @@ table {
 
     td:last-child {
         border-bottom: 0;
-    }
-
-    .selectedImg {
-        border: 5px solid rgb(131, 115, 157);
     }
 }

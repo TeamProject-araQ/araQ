@@ -22,6 +22,7 @@ public class PlazaService {
         plaza.setCode(plazaDto.getCode());
         plaza.setCreateDate(LocalDateTime.now());
         plaza.setManager(plazaDto.getManager());
+        plaza.setBackground(plazaDto.getImg());
         plazaRepo.save(plaza);
     }
 
@@ -49,10 +50,11 @@ public class PlazaService {
         plazaRepo.save(plaza);
     }
 
-    public void modify(Plaza plaza, String title, String password, Integer maxPeople) {
+    public void modify(Plaza plaza, String title, String password, Integer maxPeople, String img) {
         plaza.setTitle(title);
         plaza.setPassword(password);
         plaza.setMaxPeople(maxPeople);
+        plaza.setBackground(img);
         plazaRepo.save(plaza);
     }
 }

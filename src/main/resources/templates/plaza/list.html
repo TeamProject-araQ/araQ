@@ -62,6 +62,34 @@
                                    disabled>
                         </div>
                     </div>
+                    <div class="mt-3">배경 설정</div>
+                    <div id="bgImgList">
+                        <a href="javascript:void(0)" class="selectedImg text-center">
+                            <div th:src="@{/image/plaza/default.jpg}">없음</div>
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/1.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/2.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/3.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/4.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/5.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)">
+                            <img th:src="@{/image/plaza/6.jpg}" alt="">
+                        </a>
+                        <a href="javascript:void(0)" class="text-center customImage">
+                            커스텀이미지
+                        </a>
+                    </div>
+                    <input type="file" id="customImageInput">
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
@@ -93,6 +121,7 @@
         <input type="hidden" name="title">
         <input type="hidden" name="people">
         <input type="hidden" name="password">
+        <input type="hidden" name="img">
     </form>
     <form th:action="@{/plaza/delete}" id="plazaDeleteForm" method="post">
         <input type="hidden" name="code">
@@ -105,90 +134,5 @@
         if (alarm !== "") alert(alarm);
     </script>
 </div>
-<script layout:fragment="script">
-    $(function () {
-        $("#createPlazaBtn").on('click', function () {
-            $("#createPlazaForm").modal("show");
-        });
-
-        $("#peopleRange").on('change', function () {
-            $(".peopleRangeNumber").text($(this).val());
-        });
-
-        $("#plazaPublic").on('change', function () {
-            if (this.checked) {
-                const passwordElement = $("#plazaPassword");
-                passwordElement.val("");
-                passwordElement.prop("disabled", true);
-            }
-        });
-
-        $("#plazaPrivate").on('change', function () {
-            if (this.checked) {
-                const passwordElement = $("#plazaPassword");
-                passwordElement.prop("disabled", false);
-                passwordElement.focus();
-            }
-        });
-
-        $("#plazaCreateBtn").click(function () {
-            const title = $("#plazaTitle").val();
-            const people = $("#peopleRange").val();
-            const password = $("#plazaPassword").val();
-            if (title.trim() === "") alert("광장 이름을 입력해주세요");
-            else if ($("#plazaPrivate").is(":checked") && password  === "")
-                alert("비밀번호를 입력해주세요");
-            else {
-                $("#plazaCreateForm > input[name='title']").val(title);
-                $("#plazaCreateForm > input[name='people']").val(people);
-                $("#plazaCreateForm > input[name='password']").val(password);
-                $("#plazaCreateForm").submit();
-            }
-        });
-
-        $(".plazaDeleteBtn").click(function () {
-            if (confirm("정말 삭제하시겠습니까?")) {
-                $("#plazaDeleteForm > input[name='code']").val($(this).data("value"));
-                $("#plazaDeleteForm").submit();
-            }
-        });
-
-        $(".plazaJoinBtn").click(function () {
-            if (!$(this).data("pw")) {
-                $("#plazaJoinForm > input[name='code']").val($(this).data("value"));
-                $("#plazaJoinForm").submit();
-            } else {
-                $("#plazaCode").val($(this).data("value"));
-                $("#plazaPwModal").modal("show");
-            }
-        });
-
-        $("#plazaPwCheckBtn").click(function () {
-            $.ajax({
-                url: "/plaza/check",
-                type: "post",
-                contentType: "application/json",
-                headers: {
-                    [csrfHeader]: csrfToken
-                },
-                data: JSON.stringify({
-                    input: $("#plazaPwParam").val(),
-                    code: $("#plazaCode").val()
-                }),
-                success: function (message) {
-                    if (message === "access") {
-                        $("#plazaJoinForm > input[name='code']").val($("#plazaCode").val());
-                        $("#plazaJoinForm").submit();
-                    } else {
-                        $("#plazaPwParam").addClass("is-invalid");
-                        $("#plazaPwFeedback").text("비밀번호가 맞지 않습니다.");
-                    }
-                },
-                error: function (error) {
-                    alert("접근 실패");
-                }
-            });
-        });
-    });
-</script>
+<script layout:fragment="script" th:src="@{/plazalist.js}"></script>
 </html>

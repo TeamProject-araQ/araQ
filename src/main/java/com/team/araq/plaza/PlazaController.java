@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -48,7 +49,8 @@ public class PlazaController {
             model.addAttribute("plazaList", plazaService.getAll());
             model.addAttribute("alarm", "해당 광장의 정원이 가득 찼습니다.");
             return "plaza/list";
-        };
+        }
+        ;
         SiteUser user = userService.getByUsername(principal.getName());
         userService.setLocation(user, code);
         userService.setUserLocationInPlaza(user, "0px", "0px");
@@ -76,7 +78,18 @@ public class PlazaController {
     @ResponseBody
     public String modify(@RequestBody Map<String, String> data) {
         Plaza plaza = plazaService.getByCode(data.get("code"));
-        plazaService.modify(plaza, data.get("title"), data.get("password"), Integer.valueOf(data.get("people")));
+        plazaService.modify(plaza, data.get("title"), data.get("password"), Integer.valueOf(data.get("people")), data.get("img"));
+        simpMessagingTemplate.convertAndSend("/topic/plaza/modify/" + data.get("code"), data.get("img"));
+        return null;
+    }
+
+    @PostMapping("/customImg")
+    @ResponseBody
+    public String customImg(@RequestParam("img") MultipartFile img) {
+        String originalName = img.getOriginalFilename();
+        assert originalName != null;
+        String ext = originalName.substring(originalName.lastIndexOf('.'));
+        String dirPath = "C:/uploads/plaza/";
         return null;
     }
 }
