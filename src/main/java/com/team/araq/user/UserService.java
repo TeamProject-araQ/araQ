@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -86,22 +87,24 @@ public class UserService {
         List<MultipartFile> images = userUpdateForm.getImages();
         List<String> updatedImages = new ArrayList<>();
 
+        String userUploadPath = uploadPath + "/" + user.getUsername();
 
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {
-                File uploadDirectory = new File(uploadPath);
+                File uploadDirectory = new File(userUploadPath);
                 if (!uploadDirectory.exists()) {
                     uploadDirectory.mkdirs();
                 }
                 // 새로운 이미지 저장
                 String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+//                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                String timeStamp = Instant.now().toString().replace(":", "-").replace("-", "");
                 String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
-                File dest = new File(uploadPath + File.separator + fileName);
+                File dest = new File(userUploadPath + File.separator + fileName);
                 FileCopyUtils.copy(image.getBytes(), dest);
 
                 // 이미지 경로를 사용자의 이미지 목록에 추가
-                updatedImages.add("/user/image/" + fileName);
+                updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
             }
         }
         // 새로운 이미지 목록으로 업데이트
@@ -290,12 +293,13 @@ public class UserService {
     }
 
     public void deleteImage(List<String> images, String imageUrl, SiteUser user) {
+        String userUploadPath = uploadPath + "/" + user.getUsername();
         for (Iterator<String> iterator = images.iterator(); iterator.hasNext(); ) {
             String image = iterator.next();
             if (image.equals(imageUrl)) {
 
                 String imageName = Paths.get(imageUrl).getFileName().toString(); // 이미지 파일의 이름만 추출
-                String deleteImage = uploadPath + "/" + imageName;
+                String deleteImage = userUploadPath + "/" + imageName;
                 try {
                     Files.deleteIfExists(Path.of(deleteImage));
                     iterator.remove();
@@ -321,22 +325,23 @@ public class UserService {
     }
 
     public List<String> addImage(MultipartFile image, SiteUser user) {
-        File uploadDirectory = new File(uploadPath);
+        String userUploadPath = uploadPath + "/" + user.getUsername();
+        File uploadDirectory = new File(userUploadPath);
         if (!uploadDirectory.exists()) {
             uploadDirectory.mkdirs();
         }
 
         String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String timeStamp = Instant.now().toString().replace(":", "-").replace("-", "");
         String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
-        File dest = new File(uploadPath + File.separator + fileName);
+        File dest = new File(userUploadPath + File.separator + fileName);
         try {
             // 파일 복사
             FileCopyUtils.copy(image.getBytes(), dest);
 
             List<String> updatedImages = user.getImages();
             // 이미지 경로를 사용자의 이미지 목록에 추가
-            updatedImages.add("/user/image/" + fileName);
+            updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
 
             // 이미지 목록을 사용자 객체에 저장
             user.setImages(updatedImages);
@@ -423,6 +428,17 @@ public class UserService {
 
     public List<SiteUser> getByLocation(String location) {
         return userRepository.findByLocation(location);
+    }
+
+
+    public boolean checkUsername(String username) {
+        Optional<SiteUser> user = userRepository.findByusername(username);
+        return user.isEmpty();
+    }
+
+    public boolean checkEmail(String email) {
+        Optional<SiteUser> user = userRepository.findByEmail(email);
+        return user.isEmpty();
     }
 
     public void getPreference(SiteUser user, int days) {
