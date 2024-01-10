@@ -13,7 +13,8 @@
             </div>
             <div id="carouselExample" class="carousel slide mt-5" style="max-width: 700px;">
                 <div class="carousel-inner">
-                    <div class="carousel-item active" th:each="targetUser : ${userList}">
+                    <div class="carousel-item active" th:each="targetUser, status : ${userList}"
+                         th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                         <div class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-7">

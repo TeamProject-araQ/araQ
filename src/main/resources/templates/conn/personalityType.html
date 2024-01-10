@@ -15,7 +15,8 @@
                 </div>
                 <div id="religionCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${religionList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${religionList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
@@ -114,7 +115,8 @@
                 </div>
                 <div id="smokingCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${smokingList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${smokingList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
@@ -213,7 +215,8 @@
                 </div>
                 <div id="drinkingCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${drinkingList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${drinkingList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
@@ -312,7 +315,8 @@
                 </div>
                 <div id="hobbyCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${hobbyList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${hobbyList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
@@ -411,7 +415,8 @@
                 </div>
                 <div id="mbtiCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${mbtiList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${mbtiList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
@@ -510,7 +515,8 @@
                 </div>
                 <div id="personalityCarousel" class="carousel slide mt-5" style="max-width: 700px;">
                     <div class="carousel-inner">
-                        <div class="carousel-item active" th:each="targetUser : ${personalityList}">
+                        <div class="carousel-item active" th:each="targetUser, status : ${personalityList}"
+                             th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
                             <div class="card mb-3">
                                 <div class="row g-0">
                                     <div class="col-md-7">
