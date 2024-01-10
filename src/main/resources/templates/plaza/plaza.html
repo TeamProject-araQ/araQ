@@ -3,7 +3,7 @@
     <div class="card" id="plazaBoard">
         <div th:each="online : ${onlinePlazaUsers}" th:class="|avatar ${online.username}|"
              th:classappend="${online.plazaFocus.equals('focus')} ? 'statusFocus' : 'statusBlur'">
-            <div class="talkBox card"></div>
+            <div class="talkBox card" th:style="|background:${online.chatBackground}; color:${online.chatColor}|"></div>
             <img class="userImage" th:src="${online.image}">
             <div class="d-flex">
                 <div class="nickname" th:text="${online.nickName}"></div>
