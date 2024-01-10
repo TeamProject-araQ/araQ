@@ -100,7 +100,7 @@ $(function () {
         element.text("");
 
         if (!file.type.startsWith("image/")) {
-            alert()
+
         }
     });
 });
