@@ -94,13 +94,31 @@ $(function () {
     });
 
     $("#customImageInput").change(function () {
-        const element = $(".customImage");
-        let file = this.files[0];
+        const preview = $(".customImage");
+        const file = this.files[0];
 
-        element.text("");
+        if ($(this).val() === "") {
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
+        }
 
         if (!file.type.startsWith("image/")) {
-
+            alert("이미지 파일만 선택해주세요.");
+            $(this).val("");
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
         }
+
+        preview.empty();
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = $("<img>").attr("src", e.target.result).css({width: '100%', height: '100%'});
+            preview.append(img);
+        };
+
+        reader.readAsDataURL(file);
     });
 });
