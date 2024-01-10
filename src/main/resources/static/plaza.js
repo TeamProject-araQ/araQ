@@ -269,14 +269,14 @@ $(function () {
 
 
 function createAvatar(data) {
-    const element =
+    const element = $(
         "<div class='avatar " + data.username + "'>" +
-        "<div class='talkBox card'></div>" +
+        "<div class='talkBox card' style='background: " + data.background + "; color: " + data.color + "'></div>" +
         "<img class='userImage' src='" + data.image + "'>" +
         "<div class='nickname'>" + data.nickname + "</div>" +
         "<div class='status focus'></div>" +
-        "</div>";
-
+        "</div>"
+    );
     $("#plazaBoard").append(element);
     $(".njk7740 > .talkBox").addClass("talkBoxBlack");
 }
