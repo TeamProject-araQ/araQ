@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -86,22 +87,24 @@ public class UserService {
         List<MultipartFile> images = userUpdateForm.getImages();
         List<String> updatedImages = new ArrayList<>();
 
+        String userUploadPath = uploadPath + "/" + user.getUsername();
 
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {
-                File uploadDirectory = new File(uploadPath);
+                File uploadDirectory = new File(userUploadPath);
                 if (!uploadDirectory.exists()) {
                     uploadDirectory.mkdirs();
                 }
                 // 새로운 이미지 저장
                 String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+//                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+                String timeStamp = Instant.now().toString().replace(":", "-").replace("-", "");
                 String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
-                File dest = new File(uploadPath + File.separator + fileName);
+                File dest = new File(userUploadPath + File.separator + fileName);
                 FileCopyUtils.copy(image.getBytes(), dest);
 
                 // 이미지 경로를 사용자의 이미지 목록에 추가
-                updatedImages.add("/user/image/" + fileName);
+                updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
             }
         }
         // 새로운 이미지 목록으로 업데이트
@@ -290,12 +293,13 @@ public class UserService {
     }
 
     public void deleteImage(List<String> images, String imageUrl, SiteUser user) {
+        String userUploadPath = uploadPath + "/" + user.getUsername();
         for (Iterator<String> iterator = images.iterator(); iterator.hasNext(); ) {
             String image = iterator.next();
             if (image.equals(imageUrl)) {
 
                 String imageName = Paths.get(imageUrl).getFileName().toString(); // 이미지 파일의 이름만 추출
-                String deleteImage = uploadPath + "/" + imageName;
+                String deleteImage = userUploadPath + "/" + imageName;
                 try {
                     Files.deleteIfExists(Path.of(deleteImage));
                     iterator.remove();
@@ -321,22 +325,23 @@ public class UserService {
     }
 
     public List<String> addImage(MultipartFile image, SiteUser user) {
-        File uploadDirectory = new File(uploadPath);
+        String userUploadPath = uploadPath + "/" + user.getUsername();
+        File uploadDirectory = new File(userUploadPath);
         if (!uploadDirectory.exists()) {
             uploadDirectory.mkdirs();
         }
 
         String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String timeStamp = Instant.now().toString().replace(":", "-").replace("-", "");
         String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
-        File dest = new File(uploadPath + File.separator + fileName);
+        File dest = new File(userUploadPath + File.separator + fileName);
         try {
             // 파일 복사
             FileCopyUtils.copy(image.getBytes(), dest);
 
             List<String> updatedImages = user.getImages();
             // 이미지 경로를 사용자의 이미지 목록에 추가
-            updatedImages.add("/user/image/" + fileName);
+            updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
 
             // 이미지 목록을 사용자 객체에 저장
             user.setImages(updatedImages);
@@ -352,11 +357,6 @@ public class UserService {
     public void useBubble(SiteUser user, int bubble) {
         user.setBubble(user.getBubble() - bubble);
         this.userRepository.save(user);
-    }
-
-    public void openVoice(SiteUser user1, SiteUser user2) {
-        user1.getOpenVoice().add(user2);
-        this.userRepository.save(user1);
     }
 
     public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
@@ -430,22 +430,107 @@ public class UserService {
         return userRepository.findByLocation(location);
     }
 
-    public void getPreference(SiteUser user) {
+
+    public boolean checkUsername(String username) {
+        Optional<SiteUser> user = userRepository.findByusername(username);
+        return user.isEmpty();
+    }
+
+    public boolean checkEmail(String email) {
+        Optional<SiteUser> user = userRepository.findByEmail(email);
+        return user.isEmpty();
+    }
+
+    public void getPreference(SiteUser user, int days) {
+        if (days == 1) {
+            user.setPreference1Day(true);
+        } else if (days == 7) {
+            user.setPreference7Day(true);
+        } else if (days == 30) {
+            user.setPreference30Day(true);
+        }
         user.setPreference(true);
         user.setGetPreferenceTime(LocalDateTime.now());
         this.userRepository.save(user);
     }
 
-    @Scheduled(fixedRate = 3600000)
-    public void checkPurchaseTime() {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
-        List<SiteUser> users = userRepository.findByGetPreferenceTimeBefore(oneWeekAgo);
-        for (SiteUser user : users) {
-            user.setPreference(false);
-            user.setGetPreferenceTime(null);
-            userRepository.save(user);
+    public void getListenVoice(SiteUser user, int days) {
+        if (days == 1) {
+            user.setListenVoice1Day(true);
+        } else if (days == 7) {
+            user.setListenVoice7Day(true);
+        } else if (days == 30) {
+            user.setListenVoice30Day(true);
         }
-        System.out.println("매칭 우선권 시간 체크 완료...");
+        user.setListenVoice(true);
+        user.setGetListenVoice(LocalDateTime.now());
+        this.userRepository.save(user);
     }
 
+    public void addAraQPass(SiteUser user, int pass) {
+        user.setAraQPass(user.getAraQPass() + pass);
+        this.userRepository.save(user);
+    }
+
+    public void useAraQPass(SiteUser user) {
+        user.setAraQPass(user.getAraQPass() - 1);
+        this.userRepository.save(user);
+    }
+
+    public void addChatPass(SiteUser user, int pass) {
+        user.setChatPass(user.getChatPass() + pass);
+        this.userRepository.save(user);
+    }
+
+    public void useChatPass(SiteUser user) {
+        user.setChatPass(user.getChatPass() - 1);
+        this.userRepository.save(user);
+    }
+
+    public void changeColor(SiteUser user, String background, String color) {
+        user.setChatBackground(background);
+        user.setChatColor(color);
+        user.setGetChatColor(LocalDateTime.now());
+        this.userRepository.save(user);
+    }
+
+    @Scheduled(fixedRate = 3600000)
+    public void checkPurchaseTime() {
+        LocalDateTime now = LocalDateTime.now();
+        List<SiteUser> users = this.userRepository.findAll();
+        for (SiteUser user : users) {
+            LocalDateTime getPreferenceTime = user.getGetPreferenceTime();
+            LocalDateTime getListenVoiceTime = user.getGetListenVoice();
+            LocalDateTime getChatColorTime = user.getGetChatColor();
+            if (getPreferenceTime != null) {
+                if (user.isPreference1Day() && getPreferenceTime.plusDays(1).isBefore(now) ||
+                        user.isPreference7Day() && getPreferenceTime.plusDays(7).isBefore(now) ||
+                        user.isPreference30Day() && getPreferenceTime.plusDays(30).isBefore(now)) {
+                    user.setPreference(false);
+                    user.setPreference1Day(false);
+                    user.setPreference7Day(false);
+                    user.setPreference30Day(false);
+                    user.setGetPreferenceTime(null);
+                }
+            } else if (getListenVoiceTime != null) {
+                if (user.isListenVoice1Day() && getListenVoiceTime.plusDays(1).isBefore(now) ||
+                        user.isListenVoice7Day() && getListenVoiceTime.plusDays(7).isBefore(now) ||
+                        user.isListenVoice30Day() && getListenVoiceTime.plusDays(30).isBefore(now)) {
+                    user.setListenVoice(false);
+                    user.setListenVoice1Day(false);
+                    user.setListenVoice7Day(false);
+                    user.setListenVoice30Day(false);
+                    user.setGetListenVoice(null);
+                }
+            } else if (getChatColorTime != null) {
+                if (getChatColorTime.plusDays(7).isBefore(now)) {
+                    user.setChatColor(null);
+                    user.setChatBackground(null);
+                    user.setGetChatColor(null);
+                }
+            }
+            this.userRepository.save(user);
+        }
+        System.out.println("스케줄러 잘 돌아가유");
+    }
 }

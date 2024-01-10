@@ -35,20 +35,6 @@ public class PaymentController {
         return paymentDTO.getBubble() + " 버블이 충전되었습니다.";
     }
 
-    @PostMapping("/pay")
-    @ResponseBody
-    public boolean pay(Principal principal, @RequestBody String username) {
-        SiteUser user1 = this.userService.getByUsername(principal.getName());
-        SiteUser user2 = this.userService.getByUsername(username);
-        if (user1.getBubble() > 500) {
-            this.userService.useBubble(user1, 500);
-            this.userService.openVoice(user1, user2);
-            this.historyService.saveHistory(user1, 500, user1.getBubble(), "음성 듣기");
-            return true;
-        } else
-            return false;
-    }
-
     @PostMapping("/pay/cancel")
     @ResponseBody
     public String cancelPayment(@RequestBody String impUid) throws Exception {
@@ -72,15 +58,43 @@ public class PaymentController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         JSONObject jsonObject = new JSONObject(purchase);
         String ticketName = jsonObject.getString("ticketName");
-        System.out.println(ticketName);
         int bubble = jsonObject.getInt("bubble");
         if (bubble > user.getBubble()) return "보유하신 버블이 부족합니다.";
-        else {
-            if (ticketName.equals("우선 매칭권")) {
-                this.userService.getPreference(user);
-                this.userService.useBubble(user, bubble);
+        else if (ticketName.contains("매칭 우선권")) {
+            if (user.isPreference()) return "이미 매칭 우선권을 보유중 입니다.";
+            else {
+                switch (ticketName) {
+                    case "매칭 우선권 (1일)" -> this.userService.getPreference(user, 1);
+                    case "매칭 우선권 (7일)" -> this.userService.getPreference(user, 7);
+                    case "매칭 우선권 (30일)" -> this.userService.getPreference(user, 30);
+                }
             }
+        } else if (ticketName.contains("음성 이용권")) {
+            if (user.isListenVoice()) return "이미 음성 이용권을 보유중 입니다.";
+            else {
+                switch (ticketName) {
+                    case "음성 이용권 (1일)" -> this.userService.getListenVoice(user, 1);
+                    case "음성 이용권 (7일)" -> this.userService.getListenVoice(user, 7);
+                    case "음성 이용권 (30일)" -> this.userService.getListenVoice(user, 30);
+                }
+            }
+        } else if (ticketName.contains("아라큐 신청권")) {
+            switch (ticketName) {
+                case "아라큐 신청권 (1개)" -> this.userService.addAraQPass(user, 1);
+                case "아라큐 신청권 (5개)" -> this.userService.addAraQPass(user, 5);
+                case "아라큐 신청권 (10개)" -> this.userService.addAraQPass(user, 10);
+            }
+        } else if (ticketName.contains("채팅 신청권")) {
+            switch (ticketName) {
+                case "채팅 신청권 (1개)" -> this.userService.addChatPass(user, 1);
+                case "채팅 신청권 (3개)" -> this.userService.addChatPass(user, 3);
+                case "채팅 신청권 (5개)" -> this.userService.addChatPass(user, 5);
+            }
+        } else if (ticketName.contains("말풍선 이용권")) {
+            this.userService.changeColor(user, jsonObject.getString("background"), jsonObject.getString("color"));
         }
+        this.userService.useBubble(user, bubble);
+        this.historyService.saveHistory(user, bubble, user.getBubble(), ticketName + " 구매");
         return "구매가 완료되었습니다.";
     }
 }

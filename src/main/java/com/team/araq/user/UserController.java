@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, MultipartFile image) throws IOException {
+    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm) throws IOException {
         SiteUser user = userService.getByUsername(username);
         userService.update(user, userUpdateForm);
         return "redirect:/";
@@ -392,10 +392,9 @@ public class UserController {
 
     @PostMapping("/checkAccess")
     @ResponseBody
-    public boolean checkAccess(Principal principal, @RequestBody String username) {
-        SiteUser user1 = this.userService.getByUsername(principal.getName());
-        return user1.getOpenVoice().stream()
-                .anyMatch(user2 -> user2.getUsername().equals(username));
+    public boolean checkAccess(Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        return user.isListenVoice();
     }
 
     @GetMapping("/personality")
@@ -412,5 +411,34 @@ public class UserController {
         SiteUser user = userService.getByUsername(principal.getName());
         userService.savePersonality(user, personality);
         return "success";
+    }
+
+
+    @GetMapping("/checkUsername")
+    @ResponseBody
+    public ResponseEntity<String> checkUsername(@RequestParam String username) {
+        if (userService.checkUsername(username)) {
+            return ResponseEntity.ok("available");
+        } else {
+            return ResponseEntity.ok("unavailable");
+        }
+    }
+
+    @GetMapping("/checkEmail")
+    @ResponseBody
+    public ResponseEntity<String> checkEmail(@RequestParam String email) {
+        if (userService.checkEmail(email)) {
+            return ResponseEntity.ok("available");
+        } else {
+            return ResponseEntity.ok("unavailable");
+        }
+    }
+
+    @PostMapping("/check/chatPass")
+    @ResponseBody
+    public boolean checkChatPass(Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.getChatPass() == 0) return false;
+        else return true;
     }
 }

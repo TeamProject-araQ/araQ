@@ -46,202 +46,190 @@
         }
     </style>
 </head>
-<div layout:fragment="content" class="container my-3 d-flex align-items-center justify-content-center"
-     style="height:80vh;">
-    <div class="container">
-        <h2>프로필 변경</h2>
-        <!-- Button trigger modal -->
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <!-- Carousel -->
-                        <div id="carouselExampleIndicators" class="carousel slide">
-                            <div class="carousel-indicators">
-                                <button th:each="index : ${#numbers.sequence(0, user.images.size())}"
-                                        type="button"
-                                        data-bs-target="#carouselExampleIndicators"
-                                        th:data-bs-slide-to="${index}"
-                                        th:class="${index == 0} ? 'active' : ''"
-                                        aria-label="Slide ${index + 1}"></button>
-                            </div>
-                            <div class="carousel-inner">
-                                <div th:each="image, iterStat : ${user.images}" class="carousel-item"
-                                     th:classappend="${iterStat.index == 0} ? 'active': ''">
-                                    <img class="d-block w-100" th:src="${image}" alt="">
-                                </div>
-                                <div id="imageAddCarousel" class="carousel-item"
-                                     th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
-                                    <!-- 이미지로 변경된 버튼 -->
-                                    <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가"
-                                         onclick="openImageInput()">
-                                    <!-- 파일 입력 상자 및 이미지 미리보기 -->
-                                    <input type="file" id="imageInput" style="display: none;" accept="image/*"
-                                           onchange="addImageToCarousel()"/>
-                                    <div id="imagePreview" style="max-width: 100%; overflow: hidden;"></div>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                    data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
+<div layout:fragment="content" class="container my-3">
+    <h3 class="underline my-3">프로필 변경</h3>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <!-- Carousel -->
+                    <div id="carouselExampleIndicators" class="carousel slide">
+                        <div class="carousel-indicators">
+                            <button th:each="index : ${#numbers.sequence(0, user.images.size())}"
+                                    type="button"
+                                    data-bs-target="#carouselExampleIndicators"
+                                    th:data-bs-slide-to="${index}"
+                                    th:class="${index == 0} ? 'active' : ''"
+                                    aria-label="Slide ${index + 1}"></button>
                         </div>
+                        <div class="carousel-inner">
+                            <div th:each="image, iterStat : ${user.images}" class="carousel-item"
+                                 th:classappend="${iterStat.index == 0} ? 'active': ''">
+                                <img class="d-block w-100" th:src="${image}" alt="">
+                            </div>
+                            <div id="imageAddCarousel" class="carousel-item"
+                                 th:classappend="${#lists.isEmpty(user.images)} ? 'active': ''">
+                                <!-- 이미지로 변경된 버튼 -->
+                                <img class="add-image-button" src="/profile/plus_icon.png" alt="이미지 추가"
+                                     onclick="openImageInput()">
+                                <!-- 파일 입력 상자 및 이미지 미리보기 -->
+                                <input type="file" id="imageInput" style="display: none;" accept="image/*"
+                                       onchange="addImageToCarousel()"/>
+                                <div id="imagePreview" style="max-width: 100%; overflow: hidden;"></div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" onclick="deleteImage()">삭제</button>
-                        <button type="button" class="btn btn-primary" onclick="setProfileImage()">대표 이미지</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <div>
+                        <button type="button" class="btn 버튼" onclick="deleteImage()">삭제</button>
+                        <button type="button" class="btn 버튼-full" onclick="setProfileImage()">대표 이미지</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="d-flex justify-content-center mt-2">
         <button type="button" class="btn btn-light rounded-circle" data-bs-toggle="modal" data-bs-target="#exampleModal"
                 style="width: 150px; height: 150px; padding: 0;">
             <img id="profileImage" th:src="@{${user.image}}" alt=""
                  style="width: 100%; height: 100%; border-radius: 50%;">
         </button>
-
-        <form th:action="@{/user/edit}" th:object="${userUpdateForm}" method="post" enctype="multipart/form-data"
-              id="editForm">
-            <!-- 셀렉트 박스 -->
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="gender">성별</label>
-                        <select id="gender" class="form-select" name="gender" aria-label="Default select example"
-                                th:value="${user.gender}">
-                            <option value="남성" th:selected="${user.gender == '남성'}">남성</option>
-                            <option value="여성" th:selected="${user.gender == '여성'}">여성</option>
-                        </select>
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="religion">종교</label>
-                        <select id="religion" class="form-select" name="religion" aria-label="Default select example"
-                                th:value="${user.religion}">
-                            <option value="기독교" th:selected="${user.religion == '기독교'}">기독교</option>
-                            <option value="천주교" th:selected="${user.religion == '천주교'}">천주교</option>
-                            <option value="불교" th:selected="${user.religion == '불교'}">불교</option>
-                            <option value="무교" th:selected="${user.religion == '무교'}">무교</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="drinking">음주</label>
-                        <select id="drinking" class="form-select" name="drinking" aria-label="Default select example"
-                                th:value="${user.drinking}">
-                            <option value="전혀안함" th:selected="${user.drinking == '전혀안함'}">전혀안함</option>
-                            <option value="가끔" th:selected="${user.drinking == '가끔'}">가끔</option>
-                            <option value="자주" th:selected="${user.drinking == '자주'}">자주</option>
-                            <option value="매일" th:selected="${user.drinking == '매일'}">매일</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="smoking">흡연</label>
-                        <select id="smoking" class="form-select" name="smoking" aria-label="Default select example"
-                                th:value="${user.smoking}">
-                            <option value="흡연" th:selected="${user.smoking == '흡연'}">흡연</option>
-                            <option value="비흡연" th:selected="${user.smoking == '비흡연'}">비흡연</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="education">최종학력</label>
-                        <select id="education" class="form-select" name="education" aria-label="Default select example"
-                                th:value="${user.education}">
-                            <option value="고등학교 졸업" th:selected="${user.education == '고등학교 졸업'}">고등학교 졸업</option>
-                            <option value="대학교 재학" th:selected="${user.education == '대학교 재학'}">대학교 재학</option>
-                            <option value="대학교 졸업" th:selected="${user.education == '대학교 졸업'}">대학교 졸업</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label for="mbti">MBTI</label>
-                        <select id="mbti" class="form-select" name="mbti" aria-label="Default select example"
-                                th:value="${user.mbti}">
-                            <option value="ENFJ" th:selected="${user.mbti == 'ENFJ'}">ENFJ</option>
-                            <option value="ENFP" th:selected="${user.mbti == 'ENFP'}">ENFP</option>
-                            <option value="ENTJ" th:selected="${user.mbti == 'ENTJ'}">ENTJ</option>
-                            <option value="ENTP" th:selected="${user.mbti == 'ENTP'}">ENTP</option>
-                            <option value="ESFJ" th:selected="${user.mbti == 'ESFJ'}">ESFJ</option>
-                            <option value="ESFP" th:selected="${user.mbti == 'ESFP'}">ESFP</option>
-                            <option value="ESTJ" th:selected="${user.mbti == 'ESTJ'}">ESTJ</option>
-                            <option value="ESTP" th:selected="${user.mbti == 'ESTP'}">ESTP</option>
-                            <option value="INFJ" th:selected="${user.mbti == 'INFJ'}">INFJ</option>
-                            <option value="INFP" th:selected="${user.mbti == 'INFP'}">INFP</option>
-                            <option value="INTJ" th:selected="${user.mbti == 'INTJ'}">INTJ</option>
-                            <option value="INTP" th:selected="${user.mbti == 'INTP'}">INTP</option>
-                            <option value="ISFJ" th:selected="${user.mbti == 'ISFJ'}">ISFJ</option>
-                            <option value="ISFP" th:selected="${user.mbti == 'ISFP'}">ISFP</option>
-                            <option value="ISTJ" th:selected="${user.mbti == 'ISTJ'}">ISTJ</option>
-                            <option value="ISTP" th:selected="${user.mbti == 'ISTP'}">ISTP</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="nickName">별명</label>
-                        <input type="text" class="form-control" id="nickName" name="nickName"
-                               th:value="${user.nickName}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="height">키</label>
-                        <input type="text" class="form-control" id="height" name="height" th:value="${user.height}">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="age">나이</label>
-                        <input type="text" class="form-control" id="age" name="age" th:value="${user.age}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="hobby">취미</label>
-                        <input type="text" class="form-control" id="hobby" name="hobby" th:value="${user.hobby}">
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group mb-3">
-                        <label for="introduce">자기소개</label>
-                        <input type="text" class="form-control" id="introduce" name="introduce"
-                               th:value="${user.introduce}">
-                    </div>
-                    <div class="form-group mb-3">
-                        <label for="address">주소</label>
-                        <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
-                               readonly>
-                        <input type="button" class="btn 버튼" onclick="sample5_execDaumPostcode()" value="주소 찾기">
-                    </div>
-                </div>
-            </div>
-            <button type="button" class="btn 버튼" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                성격
-            </button>
-            <button class="btn 버튼" type="submit">저장</button>
-        </form>
     </div>
-
+    <div class="d-flex justify-content-center my-2">
+        <label class="form-label" style="border-bottom: 1px solid #D8D3E0">이미지 변경</label>
+    </div>
+    <form th:action="@{/user/edit}" th:object="${userUpdateForm}" method="post" enctype="multipart/form-data"
+          id="editForm">
+        <!-- 셀렉트 박스 -->
+        <div class="row">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="gender" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">성별</label>
+                <select id="gender" class="form-select" name="gender" aria-label="Default select example"
+                        th:value="${user.gender}">
+                    <option value="남성" th:selected="${user.gender == '남성'}">남성</option>
+                    <option value="여성" th:selected="${user.gender == '여성'}">여성</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="religion" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">종교</label>
+                <select id="religion" class="form-select" name="religion" aria-label="Default select example"
+                        th:value="${user.religion}">
+                    <option value="기독교" th:selected="${user.religion == '기독교'}">기독교</option>
+                    <option value="천주교" th:selected="${user.religion == '천주교'}">천주교</option>
+                    <option value="불교" th:selected="${user.religion == '불교'}">불교</option>
+                    <option value="무교" th:selected="${user.religion == '무교'}">무교</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="drinking" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">음주</label>
+                <select id="drinking" class="form-select" name="drinking" aria-label="Default select example"
+                        th:value="${user.drinking}">
+                    <option value="전혀안함" th:selected="${user.drinking == '전혀안함'}">전혀안함</option>
+                    <option value="가끔" th:selected="${user.drinking == '가끔'}">가끔</option>
+                    <option value="자주" th:selected="${user.drinking == '자주'}">자주</option>
+                    <option value="매일" th:selected="${user.drinking == '매일'}">매일</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="smoking" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">흡연</label>
+                <select id="smoking" class="form-select" name="smoking" aria-label="Default select example"
+                        th:value="${user.smoking}">
+                    <option value="흡연" th:selected="${user.smoking == '흡연'}">흡연</option>
+                    <option value="비흡연" th:selected="${user.smoking == '비흡연'}">비흡연</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="education" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">최종학력</label>
+                <select id="education" class="form-select" name="education" aria-label="Default select example"
+                        th:value="${user.education}">
+                    <option value="고등학교 졸업" th:selected="${user.education == '고등학교 졸업'}">고등학교 졸업</option>
+                    <option value="대학교 재학" th:selected="${user.education == '대학교 재학'}">대학교 재학</option>
+                    <option value="대학교 졸업" th:selected="${user.education == '대학교 졸업'}">대학교 졸업</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="mbti" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">MBTI</label>
+                <select id="mbti" class="form-select" name="mbti" aria-label="Default select example"
+                        th:value="${user.mbti}">
+                    <option value="ENFJ" th:selected="${user.mbti == 'ENFJ'}">ENFJ</option>
+                    <option value="ENFP" th:selected="${user.mbti == 'ENFP'}">ENFP</option>
+                    <option value="ENTJ" th:selected="${user.mbti == 'ENTJ'}">ENTJ</option>
+                    <option value="ENTP" th:selected="${user.mbti == 'ENTP'}">ENTP</option>
+                    <option value="ESFJ" th:selected="${user.mbti == 'ESFJ'}">ESFJ</option>
+                    <option value="ESFP" th:selected="${user.mbti == 'ESFP'}">ESFP</option>
+                    <option value="ESTJ" th:selected="${user.mbti == 'ESTJ'}">ESTJ</option>
+                    <option value="ESTP" th:selected="${user.mbti == 'ESTP'}">ESTP</option>
+                    <option value="INFJ" th:selected="${user.mbti == 'INFJ'}">INFJ</option>
+                    <option value="INFP" th:selected="${user.mbti == 'INFP'}">INFP</option>
+                    <option value="INTJ" th:selected="${user.mbti == 'INTJ'}">INTJ</option>
+                    <option value="INTP" th:selected="${user.mbti == 'INTP'}">INTP</option>
+                    <option value="ISFJ" th:selected="${user.mbti == 'ISFJ'}">ISFJ</option>
+                    <option value="ISFP" th:selected="${user.mbti == 'ISFP'}">ISFP</option>
+                    <option value="ISTJ" th:selected="${user.mbti == 'ISTJ'}">ISTJ</option>
+                    <option value="ISTP" th:selected="${user.mbti == 'ISTP'}">ISTP</option>
+                </select>
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="nickName" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">별명</label>
+                <input type="text" class="form-control" id="nickName" name="nickName"
+                       th:value="${user.nickName}">
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="height" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">키</label>
+                <input type="text" class="form-control" id="height" name="height" th:value="${user.height}">
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="age" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">나이</label>
+                <input type="text" class="form-control" id="age" name="age" th:value="${user.age}">
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="hobby" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">취미</label>
+                <input type="text" class="form-control" id="hobby" name="hobby" th:value="${user.hobby}">
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="introduce" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">자기소개</label>
+                <input type="text" class="form-control" id="introduce" name="introduce"
+                       th:value="${user.introduce}">
+            </div>
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
+                <label for="address" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">주소</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
+                           readonly>
+                    <input type="button" class="btn 버튼" onclick="sample5_execDaumPostcode()" value="주소 찾기">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <label for="personality" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">성격</label>
+                <input type="button" class="form-control" data-bs-toggle="modal"
+                       data-bs-target="#exampleModal2" value="수정" readonly>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button class="btn 버튼" type="submit">저장</button>
+        </div>
+    </form>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <!-- Button trigger modal -->
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">성격 수정</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -289,8 +277,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn 버튼" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn 버튼" onclick="savePersonality()">저장하기</button>
+                    <button type="button" class="btn 버튼" onclick="savePersonality()">수정</button>
                 </div>
             </div>
         </div>
@@ -389,7 +376,7 @@
         var totalImages = $('.carousel-inner .carousel-item').length;
 
         // 이미지 개수 제한 (예: 개)
-        var imageLimit = 3;
+        var imageLimit = 20;
 
         if (totalImages > imageLimit) {
             alert('이미지는 최대 ' + imageLimit + '개까지만 추가할 수 있습니다.');
@@ -490,11 +477,11 @@
         });
     }
 
-    function checkUserPersonality(data){
+    function checkUserPersonality(data) {
         var checkboxes = document.querySelectorAll('input[name="personality"]');
 
-        checkboxes.forEach(function(checkbox) {
-            if(data.includes(checkbox.value)) {
+        checkboxes.forEach(function (checkbox) {
+            if (data.includes(checkbox.value)) {
                 checkbox.checked = true;
             }
         });
@@ -502,30 +489,30 @@
 
     function resetPersonalityCheckboxes() {
         var checkboxes = document.querySelectorAll('input[name="personality"]');
-    checkboxes.forEach(function (checkbox) {
-        checkbox.checked = false;
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
         });
     }
 
-    $('#exampleModal2').on('show.bs.modal', function(){
+    $('#exampleModal2').on('show.bs.modal', function () {
         getUserPersonality();
     });
 
-    $('#exampleModal2').on('hide.bs.modal', function(){
+    $('#exampleModal2').on('hide.bs.modal', function () {
         resetPersonalityCheckboxes();
     });
 
     function savePersonality() {
         var checkedPersonality = document.querySelectorAll('input[name=personality]:checked');
 
-        var selectedPersonality = Array.from(checkedPersonality).map(function (checkbox){
+        var selectedPersonality = Array.from(checkedPersonality).map(function (checkbox) {
             return checkbox.value;
         });
 
         var formData = selectedPersonality;
 
         $.ajax({
-            type:'POST',
+            type: 'POST',
             url: '/user/savePersonality',
             data: JSON.stringify(formData),
             headers: {
@@ -536,7 +523,7 @@
                 alert('저장되었습니다.');
                 $('#exampleModal2').modal('hide');
             },
-            error:function (error){
+            error: function (error) {
                 console.error('Error', error);
             }
         });
