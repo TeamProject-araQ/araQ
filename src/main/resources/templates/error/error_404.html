@@ -1,0 +1,43 @@
+<html layout:decorate="~{layout}">
+<head>
+    <style>
+        .failed:hover .xLine-right,
+        .failed:hover .arrow-line-left,
+        .failed:hover .arrow-head-left,
+        .failed:hover .arrow-head-right {
+            transform: translateX(0);
+        }
+    </style>
+    <title>404 ERROR</title>
+</head>
+<div layout:fragment="content" class="container my-3">
+    <h1 style="font-family: nanum-bold,serif" class="highlight-default my-3">404 ERROR</h1>
+    <h3 class="mb-3">: Not Found</h3>
+    <h5 class="my-3 pb-2" style="border-bottom: 1px solid #D8D3E0;">URL이 잘못되었거나, 요청한 페이지/리소스가 없어 페이지와의 매칭이 실패하였습니다.</h5>
+
+    <div class="failed d-flex justify-content-between align-items-center mt-5"
+         style="width: 80%; margin: 0 auto;">
+        <img th:src="@{${user.image}}" alt="" style="width: 60px; height: 60px; border-radius: 50%;">
+        <div class="arrow-container">
+            <div class="arrow-line-left"></div>
+            <div class="arrow-head-left">▶</div>
+        </div>
+        <i class="bi bi-heartbreak" style="color: pink; font-size: 3rem;"></i>
+        <div class="arrow-container">
+            <div class="arrow-head-right">◀</div>
+            <div class="xLine-right"></div>
+        </div>
+        <img src="/image/etc/server.png" alt="" style="width: 60px; height: 60px; border-radius: 50%;">
+    </div>
+    <div class="row mt-5">
+        <a type="button" href="javascript:void(0)" class="col-md-6 col-lg-3 col-sm-12 btn 버튼">매칭 실패 전으로 돌아가기 →</a>
+    </div>
+</div>
+<script layout:fragment="script">
+    $(function () {
+        $('#backLink').on('click', function () {
+            window.history.back();
+        })
+    });
+</script>
+</html>
