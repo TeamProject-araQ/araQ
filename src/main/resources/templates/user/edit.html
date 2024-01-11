@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <div>
+                    <div class="modal-buttons">
                         <button type="button" class="btn 버튼" onclick="deleteImage()">삭제</button>
                         <button type="button" class="btn 버튼-full" onclick="setProfileImage()">대표 이미지</button>
                     </div>
@@ -434,12 +434,14 @@
         var imageAddCarousel = $('#imageAddCarousel.carousel-item.active');
         var isImageAddButtonActive = imageAddCarousel.length > 0;
 
+        var modalButtonsContainer = $('.modal-buttons');
+
         if (isImageAddButtonActive || $('.carousel-indicators button').length === 0) {
             // 이미지 추가 버튼이 활성화되어 있거나 이미지가 전혀 없으면 모달 버튼 숨김
-            $('.modal-footer .btn-primary').hide();
+            modalButtonsContainer.hide();
         } else {
             // 이미지 추가 버튼이 활성화되어 있지 않으면 모달 버튼 표시
-            $('.modal-footer .btn-primary').show();
+            modalButtonsContainer.show();
         }
     }
 

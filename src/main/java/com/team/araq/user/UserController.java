@@ -118,7 +118,7 @@ public class UserController {
     public String changePw(@RequestParam("newPw") String newPw, @RequestParam("confirmPw") String confirmPw, Principal principal) {
         SiteUser user = userService.getByUsername(principal.getName());
         userService.updatePw(user, newPw, confirmPw);
-        return "redirect:/user/update";
+        return "redirect:/";
     }
 
     @GetMapping("/updatePw")
