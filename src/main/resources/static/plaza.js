@@ -66,7 +66,7 @@ $(function () {
         });
 
         stompClient.subscribe("/topic/plaza/modify/" + code, function (message) {
-            $("#plazaBoard").css("background-image", `url('${message.body}')`);
+            window.location.reload();
         });
     });
 
