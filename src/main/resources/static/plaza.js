@@ -155,8 +155,25 @@ $(function () {
 
     $("#participant-tab-pane").on("click", ".delegate", function () {
         if (confirm($(this).data("nick") + "님에게 방장을 위임하시겠습니까?")) {
-            stompClient.send("/app/plaza/delegate/" + code, {}, $(this).data("value"));
-            window.location.reload();
+            $.ajax({
+                url: "/plaza/delegate",
+                type: "post",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    code: code,
+                    target: $(this).data("value")
+                }),
+                success: function () {
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert("실패");
+                    console.log(err.responseJSON.message);
+                }
+            });
         }
     });
 

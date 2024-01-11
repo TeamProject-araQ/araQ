@@ -131,4 +131,16 @@ public class PlazaController {
 
         return null;
     }
+
+    @PostMapping("/delegate")
+    @ResponseBody
+    public String delegate(@RequestBody Map<String, String> data) {
+        String code = data.get("code");
+        String value = data.get("target");
+        Plaza plaza = plazaService.getByCode(code);
+        SiteUser target = userService.getByUsername(value);
+        plazaService.changeManager(plaza, target);
+        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + value, value);
+        return null;
+    }
 }
