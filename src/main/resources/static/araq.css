@@ -777,6 +777,11 @@ table {
         border-bottom: 1px dotted #ccc;
     }
 
+    td:first-child {
+        background: #D8D3E0;
+        border-bottom: 1px solid rgb(167, 155, 185);
+    }
+
     td::before {
         content: attr(data-label);
         float: left;
