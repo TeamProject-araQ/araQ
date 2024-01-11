@@ -50,6 +50,10 @@ spring:
             tokenUri: https://kauth.kakao.com/oauth/token
             userInfoUri: https://kapi.kakao.com/v2/user/me
             userNameAttribute: id
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 #iampport
 imp:
   code: "imp65467420"

@@ -116,7 +116,7 @@
           id="editForm">
         <!-- 셀렉트 박스 -->
         <div class="row">
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="gender" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">성별</label>
                 <select id="gender" class="form-select" name="gender" aria-label="Default select example"
                         th:value="${user.gender}">
@@ -124,7 +124,7 @@
                     <option value="여성" th:selected="${user.gender == '여성'}">여성</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="religion" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">종교</label>
                 <select id="religion" class="form-select" name="religion" aria-label="Default select example"
                         th:value="${user.religion}">
@@ -134,7 +134,7 @@
                     <option value="무교" th:selected="${user.religion == '무교'}">무교</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="drinking" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">음주</label>
                 <select id="drinking" class="form-select" name="drinking" aria-label="Default select example"
                         th:value="${user.drinking}">
@@ -144,7 +144,7 @@
                     <option value="매일" th:selected="${user.drinking == '매일'}">매일</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="smoking" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">흡연</label>
                 <select id="smoking" class="form-select" name="smoking" aria-label="Default select example"
                         th:value="${user.smoking}">
@@ -152,7 +152,7 @@
                     <option value="비흡연" th:selected="${user.smoking == '비흡연'}">비흡연</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="education" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">최종학력</label>
                 <select id="education" class="form-select" name="education" aria-label="Default select example"
                         th:value="${user.education}">
@@ -161,7 +161,7 @@
                     <option value="대학교 졸업" th:selected="${user.education == '대학교 졸업'}">대학교 졸업</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="mbti" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">MBTI</label>
                 <select id="mbti" class="form-select" name="mbti" aria-label="Default select example"
                         th:value="${user.mbti}">
@@ -183,29 +183,29 @@
                     <option value="ISTP" th:selected="${user.mbti == 'ISTP'}">ISTP</option>
                 </select>
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="nickName" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">별명</label>
                 <input type="text" class="form-control" id="nickName" name="nickName"
                        th:value="${user.nickName}">
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="height" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">키</label>
                 <input type="text" class="form-control" id="height" name="height" th:value="${user.height}">
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="age" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">나이</label>
                 <input type="text" class="form-control" id="age" name="age" th:value="${user.age}">
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="hobby" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">취미</label>
                 <input type="text" class="form-control" id="hobby" name="hobby" th:value="${user.hobby}">
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="introduce" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">자기소개</label>
                 <input type="text" class="form-control" id="introduce" name="introduce"
                        th:value="${user.introduce}">
             </div>
-            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-1">
+            <div class="form-group mb-3 col-lg-3 col-md-6 col-sm-12">
                 <label for="address" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">주소</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="address" name="address" th:value="${user.address}"
@@ -213,13 +213,13 @@
                     <input type="button" class="btn 버튼" onclick="sample5_execDaumPostcode()" value="주소 찾기">
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-1">
+            <div class="col-lg-3 col-md-6 col-sm-12">
                 <label for="personality" style="border-bottom: 2px solid #D8D3E0" class="form-label mb-2">성격</label>
                 <input type="button" class="form-control" data-bs-toggle="modal"
                        data-bs-target="#exampleModal2" value="수정" readonly>
             </div>
         </div>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end my-3">
             <button class="btn 버튼" type="submit">저장</button>
         </div>
     </form>

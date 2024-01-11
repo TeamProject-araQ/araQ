@@ -90,6 +90,8 @@ public class PaymentController {
                 case "채팅 신청권 (3개)" -> this.userService.addChatPass(user, 3);
                 case "채팅 신청권 (5개)" -> this.userService.addChatPass(user, 5);
             }
+        } else if (ticketName.contains("말풍선 이용권")) {
+            this.userService.changeColor(user, jsonObject.getString("background"), jsonObject.getString("color"));
         }
         this.userService.useBubble(user, bubble);
         this.historyService.saveHistory(user, bubble, user.getBubble(), ticketName + " 구매");

@@ -64,6 +64,10 @@ $(function () {
             alert("방장을 위임받으셨습니다.");
             window.location.reload();
         });
+
+        stompClient.subscribe("/topic/plaza/modify/" + code, function (message) {
+            $("#plazaBoard").css("background-image", `url('${message.body}')`);
+        });
     });
 
     $(window).on("beforeunload", function () {
@@ -95,6 +99,7 @@ $(function () {
     });
 
     $(document).keydown(function (e) {
+        $(window).focus();
         if (keydown === false) {
             keydown = true;
             changeLocation(e);
@@ -178,7 +183,20 @@ $(function () {
         const title = $("#plazaTitle").val();
         const people = $("#peopleRange").val();
         const password = ($("#plazaPrivate").is(":checked")) ? $("#plazaPassword").val() : "";
-        if ($("#plazaPrivate").is(":checked") && password  === "")
+        let formData = new FormData();
+
+        if ($(".selectedImg").hasClass("customImage")) {
+            formData.append("customImg", $("#customImageInput")[0].files[0]);
+        } else {
+            formData.append("img", $(".selectedImg > *").attr("src"));
+        }
+
+        formData.append("title", title);
+        formData.append("people", people);
+        formData.append("password", password);
+        formData.append("code", code);
+
+        if ($("#plazaPrivate").is(":checked") && password === "")
             alert("비밀번호를 입력해주세요");
         else if (title.trim() === "") alert("광장 이름을 입력해주세요");
         else {
@@ -188,21 +206,61 @@ $(function () {
                 headers: {
                     [csrfHeader]: csrfToken
                 },
-                contentType: "application/json",
-                data: JSON.stringify({
-                    title: title,
-                    people: people,
-                    password: password,
-                    code: code
-                }),
+                contentType: false,
+                processData: false,
+                data: formData,
                 success: function () {
                     alert("변경이 완료되었습니다.");
                 },
                 error: function (err) {
-                    alert("변경 실패\n사유 : " + err);
+                    alert("변경 실패");
                 }
             });
         }
+    });
+
+    $("#bgImgList > a").click(function () {
+        $("#bgImgList > a").removeClass("selectedImg");
+        $(this).addClass("selectedImg");
+    });
+
+    $(".customImage").click(function () {
+        $("#customImageInput").click();
+    });
+
+    $("#customImageInput").change(function () {
+        const preview = $(".customImage");
+        const file = this.files[0];
+
+        if ($(this).val() === "") {
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            alert("이미지 파일만 선택해주세요.");
+            $(this).val("");
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
+        } else if (file.size > 10485760) {
+            alert("10MB 이하의 이미지만 사용해주세요.");
+            $(this).val("");
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
+        }
+
+        preview.empty();
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = $("<img>").attr("src", e.target.result).css({width: '100%', height: '100%'});
+            preview.append(img);
+        };
+
+        reader.readAsDataURL(file);
     });
 
     function changeLocation(e) {
@@ -257,16 +315,15 @@ $(function () {
 
 
 function createAvatar(data) {
-    const element =
+    const element = $(
         "<div class='avatar " + data.username + "'>" +
-        "<div class='talkBox card'></div>" +
+        "<div class='talkBox card' style='background: " + data.background + "; color: " + data.color + "'></div>" +
         "<img class='userImage' src='" + data.image + "'>" +
         "<div class='nickname'>" + data.nickname + "</div>" +
         "<div class='status focus'></div>" +
-        "</div>";
-
+        "</div>"
+    );
     $("#plazaBoard").append(element);
-    $(".njk7740 > .talkBox").addClass("talkBoxBlack");
 }
 
 function moveLocation(data) {
@@ -284,6 +341,8 @@ function init() {
             left: $(element).find("input:last").val()
         });
     });
+
+    $("#plazaBoard").css("background-image", `url('${background}')`);
 }
 
 function correctLocation() {

@@ -84,7 +84,7 @@
     <h5 class="text-center text-secondary p-5 card mb-5" th:if="${inquiryList.isEmpty()}">문의 내역 없음</h5>
     <div class="mb-5" th:if="${!inquiryList.isEmpty()}">
         <table class="table table-hover text-center">
-            <thead class="ourColor">
+            <thead class="table-head">
             <tr>
                 <th>번호</th>
                 <th>카테고리</th>
@@ -109,7 +109,7 @@
     <h5 class="text-center text-secondary p-5 card mb-5" th:if="${postList.isEmpty()}">작성한 게시물 없음</h5>
     <div class="mb-5" th:if="${!postList.isEmpty()}">
         <table class="table table-hover text-center">
-            <thead class="ourColor">
+            <thead class="table-head">
             <tr>
                 <th>번호</th>
                 <th>내용</th>
@@ -132,7 +132,7 @@
     <h5 class="text-center text-secondary p-5 card mb-5" th:if="${paymentList.isEmpty()}">결제 내역 없음</h5>
     <div class="mb-5" th:if="${!paymentList.isEmpty()}">
         <table class="table table-hover text-center">
-            <thead class="ourColor">
+            <thead class="table-head">
             <tr>
                 <th>번호</th>
                 <th>결제 금액</th>

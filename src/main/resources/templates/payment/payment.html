@@ -11,14 +11,14 @@
         </div>
     </div>
     <h4 class="my-3">결제 수단</h4>
-    <div class="d-flex justify-content-around">
-        <button onclick="selectPg('kakaopay')" class="btn kakao" data-bs-toggle="button" style="width:32%;">
+    <div class="row">
+        <button onclick="selectPg('kakaopay')" class="btn kakao col-lg-4 col-md-6 col-sm-12" data-bs-toggle="button">
             <img src="/image/etc/kakao.png" alt="" style="margin-right:10px; height:20px; width:auto;">카카오페이
         </button>
-        <button onclick="selectPg('uplus')" class="btn toss col-4" data-bs-toggle="button" style="width:32%;">
+        <button onclick="selectPg('uplus')" class="btn toss col-lg-4 col-md-6 col-sm-12" data-bs-toggle="button">
             <img src="/image/etc/toss.png" alt="" style="margin-right:10px; height:20px; width:auto;">토스페이먼츠
         </button>
-        <button onclick="selectPg('danal')" class="btn phone col-4" data-bs-toggle="button" style="width:32%;">
+        <button onclick="selectPg('danal')" class="btn phone col-lg-4 col-md-6 col-sm-12" data-bs-toggle="button">
             <img src="/image/etc/phone.png" alt="" style="margin-right:10px; height:20px; width:auto;">휴대폰 결제
         </button>
     </div>
@@ -84,7 +84,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권 (1일)
+                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권
+            (1일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">500
         </div>
@@ -92,7 +93,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권 (7일)
+                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권
+            (7일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">1000
         </div>
@@ -100,7 +102,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권 (30일)
+                                                              style="width:40px; height:40px; margin-right:20px;">매칭 우선권
+            (30일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">3500
         </div>
@@ -108,7 +111,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket4.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권 (1일)
+                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권
+            (1일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">500
         </div>
@@ -116,7 +120,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket4.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권 (7일)
+                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권
+            (7일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">1000
         </div>
@@ -124,7 +129,8 @@
     <div class="ticket d-flex justify-content-between align-items-center"
          style="border-top:1px solid lightgray;">
         <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/ticket4.png" alt=""
-                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권 (30일)
+                                                              style="width:40px; height:40px; margin-right:20px;">음성 이용권
+            (30일)
         </div>
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">3500
         </div>
@@ -177,6 +183,28 @@
         <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">7000
         </div>
     </div>
+    <h4 class="mb-3 mt-4">광장 전용 말풍선</h4>
+    <div class="d-flex justify-content-center">
+        <div class="card p-1 fs-5" style="width: fit-content" id="exampleCard">"이것은 예시 입니다."</div>
+    </div>
+    <div class="row my-3">
+        <div class="col-6">
+            <label for="background" class="form-label" style="border-bottom: 1px solid #D8D3E0;">배경색</label>
+            <input type="color" class="form-control form-control-color" id="background" style="width: 70%; margin: 0 auto; height: 100px;">
+        </div>
+        <div class="col-6">
+            <label for="fontColor" class="form-label" style="border-bottom: 1px solid #D8D3E0;">글자색</label>
+            <input type="color" class="form-control form-control-color" id="fontColor" style="width: 70%; margin: 0 auto; height: 100px;">
+        </div>
+    </div>
+    <div class="ticket d-flex justify-content-between align-items-center"
+         style="border-top:1px solid lightgray;">
+        <div class="ticketName" style="font-size: 13pt;"><img src="/image/etc/speechBubble.png" alt=""
+                                                              style="width:40px; height:40px; margin-right:20px;">말풍선 이용권 (7일)
+        </div>
+        <div class="뱃지"><img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-right: 5px;">300
+        </div>
+    </div>
 </div>
 <input type="hidden" th:value="${user}">
 <script type="text/javascript" layout:fragment="script">
@@ -198,9 +226,21 @@
     $(function () {
         IMP.init('imp65467420');
 
+        $('#background').on('input', function() {
+            var backgroundColor = $(this).val();
+            $('#exampleCard').css('background-color', backgroundColor);
+        });
+
+        $('#fontColor').on('input', function() {
+            var fontColor = $(this).val();
+            $('#exampleCard').css('color', fontColor);
+        });
+
         $('.ticket').click(function () {
             var ticketName = $(this).find('.ticketName').text().trim();
             var bubble = $(this).find('.뱃지').text().trim();
+            var background = $('#background').val();
+            var color = $('#fontColor').val();
 
             if (confirm(bubble + " 버블을 사용하여 '" + ticketName + "' 을 구매합니다."))
                 $.ajax({
@@ -212,10 +252,13 @@
                     contentType: "application/json",
                     data: JSON.stringify({
                         ticketName: ticketName,
-                        bubble: bubble
+                        bubble: bubble,
+                        background : background,
+                        color : color
                     }),
                     success: function (data) {
                         alert(data);
+                        location.reload();
                     },
                     error: function (err) {
                         console.log(err);

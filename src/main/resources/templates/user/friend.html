@@ -4,7 +4,7 @@
     <div th:if="${!requestList.isEmpty()}">
         <h3 class="underline-start mb-3">친구 요청</h3>
         <table class="table table-hover text-center">
-            <thead class="table-secondary">
+            <thead class="table-head">
             <tr>
                 <th>성별</th>
                 <th>닉네임</th>
@@ -49,7 +49,7 @@
     </div>
     <h3 class="underline-start my-3">친구 목록</h3>
     <table class="table table-hover text-center">
-        <thead class="table-secondary">
+        <thead class="table-head">
         <tr>
             <th>성별</th>
             <th>닉네임</th>
@@ -74,10 +74,10 @@
                 </div>
             </td>
             <td>
-                <a class="viewProfile" th:if="${friend.sender != user}" th:text="${friend.sender.nickName}"
+                <a class="viewProfile sendLink" th:if="${friend.sender != user}" th:text="${friend.sender.nickName}"
                    th:data-value="${friend.sender.username}" href="javascript:void(0)" th:data-image="${friend.sender.image}"
                    th:data-nick="${friend.sender.nickName}"></a>
-                <a class="viewProfile" th:if="${friend.receiver != user}" th:text="${friend.receiver.nickName}"
+                <a class="viewProfile sendLink" th:if="${friend.receiver != user}" th:text="${friend.receiver.nickName}"
                    th:data-value="${friend.receiver.username}" href="javascript:void(0)" th:data-image="${friend.receiver.image}"
                    th:data-nick="${friend.receiver.nickName}"></a>
             </td>
@@ -172,7 +172,7 @@
             showProfile($(this).data("value"));
         });
 
-        $('.viewProfile').on('contextmenu', function(e) {
+        $('.sendLink').on('contextmenu', function(e) {
             e.preventDefault();
             $('.customMenu').css({
                 top: e.pageY + 'px',

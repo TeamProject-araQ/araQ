@@ -25,7 +25,7 @@ public class MessageHandler {
         userService.setLocation(user, code);
         plazaService.setPeople(plazaService.getByCode(code), userService.getByLocation(code).size());
         simpMessagingTemplate.convertAndSend("/topic/plaza/join/" + code,
-                new Avatar(user.getUsername(), user.getNickName(), user.getImage()));
+                new Avatar(user.getUsername(), user.getNickName(), user.getImage(), user.getChatBackground(), user.getChatColor()));
         simpMessagingTemplate.convertAndSend("/topic/plaza/notice/" + code,
                 user.getNickName() + "님이 입장하셨습니다.");
     }
@@ -81,8 +81,9 @@ public class MessageHandler {
     public void delegate(@Payload String message, @DestinationVariable String code) {
         SiteUser user = userService.getByUsername(message);
         Plaza plaza = plazaService.getByCode(code);
+
         plazaService.changeManager(plaza, user);
+
         simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
     }
-
 }
