@@ -754,6 +754,10 @@ table {
     height: 100%;
 }
 
+#customImageInput {
+    display: none;
+}
+
 .table-head {
     background: #D8D3E0;
     border-bottom: rgb(167, 155, 185);

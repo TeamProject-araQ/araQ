@@ -1,4 +1,7 @@
 <html layout:decorate="~{layout}">
+<head>
+    <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css" rel="stylesheet">
+</head>
 <div layout:fragment="content" class="container my-3">
     <h3 class="underline">비밀번호변경</h3>
     <div>
@@ -7,10 +10,12 @@
             <div class="form-group mb-3">
                 <label for="newPw" class="form-label" style="border-bottom:2px solid #d8d3e0;">비밀번호</label>
                 <input type="password" class="form-control" id="newPw" name="newPw" required>
+                <div id="newPwCheck"></div>
             </div>
             <div class="form-group mb-3">
                 <label for="confirmPw" class="form-label" style="border-bottom:2px solid #d8d3e0;">비밀번호 확인</label>
                 <input type="password" class="form-control" id="confirmPw" name="confirmPw" required>
+                <div id="confirmPwCheck"></div>
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn 버튼-full">변경</button>
@@ -20,16 +25,68 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script type="text/javascript" layout:fragment="script">
-        function checkNewPw() {
-            var newPw1 = document.getElementById("newPw").value;
-            var newPw2 = document.getElementById("confirmPw").value;
+        function validationForm() {
+        var newPw = $('#newPw').val().trim();
+        var confirmPw = $('#confirmPw').val().trim();
 
-            if(newPw1 !== newPw2){
-                alert('비밀번호가 일치하지 않습니다.');
-                return false;
-            }
-            return true;
+        if (
+            newPw === "" ||
+            confirmPw === "" ||
+            $('#newPw').hasClass('is-invalid') ||
+            $('#confirmPw').hasClass('is-invalid')
+        ) {
+            alert("입력되지 않은 항목이 있거나 올바르지 않은 값이 있습니다.");
+            return false;
         }
+        return true;
+    }
+
+    $(document).ready(function() {
+        $('#password2').prop('disabled', true);
+        $('form').submit(function() {
+            return validationForm();
+        });
+
+        $('#newPw').on('change', function(){
+            var newPw = $(this).val().trim();
+
+            if(newPw === ""){
+                $('#password1CheckResult').html("");
+                $(this).removeClass('is-invalid');
+                $('#password2').prop('disabled', true);
+                return;
+            }
+
+            if(newPw.length < 8 || !/[a-zA-Z]/.test(newPw) || !/\d/.test(newPw) || !/[^a-zA-Z\d]/.test(newPw)) {
+                $('#newPwCheck').html('<span style="color: red;">비밀번호는 8자 이상, 문자/숫자/기호를 포함해야 합니다.</span>');
+                $('#newPw').addClass('is-invalid');
+                $('#confirmPw').prop('disabled', true);
+            } else {
+                $('#newPwCheck').html('<span style="color: green;">유효한 비밀번호입니다.</span>');
+                $('#newPw').removeClass('is-invalid');
+                $('#confirmPw').prop('disabled', false).focus();
+            }
+        });
+
+        $('#confirmPw').on('change', function(){
+            var newPw = $('#newPw').val().trim();
+            var confirmPw = $(this).val().trim();
+
+            if (confirmPw === ""){
+                $('#confirmPwCheck').html("");
+                $(this).removeClass('is-invalid');
+                    return;
+                }
+
+                if (newPw !== confirmPw) {
+                    $('#confirmPwCheck').html('<span style="color : red;">비밀번호가 일치하지 않습니다.</span>');
+                    $('#confirmPw').addClass('is-invalid');
+                } else {
+                    $('#confirmPwCheck').html('<span style="color : green;">비밀번호가 일치합니다.</span>');
+                    $('#confirmPw').removeClass('is-invalid');
+                }
+            });
+        });
     </script>
 </div>
 </html>

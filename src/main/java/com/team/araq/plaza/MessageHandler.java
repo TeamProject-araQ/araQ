@@ -76,12 +76,4 @@ public class MessageHandler {
         messageDto.setContent("강제퇴장 당하였습니다.");
         simpMessagingTemplate.convertAndSend("/topic/all/" + message, messageDto);
     }
-
-    @MessageMapping("/plaza/delegate/{code}")
-    public void delegate(@Payload String message, @DestinationVariable String code) {
-        SiteUser user = userService.getByUsername(message);
-        Plaza plaza = plazaService.getByCode(code);
-        plazaService.changeManager(plaza, user);
-        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
-    }
 }

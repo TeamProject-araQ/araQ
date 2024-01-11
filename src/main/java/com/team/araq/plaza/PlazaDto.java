@@ -3,6 +3,7 @@ package com.team.araq.plaza;
 import com.team.araq.user.SiteUser;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -13,4 +14,5 @@ public class PlazaDto {
     private String code;
     private SiteUser manager;
     private String img;
+    private MultipartFile customImg;
 }

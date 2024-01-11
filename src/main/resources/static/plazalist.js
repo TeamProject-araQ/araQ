@@ -28,6 +28,7 @@ $(function () {
         const people = $("#peopleRange").val();
         const password = $("#plazaPassword").val();
         const bgImg = $(".selectedImg > *").attr("src");
+
         if (title.trim() === "") alert("광장 이름을 입력해주세요");
         else if ($("#plazaPrivate").is(":checked") && password  === "")
             alert("비밀번호를 입력해주세요");
@@ -105,6 +106,12 @@ $(function () {
 
         if (!file.type.startsWith("image/")) {
             alert("이미지 파일만 선택해주세요.");
+            $(this).val("");
+            preview.empty();
+            preview.text("커스텀이미지");
+            return;
+        } else if (file.size > 10485760) {
+            alert("10MB 이하의 이미지만 사용해주세요.");
             $(this).val("");
             preview.empty();
             preview.text("커스텀이미지");
