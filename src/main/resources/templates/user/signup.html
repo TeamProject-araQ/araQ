@@ -59,7 +59,7 @@
         <div id="step1">
             <div class="mb-3">
                 <label for="username" class="form-label">아이디</label>
-                <input type="text" th:field="*{username}" id="username" class="form-control" placeholder="아이디 (6-20자 이내, 영문, 숫자 사용가능)">
+                <input type="text" th:field="*{username}" id="username" class="form-control" placeholder="아이디 (6-20자 이내, 영문, 숫자 포함)">
                 <div id="usernameCheckResult"></div>
             </div>
             <div class="mb-3">
@@ -68,7 +68,7 @@
             </div>
             <div class="mb-3">
                 <label for="password1" class="form-label">비밀번호</label>
-                <input type="password" th:field="*{password1}" id="password1" class="form-control"  placeholder="비밀번호 (8자 이상,문자/숫자/기호 사용가능)">
+                <input type="password" th:field="*{password1}" id="password1" class="form-control"  placeholder="비밀번호 (8자 이상,문자/숫자/기호 포함)">
                 <div id="password1CheckResult"></div>
             </div>
             <div class="mb-3">
@@ -201,7 +201,7 @@
             return validationForm();
         });
 
-        $('#username').on('blur', function(){
+        $('#username').on('change', function(){
             var username = $(this).val().trim();
 
             if(username === "") {
@@ -238,7 +238,7 @@
             });
         });
 
-        $('#email').on('blur', function(){
+        $('#email').on('change', function(){
             var email = $(this).val().trim();
 
             if(email === "") {
@@ -269,7 +269,8 @@
             });
         });
 
-        $('#password1').on('blur', function(){
+
+        $('#password1').on('change', function(){
             var password1 = $(this).val().trim();
 
             if(password1 === ""){
@@ -279,8 +280,8 @@
                 return;
             }
 
-            if(password1.length < 8 || !/[a-zA-Z]/.test(password1) || !/\d/.test(password1)) {
-                $('#password1CheckResult').html('<span style="color: red;">비밀번호는 8자 이상, 문자 및 숫자를 포함하여 사용 가능합니다.</span>');
+            if(password1.length < 8 || !/[a-zA-Z]/.test(password1) || !/\d/.test(password1) || !/[^a-zA-Z\d]/.test(password1)) {
+                $('#password1CheckResult').html('<span style="color: red;">비밀번호는 8자 이상, 문자/숫자/기호를 포함해야 합니다.</span>');
                 $('#password1').addClass('is-invalid');
                 $('#password2').prop('disabled', true);
             } else {
@@ -290,7 +291,7 @@
             }
         });
 
-        $('#password2').on('blur', function(){
+        $('#password2').on('change', function(){
             var password1 = $('#password1').val().trim();
             var password2 = $(this).val().trim();
 
@@ -309,7 +310,6 @@
                 }
             });
         });
-
 </script>
 </body>
 </html>
