@@ -30,8 +30,6 @@ public class OAuthAttributes {
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         if (registrationId.equals("kakao")) {
             return ofKakao(userNameAttributeName, attributes);
-        } else if (registrationId.equals("naver")) {
-            return ofNaver(userNameAttributeName, attributes);
         }
         return ofGoogle(userNameAttributeName, attributes);
     }
@@ -45,16 +43,6 @@ public class OAuthAttributes {
                 userNameAttributeName,
                 (String) profile.get("nickname"),
                 (String) kakao_account.get("email"));
-    }
-
-    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
-        Map<String, Object> response = (Map<String, Object>) attributes.get("response");    // 네이버에서 받은 데이터에서 프로필 정보다 담긴 response 값을 꺼낸다.
-
-        return new OAuthAttributes((String) response.get("id"),
-                (Map<String, Object>) attributes.get(userNameAttributeName),
-                "id",
-                (String) response.get("name"),
-                (String) response.get("email"));
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
