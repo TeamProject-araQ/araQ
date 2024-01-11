@@ -747,6 +747,10 @@ table {
     height: 100%;
 }
 
+#customImageInput {
+    display: none;
+}
+
 @media (max-width: 700px) {
     thead {
         display: none;

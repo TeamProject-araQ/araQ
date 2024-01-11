@@ -13,7 +13,7 @@ import java.util.Optional;
 public class PlazaService {
     private final PlazaRepo plazaRepo;
 
-    public void create(PlazaDto plazaDto) {
+    public Plaza create(PlazaDto plazaDto) {
         Plaza plaza = new Plaza();
         plaza.setTitle(plazaDto.getTitle());
         plaza.setMaxPeople(plazaDto.getPeople());
@@ -22,8 +22,7 @@ public class PlazaService {
         plaza.setCode(plazaDto.getCode());
         plaza.setCreateDate(LocalDateTime.now());
         plaza.setManager(plazaDto.getManager());
-        plaza.setBackground(plazaDto.getImg());
-        plazaRepo.save(plaza);
+        return plazaRepo.save(plaza);
     }
 
     public List<Plaza> getAll() {
@@ -50,10 +49,14 @@ public class PlazaService {
         plazaRepo.save(plaza);
     }
 
-    public void modify(Plaza plaza, String title, String password, Integer maxPeople, String img) {
-        plaza.setTitle(title);
-        plaza.setPassword(password);
-        plaza.setMaxPeople(maxPeople);
+    public void modify(Plaza plaza, PlazaDto plazaDto) {
+        plaza.setTitle(plazaDto.getTitle());
+        plaza.setPassword(plazaDto.getPassword());
+        plaza.setMaxPeople(plazaDto.getPeople());
+        plazaRepo.save(plaza);
+    }
+
+    public void setImg(Plaza plaza, String img) {
         plaza.setBackground(img);
         plazaRepo.save(plaza);
     }

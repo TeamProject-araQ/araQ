@@ -65,6 +65,12 @@ spring:
             tokenUri: https://nid.naver.com/oauth2.0/token
             userInfoUri: https://openapi.naver.com/v1/nid/me
             userNameAttribute: response
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
 #iampport
 imp:
   code: "imp65467420"

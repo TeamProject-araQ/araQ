@@ -89,7 +89,6 @@
                             커스텀이미지
                         </a>
                     </div>
-                    <input type="file" id="customImageInput">
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
@@ -117,11 +116,12 @@
             </div>
         </div>
     </div>
-    <form th:action="@{/plaza/create}" id="plazaCreateForm" method="post">
+    <form th:action="@{/plaza/create}" id="plazaCreateForm" method="post" enctype="multipart/form-data">
         <input type="hidden" name="title">
         <input type="hidden" name="people">
         <input type="hidden" name="password">
         <input type="hidden" name="img">
+        <input type="file" name="customImg" id="customImageInput">
     </form>
     <form th:action="@{/plaza/delete}" id="plazaDeleteForm" method="post">
         <input type="hidden" name="code">

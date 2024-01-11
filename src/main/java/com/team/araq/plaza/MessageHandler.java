@@ -81,7 +81,9 @@ public class MessageHandler {
     public void delegate(@Payload String message, @DestinationVariable String code) {
         SiteUser user = userService.getByUsername(message);
         Plaza plaza = plazaService.getByCode(code);
+
         plazaService.changeManager(plaza, user);
+
         simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
     }
 }
