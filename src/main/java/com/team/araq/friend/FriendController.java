@@ -41,7 +41,6 @@ public class FriendController {
             else messagingTemplate.convertAndSend("/topic/friend/request/impossible/" + sender.getUsername(),
                     receiver.getNickName() + "님이 이미 친구 요청 목록에 존재합니다.");
         }
-
     }
 
     @ResponseBody
