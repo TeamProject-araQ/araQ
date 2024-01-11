@@ -695,11 +695,6 @@ table {
     opacity: 50%;
 }
 
-.talkBoxBlack {
-    background: black;
-    color: gold;
-}
-
 #plazaChatContainer {
     position: absolute;
     bottom: 0;
