@@ -193,17 +193,17 @@ public class SiteUser {
 
     private boolean listenVoice;
 
-   private LocalDateTime getListenVoice;
+    private LocalDateTime getListenVoice;
 
-   private int araQPass;
+    private int araQPass;
 
-   private int chatPass;
+    private int chatPass;
 
-   private String chatBackground;
+    private String chatBackground;
 
-   private String chatColor;
+    private String chatColor;
 
-   private LocalDateTime getChatColor;
+    private LocalDateTime getChatColor;
 
    private boolean socialJoin;
 
