@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -207,7 +206,7 @@ public class UserService {
         SiteUser user = new SiteUser();
         user.setUsername("admin");
         user.setNickName("관리자");
-        user.setImage("/image/admin.png");
+        user.setImage("/image/user/admin.png");
         user.setPassword(passwordEncoder.encode("admin"));
         this.userRepository.save(user);
     }

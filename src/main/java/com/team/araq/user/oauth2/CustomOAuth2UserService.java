@@ -10,9 +10,12 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -40,9 +43,21 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private SiteUser saveOrUpdate(OAuthAttributes attributes){
-        SiteUser user = userRepository.findByusername(attributes.getId())
-                .map(entity-> entity.update(attributes.getName(), attributes.getEmail()))
-                .orElse(attributes.toEntity());
-        return userRepository.save(user);
+        Optional<SiteUser> userByEmail = userRepository.findByEmail(attributes.getEmail());
+        if (userByEmail.isPresent()) {
+            SiteUser user = userByEmail.get();
+            if (user.isSocialJoin() && user.getUsername().equals(attributes.getId())) {
+                return user.update(attributes.getName(), attributes.getEmail());
+            }
+            OAuth2Error oauth2Error = new OAuth2Error("email_already_registered", "이미 가입된 이메일 주소입니다.", null);
+            throw new OAuth2AuthenticationException(oauth2Error);        }
+        Optional<SiteUser> userByUsername = userRepository.findByusername(attributes.getId());
+        if (userByUsername.isPresent()) {
+            SiteUser user = userByUsername.get();
+            return user.update(attributes.getName(), attributes.getEmail());
+        } else {
+            SiteUser newUser = attributes.toEntity();
+            return userRepository.save(newUser);
+        }
     }
 }

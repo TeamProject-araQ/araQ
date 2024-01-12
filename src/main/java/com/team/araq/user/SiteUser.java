@@ -205,10 +205,13 @@ public class SiteUser {
 
    private LocalDateTime getChatColor;
 
-    public SiteUser(String username, String name, String email,LocalDateTime createDate) {
+   private boolean socialJoin;
+
+    public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
         this.name = name;
         this.email = email;
+        this.socialJoin = socialJoin;
         this.createDate = createDate;
     }
 
