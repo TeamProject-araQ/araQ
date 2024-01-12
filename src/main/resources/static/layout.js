@@ -245,6 +245,11 @@ $(function () {
         })
     });
 
+    if ($('#phone').val() === "" || $('#phone').val() == null) {
+        alert("휴대폰 인증이 완료되지 않은 회원입니다. 휴대폰 인증을 진행합니다.");
+        $('#verModal').modal('show');
+    }
+
     $("#chatRequestModal .refuse").on('click', function () {
         stompClient.send("/app/alert", {}, JSON.stringify({
             type: "refuse",
@@ -470,6 +475,63 @@ $(function () {
         });
     });
 });
+
+var verKeyConfirmed = false;
+
+function sendVerKey() {
+    var phoneNum = $('#phoneNumber').val();
+
+    phoneNum = phoneNum.replace(/-/g, '');
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/signupAuth',
+        contentType: 'application/json',
+        data: JSON.stringify({ phoneNum: phoneNum }),
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        success: function (response) {
+            if (response === "success") {
+                alert('인증번호을 발송했습니다. 핸드폰 번호가 정확한지 확인해주세요.');
+                $('#verKeySection').show();
+            } else {
+                alert('번호가 정확하지 않습니다.');
+            }
+        },
+        error: function () {
+            alert('서버 오류');
+        }
+    });
+}
+
+function confirmVerKey() {
+    var phoneNum = $('#phoneNumber').val();
+    var verKey = $('#verKey').val();
+    console.log(verKey);
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/confirmPhoneNum',
+        contentType: 'application/json',
+        data: JSON.stringify({ phoneNum: phoneNum, verKey: verKey }),
+        headers: {
+            [csrfHeader]: csrfToken
+        },
+        success: function(response) {
+            if (response === "success") {
+                alert('인증번호가 확인되었습니다.');
+                verKeyConfirmed = true;
+            } else {
+                alert('인증번호가 일치하지 않습니다.');
+                verKeyConfirmed = false;
+            }
+        },
+        error: function () {
+            alert('서버 오류');
+        }
+    });
+}
 
 function showProfile(username) {
     $.ajax({
