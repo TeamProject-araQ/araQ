@@ -46,7 +46,6 @@ public class FriendController {
     @ResponseBody
     @PostMapping("/accept")
     public String acceptRequest(@RequestBody String username) {
-        System.out.println(username);
         JSONObject jsonObject = new JSONObject(username);
         SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
         SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));

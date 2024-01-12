@@ -70,7 +70,6 @@ public class PlazaController {
             model.addAttribute("alarm", "해당 광장의 정원이 가득 찼습니다.");
             return "plaza/list";
         }
-        ;
         SiteUser user = userService.getByUsername(principal.getName());
         userService.setLocation(user, code);
         userService.setUserLocationInPlaza(user, "0px", "0px");
