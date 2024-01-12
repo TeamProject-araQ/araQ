@@ -1,6 +1,6 @@
 $(function () {
-    var loginUser = $('#hiddenUserName').val();
-    var loginUserNick = $('#loginUserNick').val();
+    const loginUser = $('#hiddenUserName').val();
+    const loginUserNick = $('#loginUserNick').val();
 
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
@@ -15,6 +15,10 @@ $(function () {
         ],
     };
     let targetPeer = null;
+    let location = (typeof code === "undefined") ? window.location.pathname : code;
+
+    if (loginUserNick.trim() === "" && window.location.pathname !== "/user/update")
+        window.location.href = "/user/update";
 
     stompClient.connect({}, function (frame) {
         if (Notification.permission !== "granted") {
@@ -75,10 +79,16 @@ $(function () {
             }
         });
 
-        stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
+        stompClient.send("/app/pong", {}, JSON.stringify({
+            user: $("#hiddenUserName").val(),
+            location: location
+        }));
 
         stompClient.subscribe("/topic/ping", function () {
-            stompClient.send("/app/pong", {}, $("#hiddenUserName").val());
+            stompClient.send("/app/pong", {}, JSON.stringify({
+                user: $("#hiddenUserName").val(),
+                location: location
+            }));
         });
 
         stompClient.subscribe("/topic/all/" + $("#hiddenUserName").val(), function (message) {

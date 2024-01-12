@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -209,9 +210,11 @@ public class ChatController {
     }
 
     @MessageMapping("/pong")
-    public void pong(String username) {
-        SiteUser user = userService.getByUsername(username);
+    public void pong(@Payload String data) {
+        JSONObject json = new JSONObject(data);
+        SiteUser user = userService.getByUsername(json.get("user").toString());
         userService.login(user);
+        userService.setLocation(user, json.get("location").toString());
     }
 
     public void deleteFiles(File file) {

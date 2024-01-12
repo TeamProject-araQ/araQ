@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -179,14 +178,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void logout(SiteUser user) {
-        user.setLogin(false);
-        userRepository.save(user);
-    }
-
     public void logout(List<SiteUser> users) {
         for (SiteUser user : users) {
             user.setLogin(false);
+            user.setLocation("");
             userRepository.save(user);
         }
     }
@@ -494,7 +489,7 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-    @Scheduled(fixedRate = 3600000)
+    @Scheduled(cron = "0 0 * * * *")
     public void checkPurchaseTime() {
         LocalDateTime now = LocalDateTime.now();
         List<SiteUser> users = this.userRepository.findAll();
@@ -531,6 +526,5 @@ public class UserService {
             }
             this.userRepository.save(user);
         }
-        System.out.println("스케줄러 잘 돌아가유");
     }
 }
