@@ -102,7 +102,7 @@ $(function() {
                 }
 
                 if (data.writer === user) {
-                    element =
+                    element = $(
                     '<div class="chatBox text-end">'+
                         '<div>'+
                             '<div>'+
@@ -110,13 +110,13 @@ $(function() {
                                 '<div class="card ourColor">'+
                                     '<span class="confirm"></span>'+
                                     imageElement+
-                                    '<p class="card-body text-start">' + data.content + '</p>'+
+                                    '<p class="card-body text-start"></p>'+
                                 '</div>'+
                             '</div>'+
                         '</div>'+
-                    '</div>';
+                    '</div>');
                 } else {
-                    element =
+                    element = $(
                     '<div class="chatBox">'+
                         '<img src="' + data.writerImage + '" alt="">'+
                         '<div>'+
@@ -124,13 +124,15 @@ $(function() {
                             '<div>'+
                                 '<div class="card">'+
                                     imageElement+
-                                    '<p class="card-body text-start">' + data.content + '</p>'+
+                                    '<p class="card-body text-start"></p>'+
                                 '</div>'+
                                 '<small> ' + date + ' </small>'+
                             '</div>'+
                         '</div>'+
-                    '</div>';
+                    '</div>');
                 }
+
+                element.find("p").text(data.content);
 
                 $("#chatBoard").append(element);
                 chatBoard.scrollTop = chatBoard.scrollHeight;

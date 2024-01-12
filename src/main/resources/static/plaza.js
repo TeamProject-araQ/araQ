@@ -14,7 +14,7 @@ $(function () {
 
         stompClient.subscribe("/topic/plaza/join/" + code, function (message) {
             const data = JSON.parse(message.body);
-            if (user !== data.username) {
+            if ($("." + data.username).length === 0) {
                 createAvatar(data);
                 createParticipantList(data);
             }
@@ -50,7 +50,7 @@ $(function () {
         });
 
         stompClient.subscribe("/topic/plaza/notice/" + code, function (message) {
-            $("#plazaChatBoard").append("<p class='noticeMessage'>" + message.body + "</p>");
+            $("#plazaChatBoard").append($.parseHTML("<p class='noticeMessage'>" + message.body + "</p>"));
 
             const chatBoard = document.getElementById("plazaChatBoard");
             chatBoard.scrollTop = chatBoard.scrollHeight;
@@ -314,6 +314,8 @@ $(function () {
 
     function showMessage(data) {
         const element = $("." + data.sender + " > .talkBox");
+        const boardMessage = $("<p class='normalMessage'></p>");
+        boardMessage.text(data.nick + ": " + data.content);
 
         element.text(data.content);
         element.show();
@@ -323,7 +325,7 @@ $(function () {
             element.hide();
         }, 3000));
 
-        $("#plazaChatBoard").append("<p class='normalMessage'>" + data.nick + ": " + data.content + "</p>");
+        $("#plazaChatBoard").append(boardMessage);
 
         const chatBoard = document.getElementById("plazaChatBoard");
         chatBoard.scrollTop = chatBoard.scrollHeight;
@@ -335,7 +337,7 @@ function createAvatar(data) {
     const element = $(
         "<div class='avatar " + data.username + "'>" +
         "<div class='talkBox card' style='background: " + data.background + "; color: " + data.color + "'></div>" +
-        "<img class='userImage' src='" + data.image + "'>" +
+        "<img class='userImage' src='" + data.image + "' alt=''>" +
         "<div class='nickname'>" + data.nickname + "</div>" +
         "<div class='status focus'></div>" +
         "</div>"
