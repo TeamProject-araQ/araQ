@@ -303,10 +303,14 @@ $(function () {
 
     function sendLocation() {
         const element = $("." + user);
+        const left = parseInt(element.css("left"));
+        const top = parseInt(element.css("top"));
+        const parentWidth = parseInt(element.parent().css("width"));
+        const parentHeight = parseInt(element.parent().css("height"));
         const data = {
             sender: user,
-            left: element.css("left"),
-            top: element.css("top")
+            left: left / parentWidth * 100,
+            top: top / parentHeight * 100
         };
 
         stompClient.send("/app/plaza/location/" + code, {}, JSON.stringify(data));
@@ -347,17 +351,25 @@ function createAvatar(data) {
 
 function moveLocation(data) {
     const element = $("." + data.sender);
+    const parentWidth = parseInt(element.parent().css("width"));
+    const parentHeight = parseInt(element.parent().css("height"));
+    const top = parseInt(data.top) * parentHeight / 100 + 5;
+    const left = parseInt(data.left) * parentWidth / 100 + 5;
     element.css({
-        top: data.top,
-        left: data.left
+        top: top,
+        left: left
     });
 }
 
 function init() {
     $(".avatar").each(function (index, element) {
+        const parentWidth = parseInt($(element).parent().css("width"));
+        const parentHeight = parseInt($(element).parent().css("height"));
+        const top = parseInt($(element).find("input:first").val()) * parentHeight / 100 + 5;
+        const left = parseInt($(element).find("input:last").val()) * parentWidth / 100 + 5;
         $(element).css({
-            top: $(element).find("input:first").val(),
-            left: $(element).find("input:last").val()
+            top: top,
+            left: left
         });
     });
 
