@@ -72,7 +72,6 @@ public class PlazaController {
         }
         ;
         SiteUser user = userService.getByUsername(principal.getName());
-        userService.setLocation(user, code);
         userService.setUserLocationInPlaza(user, "0px", "0px");
         userService.setFocusInPlaza(user, "focus");
         List<SiteUser> joinUsers = userService.getByLocation(code);
