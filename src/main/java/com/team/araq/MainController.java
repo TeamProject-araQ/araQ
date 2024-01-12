@@ -63,5 +63,4 @@ public class MainController {
         userService.logout(userService.getLoginUsers());
         return "redirect:/";
     }
-
 }

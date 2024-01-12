@@ -67,6 +67,6 @@ public class OAuthAttributes {
         if (nameAttributeKey.equals("response")) {
             id = attributes.get("id").toString();
         } else id = attributes.get(nameAttributeKey).toString();
-        return new SiteUser(id, name, email, LocalDateTime.now());
+        return new SiteUser(id, name, email, true, LocalDateTime.now());
     }
 }
