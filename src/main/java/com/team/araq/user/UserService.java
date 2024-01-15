@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -523,5 +524,18 @@ public class UserService {
     public void savePhoneNum(SiteUser user, String phoneNum) {
         user.setPhoneNum(phoneNum);
         this.userRepository.save(user);
+    }
+
+    public void saveRole(SiteUser admin, SiteUser targetUser) throws UnauthorizedActionException {
+        if (admin.getRole() == UserRole.ADMIN) {
+            if (targetUser.getRole() == UserRole.USER) {
+                targetUser.setRole(UserRole.ADMIN);
+            } else {
+                targetUser.setRole(UserRole.USER);
+            }
+        } else {
+            throw new UnauthorizedActionException("권한이 없습니다.");
+        }
+        this.userRepository.save(targetUser);
     }
 }
