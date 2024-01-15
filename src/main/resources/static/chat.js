@@ -24,7 +24,6 @@ $(function() {
 
     $("#chatImageInput").on('change', function() {
         var files = this.files;
-        console.log(files);
         var preview = $("#imagePreview");
 
         if (files.length > 5) {
