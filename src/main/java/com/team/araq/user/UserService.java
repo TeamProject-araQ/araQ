@@ -55,7 +55,6 @@ public class UserService {
         };
     }
 
-
     public SiteUser create(UserCreateForm userCreateForm) throws IOException {
         SiteUser user = new SiteUser();
         user.setUsername(userCreateForm.getUsername());
@@ -63,7 +62,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        if (userCreateForm.getUsername().equals("admin")) user.setRole(UserRole.ADMIN);
+        if (userCreateForm.getUsername().equals("admin1234")) user.setRole(UserRole.ADMIN);
         else user.setRole(UserRole.NEW);
         return userRepository.save(user);
     }

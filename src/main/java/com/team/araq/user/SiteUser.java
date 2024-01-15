@@ -207,6 +207,7 @@ public class SiteUser {
 
    private boolean socialJoin;
 
+   @Getter
    private UserRole role;
 
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
@@ -225,5 +226,4 @@ public class SiteUser {
         this.email = email;
         return this;
     }
-
 }
