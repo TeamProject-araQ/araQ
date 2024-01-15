@@ -164,13 +164,14 @@
         setSliderHandles();
 
         $('.saveBtn').on('click', function () {
+            console.log("min :" + $('#minHeight').val() + "max :" + $('#maxHeight').val())
             if ($('#ageRangeMin').val() === $('#ageRangeMax').val())
                 alert("최소 나이와 최대 나이가 같습니다.");
-            else if ($('#minHeight').val() >= $('#maxHeight').val())
+            else if (parseInt($('#minHeight').val()) > parseInt($('#maxHeight').val())) {
                 alert("최소 키와 최대 키를 확인해주세요.");
-            else {
-                    $('#idealTypeForm').submit();
-            }
+            } else
+                $('#idealTypeForm').submit();
+
         });
 
     });

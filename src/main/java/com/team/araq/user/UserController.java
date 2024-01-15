@@ -199,7 +199,6 @@ public class UserController {
             return "fail";
         }
         String verKey = smsService.createRandomNum();
-        System.out.println(verKey);
         session.setAttribute("verKey", verKey);
         smsService.sendSms(phoneNum, verKey);
         return "success";
@@ -440,5 +439,13 @@ public class UserController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         if (user.getChatPass() == 0) return false;
         else return true;
+    }
+
+    @ResponseBody
+    @PostMapping("/save/phone")
+    public String savePhone(@RequestBody String phoneNum, Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        this.userService.savePhoneNum(user, phoneNum);
+        return "휴대폰 인증이 완료되었습니다.";
     }
 }
