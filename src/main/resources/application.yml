@@ -47,10 +47,6 @@ spring:
           github:
             client-id: c1826a3473b0a27b8520
             client-secret: caf912d1a28aaf10c0a78d0c7ca4a53dc2c288ab
-            redirect-uri: http://localhost:8080/login/oauth2/code/github
-            scope:
-              - user:email
-              - read:user
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
