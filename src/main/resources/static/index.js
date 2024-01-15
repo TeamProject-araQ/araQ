@@ -95,12 +95,13 @@ $(function () {
                                 [csrfHeader]: csrfToken
                             },
                             contentType: "text/plain",
-                            data: dataValue,
+                            data: dataValue.toString(),
                             success: function () {
                                 alert("성공적으로 요청이 완료되었습니다.");
                             },
                             error: function (err) {
                                 alert("요청이 실패하였습니다.");
+                                console.log(err.responseText);
                             }
                         });
                     }

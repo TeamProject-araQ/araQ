@@ -34,7 +34,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String userNameAttributeName = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-        OAuthAttributes attributes= OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         SiteUser user = saveOrUpdate(attributes);
         httpSession.setAttribute("siteUser", new SessionUser(user));
@@ -43,7 +43,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     }
 
-    private SiteUser saveOrUpdate(OAuthAttributes attributes){
+    private SiteUser saveOrUpdate(OAuthAttributes attributes) {
         Optional<SiteUser> userByEmail = userRepository.findByEmail(attributes.getEmail());
         if (userByEmail.isPresent()) {
             SiteUser user = userByEmail.get();
@@ -51,7 +51,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 return user.update(attributes.getName(), attributes.getEmail());
             }
             OAuth2Error oauth2Error = new OAuth2Error("email_already_registered", "이미 가입된 이메일 주소입니다.", null);
-            throw new OAuth2AuthenticationException(oauth2Error);        }
+            throw new OAuth2AuthenticationException(oauth2Error);
+        }
         Optional<SiteUser> userByUsername = userRepository.findByusername(attributes.getId());
         if (userByUsername.isPresent()) {
             SiteUser user = userByUsername.get();
