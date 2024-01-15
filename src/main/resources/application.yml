@@ -18,11 +18,11 @@ spring:
     username: teriyaki970326
     password: pdtv fdbj vecz mpqm
     properties:
-     mail:
-       smtp:
-         auth: true
-         starttls:
-           enable: true
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   security:
     oauth2:
@@ -44,12 +44,14 @@ spring:
             scope:
               - profile_nickname
               - account_email
+          github:
+            client-id: c1826a3473b0a27b8520
+            client-secret: caf912d1a28aaf10c0a78d0c7ca4a53dc2c288ab
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             tokenUri: https://kauth.kakao.com/oauth/token
             userInfoUri: https://kapi.kakao.com/v2/user/me
-            userNameAttribute: id
   servlet:
     multipart:
       max-file-size: 10MB

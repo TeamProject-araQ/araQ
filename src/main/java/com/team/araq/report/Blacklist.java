@@ -20,6 +20,8 @@ public class Blacklist {
 
     private String phoneNum;
 
+    private String email;
+
     private String reason;
 
     private LocalDateTime date;

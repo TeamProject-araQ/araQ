@@ -193,22 +193,25 @@ public class SiteUser {
 
     private boolean listenVoice;
 
-   private LocalDateTime getListenVoice;
+    private LocalDateTime getListenVoice;
 
-   private int araQPass;
+    private int araQPass;
 
-   private int chatPass;
+    private int chatPass;
 
-   private String chatBackground;
+    private String chatBackground;
 
-   private String chatColor;
+    private String chatColor;
 
-   private LocalDateTime getChatColor;
+    private LocalDateTime getChatColor;
 
-    public SiteUser(String username, String name, String email,LocalDateTime createDate) {
+   private boolean socialJoin;
+
+    public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
         this.name = name;
         this.email = email;
+        this.socialJoin = socialJoin;
         this.createDate = createDate;
     }
 

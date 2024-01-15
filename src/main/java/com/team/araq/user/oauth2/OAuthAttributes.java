@@ -30,13 +30,13 @@ public class OAuthAttributes {
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         if (registrationId.equals("kakao")) {
             return ofKakao(userNameAttributeName, attributes);
-        }
+        } else if (registrationId.equals("github")) return ofGithub(userNameAttributeName, attributes);
         return ofGoogle(userNameAttributeName, attributes);
     }
 
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
-        Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");  // 카카오로 받은 데이터에서 계정 정보가 담긴 kakao_account 값을 꺼낸다.
-        Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");   // 마찬가지로 profile(nickname, image_url.. 등) 정보가 담긴 값을 꺼낸다.
+        Map<String, Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
 
         return new OAuthAttributes(attributes.get("id").toString(),
                 attributes,
@@ -54,11 +54,19 @@ public class OAuthAttributes {
                 (String) attributes.get("email"));
     }
 
+    private static OAuthAttributes ofGithub(String userNameAttributeName, Map<String, Object> attributes) {
+        return new OAuthAttributes(attributes.get("id").toString(),
+                attributes,
+                userNameAttributeName,
+                (String) attributes.get("name"),
+                (String) attributes.get("email"));
+    }
+
     public SiteUser toEntity() {
         String id = null;
         if (nameAttributeKey.equals("response")) {
             id = attributes.get("id").toString();
         } else id = attributes.get(nameAttributeKey).toString();
-        return new SiteUser(id, name, email, LocalDateTime.now());
+        return new SiteUser(id, name, email, true, LocalDateTime.now());
     }
 }

@@ -26,6 +26,11 @@
         body {
             font-family: 'nanum';
         }
+
+        .selected {
+            background: #D8D3E0;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -48,14 +53,14 @@
             <a href="/">사이트 바로가기</a>
         </div>
         <div style="font-size:10pt; padding:15px;">사이트 관리</div>
-        <a class="d-flex align-items-center p-3 pt-0" th:href="@{/admin/user}">
+        <a class="d-flex align-items-center p-2 manage" th:href="@{/admin/user?selected=userManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person me-4"
                  viewBox="0 0 16 16">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
             </svg>
             <div>회원 관리</div>
         </a>
-        <a class="d-flex align-items-center p-3 pt-0" th:href="@{/admin/post}">
+        <a class="d-flex align-items-center p-2 manage" th:href="@{/admin/post?selected=postManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-card-text me-4"
                  viewBox="0 0 16 16">
@@ -64,14 +69,14 @@
             </svg>
             <div>게시물 관리</div>
         </a>
-        <a class="d-flex align-items-center p-3 pt-0" th:href="@{/admin/review}">
+        <a class="d-flex align-items-center p-2 manage" th:href="@{/admin/review?selected=reviewManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil me-4"
                  viewBox="0 0 16 16">
                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
             </svg>
             <div>후기 관리</div>
         </a>
-        <a class="d-flex align-items-center p-3 pt-0" style="border-bottom:1px solid white;" th:href="@{/admin/payment}">
+        <a class="d-flex align-items-center p-2 manage" style="border-bottom:1px solid white;" th:href="@{/admin/payment?selected=paymentManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-credit-card me-4"
                  viewBox="0 0 16 16">
@@ -81,7 +86,7 @@
             <div>결제 관리</div>
         </a>
         <div style="font-size:10pt; padding:15px;">고객 지원</div>
-        <a class="d-flex align-items-center p-3 pt-0" th:href="@{/admin/inquiry}">
+        <a class="d-flex align-items-center p-2 manage" th:href="@{/admin/inquiry?selected=inquiryManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-mailbox me-4"
                  viewBox="0 0 16 16">
@@ -90,7 +95,7 @@
             </svg>
             <div>문의 내역</div>
         </a>
-        <a class="d-flex align-items-center p-3 pt-0" th:href="@{/admin/report}">
+        <a class="d-flex align-items-center p-2 manage" th:href="@{/admin/report?selected=reportManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-exclamation-triangle me-4" viewBox="0 0 16 16">
                 <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
@@ -98,7 +103,7 @@
             </svg>
             <div>신고 내역</div>
         </a>
-        <a class="d-flex align-items-center p-3 pt-0" style="border-bottom:1px solid white;" th:href="@{/admin/announcement}">
+        <a class="d-flex align-items-center p-2 manage" style="border-bottom:1px solid white;" th:href="@{/admin/announcement?selected=announcementManagement}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                  class="bi bi-megaphone me-4"
                  viewBox="0 0 16 16">
@@ -115,6 +120,19 @@
 <script>
     var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+</script>
+<script type="text/javascript">
+    $(function () {
+        var selectedMenu = new URLSearchParams(window.location.search).get('selected');
+        if (selectedMenu) {
+            $('.manage').each(function() {
+                var menuHref = $(this).attr('href');
+                if (menuHref.includes(selectedMenu)) {
+                    $(this).addClass('selected');
+                }
+            });
+        }
+    });
 </script>
 <script type="text/javascript" layout:fragment="script"></script>
 </body>

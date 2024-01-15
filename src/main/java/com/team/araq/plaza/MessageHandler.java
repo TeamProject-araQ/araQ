@@ -22,7 +22,6 @@ public class MessageHandler {
     @MessageMapping("/plaza/join/{code}")
     public void join(@Payload String username, @DestinationVariable String code) {
         SiteUser user = userService.getByUsername(username);
-        userService.setLocation(user, code);
         plazaService.setPeople(plazaService.getByCode(code), userService.getByLocation(code).size());
         simpMessagingTemplate.convertAndSend("/topic/plaza/join/" + code,
                 new Avatar(user.getUsername(), user.getNickName(), user.getImage(), user.getChatBackground(), user.getChatColor()));
@@ -75,15 +74,5 @@ public class MessageHandler {
         messageDto.setType("refuse");
         messageDto.setContent("강제퇴장 당하였습니다.");
         simpMessagingTemplate.convertAndSend("/topic/all/" + message, messageDto);
-    }
-
-    @MessageMapping("/plaza/delegate/{code}")
-    public void delegate(@Payload String message, @DestinationVariable String code) {
-        SiteUser user = userService.getByUsername(message);
-        Plaza plaza = plazaService.getByCode(code);
-
-        plazaService.changeManager(plaza, user);
-
-        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + message, message);
     }
 }

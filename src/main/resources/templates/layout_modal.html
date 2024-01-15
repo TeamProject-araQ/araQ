@@ -204,4 +204,33 @@
             </div>
         </div>
     </div>
+    <!-- 휴대폰 인증 -->
+    <div class="modal fade" id="verModal" tabindex="-1" aria-labelledby="verModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="verModalLabel">휴대폰 인증</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="phoneNum" class="form-label">핸드폰</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="phoneNumber">
+                            <input type="button" class="btn 버튼" onclick="sendVerKey()" value="인증번호 발송">
+                        </div>
+                    </div>
+                    <div id="verKeySection" class="mb-3" style="display: none;">
+                        <label for="authNum" class="form-label">인증 번호</label>
+                        <div class="input-group">
+                            <input type="text" id="verKey" class="form-control">
+                            <input type="button" class="btn 버튼" onclick="confirmVerKey()" value="인증번호 확인">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn 버튼-full">번호 등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

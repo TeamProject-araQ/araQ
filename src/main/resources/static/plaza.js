@@ -14,7 +14,7 @@ $(function () {
 
         stompClient.subscribe("/topic/plaza/join/" + code, function (message) {
             const data = JSON.parse(message.body);
-            if (user !== data.username) {
+            if ($("." + data.username).length === 0) {
                 createAvatar(data);
                 createParticipantList(data);
             }
@@ -50,7 +50,7 @@ $(function () {
         });
 
         stompClient.subscribe("/topic/plaza/notice/" + code, function (message) {
-            $("#plazaChatBoard").append("<p class='noticeMessage'>" + message.body + "</p>");
+            $("#plazaChatBoard").append($.parseHTML("<p class='noticeMessage'>" + message.body + "</p>"));
 
             const chatBoard = document.getElementById("plazaChatBoard");
             chatBoard.scrollTop = chatBoard.scrollHeight;
@@ -66,7 +66,7 @@ $(function () {
         });
 
         stompClient.subscribe("/topic/plaza/modify/" + code, function (message) {
-            $("#plazaBoard").css("background-image", `url('${message.body}')`);
+            window.location.reload();
         });
     });
 
@@ -155,8 +155,25 @@ $(function () {
 
     $("#participant-tab-pane").on("click", ".delegate", function () {
         if (confirm($(this).data("nick") + "님에게 방장을 위임하시겠습니까?")) {
-            stompClient.send("/app/plaza/delegate/" + code, {}, $(this).data("value"));
-            window.location.reload();
+            $.ajax({
+                url: "/plaza/delegate",
+                type: "post",
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    code: code,
+                    target: $(this).data("value")
+                }),
+                success: function () {
+                    window.location.reload();
+                },
+                error: function (error) {
+                    alert("실패");
+                    console.log(err.responseJSON.message);
+                }
+            });
         }
     });
 
@@ -286,10 +303,14 @@ $(function () {
 
     function sendLocation() {
         const element = $("." + user);
+        const left = parseInt(element.css("left"));
+        const top = parseInt(element.css("top"));
+        const parentWidth = parseInt(element.parent().css("width"));
+        const parentHeight = parseInt(element.parent().css("height"));
         const data = {
             sender: user,
-            left: element.css("left"),
-            top: element.css("top")
+            left: left / parentWidth * 100,
+            top: top / parentHeight * 100
         };
 
         stompClient.send("/app/plaza/location/" + code, {}, JSON.stringify(data));
@@ -297,6 +318,8 @@ $(function () {
 
     function showMessage(data) {
         const element = $("." + data.sender + " > .talkBox");
+        const boardMessage = $("<p class='normalMessage'></p>");
+        boardMessage.text(data.nick + ": " + data.content);
 
         element.text(data.content);
         element.show();
@@ -306,7 +329,7 @@ $(function () {
             element.hide();
         }, 3000));
 
-        $("#plazaChatBoard").append("<p class='normalMessage'>" + data.nick + ": " + data.content + "</p>");
+        $("#plazaChatBoard").append(boardMessage);
 
         const chatBoard = document.getElementById("plazaChatBoard");
         chatBoard.scrollTop = chatBoard.scrollHeight;
@@ -318,7 +341,7 @@ function createAvatar(data) {
     const element = $(
         "<div class='avatar " + data.username + "'>" +
         "<div class='talkBox card' style='background: " + data.background + "; color: " + data.color + "'></div>" +
-        "<img class='userImage' src='" + data.image + "'>" +
+        "<img class='userImage' src='" + data.image + "' alt=''>" +
         "<div class='nickname'>" + data.nickname + "</div>" +
         "<div class='status focus'></div>" +
         "</div>"
@@ -328,17 +351,25 @@ function createAvatar(data) {
 
 function moveLocation(data) {
     const element = $("." + data.sender);
+    const parentWidth = parseInt(element.parent().css("width"));
+    const parentHeight = parseInt(element.parent().css("height"));
+    const top = parseInt(data.top) * parentHeight / 100 + 5;
+    const left = parseInt(data.left) * parentWidth / 100 + 5;
     element.css({
-        top: data.top,
-        left: data.left
+        top: top,
+        left: left
     });
 }
 
 function init() {
     $(".avatar").each(function (index, element) {
+        const parentWidth = parseInt($(element).parent().css("width"));
+        const parentHeight = parseInt($(element).parent().css("height"));
+        const top = parseInt($(element).find("input:first").val()) * parentHeight / 100 + 5;
+        const left = parseInt($(element).find("input:last").val()) * parentWidth / 100 + 5;
         $(element).css({
-            top: $(element).find("input:first").val(),
-            left: $(element).find("input:last").val()
+            top: top,
+            left: left
         });
     });
 

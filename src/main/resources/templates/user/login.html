@@ -27,7 +27,7 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            color:gray;
+            color: gray;
         }
 
         .text::before,
@@ -37,7 +37,7 @@
             top: 50%;
             width: 40%;
             height: 2px;
-            background-color:lightgray;;
+            background-color: lightgray;;
         }
 
         .text::before {
@@ -54,12 +54,13 @@
 <body>
 <div class="center" style="min-width:600px;">
     <div class="d-flex justify-content-center"><a href="/">
-        <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png" style="height:100px; width:auto;">
+        <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png"
+             style="height:100px; width:auto;">
     </a></div>
     <h3 class="underline-start my-3">로그인</h3>
     <form th:action="@{/user/login}" method="post">
         <div th:if="${param.error}">
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" id="loginError">
                 사용자ID 또는 비밀번호를 확인해 주세요.
             </div>
         </div>
@@ -95,6 +96,10 @@
             <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" alt=""
                  style="width:50px; height:50px; border-radius:50%;">
         </a>
+        <a href="/oauth2/authorization/github">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt=""
+                 style="width:60px; height:60px; border-radius:50%;">
+        </a>
     </div>
     <!-- 아이디 찾기 모달 -->
     <div class="modal fade" id="findIdModal" tabindex="-1" aria-labelledby="findIdModalLabel" aria-hidden="true">
@@ -112,17 +117,17 @@
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">전화 번호</label>
                         <input type="text" id="phoneNumber" class="form-control">
-                        <button type="button" class="btn btn-primary mt-2" onclick="sendVerKey()">인증번호 보내기</button>
+                        <button type="button" class="btn 버튼-full mt-2" onclick="sendVerKey()">인증번호 보내기</button>
                     </div>
                     <div id="verKeySection" class="mb-3" style="display: none;">
                         <label for="authNum" class="form-label">인증 번호</label>
                         <input type="text" id="verKey" class="form-control">
-                        <button type="button" class="btn btn-primary mt-2" onclick="findId()">인증번호 확인</button>
+                        <button type="button" class="btn 버튼-full mt-2" onclick="findId()">인증번호 확인</button>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" onclick="findId()">확인</button>
+                    <button type="button" class="btn 버튼-full" onclick="findId()">확인</button>
                 </div>
             </div>
         </div>
@@ -164,7 +169,7 @@
                         <label for="phoneNum" class="form-label">전화 번호</label>
                         <input type="text" id="phoneNum" class="form-control">
                         <!-- 인증번호 보내기 버튼 추가 -->
-                        <button type="button" class="btn btn-primary mt-2" onclick="sendVerificationCode()">인증번호 보내기
+                        <button type="button" class="btn 버튼-full mt-2" onclick="sendVerificationCode()">인증번호 보내기
                         </button>
                         <!-- 인증번호 입력 칸 -->
                     </div>
@@ -176,7 +181,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     <!-- 확인 버튼이 아래에 있습니다. -->
-                    <button type="button" class="btn btn-primary" onclick="verifyFindInfo()">확인</button>
+                    <button type="button" class="btn 버튼-full" onclick="verifyFindInfo()">확인</button>
                 </div>
             </div>
         </div>
@@ -190,6 +195,15 @@
     var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 </script>
 <script type="text/javascript">
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+        if (errorMessage) {
+            $('#loginError').text(errorMessage);
+        }
+    };
+
     function sendVerKey() {
         var name = $('#name').val();
         var phoneNum = $('#phoneNumber').val();
@@ -198,9 +212,9 @@
             type: 'POST',
             url: '/user/sendVerKey',
             contentType: 'application/json',
-            data: JSON.stringify({ name: name, phoneNum: phoneNum }),
+            data: JSON.stringify({name: name, phoneNum: phoneNum}),
             headers: {
-               'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': csrfToken
             },
             success: function (response) {
                 if (response === "success") {
@@ -225,7 +239,7 @@
             type: 'POST',
             url: '/user/findId',
             contentType: 'application/json',
-            data: JSON.stringify({ name: name, phoneNum: phoneNum, verKey: verKey }),
+            data: JSON.stringify({name: name, phoneNum: phoneNum, verKey: verKey}),
             headers: {
                 [csrfHeader]: csrfToken
             },
@@ -284,7 +298,7 @@
             type: 'POST',
             url: '/user/sendVerificationCode',
             contentType: 'application/json',
-            data: JSON.stringify({ username: username, phoneNum: phoneNum }),
+            data: JSON.stringify({username: username, phoneNum: phoneNum}),
             headers: {
                 'X-CSRF-TOKEN': csrfToken
             },
@@ -311,24 +325,24 @@
             var username = $('#id').val();
 
             $.ajax({
-            type: 'POST',
-            url: '/user/sendEmail',
-            contentType: 'application/json',
-            data: JSON.stringify({ username: username, email: email }),
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
-            },
-            success: function (response) {
-                if (response === "success") {
-                    alert('이메일을 발송했습니다.');
-                } else {
-                    alert('그런 사람없다.');
-                }
-            },
-            error: function () {
-                alert('서버 오류');
-            },
-        });
+                type: 'POST',
+                url: '/user/sendEmail',
+                contentType: 'application/json',
+                data: JSON.stringify({username: username, email: email}),
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    if (response === "success") {
+                        alert('이메일을 발송했습니다.');
+                    } else {
+                        alert('그런 사람없다.');
+                    }
+                },
+                error: function () {
+                    alert('서버 오류');
+                },
+            });
         } else if (selectedMethod === 'phone') {
             var verificationCode = $('#authNum').val();
             var username = $('#id').val();
@@ -346,15 +360,15 @@
                 headers: {
                     [csrfHeader]: csrfToken
                 },
-                success: function(response) {
-                    if(response.token) {
+                success: function (response) {
+                    if (response.token) {
                         alert('인증에 성공했습니다.');
-                        window.location.href = '/user/resetPw/'+ response.token;
+                        window.location.href = '/user/resetPw/' + response.token;
                     } else {
                         alert('인증에 실패했습니다.');
                     }
                 },
-                error: function() {
+                error: function () {
                     alert('서버 오류');
                 }
             });

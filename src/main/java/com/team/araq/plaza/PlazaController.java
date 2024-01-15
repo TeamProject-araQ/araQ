@@ -70,7 +70,6 @@ public class PlazaController {
             model.addAttribute("alarm", "해당 광장의 정원이 가득 찼습니다.");
             return "plaza/list";
         }
-        ;
         SiteUser user = userService.getByUsername(principal.getName());
         userService.setLocation(user, code);
         userService.setUserLocationInPlaza(user, "0px", "0px");
@@ -85,11 +84,9 @@ public class PlazaController {
         Plaza plaza = plazaService.getByCode(code);
         File dir = new File("C:/uploads/plaza");
 
-        if (dir != null) {
-            for (File file : Objects.requireNonNull(dir.listFiles())) {
-                if (file.getName().contains(code))
-                    file.delete();
-            }
+        for (File file : Objects.requireNonNull(dir.listFiles())) {
+            if (file.getName().contains(code))
+                file.delete();
         }
         plazaService.delete(plaza);
         return "redirect:/plaza/list";
@@ -129,6 +126,18 @@ public class PlazaController {
         plazaService.setImg(plaza, imgPath);
         simpMessagingTemplate.convertAndSend("/topic/plaza/modify/" + plazaDto.getCode(), imgPath);
 
+        return null;
+    }
+
+    @PostMapping("/delegate")
+    @ResponseBody
+    public String delegate(@RequestBody Map<String, String> data) {
+        String code = data.get("code");
+        String value = data.get("target");
+        Plaza plaza = plazaService.getByCode(code);
+        SiteUser target = userService.getByUsername(value);
+        plazaService.changeManager(plaza, target);
+        simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + value, value);
         return null;
     }
 }

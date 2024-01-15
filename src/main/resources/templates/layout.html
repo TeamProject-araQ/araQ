@@ -131,8 +131,7 @@
         <li class="option"><a href="#">고객지원</a></li>
         <ul class="depth">
             <li><a th:href="@{/announcement/list}">공지사항</a></li>
-            <li><a href="#">자주 묻는 질문</a></li>
-            <li><a th:href="@{/inquiry/list}">나문희</a></li>
+            <li><a th:href="@{/inquiry/list}">문의게시판</a></li>
             <li><a th:href="@{/review/list}">회원 후기</a></li>
         </ul>
     </ul>
@@ -219,6 +218,7 @@
     </div>
     <input type="hidden" id="userIdealType" th:value="${user.idealType}">
     <input type="hidden" th:value="${user.nickName}" id="loginUserNick">
+    <input type="hidden" th:value="${user.phoneNum}" id="phone">
 </div>
 <div th:replace="~{layout_modal :: modal}"></div>
 <input type="hidden" sec:authorize="isAuthenticated()" th:value="${user.username}" id="hiddenUserName">
