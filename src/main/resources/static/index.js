@@ -19,7 +19,6 @@ function scrollToBottom() {
 }
 
 $(function () {
-
     $('#recommendedMatches').popover({
         html: true,
         content: "<strong><추천 매칭></strong> 에는 매칭 우선권을 구매한 회원만 표시됩니다."

@@ -2,6 +2,7 @@ package com.team.araq.user.oauth2;
 
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserRepository;
+import com.team.araq.user.UserRole;
 import edu.emory.mathcs.backport.java.util.Collections;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         SiteUser user = saveOrUpdate(attributes);
         httpSession.setAttribute("siteUser", new SessionUser(user));
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")), attributes.getAttributes(), attributes.getNameAttributeKey());
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue())), attributes.getAttributes(), attributes.getNameAttributeKey());
 
     }
 
@@ -57,6 +58,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             return user.update(attributes.getName(), attributes.getEmail());
         } else {
             SiteUser newUser = attributes.toEntity();
+            newUser.setRole(UserRole.NEW);
             return userRepository.save(newUser);
         }
     }

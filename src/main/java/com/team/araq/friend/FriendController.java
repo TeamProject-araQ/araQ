@@ -28,8 +28,8 @@ public class FriendController {
     @MessageMapping("/friend/request")
     public void requestFriend(@Payload String username) {
         JSONObject jsonObject = new JSONObject(username);
-        SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
-        SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
+        SiteUser sender = this.userService.getByUsername(String.valueOf(jsonObject.get("sender")));
+        SiteUser receiver = this.userService.getByUsername(String.valueOf(jsonObject.get("receiver")));
         Friend friend = this.friendService.checkFriend(sender, receiver);
         if (friend == null) {
             messagingTemplate.convertAndSend("/topic/friend/request/possible/" + receiver.getUsername(), username);
@@ -47,8 +47,8 @@ public class FriendController {
     @PostMapping("/accept")
     public String acceptRequest(@RequestBody String username) {
         JSONObject jsonObject = new JSONObject(username);
-        SiteUser receiver = this.userService.getByUsername((String) jsonObject.get("receiver"));
-        SiteUser sender = this.userService.getByUsername((String) jsonObject.get("sender"));
+        SiteUser receiver = this.userService.getByUsername(String.valueOf(jsonObject.get("receiver")));
+        SiteUser sender = this.userService.getByUsername(String.valueOf(jsonObject.get("sender")));
         Friend friend = this.friendService.getFriend(sender, receiver);
         this.friendService.acceptFriend(friend);
         return sender.getNickName() + "님이 친구로 등록되었습니다.";

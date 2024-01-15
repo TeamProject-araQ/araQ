@@ -58,8 +58,8 @@ public class OAuthAttributes {
         return new OAuthAttributes(attributes.get("id").toString(),
                 attributes,
                 userNameAttributeName,
-                (String) attributes.get("name"),
-                (String) attributes.get("email"));
+                attributes.get("name").toString(),
+                attributes.get("email").toString());
     }
 
     public SiteUser toEntity() {

@@ -41,12 +41,12 @@ public class PaymentController {
         Payment payment = this.paymentService.getPayment(impUid);
         if (payment.getStatus().equals("cancelled"))
             return "이미 취소된 결제입니다.";
-        else if (payment.getUser().getBubble() < payment.getAmount())
+        else if (payment.getUser().getBubble() < payment.getBubble())
             return "이미 사용된 결제 내역입니다.";
         else {
             this.paymentService.cancelPayment(impUid);
             this.paymentService.updatePayment(payment, impUid);
-            this.userService.minusBubbles(payment.getUser(), payment.getAmount());
+            this.userService.minusBubbles(payment.getUser(), payment.getBubble());
         }
 
         return "결제가 취소되었습니다.";

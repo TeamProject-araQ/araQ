@@ -56,7 +56,6 @@ public class UserService {
         };
     }
 
-
     public SiteUser create(UserCreateForm userCreateForm) throws IOException {
         SiteUser user = new SiteUser();
         user.setUsername(userCreateForm.getUsername());
@@ -64,7 +63,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        if (userCreateForm.getUsername().equals("admin")) user.setRole(UserRole.ADMIN);
+        if (userCreateForm.getUsername().equals("admin1234")) user.setRole(UserRole.ADMIN);
         else user.setRole(UserRole.NEW);
         return userRepository.save(user);
     }
@@ -249,7 +248,7 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         }
-        throw new UsernameNotFoundException("그런 사람 없습니다.");
+        throw new RuntimeException("그런 사람 없습니다.");
     }
 
     public List<SiteUser> getRandomList(String gender) {
