@@ -31,13 +31,22 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/user/**"),
+                                new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/bootstrap**"),
                                 new AntPathRequestMatcher("/layout**"),
-                                new AntPathRequestMatcher("/araq**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                                new AntPathRequestMatcher("/araq**"),
+                                new AntPathRequestMatcher("/js/**"),
+                                new AntPathRequestMatcher("/image/**"),
+                                new AntPathRequestMatcher("/css/**"),
+                                new AntPathRequestMatcher("/font/**"),
+                                new AntPathRequestMatcher("/ws/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
+
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .accessDeniedHandler(new CustomDeniedHandler()))
 
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
