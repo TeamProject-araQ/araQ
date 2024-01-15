@@ -2,7 +2,7 @@
 <div layout:fragment="content" class="container my-3" style="min-width: 350px;">
     <h3 th:text="|${target.nickName}님의 연애관 테스트|" class="underline my-3"></h3>
     <table class="table text-center table-hover mt-3">
-        <thead style="background:#D8D3E0;">
+        <thead class="table-head">
         <tr>
             <th style="width: 5%;">번호</th>
             <th style="width: 65%;">문제</th>
@@ -181,6 +181,7 @@
         <input type="hidden" th:value="${target.username}" id="targetName" name="username">
         <input type="hidden" id="options" name="options">
     </form>
+    <input type="hidden" th:value="${user.nickName}" id="nick">
 </div>
 <script layout:fragment="script">
     $(function () {
@@ -202,7 +203,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(options),
                 success: function (response) {
-                    alert("당신의 점수는 " + response + "점 입니다");
+                    alert($('#nick').val() + "님의 점수는 " + response + "점 입니다.");
                     options["score"] = response;
                     if (confirm("결과를 확인하시겠습니까?")) {
                         $('#options').val(JSON.stringify(options));

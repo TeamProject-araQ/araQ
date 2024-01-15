@@ -101,7 +101,6 @@ public class TasteController {
             String value = "option" + i;
             answers.add((String) jsonObject.get(value));
         }
-        System.out.println(answers );
         model.addAttribute("target", user);
         model.addAttribute("answers", answers);
         model.addAttribute("score", jsonObject.get("score"));

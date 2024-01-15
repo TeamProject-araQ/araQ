@@ -116,13 +116,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">전화 번호</label>
-                        <input type="text" id="phoneNumber" class="form-control">
-                        <button type="button" class="btn 버튼-full mt-2" onclick="sendVerKey()">인증번호 보내기</button>
+                        <div class="input-group">
+                            <input type="text" id="phoneNumber" class="form-control">
+                            <input type="button" class="btn 버튼-full" onclick="sendVerKey()" value="인증번호 발송">
+                        </div>
                     </div>
                     <div id="verKeySection" class="mb-3" style="display: none;">
                         <label for="authNum" class="form-label">인증 번호</label>
-                        <input type="text" id="verKey" class="form-control">
-                        <button type="button" class="btn 버튼-full mt-2" onclick="findId()">인증번호 확인</button>
+                        <div class="input-group">
+                            <input type="text" id="verKey" class="form-control">
+                            <input type="button" class="btn 버튼-full" onclick="findId()" value="인증번호 확인">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -196,7 +200,7 @@
 </script>
 <script type="text/javascript">
 
-    window.onload = function() {
+    window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
         const errorMessage = urlParams.get('error');
         if (errorMessage) {
