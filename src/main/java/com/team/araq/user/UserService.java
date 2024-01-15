@@ -63,11 +63,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        user.setRole(UserRole.NEW);
+        if (userCreateForm.getUsername().equals("admin")) user.setRole(UserRole.ADMIN);
+        else user.setRole(UserRole.NEW);
         return userRepository.save(user);
     }
 
-    public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+    public void update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -123,10 +124,9 @@ public class UserService {
         }
         user.setRole(UserRole.USER);
         userRepository.save(user);
-        return user;
     }
 
-    public SiteUser edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+    public void edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -141,7 +141,6 @@ public class UserService {
         user.setGender(userUpdateForm.getGender());
         user.setIntroduce(userUpdateForm.getIntroduce());
         userRepository.save(user);
-        return user;
     }
 
     public SiteUser getByUsername(String username) {

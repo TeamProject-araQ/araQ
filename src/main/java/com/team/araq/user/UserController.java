@@ -16,6 +16,10 @@ import org.json.JSONObject;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,13 +89,6 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    @PostMapping("/update")
-    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm) throws IOException {
-        SiteUser user = userService.getByUsername(username);
-        userService.update(user, userUpdateForm);
-        return "redirect:/";
-    }
-
     @GetMapping("/login")
     public String login() {
         return "user/login";
@@ -101,6 +99,23 @@ public class UserController {
         SiteUser user = userService.getByUsername(principal.getName());
         model.addAttribute("user", user);
         return "user/updateInfo";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, Principal principal) throws IOException {
+        SiteUser user = userService.getByUsername(username);
+        userService.update(user, userUpdateForm);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> auths = new ArrayList<>();
+        auths.add(new SimpleGrantedAuthority(user.getRole().getValue()));
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                auth.getPrincipal(), auth.getCredentials(), auths
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        return "redirect:/";
     }
 
     @PostMapping("/checkCurrentPw")

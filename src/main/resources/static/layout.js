@@ -19,7 +19,6 @@ $(function () {
     $('#matchHourLeft').text(daysLeft + "일 " + hoursLeft + "시간");
 
     var chatPurchaseTime = new Date($('#chatHourLeft').text());
-    console.log(chatPurchaseTime);
     var chatDayLater = new Date(chatPurchaseTime.getTime() + 7 * 24 * 60 * 60 * 1000);
     var chatTotalHoursLeft = (chatDayLater - currentTime) / (1000 * 60 * 60);
     $('#chatHourLeft').text(Math.floor(chatTotalHoursLeft / 24) + "일 " + Math.floor(chatTotalHoursLeft % 24) + "시간");
@@ -550,7 +549,6 @@ function sendVerKey() {
 function confirmVerKey() {
     var phoneNum = $('#phoneNumber').val();
     var verKey = $('#verKey').val();
-    console.log(verKey);
 
     $.ajax({
         type: 'POST',
