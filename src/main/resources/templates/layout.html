@@ -66,7 +66,7 @@
 
         .nav-link {
             font-size: 13pt;
-            font-family: nanum-semiBold,serif;
+            font-family: nanum-semiBold, serif;
         }
 
         .navbar {
@@ -148,10 +148,46 @@
         <div class="d-flex justify-content-center align-items-center mt-3">
             <div class="fs-3 pb-1" th:text="${user.nickName}"></div>
             <div class="ms-1">님</div>
-            <a class="btn btn-sm 버튼" th:href="@{/reset}" th:if="${user.username.equals('njk7740')}">테스트</a>
         </div>
         <div>환영합니다!</div>
-        <div class="row mt-5">
+        <button class="btn 버튼 w-100 my-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
+            보유중인 이용권
+        </button>
+        <div class="collapse" id="collapseWidthExample">
+            <div class="card" style="font-size: 11pt;">
+                <div class="d-flex align-items-center p-1">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">내 버블</div>
+                    <div th:text=" ${user.bubble}"></div>
+                    <img src="/image/araQ/bubble.jpg" alt="" style="width: 20px; height: 20px; margin-left: 5px;">
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.preference == true}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">매칭 우선권</div>
+                    <div id="matchHourLeft" class="ms-1" th:text="${user.getPreferenceTime}"></div>
+                    <input type="hidden" id="preferenceDay"
+                           th:value="${user.preference1Day ? '1' : (user.preference7Day ? '7' : (user.preference30Day ? '30' : '0'))}">
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.listenVoice == true}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">음성 이용권</div>
+                    <div id="voiceHourLeft" class="ms-1" th:text="${user.getListenVoice}"></div>
+                    <input type="hidden" id="voiceDay"
+                           th:value="${user.listenVoice1Day ? '1' : (user.listenVoice7Day ? '7' : (user.listenVoice30Day ? '30' : '0'))}">
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.chatColor != null}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">말풍선 이용권</div>
+                    <div id="chatHourLeft" class="ms-1" th:text="${user.getChatColor}"></div>
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.chatPass > 0}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">채팅 이용권</div>
+                    <div class="ms-1" th:text="|${user.chatPass}개|"></div>
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.araQPass > 0}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">아라큐 이용권</div>
+                    <div class="ms-1" th:text="|${user.araQPass}개|"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
             <a class="col-4 justify-content-center" th:href="@{/payment}"
                style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/araQ/bubbles.png" alt="" style="width:40px; height:40px;">

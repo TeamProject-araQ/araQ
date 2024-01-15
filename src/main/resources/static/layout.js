@@ -2,6 +2,35 @@ $(function () {
     const loginUser = $('#hiddenUserName').val();
     const loginUserNick = $('#loginUserNick').val();
 
+    var preferenceDay = $('#preferenceDay').val();
+    var purchaseTime = new Date($('#matchHourLeft').text());
+    var dayLater = new Date(purchaseTime.getTime() + preferenceDay * 24 * 60 * 60 * 1000);
+    var currentTime = new Date();
+    currentTime = new Date(Date.UTC(
+        currentTime.getUTCFullYear(),
+        currentTime.getUTCMonth(),
+        currentTime.getUTCDate(),
+        currentTime.getUTCHours(),
+        currentTime.getUTCMinutes(),
+        currentTime.getUTCSeconds()));
+    var totalHoursLeft = (dayLater - currentTime) / (1000 * 60 * 60);
+    var daysLeft = Math.floor(totalHoursLeft / 24);
+    var hoursLeft = Math.floor(totalHoursLeft % 24);
+    $('#matchHourLeft').text(daysLeft + "일 " + hoursLeft + "시간");
+
+    var chatPurchaseTime = new Date($('#chatHourLeft').text());
+    var chatDayLater = new Date(chatPurchaseTime.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var chatTotalHoursLeft = (chatDayLater - currentTime) / (1000 * 60 * 60);
+    $('#chatHourLeft').text(Math.floor(chatTotalHoursLeft / 24) + "일 " + Math.floor(chatTotalHoursLeft % 24) + "시간");
+
+    var voiceDay = $('#voiceDay').val();
+    var voicePurchaseTime = new Date($('#voiceHourLeft').text());
+    var voiceDayLater = new Date(voicePurchaseTime.getTime() + voiceDay * 24 * 60 * 60 * 1000);
+    var voiceTotalHoursLeft = (voiceDayLater - currentTime) / (1000 * 60 * 60);
+    var voiceDaysLeft = Math.floor(voiceTotalHoursLeft / 24);
+    var voiceHoursLeft = Math.floor(voiceTotalHoursLeft % 24);
+    $('#voiceHourLeft').text(voiceDaysLeft + "일 " + voiceHoursLeft + "시간");
+
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
     stompClient.debug = null;
@@ -381,28 +410,6 @@ $(function () {
         });
     });
 
-    function initiatePayment(audioOwnerId) {
-        $.ajax({
-            url: "/pay",
-            type: "POST",
-            headers: {
-                [csrfHeader]: csrfToken
-            },
-            contentType: "text/plain",
-            data: $(".username").val(),
-            success: function (data) {
-                if (data) alert("결제가 완료되었습니다.");
-                else {
-                    if (confirm("보유하신 버블이 부족합니다. 결제 페이지로 이동하시겠습니까?"))
-                        location.href = "/payment";
-                }
-            },
-            error: function (err) {
-                alert(err.responseText);
-            }
-        });
-    }
-
     $('.friendRequest').on('click', function () {
         var userNick = $(this).data("nick");
         var username = $(this).data("value");
@@ -431,7 +438,7 @@ $(function () {
         }
     });
 
-    $('#content').keypress(function(e) {
+    $('#content').keypress(function (e) {
         if (e.keyCode == 13) {
             $('.sendBtn').click();
         }
@@ -451,7 +458,7 @@ $(function () {
         }
     });
 
-    $('.answerContent').keypress(function(e) {
+    $('.answerContent').keypress(function (e) {
         if (e.keyCode == 13) {
             $('.answerBtn').click();
         }
@@ -462,7 +469,7 @@ $(function () {
         if ($('#userIdealType').val() === "") {
             if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
                 window.location.assign("/idealType/create");
-        } else location.href = $(this).data("uri");
+        } else window.location.assign($(this).data("uri"));
     });
 
     $('#messageToast .message').on('click', function () {
@@ -486,27 +493,27 @@ $(function () {
     $('.saveNum').on('click', function () {
         var phoneNum = $('#phoneNumber').val();
         phoneNum = phoneNum.replace(/-/g, '');
-       if (verKeyConfirmed === false)
-           alert("인증번호 확인이 완료되지 않았습니다.");
-       else {
-           $.ajax({
-               url:"/user/save/phone",
-               type:"POST",
-               contentType:"text/plain",
-               data:phoneNum,
-               headers: {
-                   [csrfHeader]:csrfToken
-               },
-               success:function (data) {
-                   alert(data);
-                   $('#verModal').modal('hide');
+        if (verKeyConfirmed === false)
+            alert("인증번호 확인이 완료되지 않았습니다.");
+        else {
+            $.ajax({
+                url: "/user/save/phone",
+                type: "POST",
+                contentType: "text/plain",
+                data: phoneNum,
+                headers: {
+                    [csrfHeader]: csrfToken
+                },
+                success: function (data) {
+                    alert(data);
+                    $('#verModal').modal('hide');
 
-               },
-               error: function (err) {
-                   console.log(err);
-               }
-           })
-       }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
     });
 });
 
@@ -521,7 +528,7 @@ function sendVerKey() {
         type: 'POST',
         url: '/user/signupAuth',
         contentType: 'application/json',
-        data: JSON.stringify({ phoneNum: phoneNum }),
+        data: JSON.stringify({phoneNum: phoneNum}),
         headers: {
             'X-CSRF-TOKEN': csrfToken
         },
@@ -542,17 +549,16 @@ function sendVerKey() {
 function confirmVerKey() {
     var phoneNum = $('#phoneNumber').val();
     var verKey = $('#verKey').val();
-    console.log(verKey);
 
     $.ajax({
         type: 'POST',
         url: '/user/confirmPhoneNum',
         contentType: 'application/json',
-        data: JSON.stringify({ phoneNum: phoneNum, verKey: verKey }),
+        data: JSON.stringify({phoneNum: phoneNum, verKey: verKey}),
         headers: {
             [csrfHeader]: csrfToken
         },
-        success: function(response) {
+        success: function (response) {
             if (response === "success") {
                 alert('인증번호가 확인되었습니다.');
                 verKeyConfirmed = true;

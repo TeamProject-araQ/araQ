@@ -171,10 +171,10 @@
                     <!-- 핸드폰 번호 입력 섹션 -->
                     <div id="phoneSection" class="mb-3" style="display: none;">
                         <label for="phoneNum" class="form-label">전화 번호</label>
-                        <input type="text" id="phoneNum" class="form-control">
-                        <!-- 인증번호 보내기 버튼 추가 -->
-                        <button type="button" class="btn 버튼-full mt-2" onclick="sendVerificationCode()">인증번호 보내기
-                        </button>
+                        <div class="input-group">
+                            <input type="text" id="phoneNum" class="form-control">
+                            <input type="button" class="btn 버튼-full" onclick="sendVerificationCode()" value="인증번호 보내기">
+                        </div>
                         <!-- 인증번호 입력 칸 -->
                     </div>
                     <div id="authNumSection" class="mb-3" style="display: none;">
@@ -211,6 +211,7 @@
     function sendVerKey() {
         var name = $('#name').val();
         var phoneNum = $('#phoneNumber').val();
+        phoneNum = phoneNum.replace(/-/g, '');
 
         $.ajax({
             type: 'POST',
@@ -225,7 +226,7 @@
                     alert('인증번호을 발송했습니다.');
                     $('#verKeySection').show();
                 } else {
-                    alert('그런 사람없다.');
+                    alert('가입되지 않은 정보입니다.');
                 }
             },
             error: function () {
@@ -237,6 +238,7 @@
     function findId() {
         var name = $('#name').val();
         var phoneNum = $('#phoneNumber').val();
+        phoneNum = phoneNum.replace(/-/g, '');
         var verKey = $('#verKey').val();
 
         $.ajax({
@@ -247,16 +249,15 @@
             headers: {
                 [csrfHeader]: csrfToken
             },
-            success: function (response) {
-                if (response !== "fail") {
+            success: function (data) {
+                if (data !== "fail") {
                     $('#findIdModal').modal('hide');
-                    alert('인증번호가 확인되었습니다.');
-                    alert('아이디 : ' + response);
+                    alert(data);
                 } else {
                     alert('인증번호가 일치하지 않습니다.');
                 }
             },
-            error: function () {
+            error: function (err) {
                 alert('서버 오류');
             }
         });
@@ -340,7 +341,7 @@
                     if (response === "success") {
                         alert('이메일을 발송했습니다.');
                     } else {
-                        alert('그런 사람없다.');
+                        alert('가입된 회원이 아닙니다.');
                     }
                 },
                 error: function () {
