@@ -434,7 +434,7 @@ $(function () {
                 receiver: receiver,
                 content: content
             }));
-            location.reload();
+            window.location.reload();
         }
     });
 
@@ -454,7 +454,7 @@ $(function () {
                 receiver: receiver,
                 content: content
             }));
-            location.reload();
+            window.location.reload();
         }
     });
 

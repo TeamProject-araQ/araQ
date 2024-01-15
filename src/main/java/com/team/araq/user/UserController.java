@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -138,7 +139,10 @@ public class UserController {
     }
 
     @GetMapping("/updatePw")
-    public String checkPw() {
+    public String checkPw(Principal principal) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.isSocialJoin())
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         return "user/updatePw";
     }
 

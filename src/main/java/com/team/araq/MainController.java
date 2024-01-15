@@ -60,4 +60,9 @@ public class MainController {
         userService.logout(userService.getLoginUsers());
         return "redirect:/";
     }
+
+    @GetMapping("/onlyAdmin")
+    public String onlyAdmin() {
+        return "error/onlyAdmin";
+    }
 }

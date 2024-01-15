@@ -12,7 +12,7 @@ public class CustomDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         if (request.getRequestURI().startsWith("/admin")){
-            // response.sendRedirect("관리자 권한 없으면 여기로 리디렉트");
+            response.sendRedirect("/onlyAdmin");
         } else response.sendRedirect("/user/update");
     }
 }
