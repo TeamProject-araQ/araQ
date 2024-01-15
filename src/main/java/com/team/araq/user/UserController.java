@@ -12,6 +12,7 @@ import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -221,9 +222,10 @@ public class UserController {
     // 아이디 찾기시 문자인증 번호 보내기
     @PostMapping("/sendVerKey")
     @ResponseBody
-    public String sendVerKey(@RequestBody Map<String, String> data, HttpSession session) {
-        String name = data.get("name");
-        String phoneNum = data.get("phoneNum");
+    public String sendVerKey(@RequestBody String data, HttpSession session) {
+        JSONObject jsonObject = new JSONObject(data);
+        String name = jsonObject.get("name").toString();
+        String phoneNum = jsonObject.get("phoneNum").toString();
 
         SiteUser user = userService.getByNameAndPhoneNum(name, phoneNum);
 
@@ -236,21 +238,20 @@ public class UserController {
         return "fail";
     }
 
-
-    // 아이디 찾기시 문자 인증번호 확인 후 아이디 보여주기
     @PostMapping("/findId")
     @ResponseBody
-    public String findId(@RequestBody Map<String, String> data, HttpSession session) {
-        String name = data.get("name");
-        String phoneNum = data.get("phoneNum");
-        String verKey = data.get("verKey");
+    public String findId(@RequestBody String data, HttpSession session) {
+        JSONObject jsonObject = new JSONObject(data);
+        String name = jsonObject.get("name").toString();
+        String phoneNum = jsonObject.get("phoneNum").toString();
+        String verKey = jsonObject.get("verKey").toString();
 
         String storedVerKey = (String) session.getAttribute("verKey");
 
         if (verKey.equals(storedVerKey)) {
             SiteUser user = userService.getByNameAndPhoneNum(name, phoneNum);
-            String username = user.getUsername();
-            return username;
+            if (user.isSocialJoin()) return "소셜 로그인으로 가입된 회원입니다.";
+            return "회원님의 아이디는 " + user.getUsername() + " 입니다.";
         }
         return "fail";
     }

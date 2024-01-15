@@ -249,7 +249,7 @@ public class UserService {
         if (user.isPresent()) {
             return user.get();
         }
-        throw new UsernameNotFoundException("그런 사람 없습니다.");
+        throw new RuntimeException("그런 사람 없습니다.");
     }
 
     public List<SiteUser> getRandomList(String gender) {
