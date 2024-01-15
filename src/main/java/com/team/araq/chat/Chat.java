@@ -28,5 +28,6 @@ public class Chat {
     private LocalDateTime createDate;
     private Integer confirm;
     private boolean difDate;
+    @Column(length = 1000)
     private List<String> images;
 }
