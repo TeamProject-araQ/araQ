@@ -528,4 +528,10 @@ public class UserService {
             this.userRepository.save(user);
         }
     }
+
+
+    public void savePhoneNum(SiteUser user, String phoneNum) {
+        user.setPhoneNum(phoneNum);
+        this.userRepository.save(user);
+    }
 }

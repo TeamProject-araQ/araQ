@@ -457,10 +457,11 @@ $(function () {
         }
     });
 
-    $('.idealTypeMatchLink').on('click', function () {
+    $('.idealTypeMatchLink').on('click', function (event) {
+        event.preventDefault();
         if ($('#userIdealType').val() === "") {
             if (confirm("이상형 선택이 완료되지 않았습니다. 선택 화면으로 이동합니다."))
-                location.href = "/idealType/create";
+                window.location.assign("/idealType/create");
         } else location.href = $(this).data("uri");
     });
 
@@ -480,6 +481,32 @@ $(function () {
                 console.log(err);
             }
         });
+    });
+
+    $('.saveNum').on('click', function () {
+        var phoneNum = $('#phoneNumber').val();
+        phoneNum = phoneNum.replace(/-/g, '');
+       if (verKeyConfirmed === false)
+           alert("인증번호 확인이 완료되지 않았습니다.");
+       else {
+           $.ajax({
+               url:"/user/save/phone",
+               type:"POST",
+               contentType:"text/plain",
+               data:phoneNum,
+               headers: {
+                   [csrfHeader]:csrfToken
+               },
+               success:function (data) {
+                   alert(data);
+                   $('#verModal').modal('hide');
+
+               },
+               error: function (err) {
+                   console.log(err);
+               }
+           })
+       }
     });
 });
 
