@@ -63,8 +63,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        userRepository.save(user);
-        return user;
+        user.setRole(UserRole.NEW);
+        return userRepository.save(user);
     }
 
     public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
@@ -121,6 +121,7 @@ public class UserService {
             user.setImages(defaultImages);
             user.setImage(defaultImages.get(0));
         }
+        user.setRole(UserRole.USER);
         userRepository.save(user);
         return user;
     }

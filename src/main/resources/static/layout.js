@@ -17,9 +17,6 @@ $(function () {
     let targetPeer = null;
     let location = (typeof code === "undefined") ? window.location.pathname : code;
 
-    if (loginUserNick.trim() === "" && window.location.pathname !== "/user/update")
-        window.location.href = "/user/update";
-
     stompClient.connect({}, function (frame) {
         if (Notification.permission !== "granted") {
             Notification.requestPermission().then(r => {
