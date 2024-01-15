@@ -199,15 +199,6 @@ public class UserService {
         return this.userRepository.findAll(specification, pageable);
     }
 
-    public void createAdmin() {
-        SiteUser user = new SiteUser();
-        user.setUsername("admin");
-        user.setNickName("관리자");
-        user.setImage("/image/user/admin.png");
-        user.setPassword(passwordEncoder.encode("admin"));
-        this.userRepository.save(user);
-    }
-
     public void deleteUser(SiteUser user) {
         this.userRepository.delete(user);
     }
