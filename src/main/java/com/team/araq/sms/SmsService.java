@@ -36,6 +36,7 @@ public class SmsService {
             String random = Integer.toString(rand.nextInt(10));
             randomNum += random;
         }
+        System.out.println(randomNum);
         return randomNum;
     }
 }

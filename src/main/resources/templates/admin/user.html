@@ -35,8 +35,9 @@
             <th>닉네임</th>
             <th>성별</th>
             <th>나이</th>
-            <th style="width:40%;">주소</th>
+            <th style="width:30%;">주소</th>
             <th>가입일</th>
+            <th>권한 변경</th>
         </tr>
         </thead>
         <tbody>
@@ -50,6 +51,14 @@
             <td th:text="${user.age}"></td>
             <td class="text-start" th:text="${user.address}"></td>
             <td th:text="${#temporals.format(user.createDate, 'yyyy-MM-dd')}"></td>
+            <td>
+                <form th:action="@{/admin/grantRole}" method="post">
+                    <input type="hidden" name="username" th:value="${user.username}" />
+                    <a href="#" class="grant-role-link" onclick="submitForm(event)">
+                        <span th:text="${user.role}"></span>
+                    </a>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -128,5 +137,12 @@
             }
         });
     });
+
+    function submitForm(event) {
+        event.preventDefault();
+        if (confirm('권한을 변경하시겠습니까?')) {
+            event.target.closest('form').submit();
+        }
+    }
 </script>
 </html>
