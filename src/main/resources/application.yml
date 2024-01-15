@@ -52,6 +52,8 @@ spring:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             tokenUri: https://kauth.kakao.com/oauth/token
             userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -74,5 +76,3 @@ imp:
 #    key-store-type: PKCS12
 #    key-alias: bns-ssl
 #  port: 8443
-
-
