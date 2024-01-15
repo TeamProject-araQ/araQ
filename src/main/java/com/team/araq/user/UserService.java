@@ -63,11 +63,12 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        userRepository.save(user);
-        return user;
+        if (userCreateForm.getUsername().equals("admin")) user.setRole(UserRole.ADMIN);
+        else user.setRole(UserRole.NEW);
+        return userRepository.save(user);
     }
 
-    public SiteUser update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+    public void update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -121,11 +122,11 @@ public class UserService {
             user.setImages(defaultImages);
             user.setImage(defaultImages.get(0));
         }
+        user.setRole(UserRole.USER);
         userRepository.save(user);
-        return user;
     }
 
-    public SiteUser edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+    public void edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -140,7 +141,6 @@ public class UserService {
         user.setGender(userUpdateForm.getGender());
         user.setIntroduce(userUpdateForm.getIntroduce());
         userRepository.save(user);
-        return user;
     }
 
     public SiteUser getByUsername(String username) {
@@ -196,15 +196,6 @@ public class UserService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
         Specification<SiteUser> specification = search(kw);
         return this.userRepository.findAll(specification, pageable);
-    }
-
-    public void createAdmin() {
-        SiteUser user = new SiteUser();
-        user.setUsername("admin");
-        user.setNickName("관리자");
-        user.setImage("/image/user/admin.png");
-        user.setPassword(passwordEncoder.encode("admin"));
-        this.userRepository.save(user);
     }
 
     public void deleteUser(SiteUser user) {

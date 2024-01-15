@@ -207,6 +207,8 @@ public class SiteUser {
 
    private boolean socialJoin;
 
+   private UserRole role;
+
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
         this.name = name;
