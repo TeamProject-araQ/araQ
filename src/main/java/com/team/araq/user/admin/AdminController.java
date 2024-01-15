@@ -14,13 +14,18 @@ import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
 import com.team.araq.review.ReviewService;
 import com.team.araq.user.SiteUser;
+import com.team.araq.user.UserRole;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -228,5 +233,13 @@ public class AdminController {
         Announcement announcement = this.announcementService.getAnnouncement(id);
         this.announcementService.modifyAnnouncement(announcement, title, content);
         return "redirect:/admin";
+    }
+
+    @PostMapping("/grantRole")
+    public String grantRole(@RequestParam String username, Principal principal) throws UnauthorizedActionException {
+        SiteUser admin = userService.getByUsername(principal.getName());
+        SiteUser targetUser = userService.getByUsername(username);
+        userService.saveRole(admin, targetUser);
+        return "redirect:/admin/user";
     }
 }
