@@ -36,6 +36,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/layout**"),
                                 new AntPathRequestMatcher("/araq**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
 
                 .formLogin((formLogin) -> formLogin
