@@ -17,7 +17,8 @@
 
     <div class="failed d-flex justify-content-between align-items-center mt-5"
          style="width: 80%; margin: 0 auto;">
-        <img th:src="@{${user.image}}" alt="" style="width: 60px; height: 60px; border-radius: 50%;">
+        <img th:if="${user != null}" th:src="@{${user.image}}" alt="" style="width: 60px; height: 60px; border-radius: 50%;">
+        <img th:if="${user == null}" src="/image/user/admin.png" alt="" style="width: 60px; height: 60px; border-radius: 50%;">
         <div class="arrow-container">
             <div class="arrow-line-left"></div>
             <div class="arrow-head-left">▶</div>

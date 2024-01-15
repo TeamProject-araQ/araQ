@@ -29,7 +29,6 @@ public class SiteUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 아이디
     @Column(unique = true)
     private String username;
 
@@ -205,10 +204,10 @@ public class SiteUser {
 
     private LocalDateTime getChatColor;
 
-   private boolean socialJoin;
+    private boolean socialJoin;
 
-   @Getter
-   private UserRole role;
+    @Getter
+    private UserRole role;
 
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;

@@ -579,7 +579,7 @@ function showProfile(username) {
         type: "post",
         contentType: "text/plain",
         dataType: "json",
-        data: username,
+        data: username.toString(),
         headers: {
             [csrfHeader]: csrfToken
         },
