@@ -55,11 +55,15 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofGithub(String userNameAttributeName, Map<String, Object> attributes) {
+        String email = null;
+        if (attributes.get("email") != null) {
+            email = attributes.get("email").toString();
+        }
         return new OAuthAttributes(attributes.get("id").toString(),
                 attributes,
                 userNameAttributeName,
                 attributes.get("name").toString(),
-                attributes.get("email").toString());
+                email);
     }
 
     public SiteUser toEntity() {
