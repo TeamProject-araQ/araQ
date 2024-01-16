@@ -37,11 +37,11 @@
             <th>나이</th>
             <th>주소</th>
             <th>가입일</th>
-            <th>권한 변경</th>
+            <th>권한</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user, loop : ${paging}" th:if="${user.username != 'admin'}">
+        <tr th:each="user, loop : ${paging}" th:if="${user.role.value != 'ROLE_SUPER'}">
             <td><input class="check form-check-input" type="checkbox" th:value="${user.username}" th:id="${user.id}">
             </td>
             <td th:text="${user.id}"></td>
@@ -52,12 +52,24 @@
             <td class="text-start" th:text="${user.address}"></td>
             <td th:text="${#temporals.format(user.createDate, 'yyyy-MM-dd')}"></td>
             <td>
-                <form th:action="@{/admin/grantRole}" method="post">
-                    <input type="hidden" name="username" th:value="${user.username}" />
-                    <a href="#" class="grant-role-link" onclick="submitForm(event)">
-                        <span th:text="${user.role}"></span>
-                    </a>
-                </form>
+                <span th:if="${admin.role.value == 'ROLE_ADMIN'}">
+                    <span th:text="${user.role}"></span>
+                </span>
+                <span th:if="${admin.role.value == 'ROLE_SUPER'}">
+                    <form th:action="@{/admin/grantRole}" method="post" class="role-change-form d-flex">
+                        <input type="hidden" name="username" th:value="${user.username}"/>
+                        <div class="form-group me-2">
+                            <select class="form-control" id="roleDropdown" name="role" th:value="${user.role}">
+                                <option th:selected="${user.role.value == 'ROLE_NEW'}" value="NEW">NEW</option>
+                                <option th:selected="${user.role.value == 'ROLE_USER'}" value="USER">USER</option>
+                                <option th:selected="${user.role.value == 'ROLE_ADMIN'}" value="ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn 버튼 role-change-button">
+                        변경
+                        </button>
+                    </form>
+                </span>
             </td>
         </tr>
         </tbody>
@@ -137,12 +149,17 @@
             }
         });
     });
+     $(function() {
+        $(".role-change-button").on('click', function(event) {
+            event.preventDefault();
 
-    function submitForm(event) {
-        event.preventDefault();
-        if (confirm('권한을 변경하시겠습니까?')) {
-            event.target.closest('form').submit();
-        }
-    }
+            // 컨펌 다이얼로그를 표시
+            if (confirm('권한을 변경하시겠습니까?')) {
+                // 확인 버튼이 눌리면 폼을 서브밋
+                var form = $(this).closest('.role-change-form');
+                form.submit();
+            }
+        });
+    });
 </script>
 </html>
