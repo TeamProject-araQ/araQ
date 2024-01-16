@@ -150,7 +150,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="findMethod" id="findByEmail"
                                    value="email"
-                                   onclick="showSection('emailSection')" checked>
+                                   onclick="showSection('emailSection')">
                             <label class="form-check-label" for="findByEmail">이메일로 찾기</label>
                         </div>
                         <div class="form-check">
@@ -312,11 +312,11 @@
                     alert('인증번호을 발송했습니다.');
                     $('#authNumSection').show();
                 } else {
-                    alert('그런 사람없다.');
+                    alert('가입된 회원이 아닙니다.');
                 }
             },
-            error: function () {
-                alert('서버 오류');
+            error: function (err) {
+                console.log(err);
             },
         });
     }
@@ -344,8 +344,8 @@
                         alert('가입된 회원이 아닙니다.');
                     }
                 },
-                error: function () {
-                    alert('서버 오류');
+                error: function (err) {
+                    console.log(err);
                 },
             });
         } else if (selectedMethod === 'phone') {

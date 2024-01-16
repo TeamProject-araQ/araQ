@@ -41,7 +41,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user, loop : ${paging}" th:if="${user.username != 'admin'}">
+        <tr th:each="user, loop : ${paging}" th:if="${user.role.value != 'ROLE_ADMIN'}">
             <td><input class="check form-check-input" type="checkbox" th:value="${user.username}" th:id="${user.id}">
             </td>
             <td th:text="${user.id}"></td>
