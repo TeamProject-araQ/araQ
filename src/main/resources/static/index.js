@@ -19,6 +19,31 @@ function scrollToBottom() {
 }
 
 $(function () {
+    var text = '"여기서는 당신의 취향을 반영한 매칭으로 즐거운 대화와 뜻깊은 관계를 시작할 수 있습니다."';
+    var i = 0;
+    function typeWriter() {
+        if (i < text.length) {
+            $('#typewriter').append(text.charAt(i));
+            i++;
+            setTimeout(typeWriter, 130); // 여기서 100ms는 타자가 치는 속도를 의미합니다.
+        }
+    }
+    typeWriter();
+
+    $(window).scroll(function() {
+        $('.hidden').each(function() {
+            var elementTop = $(this).offset().top;
+            var elementBottom = elementTop + $(this).outerHeight();
+            var viewportTop = $(window).scrollTop();
+            var viewportBottom = viewportTop + $(window).height();
+
+            if (elementBottom > viewportTop && elementTop < viewportBottom) {
+                $(this).addClass('visible');
+            }
+        });
+    });
+
+
     $('#recommendedMatches').popover({
         html: true,
         content: "<strong><추천 매칭></strong> 에는 매칭 우선권을 구매한 회원만 표시됩니다."
