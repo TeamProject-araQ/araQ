@@ -55,10 +55,12 @@ public class AdminController {
     }
 
     @GetMapping("/user")
-    public String manageUser(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+    public String manageUser(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw, Principal principal) {
         Page<SiteUser> paging = this.userService.getList(page, kw);
+        SiteUser admin = userService.getByUsername(principal.getName());
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
+        model.addAttribute("admin", admin);
         return "admin/user";
     }
 
@@ -236,10 +238,10 @@ public class AdminController {
     }
 
     @PostMapping("/grantRole")
-    public String grantRole(@RequestParam String username, Principal principal) throws UnauthorizedActionException {
+    public String grantRole(@RequestParam String username, @RequestParam UserRole role, Principal principal) throws UnauthorizedActionException {
         SiteUser admin = userService.getByUsername(principal.getName());
         SiteUser targetUser = userService.getByUsername(username);
-        userService.saveRole(admin, targetUser);
+        userService.saveRole(admin, targetUser, role);
         return "redirect:/admin/user";
     }
 }
