@@ -153,9 +153,7 @@
         $(".role-change-button").on('click', function(event) {
             event.preventDefault();
 
-            // 컨펌 다이얼로그를 표시
             if (confirm('권한을 변경하시겠습니까?')) {
-                // 확인 버튼이 눌리면 폼을 서브밋
                 var form = $(this).closest('.role-change-form');
                 form.submit();
             }

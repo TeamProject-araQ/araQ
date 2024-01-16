@@ -35,7 +35,7 @@
             content: '';
             position: absolute;
             top: 50%;
-            width: 40%;
+            width: 30%;
             height: 2px;
             background-color: lightgray;;
         }
@@ -49,13 +49,24 @@
             right: 0;
             margin-left: 10%;
         }
+
+        .line {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        
+        @media (max-width: 410px) {
+            .line {
+                 margin: 0 5px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="center" style="min-width:600px;">
+<div class="container">
     <div class="d-flex justify-content-center"><a href="/">
-        <img alt="" src="https://velog.velcdn.com/images/dbstjwjd/post/796233b6-7972-45b7-bce0-0e26ff7fd817/image.png"
-             style="height:100px; width:auto;">
+        <img alt="" src="/image/araQ/logo.png"
+             style="height:120px; width:auto;">
     </a></div>
     <h3 class="underline-start my-3">로그인</h3>
     <form th:action="@{/user/login}" method="post">
@@ -74,15 +85,13 @@
         </div>
         <button type="submit" class="btn 버튼-full w-100">로그인</button>
     </form>
-    <div class="my-5 text-center">
+    <div class="my-5 text-center menus">
         <a th:href="@{/user/signup}">회원가입</a>
-        <span class="mx-5">|</span>
-        <!-- 아이디 모달 -->
+        <span class="line">|</span>
         <a type="button" data-bs-toggle="modal" data-bs-target="#findIdModal">
             아이디 찾기
         </a>
-        <span class="mx-5">|</span>
-        <!-- 비밀번호 모달 -->
+        <span class="line">|</span>
         <a type="button" data-bs-toggle="modal" data-bs-target="#findPwModal">
             비밀번호 찾기
         </a>
@@ -150,7 +159,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="findMethod" id="findByEmail"
                                    value="email"
-                                   onclick="showSection('emailSection')" checked>
+                                   onclick="showSection('emailSection')">
                             <label class="form-check-label" for="findByEmail">이메일로 찾기</label>
                         </div>
                         <div class="form-check">
@@ -312,11 +321,11 @@
                     alert('인증번호을 발송했습니다.');
                     $('#authNumSection').show();
                 } else {
-                    alert('그런 사람없다.');
+                    alert('가입된 회원이 아닙니다.');
                 }
             },
-            error: function () {
-                alert('서버 오류');
+            error: function (err) {
+                console.log(err);
             },
         });
     }
@@ -344,8 +353,8 @@
                         alert('가입된 회원이 아닙니다.');
                     }
                 },
-                error: function () {
-                    alert('서버 오류');
+                error: function (err) {
+                    console.log(err);
                 },
             });
         } else if (selectedMethod === 'phone') {

@@ -16,7 +16,7 @@
         html, body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,6 +43,12 @@
         #password1::placeholder,
         #email::placeholder {
             color: #a5a5a5; /* Set the desired lighter color */
+        }
+        
+        @media (max-width: 400px) {
+            html, body {
+                height: 110%;
+            }
         }
     </style>
 </head>
