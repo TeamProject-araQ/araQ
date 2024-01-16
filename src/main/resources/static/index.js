@@ -19,7 +19,7 @@ function scrollToBottom() {
 }
 
 $(function () {
-    var text = '"여기서는 당신의 취향을 반영한 매칭으로 즐거운 대화와 뜻깊은 관계를 시작할 수 있습니다."';
+    var text = '"여기서는 당신의 취향을 \n 반영한 매칭으로 즐거운 대화와 뜻깊은 \n 관계를 시작할 수 있습니다."';
     var i = 0;
     function typeWriter() {
         if (i < text.length) {

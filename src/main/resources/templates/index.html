@@ -23,10 +23,18 @@
             opacity: 1;
         }
 
+        #idealImg {
+            width: 50%;
+            height:auto;
+            border-radius: 5px;
+        }
+
         #typewriter {
             width: 45%;
             text-indent: 10px;
             font-family: nanum-semiBold, serif;
+            font-size: 2vw;
+            white-space: pre-line;
         }
 
         @media (max-width: 995px) {
@@ -60,6 +68,24 @@
                 width: 100%;
                 margin-bottom: 30px;
             }
+
+            #imgBox {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #idealImg {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+
+            #typewriter {
+                width: 100%;
+                margin-bottom: 30px;
+                font-size: 3vw;
+                white-space: normal;
+            }
         }
     </style>
 </head>
@@ -67,12 +93,12 @@
     <input type="hidden" th:value="${postList}" id="postList">
     <img src="/image/araQ/main.png" alt="" style="width: 100%; height:auto; border-radius: 5px;" class="my-3">
     <img src="/image/araQ/click.png" alt="" style="width: 100%; height:auto;" class="my-3 hidden">
-    <div class="my-3 hidden d-flex justify-content-between align-items-center">
-        <img src="/image/araQ/ideal.png" alt="" style="width: 50%; height:auto; border-radius: 5px;">
-        <h1 id="typewriter"></h1>
+    <div class="my-3 hidden align-items-center d-flex justify-content-between" id="imgBox">
+        <img src="/image/araQ/ideal.png" alt="" id="idealImg">
+        <div id="typewriter"></div>
     </div>
     <!-- 매칭 추천 -->
-    <div class="d-flex hidden">
+    <div class="d-flex hidden mt-5">
         <h3 class="highlight" style="font-family: 'nanum-regular', serif" data-bs-toggle="popover"
             id="recommendedMatches"># 추천 매칭</h3>
     </div>

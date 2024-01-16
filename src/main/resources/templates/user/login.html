@@ -35,7 +35,7 @@
             content: '';
             position: absolute;
             top: 50%;
-            width: 40%;
+            width: 30%;
             height: 2px;
             background-color: lightgray;;
         }
@@ -49,10 +49,21 @@
             right: 0;
             margin-left: 10%;
         }
+
+        .line {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+        
+        @media (max-width: 410px) {
+            .line {
+                 margin: 0 5px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="center" style="min-width:600px;">
+<div class="container">
     <div class="d-flex justify-content-center"><a href="/">
         <img alt="" src="/image/araQ/logo.png"
              style="height:120px; width:auto;">
@@ -74,15 +85,13 @@
         </div>
         <button type="submit" class="btn 버튼-full w-100">로그인</button>
     </form>
-    <div class="my-5 text-center">
+    <div class="my-5 text-center menus">
         <a th:href="@{/user/signup}">회원가입</a>
-        <span class="mx-5">|</span>
-        <!-- 아이디 모달 -->
+        <span class="line">|</span>
         <a type="button" data-bs-toggle="modal" data-bs-target="#findIdModal">
             아이디 찾기
         </a>
-        <span class="mx-5">|</span>
-        <!-- 비밀번호 모달 -->
+        <span class="line">|</span>
         <a type="button" data-bs-toggle="modal" data-bs-target="#findPwModal">
             비밀번호 찾기
         </a>
