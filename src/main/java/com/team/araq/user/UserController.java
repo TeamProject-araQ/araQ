@@ -195,6 +195,7 @@ public class UserController {
     @GetMapping("/resetPw/{token}")
     public String resetPw(@PathVariable("token") String token, Model model) {
         SiteUser user = userService.getByUserToken(token);
+        System.out.println(user.getPhoneNum());
         model.addAttribute("user", user);
         return "/user/resetPw";
     }
