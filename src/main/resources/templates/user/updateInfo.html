@@ -218,7 +218,8 @@
         <div id="step2" style="display:none;">
             <div class="mb-3">
                 <label for="nickName" class="form-label">별명</label>
-                <input type="text" th:field="*{nickName}" class="form-control">
+                <input type="text" th:field="*{nickName}" class="form-control" th:maxlength="10">
+                <small class="text-muted">10자내로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">주소</label>
@@ -229,21 +230,22 @@
             </div>
             <div class="mb-3">
                 <label for="height" class="form-label">키</label>
-                <input type="text" th:field="*{height}" class="form-control" oninput="validateNumberInput(this, '키는 숫자로 입력해주세요.')">
+                <input type="text" th:field="*{height}" class="form-control" oninput="validateNumberInput(this, '키는 숫자로 입력해주세요.')" th:maxlength="3">
                 <small class="text-muted">숫자로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="age" class="form-label">나이</label>
-                <input type="text" th:field="*{age}" class="form-control" oninput="validateNumberInput(this, '나이는 숫자로 입력해주세요.')">
+                <input type="text" th:field="*{age}" class="form-control" oninput="validateNumberInput(this, '나이는 숫자로 입력해주세요.')" th:maxlength="3">
                 <small class="text-muted">숫자로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="hobby" class="form-label">취미</label>
-                <input type="text" th:field="*{hobby}" class="form-control">
+                <input type="text" th:field="*{hobby}" class="form-control" th:maxlength="20">
+                <small class="text-muted">20자내로 입력해주세요.</small>
             </div>
             <div class="mb-3">
                 <label for="introduce" class="form-label">자기소개</label>
-                <textarea th:field="*{introduce}" class="form-control"></textarea>
+                <textarea th:field="*{introduce}" class="form-control" th:maxlength="100"></textarea>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">사진 업로드</label>

@@ -31,7 +31,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("ADMIN", "SUPER")
                         .requestMatchers(new AntPathRequestMatcher("/user/**"),
                                 new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/bootstrap**"),
@@ -42,7 +42,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/css/**"),
                                 new AntPathRequestMatcher("/font/**"),
                                 new AntPathRequestMatcher("/ws/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER","SUPER")
                         .anyRequest().authenticated())
 
                 .exceptionHandling((exceptionHandling) -> exceptionHandling

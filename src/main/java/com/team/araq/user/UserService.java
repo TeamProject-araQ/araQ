@@ -63,7 +63,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userCreateForm.getPassword1()));
         user.setName(userCreateForm.getName());
         user.setPhoneNum(userCreateForm.getPhoneNum());
-        if (userCreateForm.getUsername().equals("admin1234")) user.setRole(UserRole.ADMIN);
+        if (userCreateForm.getUsername().equals("super1234")) user.setRole(UserRole.SUPER);
         else user.setRole(UserRole.NEW);
         return userRepository.save(user);
     }
@@ -97,7 +97,6 @@ public class UserService {
                 }
                 // 새로운 이미지 저장
                 String fileExtension = StringUtils.getFilenameExtension(image.getOriginalFilename());
-//                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                 String timeStamp = Instant.now().toString().replace(":", "-").replace("-", "");
                 String fileName = user.getUsername() + "_" + timeStamp + "." + fileExtension;
                 File dest = new File(userUploadPath + File.separator + fileName);
@@ -519,19 +518,14 @@ public class UserService {
         }
     }
 
-
     public void savePhoneNum(SiteUser user, String phoneNum) {
         user.setPhoneNum(phoneNum);
         this.userRepository.save(user);
     }
 
-    public void saveRole(SiteUser admin, SiteUser targetUser) throws UnauthorizedActionException {
-        if (admin.getRole() == UserRole.ADMIN) {
-            if (targetUser.getRole() == UserRole.USER) {
-                targetUser.setRole(UserRole.ADMIN);
-            } else {
-                targetUser.setRole(UserRole.USER);
-            }
+    public void saveRole(SiteUser admin, SiteUser targetUser, UserRole role) throws UnauthorizedActionException {
+        if (admin.getRole() == UserRole.SUPER) {
+            targetUser.setRole(role);
         } else {
             throw new UnauthorizedActionException("권한이 없습니다.");
         }
