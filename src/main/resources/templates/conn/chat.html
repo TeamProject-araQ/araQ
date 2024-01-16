@@ -1,4 +1,47 @@
 <html layout:decorate="~{layout}">
+<head>
+    <style>
+        .rate {
+            display: inline-block;
+            border: 0;
+            margin-right: 15px;
+        }
+
+        .rate > input {
+            display: none;
+        }
+
+        .rate > label {
+            float: right;
+            color: #ddd
+        }
+
+        .rate > label:before {
+            display: inline-block;
+            font-size: 3rem;
+            padding: .3rem .6rem;
+            margin: 0;
+            cursor: pointer;
+            font-family: FontAwesome, serif;
+            content: "\f005 ";
+        }
+
+        .rate .half:before {
+            content: "\f089 ";
+            position: absolute;
+            padding-right: 0;
+        }
+
+        .rate input:checked ~ label, .rate label:hover, .rate label:hover ~ label {
+            color: rgb(146, 132, 168) !important;
+        }
+
+        .rate input:checked + .rate label:hover, .rate input input:checked ~ label:hover, .rate input:checked ~ .rate label:hover ~ label,
+        .rate label:hover ~ input:checked ~ label {
+            color: rgb(146, 132, 168) !important;
+        }
+    </style>
+</head>
 <div layout:fragment="content" class="container my-3">
     <div class="card" style="min-width:250px;">
         <div style="height:60vh; overflow-y:scroll;" id="chatBoard">
@@ -35,7 +78,8 @@
             </div>
             <textarea type="text" id="msgContent" class="form-control"></textarea>
             <div class="d-flex justify-content-between align-items-center m-2">
-                <a th:href="@{/chat/list}" style="padding:3px 5px;"><i class="bi bi-box-arrow-right" style="font-size: 30px;"></i></a>
+                <a th:href="@{/chat/list}" style="padding:3px 5px;"><i class="bi bi-box-arrow-right"
+                                                                       style="font-size: 30px;"></i></a>
                 <a href="javascript:void(0)" id="chatImageBtn">
                     <i class="bi bi-images" style="font-size: 30px;"></i>
                 </a>
@@ -43,13 +87,123 @@
                     <i class="bi bi-telephone-fill" style="font-size: 30px;"></i>
                 </a>
                 <a href="javascript:void(0)" id="chatReportBtn">
-                    <img th:src="@{/image/etc/siren.png}" alt="" style="height: 30px; width: 30px; margin-bottom: 10px;">
+                    <img th:src="@{/image/etc/siren.png}" alt=""
+                         style="height: 30px; width: 30px; margin-bottom: 10px;">
+                </a>
+                <a href="javascript:void(0)" id="rateBtn" th:if="${rate == null && room.possible == true}">
+                    <i class="bi bi-pencil-square" style="font-size: 30px;"></i>
                 </a>
                 <button type="submit" style="border:0;">
                     <i class="bi bi-send-fill" style="font-size: 30px; color: rgb(146, 132, 168)"></i>
                 </button>
             </div>
         </form>
+        <!-- 상대 평가 모달 -->
+        <div class="modal fade" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <input type="hidden" id="mannerValue">
+                    <input type="hidden" id="appealValue">
+                    <input type="hidden" id="appearanceValue">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="rateModalLabel">상대방 평가하기</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="manner" class="form-label"
+                                   style="border-bottom: 2px solid #D8D3E0; font-size: 13pt;">매너</label>
+                            <div>"상대방이 예의바르고 존중하는 태도를 보였나요? 대화 중 상대의 매너를 평가해주세요."</div>
+                            <div class="d-flex justify-content-center">
+                                <div class="rate" id="mannerRate">
+                                    <input type="radio" id="mannerRating10" name="mannerRating" value="10">
+                                    <label for="mannerRating10" title="5점"></label>
+                                    <input type="radio" id="mannerRating9" name="mannerRating" value="9">
+                                    <label class="half" for="mannerRating9" title="4.5점"></label>
+                                    <input type="radio" id="mannerRating8" name="mannerRating" value="8">
+                                    <label for="mannerRating8" title="4점"></label>
+                                    <input type="radio" id="mannerRating7" name="mannerRating" value="7">
+                                    <label class="half" for="mannerRating7" title="3.5점"></label>
+                                    <input type="radio" id="mannerRating6" name="mannerRating" value="6">
+                                    <label for="mannerRating6" title="3점"></label>
+                                    <input type="radio" id="mannerRating5" name="mannerRating" value="5">
+                                    <label class="half" for="mannerRating5" title="2.5점"></label>
+                                    <input type="radio" id="mannerRating4" name="mannerRating" value="4">
+                                    <label for="mannerRating4" title="2점"></label>
+                                    <input type="radio" id="mannerRating3" name="mannerRating" value="3">
+                                    <label class="half" for="mannerRating3" title="1.5점"></label>
+                                    <input type="radio" id="mannerRating2" name="mannerRating" value="2">
+                                    <label for="mannerRating2" title="1점"></label>
+                                    <input type="radio" id="mannerRating1" name="mannerRating" value="1">
+                                    <label class="half" for="mannerRating1" title="0.5점"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="appeal" class="form-label"
+                                   style="border-bottom: 2px solid #D8D3E0; font-size: 13pt;">매력</label>
+                            <div>"상대방의 개성이나 대화 스타일이 매력적이었나요? 상대의 매력을 평가해주세요."</div>
+                            <div class="d-flex justify-content-center">
+                                <div class="rate" id="appealRate">
+                                    <input type="radio" id="appealRating10" name="appealRating" value="10">
+                                    <label for="appealRating10" title="5점"></label>
+                                    <input type="radio" id="appealRating9" name="appealRating" value="9">
+                                    <label class="half" for="appealRating9" title="4.5점"></label>
+                                    <input type="radio" id="appealRating8" name="appealRating" value="8">
+                                    <label for="appealRating8" title="4점"></label>
+                                    <input type="radio" id="appealRating7" name="appealRating" value="7">
+                                    <label class="half" for="appealRating7" title="3.5점"></label>
+                                    <input type="radio" id="appealRating6" name="appealRating" value="6">
+                                    <label for="appealRating6" title="3점"></label>
+                                    <input type="radio" id="appealRating5" name="appealRating" value="5">
+                                    <label class="half" for="appealRating5" title="2.5점"></label>
+                                    <input type="radio" id="appealRating4" name="appealRating" value="4">
+                                    <label for="appealRating4" title="2점"></label>
+                                    <input type="radio" id="appealRating3" name="appealRating" value="3">
+                                    <label class="half" for="appealRating3" title="1.5점"></label>
+                                    <input type="radio" id="appealRating2" name="appealRating" value="2">
+                                    <label for="appealRating2" title="1점"></label>
+                                    <input type="radio" id="appealRating1" name="appealRating" value="1">
+                                    <label class="half" for="appealRating1" title="0.5점"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="appearance" class="form-label"
+                                   style="border-bottom: 2px solid #D8D3E0; font-size: 13pt;">외모</label>
+                            <div>"상대방의 외모나 프로필 사진이 어떠했나요? 외모에 대한 첫인상을 평가해주세요."</div>
+                            <div class="d-flex justify-content-center">
+                                <div class="rate" id="appearanceRate">
+                                    <input type="radio" id="appearanceRating10" name="appearanceRating" value="10">
+                                    <label for="appearanceRating10" title="5점"></label>
+                                    <input type="radio" id="appearanceRating9" name="appearanceRating" value="9">
+                                    <label class="half" for="appearanceRating9" title="4.5점"></label>
+                                    <input type="radio" id="appearanceRating8" name="appearanceRating" value="8">
+                                    <label for="appearanceRating8" title="4점"></label>
+                                    <input type="radio" id="appearanceRating7" name="appearanceRating" value="7">
+                                    <label class="half" for="appearanceRating7" title="3.5점"></label>
+                                    <input type="radio" id="appearanceRating6" name="appearanceRating" value="6">
+                                    <label for="appearanceRating6" title="3점"></label>
+                                    <input type="radio" id="appearanceRating5" name="appearanceRating" value="5">
+                                    <label class="half" for="appearanceRating5" title="2.5점"></label>
+                                    <input type="radio" id="appearanceRating4" name="appearanceRating" value="4">
+                                    <label for="appearanceRating4" title="2점"></label>
+                                    <input type="radio" id="appearanceRating3" name="appearanceRating" value="3">
+                                    <label class="half" for="appearanceRating3" title="1.5점"></label>
+                                    <input type="radio" id="appearanceRating2" name="appearanceRating" value="2">
+                                    <label for="appearanceRating2" title="1점"></label>
+                                    <input type="radio" id="appearanceRating1" name="appearanceRating" value="1">
+                                    <label class="half" for="appearanceRating1" title="0.5점"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn 버튼-full" id="saveRate">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <input type="file" id="chatImageInput" accept="image/*" multiple>
         <audio autoplay></audio>
     </div>
