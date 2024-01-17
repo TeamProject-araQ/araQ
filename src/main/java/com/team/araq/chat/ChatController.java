@@ -14,6 +14,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -191,7 +192,7 @@ public class ChatController {
         for (MultipartFile file : files) {
             String filename = file.getOriginalFilename();
             File image = new File(dirPath + "/" + filename);
-            file.transferTo(image);
+            FileCopyUtils.copy(file.getBytes(), image);
             images.add("/chat/image/" + room.getCode() + "/" + chat.getId() + "/" + filename);
         }
 
