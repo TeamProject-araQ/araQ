@@ -18,6 +18,19 @@ function scrollToBottom() {
     container.scrollTo({top: container.scrollHeight, behavior: 'smooth'});
 }
 
+function checkVisibility() {
+    $('.hidden').each(function() {
+        var elementTop = $(this).offset().top;
+        var elementBottom = elementTop + $(this).outerHeight();
+        var viewportTop = $(window).scrollTop();
+        var viewportBottom = viewportTop + $(window).height();
+
+        if (elementBottom > viewportTop && elementTop < viewportBottom) {
+            $(this).addClass('visible');
+        }
+    });
+}
+
 $(function () {
     var text = '"여기서는 당신의 취향을 \n 반영한 매칭으로 즐거운 대화와 \n 뜻깊은 관계를 시작할 수 있습니다."';
     var i = 0;
@@ -30,19 +43,9 @@ $(function () {
     }
     typeWriter();
 
-    $(window).scroll(function() {
-        $('.hidden').each(function() {
-            var elementTop = $(this).offset().top;
-            var elementBottom = elementTop + $(this).outerHeight();
-            var viewportTop = $(window).scrollTop();
-            var viewportBottom = viewportTop + $(window).height();
+    checkVisibility();
 
-            if (elementBottom > viewportTop && elementTop < viewportBottom) {
-                $(this).addClass('visible');
-            }
-        });
-    });
-
+    $(window).scroll(checkVisibility);
 
     $('#recommendedMatches').popover({
         html: true,
