@@ -268,7 +268,7 @@ public class UserService {
         try {
             String fileName = user.getUsername() + "_" + multipartFile.getOriginalFilename();
             File dest = new File(audioPath + File.separator + fileName);
-            multipartFile.transferTo(dest);
+            FileCopyUtils.copy(multipartFile.getBytes(), dest);
             user.setAudio("/user/audio/" + fileName);
             this.userRepository.save(user);
 
