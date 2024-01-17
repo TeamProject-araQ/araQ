@@ -1,6 +1,8 @@
 package com.team.araq.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.araq.chat.rate.Rate;
+import com.team.araq.chat.rate.RateService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 public class ChatController {
+
     private final SimpMessagingTemplate simpMessagingTemplate;
+
     private final UserService userService;
+
     private final RoomService roomService;
+
     private final ChatService chatService;
+
+    private final RateService rateService;
 
     @MessageMapping("/send")
     public void sendMessage(ChatDto chatDto) {
@@ -52,6 +60,8 @@ public class ChatController {
         messageDto.setContent(chatDto.getContent());
         messageDto.setImage(user.getImage());
         messageDto.setTarget(chatDto.getCode());
+
+        this.roomService.saveChatNumbers(room);
 
         Notification notification = new Notification("채팅 알림",
                 user.getNickName() + "님이 채팅를 보냈습니다.", user.getUsername(), target.getUsername(),
@@ -90,11 +100,18 @@ public class ChatController {
         SiteUser user = userService.getByUsername(principal.getName());
         Room room = roomService.get(code);
 
+
         if (!roomService.check(room, user)) throw new RuntimeException("권한이 없습니다.");
 
-        if (user.getUsername().equals(room.getParticipant1().getUsername()))
+        if (user.getUsername().equals(room.getParticipant1().getUsername())) {
+            Rate rate = this.rateService.checkRate(user, room.getParticipant2());
             model.addAttribute("target", room.getParticipant2());
-        else model.addAttribute("target", room.getParticipant1());
+            model.addAttribute("rate", rate);
+        } else {
+            Rate rate = this.rateService.checkRate(user, room.getParticipant1());
+            model.addAttribute("target", room.getParticipant1());
+            model.addAttribute("rate", rate);
+        }
         model.addAttribute("user", user);
         model.addAttribute("room", room);
         model.addAttribute("chatList", room.getChats());

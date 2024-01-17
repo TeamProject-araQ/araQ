@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.araq.board.comment.Comment;
 import com.team.araq.board.post.Post;
 import com.team.araq.chat.Room;
+import com.team.araq.chat.rate.Rate;
 import com.team.araq.friend.Friend;
 import com.team.araq.idealType.IdealType;
 import com.team.araq.inquiry.Inquiry;
@@ -208,6 +209,12 @@ public class SiteUser {
 
     @Getter
     private UserRole role;
+
+    @OneToMany(mappedBy = "user1", cascade = CascadeType.REMOVE)
+    private List<Rate> rateList1;
+
+    @OneToMany(mappedBy = "user2", cascade = CascadeType.REMOVE)
+    private List<Rate> rateList2;
 
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
