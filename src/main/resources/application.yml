@@ -69,14 +69,14 @@ imp:
     key: "4323773555508561"
     secret: "y46aKg8JTOLBqyKtcM04uAnLPeJ4PfrIEiHIP1vymIVaK91zGwQNJibao4Dw2mOxAlmvCiv37Yq1ueSc"
 
-#Logging
-logging:
-  logback:
-    rollingpolicy:
-      max-history: 30
-      max-file-size: 100MB
-      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
-  file:
-    name: logs/araq.log
-  pattern:
-    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
+##Logging
+#logging:
+#  logback:
+#    rollingpolicy:
+#      max-history: 30
+#      max-file-size: 100MB
+#      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
+#  file:
+#    name: logs/araq.log
+#  pattern:
+#    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
