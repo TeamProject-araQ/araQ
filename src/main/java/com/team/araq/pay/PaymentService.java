@@ -1,7 +1,6 @@
 package com.team.araq.pay;
 
 import com.team.araq.user.SiteUser;
-import com.team.araq.user.UserService;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
@@ -27,8 +26,6 @@ import java.util.Optional;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-
-    private final UserService userService;
 
     private String impKey = "4323773555508561";
 
@@ -99,10 +96,10 @@ public class PaymentService {
         else throw new RuntimeException("그런 결제 없습니다.");
     }
 
-    public void savePayment(PaymentDTO paymentDTO) {
+    public void savePayment(PaymentDTO paymentDTO, SiteUser user) {
         Payment pay = new Payment();
         pay.setDate(paymentDTO.getDate());
-        pay.setUser(this.userService.getByUsername(paymentDTO.getUsername()));
+        pay.setUser(user);
         pay.setAmount(paymentDTO.getAmount());
         pay.setMethod(paymentDTO.getMethod());
         pay.setOrderNum(paymentDTO.getOrderNum());

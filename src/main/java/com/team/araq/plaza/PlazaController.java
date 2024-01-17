@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,7 +54,7 @@ public class PlazaController {
             if (!dir.exists()) dir.mkdirs();
 
             File file = new File(dirPath + "/" + filename);
-            img.transferTo(file);
+            FileCopyUtils.copy(img.getBytes(), file);
 
             plazaService.setImg(plaza, "/plaza/image/" + filename);
         }
@@ -120,7 +121,7 @@ public class PlazaController {
             if (!dir.exists()) dir.mkdirs();
 
             File file = new File(dirPath + "/" + filename);
-            img.transferTo(file);
+            FileCopyUtils.copy(img.getBytes(), file);
             imgPath = "/plaza/image/" + filename;
         }
         plazaService.setImg(plaza, imgPath);

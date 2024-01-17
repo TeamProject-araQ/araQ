@@ -218,6 +218,12 @@ public class SiteUser {
     @OneToMany(mappedBy = "user2", cascade = CascadeType.REMOVE)
     private List<Rate> rateList2;
 
+    private int ratePass;
+
+    @JsonIgnore
+    @ManyToMany
+    private List<SiteUser> openRates;
+
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
         this.name = name;

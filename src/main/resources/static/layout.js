@@ -492,6 +492,51 @@ $(function () {
         });
     });
 
+    $('#profileModal .rate').on('click', function () {
+        const nick = $(this).data("nick");
+        const target = $(this).data("value")
+        $.ajax({
+            url: "/user/getRate",
+            type: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            contentType: "text/plain",
+            data: target,
+            success: function (data) {
+                if (data !== "") {
+                    if (confirm(nick + "님에 대한 평가를 열람하시겠습니까?")) {
+                        $.ajax({
+                            url: "/rate/view",
+                            type: "POST",
+                            headers: {
+                                [csrfHeader]: csrfToken
+                            },
+                            contentType: "text/plain",
+                            data: target,
+                            success: function (response) {
+                                if (response === false)
+                                    alert("평가 열람권이 필요합니다.");
+                                else {
+                                    var rate = JSON.parse(data);
+                                    $("#collapseRate").collapse('toggle');
+                                    $('#profileModal #manner').text(rate.manner);
+                                    $('#profileModal #appeal').text(rate.appeal);
+                                    $('#profileModal #appearance').text(rate.appearance);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    alert("아직 " + nick + "님에 대한 평가 내역이 존재하지 않습니다.");
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+
     $('.saveNum').on('click', function () {
         var phoneNum = $('#phoneNumber').val();
         phoneNum = phoneNum.replace(/-/g, '');
@@ -517,8 +562,7 @@ $(function () {
             })
         }
     });
-})
-;
+});
 
 var verKeyConfirmed = false;
 
@@ -592,6 +636,8 @@ function showProfile(username) {
             $("#profileModal .card-title").text(data.nickName);
             $("#profileModal .age").text(data.age);
             $("#profileModal .introduce").text(data.introduce);
+            $('#profileModal .rate').data("value", data.username);
+            $('#profileModal .rate').data("nick", data.nickName);
             if (data.audio) {
                 var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
                 var durationElement = $("#profileModal #audioDuration");

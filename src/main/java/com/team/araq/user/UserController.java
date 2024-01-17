@@ -3,6 +3,8 @@ package com.team.araq.user;
 import com.team.araq.board.email.MailService;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.chat.rate.Rate;
+import com.team.araq.chat.rate.RateService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
@@ -54,6 +56,8 @@ public class UserController {
     private final PostService postService;
 
     private final PaymentService paymentService;
+
+    private final RateService rateService;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -176,8 +180,28 @@ public class UserController {
         return userService.getByUsername(username);
     }
 
-    public void getRate(@RequestBody String username) {
-
+    @PostMapping("/getRate")
+    @ResponseBody
+    public String getRate(@RequestBody String username) {
+        SiteUser user = this.userService.getByUsername(username);
+        List<Rate> rateList = this.rateService.getRateByUser(user);
+        if (rateList.isEmpty()) return null;
+        double manner = 0;
+        double appeal = 0;
+        double appearance = 0;
+        for (int i = 0; i < rateList.size(); i++) {
+            manner += rateList.get(i).getManner();
+            appeal += rateList.get(i).getAppeal();
+            appearance += rateList.get(i).getAppearance();
+        }
+        manner = Math.round(manner/rateList.size() * 10) / 10.0;
+        appeal = Math.round(appeal/rateList.size() * 10) / 10.0;
+        appearance = Math.round(appearance/ rateList.size() * 10) / 10.0;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("manner", manner);
+        jsonObject.put("appeal", appeal);
+        jsonObject.put("appearance", appearance);
+        return jsonObject.toString();
     }
 
     @PostMapping("/sendEmail")

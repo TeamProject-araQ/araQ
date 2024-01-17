@@ -30,4 +30,14 @@ public class RateController {
         this.rateService.saveRate(user1, user2, jsonObject.getDouble("manner"), jsonObject.getDouble("appeal"), jsonObject.getDouble("appearance"));
         return "평가가 저장되었습니다.";
     }
+
+    @ResponseBody
+    @PostMapping("/view")
+    public boolean viewRate(Principal principal, @RequestBody String username) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.getRatePass() < 1) return false;
+        this.userService.useRatePass(user);
+        this.userService.addOpenRate(user, this.userService.getByUsername(username));
+        return true;
+    }
 }
