@@ -89,7 +89,7 @@ public class MatchController {
         model.addAttribute("personalityList", personalityList);
         model.addAttribute("likeList", likeList);
         model.addAttribute("likesStatus", likesStatus);
-        return "conn//personalityType";
+        return "conn/personalityType";
     }
 
     @GetMapping("/random")
