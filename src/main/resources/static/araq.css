@@ -317,7 +317,7 @@ a:hover {
 }
 
 .kakao.active {
-    background: rgb(236, 218, 0);
+    background: rgb(255, 235, 0);
     border: none;
 }
 
@@ -331,7 +331,7 @@ a:hover {
 }
 
 .toss.active {
-    background: rgb(0, 58, 196);
+    background: rgb(0, 77, 255);
     color: white;
 }
 
@@ -345,7 +345,7 @@ a:hover {
 }
 
 .phone.active {
-    background: rgb(45, 39, 112);
+    background: rgb(57, 50, 144);
     color: white;
 }
 
