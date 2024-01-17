@@ -1,18 +1,13 @@
 package com.team.araq.inquiry;
 
-import com.team.araq.board.post.Post;
-import com.team.araq.review.Review;
 import com.team.araq.user.SiteUser;
-import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,7 +23,7 @@ public class InquiryService {
 
     private final InquiryRepository inquiryRepository;
 
-    private String uploadPath = "C:/uploads/inquiry";
+    private String uploadPath = "uploads/inquiry";
 
     public Page<Inquiry> getList(int page, String kw, String category) {
         List<Sort.Order> sort = new ArrayList<>();

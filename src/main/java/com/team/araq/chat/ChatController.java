@@ -144,7 +144,7 @@ public class ChatController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@RequestBody String code) {
-        File file = new File("C:/uploads/chat/" + code);
+        File file = new File("uploads/chat/" + code);
         if (file.exists()) deleteFiles(file);
         roomService.delete(roomService.get(code));
         return null;
@@ -182,7 +182,7 @@ public class ChatController {
         roomService.setRecent(room, chat.getCreateDate());
         roomService.setConfirm(room, target.getUsername());
 
-        String dirPath = "C:/uploads/chat/" + room.getCode() + "/" + chat.getId();
+        String dirPath = "uploads/chat/" + room.getCode() + "/" + chat.getId();
         File dir = new File(dirPath);
         List<String> images = new ArrayList<>();
 

@@ -48,7 +48,7 @@ public class PlazaController {
             assert originalName != null;
             String ext = originalName.substring(originalName.lastIndexOf('.'));
             String filename = uuid + ext;
-            String dirPath = "C:/uploads/plaza";
+            String dirPath = "uploads/plaza";
             File dir = new File(dirPath);
             if (!dir.exists()) dir.mkdirs();
 
@@ -82,7 +82,7 @@ public class PlazaController {
     @PostMapping("/delete")
     public String delete(@RequestParam("code") String code) {
         Plaza plaza = plazaService.getByCode(code);
-        File dir = new File("C:/uploads/plaza");
+        File dir = new File("uploads/plaza");
 
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.getName().contains(code))
@@ -115,7 +115,7 @@ public class PlazaController {
             assert originalName != null;
             String ext = originalName.substring(originalName.lastIndexOf('.'));
             String filename = plazaDto.getCode() + ext;
-            String dirPath = "C:/uploads/plaza";
+            String dirPath = "uploads/plaza";
             File dir = new File(dirPath);
             if (!dir.exists()) dir.mkdirs();
 

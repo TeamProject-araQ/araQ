@@ -6,17 +6,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MVCConfig implements WebMvcConfigurer {
-    private String inquiryPath = "C:/uploads/inquiry";
+    private String inquiryPath = "uploads/inquiry";
 
-    private String userPath = "C:/uploads/user";
+    private String userPath = "uploads/user";
 
-    private String chatPath = "C:/uploads/chat";
+    private String chatPath = "uploads/chat";
 
-    private String audioPath = "C:/uploads/audio";
+    private String audioPath = "uploads/audio";
 
-    private String reviewPath = "C:/uploads/review";
+    private String reviewPath = "uploads/review";
 
-    private String plazaPath = "C:/uploads/plaza";
+    private String plazaPath = "uploads/plaza";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
