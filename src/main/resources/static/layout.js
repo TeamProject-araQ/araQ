@@ -441,7 +441,7 @@ $(function () {
     });
 
     $('#content').keypress(function (e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             $('.sendBtn').click();
         }
     });
@@ -461,7 +461,7 @@ $(function () {
     });
 
     $('.answerContent').keypress(function (e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             $('.answerBtn').click();
         }
     });

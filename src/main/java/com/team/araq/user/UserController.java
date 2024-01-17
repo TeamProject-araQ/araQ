@@ -176,6 +176,10 @@ public class UserController {
         return userService.getByUsername(username);
     }
 
+    public void getRate(@RequestBody String username) {
+
+    }
+
     @PostMapping("/sendEmail")
     @ResponseBody
     public String sendEmail(@RequestBody Map<String, String> data) {
