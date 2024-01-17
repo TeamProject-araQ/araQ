@@ -9291,3 +9291,274 @@ org.thymeleaf.exceptions.TemplateInputException: Error resolving template [layou
 2024-01-17 12:49:02.852  INFO 7544 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2024-01-17 12:49:02.852  INFO 7544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2024-01-17 12:49:02.852  INFO 7544 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-01-17 12:53:10.899  INFO 7544 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 0 deletions, 3 modifications)
+2024-01-17 12:53:10.900  INFO 7544 --- [Thread-79] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-01-17 12:53:10.900  INFO 7544 --- [Thread-79] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@1b4af82e]]
+2024-01-17 12:53:10.900  INFO 7544 --- [Thread-79] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-01-17 12:53:10.904  INFO 7544 --- [Thread-79] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-01-17 12:53:10.905  INFO 7544 --- [Thread-79] o.a.c.c.C.[Tomcat].[localhost].[/]       : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2024-01-17 12:53:10.909  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-3] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.910  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-5] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.910  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-6] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.911  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-9] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1182)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.911  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-10] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.912  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-12] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.912  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [MessageBroker-15] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.park(LockSupport.java:341)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionNode.block(AbstractQueuedSynchronizer.java:506)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.unmanagedBlock(ForkJoinPool.java:3465)
+ java.base@17.0.8.1/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3436)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1623)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:1177)
+ java.base@17.0.8.1/java.util.concurrent.ScheduledThreadPoolExecutor$DelayedWorkQueue.take(ScheduledThreadPoolExecutor.java:899)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1062)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.912  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [clientInboundChannel-39] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.913  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [clientInboundChannel-40] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.913  WARN 7544 --- [Thread-79] o.a.c.loader.WebappClassLoaderBase       : The web application [ROOT] appears to have started a thread named [clientInboundChannel-41] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base@17.0.8.1/jdk.internal.misc.Unsafe.park(Native Method)
+ java.base@17.0.8.1/java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:252)
+ java.base@17.0.8.1/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.awaitNanos(AbstractQueuedSynchronizer.java:1672)
+ java.base@17.0.8.1/java.util.concurrent.LinkedBlockingQueue.poll(LinkedBlockingQueue.java:460)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1061)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1122)
+ java.base@17.0.8.1/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+ java.base@17.0.8.1/java.lang.Thread.run(Thread.java:833)
+2024-01-17 12:53:10.915  INFO 7544 --- [Thread-79] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 12:53:10.915  INFO 7544 --- [Thread-79] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2024-01-17 12:53:10.916  INFO 7544 --- [Thread-79] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+2024-01-17 12:53:10.994  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Starting AraqApplication using Java 17.0.8.1 with PID 7544 (C:\Users\admin\Desktop\araq\out\production\classes started by admin in C:\Users\admin\Desktop\araq)
+2024-01-17 12:53:10.994  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-01-17 12:53:11.098  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-01-17 12:53:11.123  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 20 JPA repository interfaces.
+2024-01-17 12:53:11.180  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-01-17 12:53:11.180  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-17 12:53:11.180  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2024-01-17 12:53:11.197  INFO 7544 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-17 12:53:11.197  INFO 7544 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 202 ms
+2024-01-17 12:53:11.221  INFO 7544 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-01-17 12:53:11.226  INFO 7544 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-01-17 12:53:11.226  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Starting...
+2024-01-17 12:53:11.228  INFO 7544 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-14 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1bd836c8
+2024-01-17 12:53:11.228  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Start completed.
+2024-01-17 12:53:11.229  WARN 7544 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000511: The 5.5.0 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 5.7.0. Check the community dialects project for available legacy versions.
+2024-01-17 12:53:11.229  WARN 7544 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-01-17 12:53:11.304  INFO 7544 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-01-17 12:53:11.440  INFO 7544 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 12:53:11.457  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.announcement.AnnouncementRepository
+2024-01-17 12:53:11.480  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.board.post.PostRepository
+2024-01-17 12:53:11.493  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserRepository
+2024-01-17 12:53:11.499  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserService
+2024-01-17 12:53:11.518  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.RoomRepo
+2024-01-17 12:53:11.525  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.ChatRepo
+2024-01-17 12:53:11.532  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.rate.RateRepository
+2024-01-17 12:53:11.541  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.friend.FriendRepository
+2024-01-17 12:53:11.549  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.idealType.IdealTypeRepository
+2024-01-17 12:53:11.562  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.inquiry.InquiryRepository
+2024-01-17 12:53:11.579  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.like.LikeRepository
+2024-01-17 12:53:11.602  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.pay.PaymentRepository
+2024-01-17 12:53:11.611  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.plaza.PlazaRepo
+2024-01-17 12:53:11.619  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.report.BlacklistRepository
+2024-01-17 12:53:11.638  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.taste.TasteRepository
+2024-01-17 12:53:11.653  WARN 7544 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-01-17 12:53:11.668  INFO 7544 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@611a8294, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@649d4c81, org.springframework.security.web.context.SecurityContextHolderFilter@71c13e9f, org.springframework.security.web.header.HeaderWriterFilter@774d7575, org.springframework.security.web.csrf.CsrfFilter@4a260366, org.springframework.security.web.authentication.logout.LogoutFilter@793de364, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@18318411, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@6aada243, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@e816066, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@b062ef2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d8a381a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@70984d0f, org.springframework.security.web.access.ExceptionTranslationFilter@3b2a505, org.springframework.security.web.access.intercept.AuthorizationFilter@f708993]
+2024-01-17 12:53:11.689  INFO 7544 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-01-17 12:53:11.712  INFO 7544 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-01-17 12:53:11.715  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-01-17 12:53:11.716  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-01-17 12:53:11.716  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2f770de4]]
+2024-01-17 12:53:11.716  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-01-17 12:53:11.718  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Started AraqApplication in 0.736 seconds (process running for 5087.439)
+2024-01-17 12:53:11.718  INFO 7544 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-01-17 12:54:11.678  INFO 7544 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2024-01-17 13:24:11.688  INFO 7544 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2024-01-17 13:51:37.341  INFO 7544 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (0 additions, 3 deletions, 0 modifications)
+2024-01-17 13:51:37.344  INFO 7544 --- [Thread-84] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-01-17 13:51:37.345  INFO 7544 --- [Thread-84] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@2f770de4]]
+2024-01-17 13:51:37.345  INFO 7544 --- [Thread-84] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-01-17 13:51:37.352  INFO 7544 --- [Thread-84] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-01-17 13:51:37.359  INFO 7544 --- [Thread-84] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 13:51:37.360  INFO 7544 --- [Thread-84] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2024-01-17 13:51:37.362  INFO 7544 --- [Thread-84] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+2024-01-17 13:51:37.517  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Starting AraqApplication using Java 17.0.8.1 with PID 7544 (C:\Users\admin\Desktop\araq\out\production\classes started by admin in C:\Users\admin\Desktop\araq)
+2024-01-17 13:51:37.517  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-01-17 13:51:37.661  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-01-17 13:51:37.689  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 20 JPA repository interfaces.
+2024-01-17 13:51:37.783  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-01-17 13:51:37.784  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-17 13:51:37.785  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2024-01-17 13:51:37.815  INFO 7544 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-17 13:51:37.816  INFO 7544 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 298 ms
+2024-01-17 13:51:37.878  INFO 7544 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-01-17 13:51:37.891  INFO 7544 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-01-17 13:51:37.892  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Starting...
+2024-01-17 13:51:37.896  INFO 7544 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-15 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5159928b
+2024-01-17 13:51:37.897  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Start completed.
+2024-01-17 13:51:37.898  WARN 7544 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000511: The 5.5.0 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 5.7.0. Check the community dialects project for available legacy versions.
+2024-01-17 13:51:37.898  WARN 7544 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-01-17 13:51:38.153  INFO 7544 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-01-17 13:51:38.461  INFO 7544 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 13:51:38.508  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.announcement.AnnouncementRepository
+2024-01-17 13:51:38.569  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.board.post.PostRepository
+2024-01-17 13:51:38.591  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserRepository
+2024-01-17 13:51:38.604  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserService
+2024-01-17 13:51:38.662  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.RoomRepo
+2024-01-17 13:51:38.675  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.ChatRepo
+2024-01-17 13:51:38.685  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.rate.RateRepository
+2024-01-17 13:51:38.703  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.friend.FriendRepository
+2024-01-17 13:51:38.716  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.idealType.IdealTypeRepository
+2024-01-17 13:51:38.740  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.inquiry.InquiryRepository
+2024-01-17 13:51:38.774  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.like.LikeRepository
+2024-01-17 13:51:38.806  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.pay.PaymentRepository
+2024-01-17 13:51:38.816  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.plaza.PlazaRepo
+2024-01-17 13:51:38.823  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.report.BlacklistRepository
+2024-01-17 13:51:38.842  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.taste.TasteRepository
+2024-01-17 13:51:38.858  WARN 7544 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-01-17 13:51:38.873  INFO 7544 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@29058b3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5416c090, org.springframework.security.web.context.SecurityContextHolderFilter@137c67a2, org.springframework.security.web.header.HeaderWriterFilter@3695091c, org.springframework.security.web.csrf.CsrfFilter@3ef53f83, org.springframework.security.web.authentication.logout.LogoutFilter@4bb8bc32, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@5486ee7d, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@35897d25, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5ad18039, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4624b69, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@25cabdca, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@37003969, org.springframework.security.web.access.ExceptionTranslationFilter@3e73ff50, org.springframework.security.web.access.intercept.AuthorizationFilter@2dc34dba]
+2024-01-17 13:51:38.899  INFO 7544 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-01-17 13:51:38.926  INFO 7544 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-01-17 13:51:38.932  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-01-17 13:51:38.933  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-01-17 13:51:38.933  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6ac51d31]]
+2024-01-17 13:51:38.933  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-01-17 13:51:38.935  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Started AraqApplication in 1.445 seconds (process running for 8594.656)
+2024-01-17 13:51:38.936  INFO 7544 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+2024-01-17 13:51:40.399  INFO 7544 --- [File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 3 class path changes (3 additions, 0 deletions, 0 modifications)
+2024-01-17 13:51:40.400  INFO 7544 --- [Thread-88] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2024-01-17 13:51:40.400  INFO 7544 --- [Thread-88] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@6ac51d31]]
+2024-01-17 13:51:40.400  INFO 7544 --- [Thread-88] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.
+2024-01-17 13:51:40.405  INFO 7544 --- [Thread-88] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-01-17 13:51:40.408  INFO 7544 --- [Thread-88] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 13:51:40.408  INFO 7544 --- [Thread-88] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown initiated...
+2024-01-17 13:51:40.409  INFO 7544 --- [Thread-88] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown completed.
+2024-01-17 13:51:40.489  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Starting AraqApplication using Java 17.0.8.1 with PID 7544 (C:\Users\admin\Desktop\araq\out\production\classes started by admin in C:\Users\admin\Desktop\araq)
+2024-01-17 13:51:40.489  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : No active profile set, falling back to 1 default profile: "default"
+2024-01-17 13:51:40.592  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-01-17 13:51:40.615  INFO 7544 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 20 JPA repository interfaces.
+2024-01-17 13:51:40.673  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-01-17 13:51:40.673  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-01-17 13:51:40.673  INFO 7544 --- [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2024-01-17 13:51:40.689  INFO 7544 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-01-17 13:51:40.689  INFO 7544 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 199 ms
+2024-01-17 13:51:40.708  INFO 7544 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-01-17 13:51:40.713  INFO 7544 --- [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-01-17 13:51:40.714  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Starting...
+2024-01-17 13:51:40.715  INFO 7544 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-16 - Added connection com.mysql.cj.jdbc.ConnectionImpl@18eb0702
+2024-01-17 13:51:40.715  INFO 7544 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Start completed.
+2024-01-17 13:51:40.716  WARN 7544 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000511: The 5.5.0 version for [org.hibernate.dialect.MySQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 5.7.0. Check the community dialects project for available legacy versions.
+2024-01-17 13:51:40.716  WARN 7544 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-01-17 13:51:40.801  INFO 7544 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-01-17 13:51:40.944  INFO 7544 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-01-17 13:51:40.961  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.announcement.AnnouncementRepository
+2024-01-17 13:51:40.984  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.board.post.PostRepository
+2024-01-17 13:51:40.997  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserRepository
+2024-01-17 13:51:41.004  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.user.UserService
+2024-01-17 13:51:41.025  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.RoomRepo
+2024-01-17 13:51:41.031  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.ChatRepo
+2024-01-17 13:51:41.038  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.chat.rate.RateRepository
+2024-01-17 13:51:41.046  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.friend.FriendRepository
+2024-01-17 13:51:41.053  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.idealType.IdealTypeRepository
+2024-01-17 13:51:41.068  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.inquiry.InquiryRepository
+2024-01-17 13:51:41.081  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.like.LikeRepository
+2024-01-17 13:51:41.104  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.pay.PaymentRepository
+2024-01-17 13:51:41.112  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.plaza.PlazaRepo
+2024-01-17 13:51:41.119  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.report.BlacklistRepository
+2024-01-17 13:51:41.139  WARN 7544 --- [restartedMain] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: com.team.araq.taste.TasteRepository
+2024-01-17 13:51:41.158  WARN 7544 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-01-17 13:51:41.171  INFO 7544 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2b143b30, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1838b97b, org.springframework.security.web.context.SecurityContextHolderFilter@11da2d60, org.springframework.security.web.header.HeaderWriterFilter@45846ad5, org.springframework.security.web.csrf.CsrfFilter@fcfddc9, org.springframework.security.web.authentication.logout.LogoutFilter@15bd3c41, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@1bb9f737, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@60638acd, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@671a80a1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@600a9b07, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@33f8acdd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4cece504, org.springframework.security.web.access.ExceptionTranslationFilter@6f3782d1, org.springframework.security.web.access.intercept.AuthorizationFilter@57b381f0]
+2024-01-17 13:51:41.194  INFO 7544 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-01-17 13:51:41.224  INFO 7544 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-01-17 13:51:41.234  INFO 7544 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-01-17 13:51:41.234  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2024-01-17 13:51:41.234  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@775f8092]]
+2024-01-17 13:51:41.234  INFO 7544 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2024-01-17 13:51:41.236  INFO 7544 --- [restartedMain] com.team.araq.AraqApplication            : Started AraqApplication in 0.76 seconds (process running for 8596.957)
+2024-01-17 13:51:41.237  INFO 7544 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged

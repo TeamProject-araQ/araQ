@@ -30,8 +30,9 @@ public class PaymentController {
     @PostMapping("/charge")
     @ResponseBody
     public String charge(@RequestBody PaymentDTO paymentDTO, Principal principal) {
-        this.paymentService.savePayment(paymentDTO);
-        this.userService.plusBubbles(this.userService.getByUsername(principal.getName()), paymentDTO.getBubble());
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        this.paymentService.savePayment(paymentDTO, user);
+        this.userService.plusBubbles(user, paymentDTO.getBubble());
         return paymentDTO.getBubble() + " 버블이 충전되었습니다.";
     }
 
