@@ -2,6 +2,7 @@ package com.team.araq.chat;
 
 import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,6 +58,32 @@ public class RoomService {
         if (room.getConfirm().equals(username)) {
             room.setConfirm("");
             roomRepo.save(room);
+        }
+    }
+
+    public void saveChatNumbers(Room room) {
+        room.setChatNumbers(room.getChatNumbers() + 1);
+        this.roomRepo.save(room);
+    }
+
+    public void updatePossible(Room room) {
+        if (room.getChatNumbers() >= 50) {
+            room.setPossible(true);
+        }
+        this.roomRepo.save(room);
+    }
+
+    public boolean isOlderThanOneDay(Room room) {
+        return room.getCreateDate().plusDays(1).isBefore(LocalDateTime.now());
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void checkAndUpdateChatRooms() {
+        List<Room> rooms = roomRepo.findAll();
+        for (Room room : rooms) {
+            if (isOlderThanOneDay(room)) {
+                updatePossible(room);
+            }
         }
     }
 }

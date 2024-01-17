@@ -19,13 +19,13 @@ function scrollToBottom() {
 }
 
 $(function () {
-    var text = '"여기서는 당신의 취향을 \n 반영한 매칭으로 즐거운 대화와 뜻깊은 \n 관계를 시작할 수 있습니다."';
+    var text = '"여기서는 당신의 취향을 \n 반영한 매칭으로 즐거운 대화와 \n 뜻깊은 관계를 시작할 수 있습니다."';
     var i = 0;
     function typeWriter() {
         if (i < text.length) {
             $('#typewriter').append(text.charAt(i));
             i++;
-            setTimeout(typeWriter, 130); // 여기서 100ms는 타자가 치는 속도를 의미합니다.
+            setTimeout(typeWriter, 30);
         }
     }
     typeWriter();
