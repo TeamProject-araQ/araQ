@@ -531,4 +531,19 @@ public class UserService {
         }
         this.userRepository.save(targetUser);
     }
+
+    public void addRatePass(SiteUser user, int pass) {
+        user.setRatePass(user.getRatePass() + pass);
+        this.userRepository.save(user);
+    }
+
+    public void useRatePass(SiteUser user) {
+        user.setRatePass(user.getRatePass() - 1);
+        this.userRepository.save(user);
+    }
+
+    public void addOpenRate(SiteUser user1, SiteUser user2) {
+        user1.getOpenRates().add(user2);
+        this.userRepository.save(user1);
+    }
 }

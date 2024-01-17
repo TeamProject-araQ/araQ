@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/araq.css}">
-    <link rel="icon" href="https://araq.site/image/araQ/icon.jpg">
+    <link rel="icon" href="/image/araQ/icon.jpg">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -185,6 +185,10 @@
                 <div class="d-flex align-items-center p-1" th:if="${user.araQPass > 0}">
                     <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">아라큐 이용권</div>
                     <div class="ms-1" th:text="|${user.araQPass}개|"></div>
+                </div>
+                <div class="d-flex align-items-center p-1" th:if="${user.ratePass > 0}">
+                    <div class="badge me-1" style="background: rgb(146, 132, 168); color: #ffffff;">평가 열람권</div>
+                    <div class="ms-1" th:text="|${user.ratePass}개|"></div>
                 </div>
             </div>
         </div>

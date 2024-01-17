@@ -29,9 +29,9 @@ public class PaymentController {
 
     @PostMapping("/charge")
     @ResponseBody
-    public String charge(@RequestBody PaymentDTO paymentDTO) {
+    public String charge(@RequestBody PaymentDTO paymentDTO, Principal principal) {
         this.paymentService.savePayment(paymentDTO);
-        this.userService.plusBubbles(this.userService.getByUsername(paymentDTO.getUsername()), paymentDTO.getBubble());
+        this.userService.plusBubbles(this.userService.getByUsername(principal.getName()), paymentDTO.getBubble());
         return paymentDTO.getBubble() + " 버블이 충전되었습니다.";
     }
 
@@ -89,6 +89,12 @@ public class PaymentController {
                 case "채팅 신청권 (1개)" -> this.userService.addChatPass(user, 1);
                 case "채팅 신청권 (3개)" -> this.userService.addChatPass(user, 3);
                 case "채팅 신청권 (5개)" -> this.userService.addChatPass(user, 5);
+            }
+        } else if (ticketName.contains("평가 열람권")) {
+            switch (ticketName) {
+                case "평가 열람권 (1개)" -> this.userService.addRatePass(user, 1);
+                case "평가 열람권 (3개)" -> this.userService.addRatePass(user, 3);
+                case "평가 열람권 (5개)" -> this.userService.addRatePass(user, 5);
             }
         } else if (ticketName.contains("말풍선 이용권")) {
             this.userService.changeColor(user, jsonObject.getString("background"), jsonObject.getString("color"));
