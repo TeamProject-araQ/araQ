@@ -167,7 +167,7 @@ stompClient.connect({}, function (frame) {
                     '<div class="chatBox">' +
                     '<img src="' + data.writerImage + '" alt="">' +
                     '<div>' +
-                    '<a href="javascript:void(0)" onclick="window.location.reload()">' + data.writerNick + '</a>' +
+                    '<a href="javascript:void(0)" class="chatWriterBtn">' + data.writerNick + '</a>' +
                     '<div>' +
                     '<div class="card">' +
                     imageElement +
@@ -264,7 +264,7 @@ $("#voiceChatBtn").on('click', function () {
     }
 });
 
-$(".chatWriterBtn").on('click', function () {
+$(".chatBox").on("click", ".chatWriterBtn", function () {
     showProfile(target);
 });
 

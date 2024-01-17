@@ -49,9 +49,9 @@ $(function () {
     stompClient.connect({}, function (frame) {
         if (Notification.permission !== "granted") {
             Notification.requestPermission().then(r => {
-                if (r === "granted") alert("푸시 알람이 설정되었습니다.");
+                if (r === "granted") alert("푸시 알림이 설정되었습니다.");
             });
-        }
+        } else alert("푸시 알림이 설정되어 있지 않습니다.");
 
         stompClient.subscribe('/topic/friend/request/impossible/' + loginUser, function (notification) {
             alert(notification.body);
