@@ -32,6 +32,14 @@ public class RateController {
     }
 
     @ResponseBody
+    @PostMapping("/check")
+    public boolean checkRate(Principal principal, @RequestBody String username) {
+        SiteUser user1 = this.userService.getByUsername(principal.getName());
+        SiteUser user2 = this.userService.getByUsername(username);
+        return user1.getOpenRates().contains(user2);
+    }
+
+    @ResponseBody
     @PostMapping("/view")
     public boolean viewRate(Principal principal, @RequestBody String username) {
         SiteUser user = this.userService.getByUsername(principal.getName());

@@ -492,7 +492,15 @@ $(function () {
         });
     });
 
-    $('#profileModal .rate').on('click', function () {
+    function displayRateData(data) {
+        var rate = JSON.parse(data);
+        $("#collapseRate").collapse('toggle');
+        $('#profileModal #manner').text(rate.manner);
+        $('#profileModal #appeal').text(rate.appeal);
+        $('#profileModal #appearance').text(rate.appearance);
+    }
+
+    $('#profileModal .viewRate').on('click', function () {
         const nick = $(this).data("nick");
         const target = $(this).data("value")
         $.ajax({
@@ -505,28 +513,41 @@ $(function () {
             data: target,
             success: function (data) {
                 if (data !== "") {
-                    if (confirm(nick + "님에 대한 평가를 열람하시겠습니까?")) {
-                        $.ajax({
-                            url: "/rate/view",
-                            type: "POST",
-                            headers: {
-                                [csrfHeader]: csrfToken
-                            },
-                            contentType: "text/plain",
-                            data: target,
-                            success: function (response) {
-                                if (response === false)
-                                    alert("평가 열람권이 필요합니다.");
-                                else {
-                                    var rate = JSON.parse(data);
-                                    $("#collapseRate").collapse('toggle');
-                                    $('#profileModal #manner').text(rate.manner);
-                                    $('#profileModal #appeal').text(rate.appeal);
-                                    $('#profileModal #appearance').text(rate.appearance);
+                    $.ajax({
+                        url: "/rate/check",
+                        type: "POST",
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        },
+                        contentType: "text/plain",
+                        data: target,
+                        success: function (value) {
+                            if (value === true) displayRateData(data);
+                            else {
+                                if (confirm(nick + "님에 대한 평가를 열람하시겠습니까?")) {
+                                    $.ajax({
+                                        url: "/rate/view",
+                                        type: "POST",
+                                        headers: {
+                                            [csrfHeader]: csrfToken
+                                        },
+                                        contentType: "text/plain",
+                                        data: target,
+                                        success: function (response) {
+                                            if (response === false)
+                                                alert("평가 열람권이 필요합니다.");
+                                            else displayRateData(data);
+                                        },
+                                        error: function (err) {
+                                            console.log(err)
+                                        }
+                                    });
                                 }
                             }
-                        });
-                    }
+                        }, error: function (err) {
+                            console.log(err);
+                        }
+                    })
                 } else {
                     alert("아직 " + nick + "님에 대한 평가 내역이 존재하지 않습니다.");
                 }
@@ -636,8 +657,8 @@ function showProfile(username) {
             $("#profileModal .card-title").text(data.nickName);
             $("#profileModal .age").text(data.age);
             $("#profileModal .introduce").text(data.introduce);
-            $('#profileModal .rate').data("value", data.username);
-            $('#profileModal .rate').data("nick", data.nickName);
+            $('#profileModal .viewRate').data("value", data.username);
+            $('#profileModal .viewRate').data("nick", data.nickName);
             if (data.audio) {
                 var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
                 var durationElement = $("#profileModal #audioDuration");
