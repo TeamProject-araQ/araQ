@@ -392,8 +392,9 @@ $(function () {
         };
     }
 
-    $('.listen').on('click', function () {
-        var myAudio = $('.audio')[0];
+    $('#profileModal .audio').on('play', function () {
+        console.log("클릭");
+        var myAudio = $('#profileModal .audio')[0];
         $.ajax({
             url: "/user/checkAccess",
             type: "POST",
@@ -660,22 +661,10 @@ function showProfile(username) {
             $('#profileModal .viewRate').data("value", data.username);
             $('#profileModal .viewRate').data("nick", data.nickName);
             if (data.audio) {
-                var audioElement = $("#profileModal .audio").attr("src", data.audio)[0];
-                var durationElement = $("#profileModal #audioDuration");
-
-                audioElement.ontimeupdate = function () {
-                    var currentMinutes = Math.floor(audioElement.currentTime / 60);
-                    var currentSeconds = Math.floor(audioElement.currentTime - currentMinutes * 60);
-                    durationElement.text(pad(currentMinutes) + ":" + pad(currentSeconds));
-                };
-
-                function pad(value) {
-                    return value > 9 ? value : "0" + value;
-                }
-
-                $("#profileModal .listen, #profileModal #audioDuration").show();
+                $("#profileModal .audio").attr("src", data.audio)[0];
+                $("#profileModal .audio").show();
             } else {
-                $("#profileModal .listen, #profileModal #audioDuration").hide();
+                $("#profileModal .audio").hide();
             }
             $("#profileModal").modal("show");
 

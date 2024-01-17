@@ -13,7 +13,7 @@
                     </div>
                     <div class="ms-1" th:text="|가 일치하는 ${#lists.size(religionList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="religionCarousel" class="carousel slide mt-5" style="max-width: 700px;">
+                <div id="religionCarousel" class="carousel slide mt-5" style="width: 90%;">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${religionList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
