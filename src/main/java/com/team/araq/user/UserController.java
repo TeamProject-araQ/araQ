@@ -225,7 +225,7 @@ public class UserController {
         SiteUser user = userService.getByUserToken(token);
         model.addAttribute("target", user);
         model.addAttribute("user", user);
-        return "/user/resetPw";
+        return "user/resetPw";
     }
 
     @PostMapping("/resetPw")
