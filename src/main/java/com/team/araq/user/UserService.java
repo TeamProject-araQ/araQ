@@ -40,9 +40,9 @@ public class UserService {
 
     private final TaskScheduler taskScheduler;
 
-    private String uploadPath = "C:/uploads/user";
+    private String uploadPath = "uploads/user";
 
-    private String audioPath = "C:/uploads/audio";
+    private String audioPath = "uploads/audio";
 
 
     private Specification<SiteUser> search(String kw) {

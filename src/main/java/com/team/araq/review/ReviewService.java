@@ -25,7 +25,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    private String uploadPath = "C:/uploads/review";
+    private String uploadPath = "uploads/review";
 
     private Specification<Review> search(String kw) {
         return new Specification<Review>() {
