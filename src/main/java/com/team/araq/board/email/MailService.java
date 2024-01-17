@@ -48,7 +48,6 @@ public class MailService {
             helper.setTo(mailDto.getAddress());
             helper.setSubject(mailDto.getTitle());
 
-            // HTML 형식의 이메일 내용 설정
             helper.setText(mailDto.getMessage(), true);
 
             helper.setFrom("teriyaki970326@google.com");
@@ -76,7 +75,7 @@ public class MailService {
         String resetToken = createToken(username);
 
         // 비밀번호 재설정 링크를 이메일에 포함시켜 전송
-        String resetLink = "http://localhost:8080/user/resetPw/" + resetToken;
+        String resetLink = "https://araq.site/user/resetPw/" + resetToken;
         String emailContent = "<p>비밀번호를 변경하려면 다음 링크를 클릭하세요: <a href='" + resetLink + "'>비밀번호 변경하기</a></p>";
         MailDto dto = new MailDto();
         dto.setAddress(user.getEmail());

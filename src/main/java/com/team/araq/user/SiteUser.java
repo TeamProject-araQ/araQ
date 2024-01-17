@@ -210,9 +210,11 @@ public class SiteUser {
     @Getter
     private UserRole role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user1", cascade = CascadeType.REMOVE)
     private List<Rate> rateList1;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user2", cascade = CascadeType.REMOVE)
     private List<Rate> rateList2;
 
