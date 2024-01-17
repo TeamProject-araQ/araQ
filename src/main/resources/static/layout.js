@@ -281,8 +281,6 @@ $(function () {
         })
     });
 
-    console.log($('#phone').val());
-
     if ($('#phone').val() == null || $('#phone').val() === "") {
         if (!window.location.pathname.startsWith('/user/resetPw/')) {
             alert("휴대폰 인증이 완료되지 않은 회원입니다. 휴대폰 인증을 진행합니다.");
