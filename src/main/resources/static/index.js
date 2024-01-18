@@ -45,7 +45,7 @@ $(function () {
 
     checkVisibility();
 
-    $(window).scroll(checkVisibility);
+    $(window).scroll(checkVisibility, typeWriter());
 
     $('#recommendedMatches').popover({
         html: true,

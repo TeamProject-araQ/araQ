@@ -11,7 +11,7 @@
         <a th:href="@{/review/create}" th:if="${user.review == null}" class="btn 버튼-full">후기 작성하기</a>
     </div>
     <div class="row mb-3">
-        <div class="col-3" th:each="review, loop:${paging}">
+        <div class="col-lg-3 col-md-6 col-sm-12" th:each="review, loop:${paging}">
             <a th:href="@{|/review/detail/${review.id}|}">
                 <div class="reviewCard card p-0">
                     <div class="cardOverlay"></div>
