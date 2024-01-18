@@ -4,6 +4,7 @@ import com.team.araq.announcement.Announcement;
 import com.team.araq.announcement.AnnouncementService;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.chat.RoomService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
@@ -46,6 +47,8 @@ public class AdminController {
     private final BlacklistService blacklistService;
 
     private final AnnouncementService announcementService;
+
+    private final RoomService roomService;
 
     @GetMapping("")
     public String page() {
@@ -201,6 +204,7 @@ public class AdminController {
     public String keepUser(@RequestBody String reportId) {
         Report report = this.reportService.getReport(Integer.parseInt(reportId));
         this.reportService.updateStatus(report);
+        if (report.getCode() != null) roomService.setReport(roomService.get(report.getCode()), false);
         return "처리가 완료되었습니다.";
     }
 

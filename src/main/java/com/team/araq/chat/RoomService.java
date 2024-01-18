@@ -22,6 +22,7 @@ public class RoomService {
         room.setRecentDate(LocalDateTime.now());
         room.setCode(uuid);
         room.setConfirm("");
+        room.setReported(false);
         roomRepo.save(room);
     }
 
@@ -85,5 +86,10 @@ public class RoomService {
                 updatePossible(room);
             }
         }
+    }
+
+    public void setReport(Room room, boolean report) {
+        room.setReported(report);
+        roomRepo.save(room);
     }
 }

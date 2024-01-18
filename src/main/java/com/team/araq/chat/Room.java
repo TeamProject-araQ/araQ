@@ -37,4 +37,6 @@ public class Room {
 
     private int chatNumbers;
 
+    private Boolean reported;
+
 }
