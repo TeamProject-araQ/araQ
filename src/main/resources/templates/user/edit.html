@@ -64,7 +64,7 @@
                                     th:class="${index == 0} ? 'active' : ''"
                                     aria-label="Slide ${index + 1}"></button>
                         </div>
-                        <div class="carousel-inner">
+                        <div class="carousel-inner" id="carousel-inner1">
                             <div th:each="image, iterStat : ${user.images}" class="carousel-item"
                                  th:classappend="${iterStat.index == 0} ? 'active': ''">
                                 <img class="d-block w-100" th:src="${image}" alt="">
@@ -373,7 +373,7 @@
     }
 
     function addImageToCarousel() {
-        var totalImages = $('.carousel-inner .carousel-item').length;
+        var totalImages = $('#carousel-inner1 .carousel-item').length;
 
         // 이미지 개수 제한 (예: 개)
         var imageLimit = 10;
@@ -397,7 +397,7 @@
                 [csrfHeader]: csrfToken
             },
             success: function (data) {
-                var carouselInner = $('.carousel-inner');
+                var carouselInner = $('#carousel-inner1');
                 var indicators = $('.carousel-indicators');
 
                 // 새 이미지 추가
