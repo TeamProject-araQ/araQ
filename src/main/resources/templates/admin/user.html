@@ -41,7 +41,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user, loop : ${paging}" th:if="${user.role.value != 'ROLE_SUPER'}">
+        <tr th:each="user, loop : ${paging}" th:if="${!user.role.value.equals('ROLE_SUPER') && !user.username.equals(admin.username)}">
             <td><input class="check form-check-input" type="checkbox" th:value="${user.username}" th:id="${user.id}">
             </td>
             <td th:text="${user.id}"></td>
@@ -120,7 +120,7 @@
         });
 
         $("#deleteBtn").on('click', function() {
-            var checkedValues = $(".check:checked").map(function() {
+            const checkedValues = $(".check:checked").map(function() {
                 return this.value;
             }).get();
 
@@ -128,6 +128,8 @@
                 alert('선택된 회원이 없습니다.');
                 return;
             }
+
+            console.log(checkedValues);
 
             if (confirm('회원 정보를 삭제하시겠습니까?')) {
                 $.ajax({
