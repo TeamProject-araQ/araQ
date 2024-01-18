@@ -19,8 +19,6 @@ import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -138,6 +136,11 @@ public class AdminController {
     @PostMapping("/user/delete")
     @ResponseBody
     public String deleteUser(@RequestBody List<String> usernames) {
+        for (String username : usernames) {
+            SiteUser user = this.userService.getByUsername(username);
+            if (user.getRole().equals(UserRole.ADMIN))
+                return "관리자는 삭제할 수 없습니다.";
+        }
         for (String username : usernames) {
             SiteUser user = this.userService.getByUsername(username);
             this.userService.deleteUser(user);
