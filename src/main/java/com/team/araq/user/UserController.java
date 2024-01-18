@@ -9,7 +9,6 @@ import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
-import com.team.araq.report.BlacklistService;
 import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -49,8 +48,6 @@ public class UserController {
 
     private final SmsService smsService;
 
-    private final BlacklistService blacklistService;
-
     private final InquiryService inquiryService;
 
     private final PostService postService;
@@ -72,10 +69,6 @@ public class UserController {
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
-        }
-        if (this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()) != null) {
-            model.addAttribute("blacklist", this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()));
-            return "user/blacklist";
         }
         try {
             SiteUser user = userService.create(userCreateForm);

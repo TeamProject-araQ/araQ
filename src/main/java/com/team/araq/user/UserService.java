@@ -546,4 +546,10 @@ public class UserService {
         user1.getOpenRates().add(user2);
         this.userRepository.save(user1);
     }
+
+    public void updateRole(SiteUser user, UserRole userRole) {
+        user.setRole(userRole);
+        this.userRepository.save(user);
+    }
+
 }

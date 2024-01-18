@@ -8,12 +8,15 @@
                 전체 선택
             </label>
         </div>
-        <button type="button" class="btn btn-sm 버튼" id="deleteBtn">삭제
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
-                 viewBox="0 0 16 16">
-                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-            </svg>
-        </button>
+        <div>
+            <button type="button" class="btn btn-sm 버튼-full" id="actionBtn">저장</button>
+            <button type="button" class="btn btn-sm 버튼" id="deleteBtn">삭제
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                     viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+        </div>
     </div>
     <table class="table table-hover text-center" style="width:100%; table-layout: fixed;">
         <thead style="background:#5f566d; color:white;">
@@ -26,7 +29,7 @@
             <th>신고 대상</th>
             <th>신고일</th>
             <th>처리 상태</th>
-            <th>탈퇴</th>
+            <th>조치</th>
         </tr>
         </thead>
         <tbody>
@@ -39,9 +42,13 @@
             <td th:text="${report.reportedUser.username}"></td>
             <td th:text="${#temporals.format(report.reportDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${report.status}"></td>
-            <td>
-                <input type="button" class="keep btn btn-sm btn-outline-primary" th:if="${report.status == '처리 대기'}" value="활동 유지" th:data-value="${report.id}">
-                <input type="button" class="withdraw btn btn-sm btn-outline-secondary" th:if="${report.status == '처리 대기'}" value="강제 탈퇴" th:data-value="${report.id}">
+            <td th:if="${report.status == '처리 대기'}">
+                <select class="form-select actionSelect" aria-label="actionSelect">
+                    <option value="" selected>관리 옵션</option>
+                    <option value="활동 유지">활동 유지</option>
+                    <option value="계정 정지">계정 정지</option>
+                    <option value="영구 탈퇴">영구 탈퇴</option>
+                </select>
             </td>
         </tr>
         </tbody>
@@ -68,62 +75,103 @@
             <input type="hidden" id="page" name="page" th:value="${paging.number}">
         </form>
     </div>
+    <!-- 정지 일수 선택을 위한 모달 -->
+    <div class="modal fade" id="suspensionModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="suspensionModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="suspensionModalLabel">계정 정지 일수 선택</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" id="suspensionDays" placeholder="일수를 입력하세요">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveSuspensionDays">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript" layout:fragment="script">
-    $(function() {
-        $(".page-link").on('click', function() {
+    $(function () {
+
+        $(".page-link").on('click', function () {
             $("#page").val(this.dataset.page);
             $("#searchForm").submit();
         });
 
-        $("#checkAll").on('click', function() {
+        $("#checkAll").on('click', function () {
             $('.check').prop('checked', this.checked);
         });
 
-        $(".keep").on('click', function() {
-            if (confirm('계정을 유지하시겠습니까?')) {
+        $('.actionSelect').change(function () {
+            var selectedAction = $(this).val();
+            var $checkbox = $(this).closest('tr').find('.check');
+
+            if (selectedAction === "계정 정지") {
+                $('#suspensionModal').modal('show');
+
+                $('#saveSuspensionDays').click(function () {
+                    var suspensionDays = $('#suspensionDays').val();
+                    if (suspensionDays == null || suspensionDays === "")
+                        alert("일수 선택은 필수 입력 사항입니다.");
+                    else {
+                        $checkbox.attr('data-action', selectedAction);
+                        $checkbox.attr('data-days', suspensionDays);
+                        $('#suspensionModal').modal('hide');
+                    }
+                });
+            } else $checkbox.attr('data-action', selectedAction);
+        });
+
+        $('#actionBtn').on('click', function () {
+            var dataObject = {};
+            var isEmptyAction = false;
+            $(".check:checked").each(function () {
+                var id = $(this).val();
+                var action = $(this).data("action");
+                var days = $(this).data("days");
+                if (action === "") {
+                    isEmptyAction = true;
+                    return false;
+                }
+                dataObject[id] = {
+                    action: action,
+                    days: days
+                };
+            });
+
+            var jsonData = JSON.stringify(dataObject);
+            var keys = Object.keys(dataObject);
+            if (keys.length === 0) {
+                alert('선택된 신고 내역이 없습니다.');
+                return;
+            } else if (isEmptyAction) {
+                alert("조치 옵션을 선택해주세요.");
+                return;
+            } else {
                 $.ajax({
-                    url: '/admin/report/keep',
-                    type : 'post',
-                    headers : {
-                        [csrfHeader] : csrfToken
+                    url: "/admin/report/action",
+                    type: "POST",
+                    headers: {
+                        [csrfHeader]: csrfToken
                     },
-                    contentType : 'text/plain',
-                    data: JSON.stringify($(this).data('value')),
-                    success : function(data) {
-                        alert(data);
-                        location.reload();
+                    contentType: "application/json",
+                    data: JSON.stringify(jsonData),
+                    success: function (response) {
+                        alert(response);
                     },
-                    error : function(error) {
-                        console.log(error);
+                    error: function (err) {
+                        console.log(err);
                     }
                 });
             }
         });
 
-        $(".withdraw").on('click', function() {
-            if (confirm('계정을 탈퇴 처리하시겠습니까?')) {
-                $.ajax({
-                    url: '/admin/report/withdraw',
-                    type : 'post',
-                    headers : {
-                        [csrfHeader] : csrfToken
-                    },
-                    contentType : 'text/plain',
-                    data: JSON.stringify($(this).data('value')),
-                    success : function(data) {
-                        alert(data);
-                        location.reload();
-                    },
-                    error : function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-        });
-
-        $("#deleteBtn").on('click', function() {
-            var checkedValues = $(".check:checked").map(function() {
+        $("#deleteBtn").on('click', function () {
+            var checkedValues = $(".check:checked").map(function () {
                 return this.value;
             }).get();
 
@@ -134,18 +182,18 @@
 
             if (confirm('신고 내역을 삭제하시겠습니까?')) {
                 $.ajax({
-                    url : '/admin/report/delete',
-                    type : 'post',
-                    headers : {
-                        [csrfHeader] : csrfToken
+                    url: '/admin/report/delete',
+                    type: 'post',
+                    headers: {
+                        [csrfHeader]: csrfToken
                     },
-                    contentType : 'application/json',
+                    contentType: 'application/json',
                     data: JSON.stringify(checkedValues),
-                    success : function(data) {
+                    success: function (data) {
                         alert(data);
                         location.reload();
                     },
-                    error : function(error) {
+                    error: function (error) {
                         console.log(error);
                     }
                 });
