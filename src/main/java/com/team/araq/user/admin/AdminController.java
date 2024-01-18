@@ -9,6 +9,7 @@ import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
+import com.team.araq.plaza.PlazaService;
 import com.team.araq.report.Report;
 import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
@@ -47,6 +48,8 @@ public class AdminController {
     private final AnnouncementService announcementService;
 
     private final RoomService roomService;
+
+    private final PlazaService plazaService;
 
     @GetMapping("")
     public String page() {
@@ -217,7 +220,8 @@ public class AdminController {
                 this.userService.updateRole(user, UserRole.BAN);
             }
             System.out.println(report.getCode());
-            if (report.getCode() != null) roomService.setReport(roomService.get(report.getCode()), false);
+            if (report.getLocation().equals("chat")) roomService.setReport(roomService.get(report.getCode()), false);
+            else if (report.getLocation().equals("plaza")) plazaService.setReport(plazaService.getByCode(report.getCode()), false);
         }
         return "조치가 완료되었습니다.";
     }
