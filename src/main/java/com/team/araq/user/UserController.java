@@ -156,7 +156,7 @@ public class UserController {
     }
 
     @PostMapping("/out")
-    public String out(@RequestParam("username") String username, @RequestParam("password") String password, Principal principal) {
+    public String out(Principal principal) {
         SiteUser user = userService.getByUsername(principal.getName());
         userService.deleteUser(user);
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -194,9 +194,9 @@ public class UserController {
             appeal += rateList.get(i).getAppeal();
             appearance += rateList.get(i).getAppearance();
         }
-        manner = Math.round(manner/rateList.size() * 10) / 10.0;
-        appeal = Math.round(appeal/rateList.size() * 10) / 10.0;
-        appearance = Math.round(appearance/ rateList.size() * 10) / 10.0;
+        manner = Math.round(manner / rateList.size() * 10) / 10.0;
+        appeal = Math.round(appeal / rateList.size() * 10) / 10.0;
+        appearance = Math.round(appearance / rateList.size() * 10) / 10.0;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("manner", manner);
         jsonObject.put("appeal", appeal);
@@ -307,7 +307,7 @@ public class UserController {
     // 비밀번호 찾기시 문자로 인증번호 보내기
     @PostMapping("/sendVerificationCode")
     @ResponseBody
-    public String sendVerificationCod(@RequestBody Map<String, String> data, HttpSession session) {
+    public String sendVerificationCode(@RequestBody Map<String, String> data, HttpSession session) {
         String username = data.get("username");
         String phoneNum = data.get("phoneNum");
 
@@ -496,5 +496,29 @@ public class UserController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         this.userService.savePhoneNum(user, phoneNum);
         return "휴대폰 인증이 완료되었습니다.";
+    }
+
+    @ResponseBody
+    @PostMapping("/sendSocialVerKey")
+    public String sendSocialVerkey(@RequestBody String phoneNum, Principal principal, HttpSession session) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        if (user.getPhoneNum().equals(phoneNum)) {
+            String verKey = smsService.createRandomNum();
+            session.setAttribute("verKey", verKey);
+            smsService.sendSms(phoneNum, verKey);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    @PostMapping("/confirmSocialVerKey")
+    @ResponseBody
+    public String confirmSocialVerKey(@RequestBody String verKey, HttpSession session) {
+        String storedVerKey = (String) session.getAttribute("verKey");
+        if (verKey.equals(storedVerKey)) {
+            return "success";
+        }
+        return "fail";
     }
 }

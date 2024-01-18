@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <h3 class="underline">회원 인증</h3>
-    <div>
+    <div th:if="${user.password != null}" class="form-group mb-3">
         <form th:action="@{/user/out}" method="post" id="outForm" onsubmit="return checkUser();">
             <div class="form-group mb-3">
                 <label for="username" class="form-label" style="border-bottom:2px solid #d8d3e0;">아이디</label>
@@ -16,6 +16,24 @@
             </div>
         </form>
     </div>
+    <div th:if="${user.password == null}" class="form-group mb-3">
+        <form th:action="@{/user/out}" method="post" id="socialOutForm">
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">전화 번호</label>
+                <div class="input-group">
+                    <input type="text" id="phoneNumber" class="form-control">
+                    <input type="button" class="btn 버튼-full" name="phoneNumber" onclick="sendSocialVerKey()" value="인증번호 발송">
+                </div>
+            </div>
+            <div id="verKeySection" class="mb-3" style="display: none;">
+                <label for="socialVerKey" class="form-label">인증 번호</label>
+                <div class="input-group">
+                    <input type="text" id="socialVerKey" class="form-control">
+                    <input type="button" class="btn 버튼-full" name="verKey" onclick="confirmSocialVerKey()" value="인증번호 확인">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 <script th:inline="javascript" type="text/javascript" layout:fragment="script">
     function checkUser() {
@@ -24,7 +42,6 @@
         var username = $("#username").val();
         var password = $("#password").val();
 
-                        console.log('실행');
         $.ajax({
             type: 'POST',
             url: '/user/checkUser',
@@ -45,5 +62,73 @@
 
         return false; // 폼 제출 막기
     }
+
+    function sendSocialVerKey() {
+        var phoneNum = $('#phoneNumber').val();
+
+        if (!phoneNum.trim()) {
+            alert('전화번호를 입력해주세요.');
+            return;
+        }
+
+        phoneNum = phoneNum.replace(/-/g, '');
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/sendSocialVerKey',
+            contentType: 'text/plain',
+            data: phoneNum,
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert('인증번호을 발송했습니다.');
+                    $('#verKeySection').show();
+                } else {
+                    alert('등록된 번호와 일치하지 않습니다.');
+                }
+            },
+            error: function () {
+                alert('서버 오류');
+            },
+        });
+    }
+
+    function confirmSocialVerKey() {
+        var verKey = $('#socialVerKey').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/user/confirmSocialVerKey',
+            contentType: 'text/plain',
+            data: verKey,
+            headers: {
+                [csrfHeader]: csrfToken
+            },
+            success: function (response) {
+                if (response === "success") {
+                    alert('인증번호가 확인되었습니다.');
+                    if (confirm('정말 삭제하시겠습니까?')) {
+                            $("#socialOutForm")[0].submit();
+                        }
+                } else {
+                    alert('인증번호가 일치하지 않습니다.');
+                    verKeyConfirmed = false;
+                }
+            },
+            error: function () {
+                alert('서버 오류');
+            }
+        });
+    }
+    $(document).ready(function () {
+        ('#outForm, #socialOutForm').on('keydown', function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                    return false;
+            }
+        });
+    });
 </script>
 </html>
