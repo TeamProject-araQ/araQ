@@ -665,6 +665,27 @@ function showProfile(username) {
             $("#moreInfoForm > table > tbody > tr:nth-child(5) > td").text(data.hobby);
             $("#moreInfoForm > table > tbody > tr:nth-child(6) > td").text(data.mbti);
             $("#moreInfoForm > table > tbody > tr:nth-child(7) > td").text(data.religion);
+
+            var carouselInner = $("#profileModal #carouselExampleControls .carousel-inner");
+            carouselInner.empty();  // 기존 캐러셀 내용 비우기
+
+            // 각 이미지를 캐러셀에 동적으로 추가
+            for (var i = 0; i < data.images.length; i++) {
+                var imageUrl = data.images[i];
+
+                // 이미지에 대한 HTML 생성 및 추가
+                var carouselItem = $("<div>").addClass("carousel-item");
+                var imageElement = $("<img>").addClass("d-block w-100").attr("src", imageUrl).css("height", "500px");
+                carouselItem.append(imageElement);
+
+                // 첫 번째 이미지는 활성화 상태로 설정
+                if (i === 0) {
+                    carouselItem.addClass("active");
+                }
+
+                // 캐러셀에 이미지 추가
+                carouselInner.append(carouselItem);
+            }
         },
         error: function (err) {
             alert("요청이 실패하였습니다.");
@@ -672,3 +693,8 @@ function showProfile(username) {
         }
     });
 }
+
+$('#profileModal .toggle').on('click', function () {
+    $('#content1').toggle();
+    $('#content2').toggle();
+});
