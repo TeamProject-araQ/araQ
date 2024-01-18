@@ -146,9 +146,7 @@ public class ChatController {
     @ResponseBody
     public String delete(@RequestBody String code) {
         Room room = roomService.get(code);
-
         if (room.getReported()) return "deny";
-
         File file = new File("uploads/chat/" + code);
         if (file.exists()) deleteFiles(file);
         roomService.delete(room);

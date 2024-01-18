@@ -23,4 +23,5 @@ public class Plaza {
     private LocalDateTime createDate;
     private String password;
     private String background;
+    private Boolean reported;
 }

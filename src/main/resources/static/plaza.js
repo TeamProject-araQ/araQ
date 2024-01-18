@@ -166,8 +166,9 @@ $(function () {
                     code: code,
                     target: $(this).data("value")
                 }),
-                success: function () {
-                    window.location.reload();
+                success: function (data) {
+                    if (data === "deny") alert("현재 해당 방을 변경할 수 없습니다.");
+                    else window.location.reload();
                 },
                 error: function (error) {
                     alert("실패");
@@ -226,8 +227,9 @@ $(function () {
                 contentType: false,
                 processData: false,
                 data: formData,
-                success: function () {
-                    alert("변경이 완료되었습니다.");
+                success: function (data) {
+                    if (data === "deny") alert("현재 해당 방을 변경할 수 없습니다.");
+                    else alert("변경이 완료되었습니다.");
                 },
                 error: function (err) {
                     alert("변경 실패");

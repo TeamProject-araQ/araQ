@@ -289,6 +289,7 @@ $(window).on("focus", function () {
 $("#chatReportBtn").on('click', function () {
     $("#reportedUsername").val(target);
     $("#reportedRoomCode").val(roomCode);
+    $("#reportedLocation").val("chat");
     $("#report").modal("show");
 });
 })
