@@ -43,9 +43,12 @@
                     },
                     contentType:"text/plain",
                     data: code,
-                    success: function() {
-                        alert("삭제가 완료되었습니다.");
-                        window.location.reload();
+                    success: function(data) {
+                        if (data === "deny") alert("해당 채팅방을 삭제할 수 없습니다.");
+                        else {
+                            alert("삭제가 완료되었습니다.");
+                            window.location.reload();
+                        }
                     },
                     error: function(err) {
                         console.log(err);

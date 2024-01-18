@@ -85,7 +85,7 @@
                     <h5 class="modal-title" id="suspensionModalLabel">계정 정지 일수 선택</h5>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="suspensionDays" placeholder="일수를 입력하세요">
+                    <input type="number" class="form-control" id="suspensionDays" placeholder="일수를 입력하세요" min="1" value="1">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveSuspensionDays">저장</button>
@@ -133,9 +133,8 @@
                 var id = $(this).val();
                 var action = $(this).data("action");
                 var days = $(this).data("days");
-                if (action === "") {
+                if (action === "" || action == null) {
                     isEmptyAction = true;
-                    return false;
                 }
                 dataObject[id] = {
                     action: action,
@@ -147,10 +146,8 @@
             var keys = Object.keys(dataObject);
             if (keys.length === 0) {
                 alert('선택된 신고 내역이 없습니다.');
-                return;
             } else if (isEmptyAction) {
                 alert("조치 옵션을 선택해주세요.");
-                return;
             } else {
                 $.ajax({
                     url: "/admin/report/action",
@@ -159,7 +156,7 @@
                         [csrfHeader]: csrfToken
                     },
                     contentType: "application/json",
-                    data: JSON.stringify(jsonData),
+                    data: jsonData,
                     success: function (response) {
                         alert(response);
                     },

@@ -4,6 +4,7 @@ import com.team.araq.announcement.Announcement;
 import com.team.araq.announcement.AnnouncementService;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.chat.RoomService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
@@ -44,6 +45,8 @@ public class AdminController {
     private final ReportService reportService;
 
     private final AnnouncementService announcementService;
+
+    private final RoomService roomService;
 
     @GetMapping("")
     public String page() {
@@ -203,14 +206,18 @@ public class AdminController {
             String action = actionData.get("action").toString();
             Report report = this.reportService.getReport(reportId);
             SiteUser user = report.getReportedUser();
-//            if ("활동 유지".equals(action)) {
-//                this.reportService.updateStatus(report);
-//            } else if ("계정 정지".equals(action)) {
-//                this.userService.updateRole(user, UserRole.SUSPEND);
-//                int days = Integer.parseInt(String.valueOf(actionData.get("days")));
-//            } else if ("영구 탈퇴".equals(action)) {
-//                this.userService.updateRole(user, UserRole.BAN);
-//            }
+            System.out.println(reportId + action + actionData.get("days"));
+            if ("활동 유지".equals(action)) {
+                this.reportService.updateStatus(report);
+            } else if ("계정 정지".equals(action)) {
+                this.userService.updateRole(user, UserRole.SUSPEND);
+                int days = Integer.parseInt(String.valueOf(actionData.get("days")));
+                this.userService.suspendUser(user, days);
+            } else if ("영구 탈퇴".equals(action)) {
+                this.userService.updateRole(user, UserRole.BAN);
+            }
+            System.out.println(report.getCode());
+            if (report.getCode() != null) roomService.setReport(roomService.get(report.getCode()), false);
         }
         return "조치가 완료되었습니다.";
     }

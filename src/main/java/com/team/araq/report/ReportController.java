@@ -1,6 +1,5 @@
 package com.team.araq.report;
 
-import com.team.araq.chat.Room;
 import com.team.araq.chat.RoomService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
@@ -32,10 +31,10 @@ public class ReportController {
         SiteUser reportedUser = this.userService.getByUsername(reportedUsername);
         SiteUser reportingUser = this.userService.getByUsername(principal.getName());
 
-        Room room = null;
-        if (!reportedRoomCode.isBlank())  room = roomService.get(reportedRoomCode);
+        if (!reportedRoomCode.isBlank())
+            roomService.setReport(roomService.get(reportedRoomCode), true);
 
-        this.reportService.createReport(reason, detailReason, reportingUser, reportedUser, room);
+        this.reportService.createReport(reason, detailReason, reportingUser, reportedUser, reportedRoomCode);
         return "redirect:/";
     }
 }
