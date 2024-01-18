@@ -2,6 +2,7 @@ package com.team.araq.message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.araq.chat.Notification;
 import com.team.araq.friend.Friend;
 import com.team.araq.friend.FriendService;
 import com.team.araq.user.SiteUser;
@@ -79,6 +80,10 @@ public class MessageController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonData = objectMapper.writeValueAsString(data);
         messagingTemplate.convertAndSend("/topic/send/message/" + receiver.getUsername(), jsonData);
+
+        Notification notification = new Notification("쪽지 알림", sender.getNickName() + "님이 쪽지를 보냈습니다.",
+                sender.getUsername(), receiver.getUsername(), "/message/receive");
+        messagingTemplate.convertAndSend("/topic/notification/" + receiver.getUsername(), notification);
     }
 
     @PostMapping("/read")
