@@ -480,7 +480,7 @@ public class UserService {
     }
 
     @Scheduled(cron = "0 0 * * * *")
-    public void checkPurchaseTime() {
+    public void checkTime() {
         LocalDateTime now = LocalDateTime.now();
         List<SiteUser> users = this.userRepository.findAll();
         for (SiteUser user : users) {

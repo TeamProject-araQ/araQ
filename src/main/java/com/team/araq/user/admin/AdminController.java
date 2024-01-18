@@ -216,7 +216,6 @@ public class AdminController {
             } else if ("영구 탈퇴".equals(action)) {
                 this.userService.updateRole(user, UserRole.BAN);
             }
-            System.out.println(report.getCode());
             if (report.getCode() != null) roomService.setReport(roomService.get(report.getCode()), false);
         }
         return "조치가 완료되었습니다.";
