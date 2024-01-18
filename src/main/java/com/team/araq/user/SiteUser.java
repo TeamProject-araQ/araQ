@@ -224,6 +224,8 @@ public class SiteUser {
     @ManyToMany
     private List<SiteUser> openRates;
 
+    private LocalDateTime suspendedEndTime;
+
     public SiteUser(String username, String name, String email, boolean socialJoin, LocalDateTime createDate) {
         this.username = username;
         this.name = name;

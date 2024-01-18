@@ -513,6 +513,11 @@ public class UserService {
                     user.setChatBackground(null);
                     user.setGetChatColor(null);
                 }
+            } else if (user.getRole().equals(UserRole.SUSPEND)) {
+                if (now.isAfter(user.getSuspendedEndTime())) {
+                    updateRole(user, UserRole.USER);
+                    user.setSuspendedEndTime(null);
+                }
             }
             this.userRepository.save(user);
         }
@@ -546,4 +551,15 @@ public class UserService {
         user1.getOpenRates().add(user2);
         this.userRepository.save(user1);
     }
+
+    public void updateRole(SiteUser user, UserRole userRole) {
+        user.setRole(userRole);
+        this.userRepository.save(user);
+    }
+
+    public void suspendUser(SiteUser user, int days) {
+        user.setSuspendedEndTime(LocalDateTime.now().plusDays(days));
+        this.userRepository.save(user);
+    }
+
 }
