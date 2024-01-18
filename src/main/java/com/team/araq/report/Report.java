@@ -32,4 +32,5 @@ public class Report {
 
     private String code;
 
+    private String location;
 }

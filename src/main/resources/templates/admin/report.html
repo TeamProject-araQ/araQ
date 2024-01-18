@@ -36,7 +36,7 @@
         <tr th:each="report, loop : ${paging}">
             <td><input class="check form-check-input" type="checkbox" th:value="${report.id}"></td>
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-            <td th:text="${report.reason}"></td>
+            <td th:text="${report.reason}" class="reason"></td>
             <td th:text="${report.detailReason}"></td>
             <td th:text="${report.reportingUser.username}"></td>
             <td th:text="${report.reportedUser.username}"></td>
@@ -47,7 +47,7 @@
                     <option value="" selected>관리 옵션</option>
                     <option value="활동 유지">활동 유지</option>
                     <option value="계정 정지">계정 정지</option>
-                    <option value="영구 탈퇴">영구 탈퇴</option>
+                    <option value="영구 정지">영구 정지</option>
                 </select>
             </td>
         </tr>
@@ -85,7 +85,8 @@
                     <h5 class="modal-title" id="suspensionModalLabel">계정 정지 일수 선택</h5>
                 </div>
                 <div class="modal-body">
-                    <input type="number" class="form-control" id="suspensionDays" placeholder="일수를 입력하세요" min="1" value="1">
+                    <input type="number" class="form-control" id="suspensionDays" placeholder="일수를 입력하세요" min="1"
+                           value="1">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="saveSuspensionDays">저장</button>
@@ -109,7 +110,8 @@
         $('.actionSelect').change(function () {
             var selectedAction = $(this).val();
             var $checkbox = $(this).closest('tr').find('.check');
-
+            var reason = $(this).closest('tr').find('.reason').text();
+            console.log(reason);
             if (selectedAction === "계정 정지") {
                 $('#suspensionModal').modal('show');
 
@@ -120,9 +122,13 @@
                     else {
                         $checkbox.attr('data-action', selectedAction);
                         $checkbox.attr('data-days', suspensionDays);
+                        $checkbox.attr('data-reason', reason);
                         $('#suspensionModal').modal('hide');
                     }
                 });
+            } else if (selectedAction === "영구 정지") {
+                $checkbox.attr('data-action', selectedAction);
+                $checkbox.attr('data-reason', reason);
             } else $checkbox.attr('data-action', selectedAction);
         });
 
@@ -133,12 +139,14 @@
                 var id = $(this).val();
                 var action = $(this).data("action");
                 var days = $(this).data("days");
+                var reason = $(this).data("reason");
                 if (action === "" || action == null) {
                     isEmptyAction = true;
                 }
                 dataObject[id] = {
                     action: action,
-                    days: days
+                    days: days,
+                    reason: reason
                 };
             });
 

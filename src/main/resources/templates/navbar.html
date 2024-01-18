@@ -7,7 +7,7 @@
         <a class="navbar-brand mx-auto" href="/">
             <img src="/image/araQ/logo2.png" alt="" style="height: 75px; width: auto;">
         </a>
-        <div class="d-flex">
+        <div class="d-flex" th:if="${user.role.value != 'ROLE_NEW' && user.role.value != 'ROLE_SUSPEND' && user.role.value != 'ROLE_BAN'}">
             <button sec:authorize="isAuthenticated()" class="btn" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasRight"
                     aria-controls="offcanvasRight">

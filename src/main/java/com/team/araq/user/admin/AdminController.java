@@ -9,6 +9,7 @@ import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
+import com.team.araq.plaza.PlazaService;
 import com.team.araq.report.Report;
 import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
@@ -47,6 +48,8 @@ public class AdminController {
     private final AnnouncementService announcementService;
 
     private final RoomService roomService;
+
+    private final PlazaService plazaService;
 
     @GetMapping("")
     public String page() {
@@ -206,17 +209,19 @@ public class AdminController {
             String action = actionData.get("action").toString();
             Report report = this.reportService.getReport(reportId);
             SiteUser user = report.getReportedUser();
-            System.out.println(reportId + action + actionData.get("days"));
+            String reason = actionData.get("reason").toString();
             if ("활동 유지".equals(action)) {
                 this.reportService.updateStatus(report);
             } else if ("계정 정지".equals(action)) {
-                this.userService.updateRole(user, UserRole.SUSPEND);
                 int days = Integer.parseInt(String.valueOf(actionData.get("days")));
-                this.userService.suspendUser(user, days);
-            } else if ("영구 탈퇴".equals(action)) {
-                this.userService.updateRole(user, UserRole.BAN);
+                this.userService.suspendUser(user, days, reason);
+                this.reportService.updateStatus(report);
+            } else if ("영구 정지".equals(action)) {
+                this.userService.vanUser(user, reason);
+                this.reportService.updateStatus(report);
             }
-            if (report.getCode() != null) roomService.setReport(roomService.get(report.getCode()), false);
+            if (report.getLocation().equals("chat")) roomService.setReport(roomService.get(report.getCode()), false);
+            else if (report.getLocation().equals("plaza")) plazaService.setReport(plazaService.getByCode(report.getCode()), false);
         }
         return "조치가 완료되었습니다.";
     }

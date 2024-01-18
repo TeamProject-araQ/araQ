@@ -19,7 +19,8 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
 
-    public void createReport(String reason, String detailReason, SiteUser reportingUser, SiteUser reportedUser, String code) {
+    public void createReport(String reason, String detailReason, SiteUser reportingUser, SiteUser reportedUser,
+                             String code, String location) {
         Report report = new Report();
         report.setReason(reason);
         report.setDetailReason(detailReason);
@@ -28,6 +29,7 @@ public class ReportService {
         report.setReportDate(LocalDateTime.now());
         report.setStatus("처리 대기");
         report.setCode(code);
+        report.setLocation(location);
         this.reportRepository.save(report);
     }
 

@@ -31,6 +31,8 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/user/suspended")).hasRole("SUSPEND")
+                        .requestMatchers(new AntPathRequestMatcher("/user/banned")).hasRole("BAN")
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("ADMIN", "SUPER")
                         .requestMatchers(new AntPathRequestMatcher("/user/**"),
                                 new AntPathRequestMatcher("/error"),
@@ -42,17 +44,14 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/css/**"),
                                 new AntPathRequestMatcher("/font/**"),
                                 new AntPathRequestMatcher("/ws/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER","SUPER")
+                        .requestMatchers(new AntPathRequestMatcher("/**")).hasAnyRole("ADMIN", "USER", "SUPER")
                         .anyRequest().authenticated())
-
                 .exceptionHandling((exceptionHandling) -> exceptionHandling
                         .accessDeniedHandler(new CustomDeniedHandler()))
-
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/user/login")
                         .defaultSuccessUrl("/", true)
                         .successHandler(new CustomSuccessHandler()))
-
                 .logout((logout) -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")

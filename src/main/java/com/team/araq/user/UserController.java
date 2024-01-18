@@ -31,6 +31,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -489,5 +491,22 @@ public class UserController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         this.userService.savePhoneNum(user, phoneNum);
         return "휴대폰 인증이 완료되었습니다.";
+    }
+
+    @GetMapping("/suspended")
+    public String suspend(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        LocalDateTime endTime = user.getSuspendedEndTime();
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(now, endTime);
+        long days = duration.toDays();
+        long hours = duration.toHours() % 24;
+        model.addAttribute("time", days + "일 " + hours + "시간");
+        return "user/suspend";
+    }
+
+    @GetMapping("/banned")
+    public String ban() {
+        return "user/ban";
     }
 }

@@ -22,6 +22,7 @@ public class PlazaService {
         plaza.setCode(plazaDto.getCode());
         plaza.setCreateDate(LocalDateTime.now());
         plaza.setManager(plazaDto.getManager());
+        plaza.setReported(false);
         return plazaRepo.save(plaza);
     }
 
@@ -58,6 +59,11 @@ public class PlazaService {
 
     public void setImg(Plaza plaza, String img) {
         plaza.setBackground(img);
+        plazaRepo.save(plaza);
+    }
+
+    public void setReport(Plaza plaza, boolean report) {
+        plaza.setReported(report);
         plazaRepo.save(plaza);
     }
 }

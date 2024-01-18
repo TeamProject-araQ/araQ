@@ -515,8 +515,9 @@ public class UserService {
                 }
             } else if (user.getRole().equals(UserRole.SUSPEND)) {
                 if (now.isAfter(user.getSuspendedEndTime())) {
-                    updateRole(user, UserRole.USER);
+                    user.setRole(UserRole.USER);
                     user.setSuspendedEndTime(null);
+                    user.setReportedReason(null);
                 }
             }
             this.userRepository.save(user);
@@ -552,13 +553,16 @@ public class UserService {
         this.userRepository.save(user1);
     }
 
-    public void updateRole(SiteUser user, UserRole userRole) {
-        user.setRole(userRole);
+    public void suspendUser(SiteUser user, int days, String reason) {
+        user.setSuspendedEndTime(LocalDateTime.now().plusDays(days));
+        user.setReportedReason(reason);
+        user.setRole(UserRole.SUSPEND);
         this.userRepository.save(user);
     }
 
-    public void suspendUser(SiteUser user, int days) {
-        user.setSuspendedEndTime(LocalDateTime.now().plusDays(days));
+    public void vanUser(SiteUser user, String reason) {
+        user.setRole(UserRole.BAN);
+        user.setReportedReason(reason);
         this.userRepository.save(user);
     }
 

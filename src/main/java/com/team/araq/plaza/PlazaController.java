@@ -83,6 +83,8 @@ public class PlazaController {
     @PostMapping("/delete")
     public String delete(@RequestParam("code") String code) {
         Plaza plaza = plazaService.getByCode(code);
+        if (plaza.getReported()) return "redirect:/plaza/list";
+
         File dir = new File("uploads/plaza");
 
         for (File file : Objects.requireNonNull(dir.listFiles())) {
@@ -105,6 +107,7 @@ public class PlazaController {
     @ResponseBody
     public String modify(@ModelAttribute PlazaDto plazaDto) throws IOException {
         Plaza plaza = plazaService.getByCode(plazaDto.getCode());
+        if (plaza.getReported()) return "deny";
         String imgPath = null;
         plazaService.modify(plaza, plazaDto);
 
@@ -136,6 +139,7 @@ public class PlazaController {
         String code = data.get("code");
         String value = data.get("target");
         Plaza plaza = plazaService.getByCode(code);
+        if (plaza.getReported()) return "deny";
         SiteUser target = userService.getByUsername(value);
         plazaService.changeManager(plaza, target);
         simpMessagingTemplate.convertAndSend("/topic/plaza/delegate/" + code + "/" + value, value);
