@@ -54,7 +54,7 @@
                     <h1 class="modal-title fs-5" id="profileModalLabel"></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="content1">
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-5">
@@ -105,6 +105,7 @@
                         <a data-bs-toggle="collapse" href="#moreInfoForm" role="button" aria-expanded="false"
                            aria-controls="moreInfoForm" class="badge bg-secondary text-light">더보기</a>
                     </div>
+                    <button type="button" class="toggle btn 버튼-full">프로필 사진</button>
                     <div class="collapse" id="moreInfoForm">
                         <table class="table">
                             <tr>
@@ -137,6 +138,23 @@
                             </tr>
                         </table>
                     </div>
+                </div>
+                <div class="modal-body" id="content2" style="display: none;">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                                data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <button type="button" class="toggle btn 버튼-full">프로필</button>
                 </div>
             </div>
         </div>
