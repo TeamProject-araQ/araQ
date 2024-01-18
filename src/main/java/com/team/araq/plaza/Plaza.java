@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,4 +25,5 @@ public class Plaza {
     private String password;
     private String background;
     private Boolean reported;
+    private Set<String> blackList;
 }
