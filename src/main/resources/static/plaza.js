@@ -282,6 +282,13 @@ $(function () {
         reader.readAsDataURL(file);
     });
 
+    $("#plazaReportBtn").click(function () {
+        $("#reportedUsername").val(manager);
+        $("#reportedRoomCode").val(code);
+        $("#reportedLocation").val("plaza");
+        $("#report").modal("show");
+    });
+
     function changeLocation(e) {
         const element = $("." + user);
         const left = parseInt(element.css("left"));

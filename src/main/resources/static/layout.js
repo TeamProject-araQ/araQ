@@ -278,7 +278,11 @@ $(function () {
                     }, 5000);
                 }
             });
-        })
+        });
+
+        stompClient.subscribe("/topic/alert/" + $("#hiddenUserName").val(), function (message) {
+            alert(message.body);
+        });
     });
 
     if ($('#phone').val() == null || $('#phone').val() === "") {

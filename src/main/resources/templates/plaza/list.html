@@ -129,10 +129,6 @@
     <form th:action="@{/plaza/join}" id="plazaJoinForm" method="post">
         <input type="hidden" name="code">
     </form>
-    <script th:inline="javascript">
-        const alarm = [[${alarm}]];
-        if (alarm !== "") alert(alarm);
-    </script>
 </div>
 <script layout:fragment="script" th:src="@{/plazalist.js}"></script>
 </html>

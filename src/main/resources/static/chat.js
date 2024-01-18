@@ -140,12 +140,14 @@ stompClient.connect({}, function (frame) {
             var date = createDate.getHours().toString().padStart(2, '0') + ":" + createDate.getMinutes().toString().padStart(2, '0');
             var imageElement = ""
             if (data.images != null) {
+                imageElement += '<div class="chatImage">';
                 for (var i = 0; i < data.images.length; i++) {
                     imageElement +=
                         '<a href="' + data.images[i] + '">' +
                         '<img src="' + data.images[i] + '" alt="" style="width:100px; height:100px;">' +
                         '</a>';
                 }
+                imageElement += '</div>';
             }
 
             if (data.writer === user) {

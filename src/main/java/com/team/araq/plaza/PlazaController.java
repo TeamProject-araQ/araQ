@@ -66,11 +66,17 @@ public class PlazaController {
                             Principal principal) {
         Plaza plaza = plazaService.getByCode(code);
         model.addAttribute("plaza", plaza);
-        if (plaza.getPeople() >= plaza.getMaxPeople()) {
-            model.addAttribute("plazaList", plazaService.getAll());
-            model.addAttribute("alarm", "해당 광장의 정원이 가득 찼습니다.");
-            return "plaza/list";
+
+        if (plaza.getBlackList().contains(principal.getName())) {
+            simpMessagingTemplate.convertAndSend("/topic/alert/" + principal.getName(),
+                    "강제퇴장 당한 방에는 재입장 할 수 없습니다.");
+            return "redirect:/plaza/list";
+        } else if (plaza.getPeople() >= plaza.getMaxPeople()) {
+            simpMessagingTemplate.convertAndSend("/topic/alert/" + principal.getName(),
+                    "해당 광장의 정원이 가득 찼습니다.");
+            return "redirect:/plaza/list";
         }
+
         SiteUser user = userService.getByUsername(principal.getName());
         userService.setLocation(user, code);
         userService.setUserLocationInPlaza(user, "0px", "0px");
@@ -87,9 +93,11 @@ public class PlazaController {
 
         File dir = new File("uploads/plaza");
 
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
-            if (file.getName().contains(code))
-                file.delete();
+        if (dir.exists()) {
+            for (File file : Objects.requireNonNull(dir.listFiles())) {
+                if (file.getName().contains(code))
+                    file.delete();
+            }
         }
         plazaService.delete(plaza);
         return "redirect:/plaza/list";

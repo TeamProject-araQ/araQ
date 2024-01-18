@@ -1,6 +1,5 @@
 package com.team.araq.plaza;
 
-import com.team.araq.chat.MessageDto;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -67,12 +66,10 @@ public class MessageHandler {
     @MessageMapping("/plaza/fire/{code}")
     public void fire(@Payload String message, @DestinationVariable String code) {
         SiteUser user = userService.getByUsername(message);
+        plazaService.addBlackList(plazaService.getByCode(code), message);
         simpMessagingTemplate.convertAndSend("/topic/plaza/fire/" + code + "/" + message, "fire");
         simpMessagingTemplate.convertAndSend("/topic/plaza/notice/" + code,
                 user.getNickName() + "님이 강제퇴장 당하였습니다.");
-        MessageDto messageDto = new MessageDto();
-        messageDto.setType("refuse");
-        messageDto.setContent("강제퇴장 당하였습니다.");
-        simpMessagingTemplate.convertAndSend("/topic/all/" + message, messageDto);
+        simpMessagingTemplate.convertAndSend("/topic/alert/" + message, "강제퇴장 당하였습니다.");
     }
 }
