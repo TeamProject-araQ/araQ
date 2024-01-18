@@ -309,7 +309,8 @@
                 buyer_name: '[[${user.username}]]',
                 buyer_tel: '[[${user.phoneNum}]]',
                 buyer_addr: '[[${user.address}]]',
-                status: status
+                status: status,
+                m_redirect_url: 'https://araq.site/payment'
             }, function (rsp) {
                 if (rsp.success) {
                     var data = {

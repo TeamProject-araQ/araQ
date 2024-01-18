@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/araq?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: araq
-    password: araq1234
+    username: root
+    password:
 
   jpa:
     properties:
@@ -31,6 +31,7 @@ spring:
           google:
             client-id: 919475405372-7a3qg0e3j861f2gsq8hl3adi99bc5dsd.apps.googleusercontent.com
             client-secret: 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
+            redirect-uri: https://araq.site/login/oauth2/code/google
             scope:
               - profile
               - email
@@ -47,6 +48,7 @@ spring:
           github:
             client-id: c1826a3473b0a27b8520
             client-secret: caf912d1a28aaf10c0a78d0c7ca4a53dc2c288ab
+            redirect-uri: https://araq.site/login/oauth2/code/github
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -67,14 +69,14 @@ imp:
     key: "4323773555508561"
     secret: "y46aKg8JTOLBqyKtcM04uAnLPeJ4PfrIEiHIP1vymIVaK91zGwQNJibao4Dw2mOxAlmvCiv37Yq1ueSc"
 
-#Logging
-logging:
-  logback:
-    rollingpolicy:
-      max-history: 30
-      max-file-size: 100MB
-      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
-  file:
-    name: logs/araq.log
-  pattern:
-    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
+##Logging
+#logging:
+#  logback:
+#    rollingpolicy:
+#      max-history: 30
+#      max-file-size: 100MB
+#      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}-%i.log
+#  file:
+#    name: logs/araq.log
+#  pattern:
+#    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
