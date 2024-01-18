@@ -293,6 +293,11 @@ a:hover {
     text-align: center;
 }
 
+#chatBoard .chatImage {
+    margin: 10px;
+    display: flex;
+}
+
 #chatImageInput {
     display: none;
 }

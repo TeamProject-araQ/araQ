@@ -59,7 +59,7 @@
                         <div class="card" th:classappend="${chat.writer.username.equals(user.username)} ? 'ourColor'">
                             <span class="confirm"
                                   th:if="${chat.writer.username.equals(user.username) && chat.confirm == 0}"></span>
-                            <div th:if="${chat.images != null}">
+                            <div th:if="${chat.images != null}" class="chatImage">
                                 <a th:each="image : ${chat.images}" th:href="@{${image}}">
                                     <img th:src="@{${image}}" alt="" style="width:100px; height:100px;">
                                 </a>

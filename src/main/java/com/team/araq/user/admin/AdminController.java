@@ -4,11 +4,12 @@ import com.team.araq.announcement.Announcement;
 import com.team.araq.announcement.AnnouncementService;
 import com.team.araq.board.post.Post;
 import com.team.araq.board.post.PostService;
+import com.team.araq.chat.RoomService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
-import com.team.araq.report.BlacklistService;
+import com.team.araq.plaza.PlazaService;
 import com.team.araq.report.Report;
 import com.team.araq.report.ReportService;
 import com.team.araq.review.Review;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,9 +45,11 @@ public class AdminController {
 
     private final ReportService reportService;
 
-    private final BlacklistService blacklistService;
-
     private final AnnouncementService announcementService;
+
+    private final RoomService roomService;
+
+    private final PlazaService plazaService;
 
     @GetMapping("")
     public String page() {
@@ -197,22 +201,29 @@ public class AdminController {
     }
 
     @ResponseBody
-    @PostMapping("/report/keep")
-    public String keepUser(@RequestBody String reportId) {
-        Report report = this.reportService.getReport(Integer.parseInt(reportId));
-        this.reportService.updateStatus(report);
-        return "처리가 완료되었습니다.";
-    }
-
-    @ResponseBody
-    @PostMapping("/report/withdraw")
-    public String withdrawUser(@RequestBody String reportId) {
-        Report report = this.reportService.getReport(Integer.parseInt(reportId));
-        if (blacklistService.checkBlacklist(report.getReportedUser().getPhoneNum()) == null) {
-            this.blacklistService.saveBlacklist(report.getReportedUser().getPhoneNum(), report.getReason());
+    @PostMapping("/report/action")
+    public String reportAction(@RequestBody Map<String, Object> data) {
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            Integer reportId = Integer.parseInt(entry.getKey());
+            Map<String, Object> actionData = (Map<String, Object>) entry.getValue();
+            String action = actionData.get("action").toString();
+            Report report = this.reportService.getReport(reportId);
+            SiteUser user = report.getReportedUser();
+            String reason = actionData.get("reason").toString();
+            if ("활동 유지".equals(action)) {
+                this.reportService.updateStatus(report);
+            } else if ("계정 정지".equals(action)) {
+                int days = Integer.parseInt(String.valueOf(actionData.get("days")));
+                this.userService.suspendUser(user, days, reason);
+                this.reportService.updateStatus(report);
+            } else if ("영구 정지".equals(action)) {
+                this.userService.vanUser(user, reason);
+                this.reportService.updateStatus(report);
+            }
+            if (report.getLocation().equals("chat")) roomService.setReport(roomService.get(report.getCode()), false);
+            else if (report.getLocation().equals("plaza")) plazaService.setReport(plazaService.getByCode(report.getCode()), false);
         }
-        this.userService.deleteUser(report.getReportedUser());
-        return "탈퇴 처리가 완료되었습니다.";
+        return "조치가 완료되었습니다.";
     }
 
     @GetMapping("/announcement/create")
@@ -241,7 +252,8 @@ public class AdminController {
     }
 
     @PostMapping("/grantRole")
-    public String grantRole(@RequestParam String username, @RequestParam UserRole role, Principal principal) throws UnauthorizedActionException {
+    public String grantRole(@RequestParam String username, @RequestParam UserRole role, Principal principal) throws
+            UnauthorizedActionException {
         SiteUser admin = userService.getByUsername(principal.getName());
         SiteUser targetUser = userService.getByUsername(username);
         userService.saveRole(admin, targetUser, role);

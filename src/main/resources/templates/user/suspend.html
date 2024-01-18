@@ -1,0 +1,20 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3 d-flex align-items-center justify-content-center"
+     style="height:80vh;">
+    <div>
+        <div class="text-center">
+            <div class="d-flex justify-content-center my-3">
+                <img src="/image/etc/suspend.png"
+                     alt="" style="height:120px; width:auto;">
+            </div>
+            <h2 class="mb-3">계정이 정지되어 해당 사이트에 접근하실 수 없습니다.</h2>
+            <div class="mb-3" th:text="|정지 사유 : ${user.reportedReason}|"></div>
+            <div class="card card-body">
+                <h4 class="mb-3">정지 해제까지 남은 시간</h4>
+                <h5 th:text="${time}"></h5>
+            </div>
+            <a th:href="@{/user/logout}" type="button" class="btn 버튼-full mt-5">LOG-OUT</a>
+        </div>
+    </div>
+</div>
+</html>

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,8 @@ public class PlazaService {
         plaza.setCode(plazaDto.getCode());
         plaza.setCreateDate(LocalDateTime.now());
         plaza.setManager(plazaDto.getManager());
+        plaza.setReported(false);
+        plaza.setBlackList(new HashSet<>());
         return plazaRepo.save(plaza);
     }
 
@@ -58,6 +61,21 @@ public class PlazaService {
 
     public void setImg(Plaza plaza, String img) {
         plaza.setBackground(img);
+        plazaRepo.save(plaza);
+    }
+
+    public void setReport(Plaza plaza, boolean report) {
+        plaza.setReported(report);
+        plazaRepo.save(plaza);
+    }
+
+    public void addBlackList(Plaza plaza, String username) {
+        plaza.getBlackList().add(username);
+        plazaRepo.save(plaza);
+    }
+
+    public void removeBlackList(Plaza plaza, String username) {
+        plaza.getBlackList().remove(username);
         plazaRepo.save(plaza);
     }
 }

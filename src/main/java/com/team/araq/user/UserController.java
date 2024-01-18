@@ -9,7 +9,6 @@ import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
-import com.team.araq.report.BlacklistService;
 import com.team.araq.sms.SmsService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -32,6 +31,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +49,6 @@ public class UserController {
     private final MailService mailService;
 
     private final SmsService smsService;
-
-    private final BlacklistService blacklistService;
 
     private final InquiryService inquiryService;
 
@@ -72,10 +71,6 @@ public class UserController {
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
-        }
-        if (this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()) != null) {
-            model.addAttribute("blacklist", this.blacklistService.checkBlacklist(userCreateForm.getPhoneNum()));
-            return "user/blacklist";
         }
         try {
             SiteUser user = userService.create(userCreateForm);
@@ -498,6 +493,7 @@ public class UserController {
         return "휴대폰 인증이 완료되었습니다.";
     }
 
+
     @ResponseBody
     @PostMapping("/sendSocialVerKey")
     public String sendSocialVerkey(@RequestBody String phoneNum, Principal principal, HttpSession session) {
@@ -520,5 +516,23 @@ public class UserController {
             return "success";
         }
         return "fail";
+    }
+
+    @GetMapping("/suspended")
+    public String suspend(Principal principal, Model model) {
+        SiteUser user = this.userService.getByUsername(principal.getName());
+        LocalDateTime endTime = user.getSuspendedEndTime();
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(now, endTime);
+        long days = duration.toDays();
+        long hours = duration.toHours() % 24;
+        model.addAttribute("time", days + "일 " + hours + "시간");
+        return "user/suspend";
+    }
+
+    @GetMapping("/banned")
+    public String ban() {
+        return "user/ban";
+
     }
 }

@@ -1,6 +1,5 @@
 package com.team.araq.report;
 
-import com.team.araq.chat.Room;
 import com.team.araq.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,7 +30,7 @@ public class Report {
 
     private String status;
 
-    @ManyToOne
-    private Room room;
+    private String code;
 
+    private String location;
 }

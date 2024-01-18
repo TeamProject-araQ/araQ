@@ -145,9 +145,11 @@ public class ChatController {
     @PostMapping("/delete")
     @ResponseBody
     public String delete(@RequestBody String code) {
+        Room room = roomService.get(code);
+        if (room.getReported()) return "deny";
         File file = new File("uploads/chat/" + code);
         if (file.exists()) deleteFiles(file);
-        roomService.delete(roomService.get(code));
+        roomService.delete(room);
         return null;
     }
 

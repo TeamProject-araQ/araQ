@@ -480,7 +480,7 @@ public class UserService {
     }
 
     @Scheduled(cron = "0 0 * * * *")
-    public void checkPurchaseTime() {
+    public void checkTime() {
         LocalDateTime now = LocalDateTime.now();
         List<SiteUser> users = this.userRepository.findAll();
         for (SiteUser user : users) {
@@ -512,6 +512,12 @@ public class UserService {
                     user.setChatColor(null);
                     user.setChatBackground(null);
                     user.setGetChatColor(null);
+                }
+            } else if (user.getRole().equals(UserRole.SUSPEND)) {
+                if (now.isAfter(user.getSuspendedEndTime())) {
+                    user.setRole(UserRole.USER);
+                    user.setSuspendedEndTime(null);
+                    user.setReportedReason(null);
                 }
             }
             this.userRepository.save(user);
@@ -546,4 +552,18 @@ public class UserService {
         user1.getOpenRates().add(user2);
         this.userRepository.save(user1);
     }
+
+    public void suspendUser(SiteUser user, int days, String reason) {
+        user.setSuspendedEndTime(LocalDateTime.now().plusDays(days));
+        user.setReportedReason(reason);
+        user.setRole(UserRole.SUSPEND);
+        this.userRepository.save(user);
+    }
+
+    public void vanUser(SiteUser user, String reason) {
+        user.setRole(UserRole.BAN);
+        user.setReportedReason(reason);
+        this.userRepository.save(user);
+    }
+
 }

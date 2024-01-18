@@ -14,6 +14,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("ROLE_SUPER"))) {
             getRedirectStrategy().sendRedirect(request, response, "/admin");
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SUSPEND"))) {
+            getRedirectStrategy().sendRedirect(request, response, "/user/suspended");
+        } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_BAN"))) {
+            getRedirectStrategy().sendRedirect(request, response, "/user/banned");
         } else {
             super.onAuthenticationSuccess(request, response, authentication);
         }

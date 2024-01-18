@@ -1,6 +1,5 @@
 package com.team.araq.report;
 
-import com.team.araq.chat.Room;
 import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,7 @@ public class ReportService {
     private final ReportRepository reportRepository;
 
     public void createReport(String reason, String detailReason, SiteUser reportingUser, SiteUser reportedUser,
-                             Room room) {
+                             String code, String location) {
         Report report = new Report();
         report.setReason(reason);
         report.setDetailReason(detailReason);
@@ -29,7 +28,8 @@ public class ReportService {
         report.setReportedUser(reportedUser);
         report.setReportDate(LocalDateTime.now());
         report.setStatus("처리 대기");
-        report.setRoom(room);
+        report.setCode(code);
+        report.setLocation(location);
         this.reportRepository.save(report);
     }
 

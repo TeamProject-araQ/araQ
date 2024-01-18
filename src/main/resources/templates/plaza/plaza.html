@@ -22,6 +22,9 @@
     <div class="text-end">
         <button class="btn btn-sm 버튼" id="plazaManageBtn" th:if="${user.username.equals(plaza.manager.username)}">관리
         </button>
+        <button class="btn btn-sm btn-outline-danger" id="plazaReportBtn"
+                th:if="${!user.username.equals(plaza.manager.username)}">신고
+        </button>
     </div>
     <div class="modal fade" id="plazaManageModal" tabindex="-1" aria-labelledby="plazaManageModalLabel"
          aria-hidden="true">
@@ -143,6 +146,7 @@
     <script th:inline="javascript">
         const user = [[${user.username}]];
         const nick = [[${user.nickName}]];
+        const manager = [[${plaza.manager.username}]];
         const code = [[${plaza.code}]];
         let background = [[${plaza.background}]];
     </script>
