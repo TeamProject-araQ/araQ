@@ -87,9 +87,11 @@ public class PlazaController {
 
         File dir = new File("uploads/plaza");
 
-        for (File file : Objects.requireNonNull(dir.listFiles())) {
-            if (file.getName().contains(code))
-                file.delete();
+        if (dir.exists()) {
+            for (File file : Objects.requireNonNull(dir.listFiles())) {
+                if (file.getName().contains(code))
+                    file.delete();
+            }
         }
         plazaService.delete(plaza);
         return "redirect:/plaza/list";
