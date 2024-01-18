@@ -6,16 +6,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -29,12 +33,26 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        AuthorizationManager<RequestAuthorizationContext> customAuthorizationManager =
+                (authentication, context) -> {
+                    Authentication auth = authentication.get();
+                    boolean isSuspendedOrBanned = auth.getAuthorities().stream()
+                            .anyMatch(grantedAuthority -> "ROLE_SUSPEND".equals(grantedAuthority.getAuthority())
+                                    || "ROLE_BAN".equals(grantedAuthority.getAuthority()));
+                    boolean isAccessAllowed = !isSuspendedOrBanned
+                            || context.getRequest().getServletPath().matches("/user/suspended")
+                            || context.getRequest().getServletPath().matches("/user/banned");
+
+                    return new AuthorizationDecision(isAccessAllowed);
+                };
+
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/user/**")).access(customAuthorizationManager)
                         .requestMatchers(new AntPathRequestMatcher("/user/suspended")).hasRole("SUSPEND")
                         .requestMatchers(new AntPathRequestMatcher("/user/banned")).hasRole("BAN")
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAnyRole("ADMIN", "SUPER")
-                        .requestMatchers(new AntPathRequestMatcher("/user/**"),
+                        .requestMatchers(
                                 new AntPathRequestMatcher("/error"),
                                 new AntPathRequestMatcher("/bootstrap**"),
                                 new AntPathRequestMatcher("/layout**"),
