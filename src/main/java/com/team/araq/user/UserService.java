@@ -309,7 +309,7 @@ public class UserService {
     public void setProfileImage(String imageUrl, SiteUser user) {
         user.setImage(imageUrl);
         List<String> images = user.getImages();
-        if(images.size() != 1){
+        if(!images.isEmpty()){
             Iterator<String> iterator = images.iterator();
             while(iterator.hasNext()){
                 String image = iterator.next();
@@ -318,6 +318,7 @@ public class UserService {
                 }
             }
         }
+
         images.add(0,imageUrl);
         user.setImages(images);
         userRepository.save(user);
