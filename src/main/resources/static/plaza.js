@@ -5,6 +5,7 @@ $(function () {
     let keydown = false;
     let interval = null;
     let timer = new Map();
+    const mobile = /Mobi|Android|iPhone/.test(navigator.userAgent);
 
     init();
 
@@ -78,11 +79,13 @@ $(function () {
         e.preventDefault();
         const text = $("#plazaChatParam").val();
 
-        $("#plazaChatBoard").css("height", "80px");
-        const chatBoard = document.getElementById("plazaChatBoard");
-        chatBoard.scrollTop = chatBoard.scrollHeight;
+        if (!mobile) {
+            $("#plazaChatBoard").css("height", "80px");
+            const chatBoard = document.getElementById("plazaChatBoard");
+            chatBoard.scrollTop = chatBoard.scrollHeight;
 
-        $("#plazaChatParam").hide();
+            $("#plazaChatParam").hide();
+        }
 
         if (text !== "") {
             const message = {
@@ -98,36 +101,51 @@ $(function () {
         $("#plazaChatParam").blur();
     });
 
-    $(document).keydown(function (e) {
-        $(window).focus();
-        if (keydown === false) {
-            keydown = true;
-            changeLocation(e);
-            interval = setInterval(function () {
+    if (mobile) $("#plazaChatParam").show();
+
+    $("#plazaBoard").click(function (e) {
+        if (!($(e.target).is("#plazaBoard") || $(e.target).is("#plazaChatBoard") ||
+            $(e.target).is(".noticeMessage"))) return;
+
+        const offset = $(this).offset();
+        const clickX = e.pageX - offset.left;
+        const clickY = e.pageY - offset.top;
+
+        sendLocationOnClick(clickX - 100, clickY - 25);
+    });
+
+    if (!mobile) {
+        $(document).keydown(function (e) {
+            $(window).focus();
+            if (keydown === false) {
+                keydown = true;
                 changeLocation(e);
-            }, 1000);
-        }
-    });
+                interval = setInterval(function () {
+                    changeLocation(e);
+                }, 1000);
+            }
+        });
 
-    $(document).keyup(function (e) {
-        keydown = false;
-        clearInterval(interval);
+        $(document).keyup(function (e) {
+            keydown = false;
+            clearInterval(interval);
 
-        correctLocation();
+            correctLocation();
 
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-            sendLocation();
-        }
-        $("." + user).css("transition", "1s linear");
-    });
+            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+                sendLocation();
+            }
+            $("." + user).css("transition", "1s linear");
+        });
 
-    $(document).keypress(function (e) {
-        if (e.key === "Enter") {
-            $("#plazaChatBoard").css("height", "200px");
-            $("#plazaChatParam").show();
-            $("#plazaChatParam").focus();
-        }
-    });
+        $(document).keypress(function (e) {
+            if (e.key === "Enter") {
+                $("#plazaChatBoard").css("height", "200px");
+                $("#plazaChatParam").show();
+                $("#plazaChatParam").focus();
+            }
+        });
+    }
 
     $(window).blur(function () {
         stompClient.send("/app/plaza/focus/" + code, {}, JSON.stringify({
@@ -320,6 +338,19 @@ $(function () {
             sender: user,
             left: left / parentWidth * 100,
             top: top / parentHeight * 100
+        };
+
+        stompClient.send("/app/plaza/location/" + code, {}, JSON.stringify(data));
+    }
+
+    function sendLocationOnClick(x, y) {
+        const element = $("." + user);
+        const parentWidth = parseInt(element.parent().css("width"));
+        const parentHeight = parseInt(element.parent().css("height"));
+        const data = {
+            sender: user,
+            left: x / parentWidth * 100,
+            top: y / parentHeight * 100
         };
 
         stompClient.send("/app/plaza/location/" + code, {}, JSON.stringify(data));
