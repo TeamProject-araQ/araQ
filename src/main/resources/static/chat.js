@@ -55,6 +55,7 @@ $(function () {
     $("#sendChatForm > textarea").on('keydown', function (e) {
         if (e.keyCode === 13 && !e.shiftKey) {
             e.preventDefault();
+            $('#emojiCollapse').collapse('hide');
             $("#sendChatForm").submit();
         }
     });
@@ -209,6 +210,7 @@ $(function () {
 
     $("#sendChatForm").submit(function (event) {
         event.preventDefault();
+        $('#emojiCollapse').collapse('hide');
 
         var files = $("#chatImageInput")[0].files;
         var chatContent = {
@@ -320,5 +322,6 @@ $(function () {
         var emoji = $(this).text();
         var chatInput = $('#msgContent');
         chatInput.val(chatInput.val() + emoji);
+        $("#msgContent").focus();
     });
 });
