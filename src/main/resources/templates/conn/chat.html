@@ -40,6 +40,11 @@
         .rate label:hover ~ input:checked ~ label {
             color: rgb(146, 132, 168) !important;
         }
+
+        span {
+            font-size: 25px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <div layout:fragment="content" class="container my-3">
@@ -93,9 +98,14 @@
                 <a href="javascript:void(0)" id="rateBtn" th:if="${rate == null && room.possible == true}">
                     <i class="bi bi-pencil-square" style="font-size: 30px;"></i>
                 </a>
+                <i class="fas fa-smile" id="emoji-icon" data-bs-toggle="collapse" data-bs-target="#emojiCollapse"
+                   aria-expanded="false" aria-controls="emojiCollapse" type="button" style="font-size: 30px;"></i>
                 <button type="submit" style="border:0;">
                     <i class="bi bi-send-fill" style="font-size: 30px; color: rgb(146, 132, 168)"></i>
                 </button>
+            </div>
+            <div class="collapse" id="emojiCollapse" style="max-height: 200px; overflow: auto;">
+                <div class="border-top p-2" id="emoji"></div>
             </div>
         </form>
         <!-- 상대 평가 모달 -->
