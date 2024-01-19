@@ -339,7 +339,7 @@
                 toggleModalButtons();
             },
             error: function (error) {
-                alert(error);
+                console.log(error);
             }
         });
     }
@@ -362,7 +362,7 @@
                 location.reload();
             },
             error: function (error) {
-                alert(error);
+                alert('프로필 설정에 실패했습니다.');
             }
         });
     }
@@ -425,7 +425,7 @@
                 toggleModalButtons();
             },
             error: function (error) {
-                alert('이미지 추가에 실패했습니다. 에러: ' + error.responseText);
+                alert('이미지 추가에 실패했습니다.');
             }
         });
     }
