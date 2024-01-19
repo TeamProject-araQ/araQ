@@ -1,15 +1,21 @@
 package com.team.araq.report;
 
+import com.team.araq.chat.Chat;
+import com.team.araq.chat.Room;
 import com.team.araq.chat.RoomService;
+import com.team.araq.plaza.Plaza;
 import com.team.araq.plaza.PlazaService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -41,5 +47,18 @@ public class ReportController {
 
         this.reportService.createReport(reason, detailReason, reportingUser, reportedUser, reportedRoomCode, reportedLocation);
         return "redirect:/";
+    }
+
+    @PostMapping("/getChatHistory")
+    @ResponseBody
+    public List<Chat> getChatHistory(@RequestBody String code) {
+        Room room = roomService.get(code);
+        return room.getChats();
+    }
+
+    @PostMapping("/getPlazaHistory")
+    @ResponseBody
+    public Plaza getPlazaHistory(@RequestBody String code) {
+        return plazaService.getByCode(code);
     }
 }
