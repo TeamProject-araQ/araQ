@@ -1,0 +1,99 @@
+<html layout:decorate="~{admin/page}">
+<div layout:fragment="content" class="container-fluid p-5">
+    <div>
+        <div class="row">
+            <div class="col-7">
+                <h4 class="my-2">신규 가입자 수</h4>
+                <canvas id="newUserChart" height="120"></canvas>
+            </div>
+            <div class="col-5">
+                <h4 class="my-2" th:text="|운영진 (${#lists.size(adminList)})|"></h4>
+                <div th:each="admin : ${adminList}">
+                    <table class="table text-center">
+                        <tbody>
+                        <tr>
+                            <td th:text="${admin.username}"></td>
+                            <td th:text="${admin.nickName != null ? admin.nickName : '슈퍼관리자'}"></td>
+                            <td th:text="${admin.role}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-4 mt-5">
+                <h4 class="my-2">남녀 성비</h4>
+                <canvas id="genderRatioChart" height="300"></canvas>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script th:inline="javascript">
+            var allData = [[${signupStats}]];
+            var genderRatio = [[${genderRatio}]];
+        </script>
+    </div>
+</div>
+<script layout:fragment="script">
+    $(function () {
+        var signupDates = Object.keys(allData);
+        var signupCounts = Object.values(allData);
+
+        var newUser = $('#newUserChart');
+        var newUserCtx = newUser.get(0).getContext('2d');
+        var signupChart = new Chart(newUserCtx, {
+            type: 'line',
+            data: {
+                labels: signupDates,
+                datasets: [{
+                    label: '신규 가입자 수',
+                    data: signupCounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true,
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function (value) {
+                                if (value % 1 === 0) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        var gender = $('#genderRatioChart');
+        var genderCtx = gender.get(0).getContext('2d');
+        var genderRatioChart = new Chart(genderCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(genderRatio),
+                datasets: [{
+                    data: Object.values(genderRatio),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false
+            }
+        });
+    })
+</script>
+</html>
