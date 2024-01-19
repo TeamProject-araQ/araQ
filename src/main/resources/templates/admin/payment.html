@@ -81,9 +81,6 @@
     </div>
 </div>
 <script type="text/javascript" layout:fragment="script">
-    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
     $(function() {
         $(".page-link").on('click', function() {
             $("#page").val(this.dataset.page);
