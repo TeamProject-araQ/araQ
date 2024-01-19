@@ -19,6 +19,7 @@ import com.team.araq.user.UserRole;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.struts.chain.commands.UnauthorizedActionException;
+import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -252,11 +253,15 @@ public class AdminController {
     }
 
     @PostMapping("/grantRole")
-    public String grantRole(@RequestParam String username, @RequestParam UserRole role, Principal principal) throws
+    @ResponseBody
+    public String grantRole(@RequestBody String data, Principal principal) throws
             UnauthorizedActionException {
+        System.out.println(data);
         SiteUser admin = userService.getByUsername(principal.getName());
-        SiteUser targetUser = userService.getByUsername(username);
+        JSONObject jsonObject = new JSONObject(data);
+        SiteUser targetUser = userService.getByUsername(jsonObject.getString("username"));
+        UserRole role = jsonObject.getEnum(UserRole.class, "role");
         userService.saveRole(admin, targetUser, role);
-        return "redirect:/admin/user";
+        return "권한이 변경되었습니다.";
     }
 }

@@ -533,6 +533,5 @@ public class UserController {
     @GetMapping("/banned")
     public String ban() {
         return "user/ban";
-
     }
 }

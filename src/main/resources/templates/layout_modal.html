@@ -58,7 +58,8 @@
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-5">
-                                <img class="profileImage img-fluid rounded-start" alt="..." src="">
+                                <img class="profileImage img-fluid rounded-start toggle" type="button" alt="..." src=""
+                                     data-toggle="popover" title="더 많은 이미지를 보려면 클릭">
                             </div>
                             <div class="col-md-7">
                                 <div class="card-body">
@@ -105,7 +106,6 @@
                         <a data-bs-toggle="collapse" href="#moreInfoForm" role="button" aria-expanded="false"
                            aria-controls="moreInfoForm" class="badge bg-secondary text-light">더보기</a>
                     </div>
-                    <button type="button" class="toggle btn 버튼-full">프로필 사진</button>
                     <div class="collapse" id="moreInfoForm">
                         <table class="table">
                             <tr>
@@ -141,7 +141,8 @@
                 </div>
                 <div class="modal-body" id="content2" style="display: none;">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
+                        <div class="carousel-inner toggle" type="button" data-toggle="popover"
+                             title="프로필 정보로 돌아가기">
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
                                 data-bs-slide="prev">
@@ -154,7 +155,6 @@
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
-                    <button type="button" class="toggle btn 버튼-full">프로필</button>
                 </div>
             </div>
         </div>
