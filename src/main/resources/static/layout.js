@@ -2,10 +2,10 @@ $(function () {
     const loginUser = $('#hiddenUserName').val();
     const loginUserNick = $('#loginUserNick').val();
 
-    var preferenceDay = $('#preferenceDay').val();
-    var purchaseTime = new Date($('#matchHourLeft').text());
-    var dayLater = new Date(purchaseTime.getTime() + preferenceDay * 24 * 60 * 60 * 1000);
-    var currentTime = new Date();
+    const preferenceDay = $('#preferenceDay').val();
+    const purchaseTime = new Date($('#matchHourLeft').text());
+    const dayLater = new Date(purchaseTime.getTime() + preferenceDay * 24 * 60 * 60 * 1000);
+    let currentTime = new Date();
     currentTime = new Date(Date.UTC(
         currentTime.getUTCFullYear(),
         currentTime.getUTCMonth(),
@@ -13,22 +13,22 @@ $(function () {
         currentTime.getUTCHours(),
         currentTime.getUTCMinutes(),
         currentTime.getUTCSeconds()));
-    var totalHoursLeft = (dayLater - currentTime) / (1000 * 60 * 60);
-    var daysLeft = Math.floor(totalHoursLeft / 24);
-    var hoursLeft = Math.floor(totalHoursLeft % 24);
+    const totalHoursLeft = (dayLater - currentTime) / (1000 * 60 * 60);
+    const daysLeft = Math.floor(totalHoursLeft / 24);
+    const hoursLeft = Math.floor(totalHoursLeft % 24);
     $('#matchHourLeft').text(daysLeft + "일 " + hoursLeft + "시간");
 
-    var chatPurchaseTime = new Date($('#chatHourLeft').text());
-    var chatDayLater = new Date(chatPurchaseTime.getTime() + 7 * 24 * 60 * 60 * 1000);
-    var chatTotalHoursLeft = (chatDayLater - currentTime) / (1000 * 60 * 60);
+    const chatPurchaseTime = new Date($('#chatHourLeft').text());
+    const chatDayLater = new Date(chatPurchaseTime.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const chatTotalHoursLeft = (chatDayLater - currentTime) / (1000 * 60 * 60);
     $('#chatHourLeft').text(Math.floor(chatTotalHoursLeft / 24) + "일 " + Math.floor(chatTotalHoursLeft % 24) + "시간");
 
-    var voiceDay = $('#voiceDay').val();
-    var voicePurchaseTime = new Date($('#voiceHourLeft').text());
-    var voiceDayLater = new Date(voicePurchaseTime.getTime() + voiceDay * 24 * 60 * 60 * 1000);
-    var voiceTotalHoursLeft = (voiceDayLater - currentTime) / (1000 * 60 * 60);
-    var voiceDaysLeft = Math.floor(voiceTotalHoursLeft / 24);
-    var voiceHoursLeft = Math.floor(voiceTotalHoursLeft % 24);
+    const voiceDay = $('#voiceDay').val();
+    const voicePurchaseTime = new Date($('#voiceHourLeft').text());
+    const voiceDayLater = new Date(voicePurchaseTime.getTime() + voiceDay * 24 * 60 * 60 * 1000);
+    const voiceTotalHoursLeft = (voiceDayLater - currentTime) / (1000 * 60 * 60);
+    const voiceDaysLeft = Math.floor(voiceTotalHoursLeft / 24);
+    const voiceHoursLeft = Math.floor(voiceTotalHoursLeft % 24);
     $('#voiceHourLeft').text(voiceDaysLeft + "일 " + voiceHoursLeft + "시간");
 
     $('[data-toggle="popover"]').popover({
@@ -63,12 +63,12 @@ $(function () {
 
         stompClient.subscribe('/topic/send/message/' + loginUser, function (notification) {
             const data = JSON.parse(notification.body);
-            var image = data.image;
-            var senderNick = data.senderNick;
-            var sender = data.sender;
-            var content = data.content;
-            var datetime = data.datetime;
-            var messageId = data.messageId;
+            const image = data.image;
+            const senderNick = data.senderNick;
+            const sender = data.sender;
+            const content = data.content;
+            const datetime = data.datetime;
+            const messageId = data.messageId;
             const messageToast = new bootstrap.Toast($('#messageToast'), {
                 autohide: false
             });
