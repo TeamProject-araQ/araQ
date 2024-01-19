@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
     <div style="margin: 0; padding: 0; height: 100%; display: flex; justify-content: center; align-items: center;">
-        <div>
+        <div class="row">
             <h3 class="underline my-3">랜덤 매칭</h3>
             <div class="my-3 text-center">
                 <div class="d-flex justify-content-center">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="ms-1" th:text="|이 다른 ${#lists.size(userList)}명의 회원이 랜덤으로 추천되었습니다.|"></div>
             </div>
-            <div id="carouselExample" class="carousel slide mt-5" style="width: 90%;">
+            <div id="carouselExample" class="carousel slide mt-5 col-10 mx-auto" style="width: 90%;">
                 <div class="carousel-inner">
                     <div class="carousel-item active" th:each="targetUser, status : ${userList}"
                          th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">

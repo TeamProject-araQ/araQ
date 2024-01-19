@@ -41,7 +41,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user, loop : ${paging}" th:if="${!user.role.value.equals('ROLE_SUPER') && !user.username.equals(admin.username)}">
+        <tr th:each="user, loop : ${paging}"
+            th:if="${!user.role.value.equals('ROLE_SUPER') && !user.username.equals(admin.username)}">
             <td><input class="check form-check-input" type="checkbox" th:value="${user.username}" th:id="${user.id}">
             </td>
             <td th:text="${user.id}"></td>
@@ -52,24 +53,19 @@
             <td class="text-start" th:text="${user.address}"></td>
             <td th:text="${#temporals.format(user.createDate, 'yyyy-MM-dd')}"></td>
             <td>
-                <span th:if="${admin.role.value == 'ROLE_ADMIN'}">
+                <div th:if="${admin.role.value == 'ROLE_ADMIN'}">
                     <span th:text="${user.role}"></span>
-                </span>
-                <span th:if="${admin.role.value == 'ROLE_SUPER'}">
-                    <form th:action="@{/admin/grantRole}" method="post" class="role-change-form d-flex">
-                        <input type="hidden" name="username" th:value="${user.username}"/>
-                        <div class="form-group me-2">
-                            <select class="form-control" id="roleDropdown" name="role" th:value="${user.role}">
-                                <option th:selected="${user.role.value == 'ROLE_NEW'}" value="NEW">NEW</option>
-                                <option th:selected="${user.role.value == 'ROLE_USER'}" value="USER">USER</option>
-                                <option th:selected="${user.role.value == 'ROLE_ADMIN'}" value="ADMIN">ADMIN</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn 버튼 role-change-button">
-                        변경
-                        </button>
-                    </form>
-                </span>
+                </div>
+                <div th:if="${admin.role.value == 'ROLE_SUPER'}">
+                    <select class="form-control roleDropdown" th:value="${user.role}"
+                            th:data-user="${user.username}" th:data-nick="${user.nickName}">
+                        <option th:selected="${user.role.value == 'ROLE_NEW'}" value="NEW">NEW</option>
+                        <option th:selected="${user.role.value == 'ROLE_USER'}" value="USER">USER</option>
+                        <option th:selected="${user.role.value == 'ROLE_ADMIN'}" value="ADMIN">ADMIN</option>
+                        <option th:selected="${user.role.value == 'ROLE_SUSPEND'}" value="SUSPEND">SUSPEND</option>
+                        <option th:selected="${user.role.value == 'ROLE_BAN'}" value="BAN">BAN</option>
+                    </select>
+                </div>
             </td>
         </tr>
         </tbody>
@@ -103,24 +99,24 @@
     var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-    $(function() {
-        $(".page-link").on('click', function() {
+    $(function () {
+        $(".page-link").on('click', function () {
             $("#page").val(this.dataset.page);
             $("#searchForm").submit();
         });
 
-        $("#searchBtn").on('click', function() {
+        $("#searchBtn").on('click', function () {
             $("#kw").val($("#searchKw").val());
             $("#page").val("0");
             $("#searchForm").submit();
         });
 
-        $("#checkAll").on('click', function() {
+        $("#checkAll").on('click', function () {
             $('.check').prop('checked', this.checked);
         });
 
-        $("#deleteBtn").on('click', function() {
-            const checkedValues = $(".check:checked").map(function() {
+        $("#deleteBtn").on('click', function () {
+            const checkedValues = $(".check:checked").map(function () {
                 return this.value;
             }).get();
 
@@ -129,35 +125,52 @@
                 return;
             }
 
-            console.log(checkedValues);
-
             if (confirm('회원 정보를 삭제하시겠습니까?')) {
                 $.ajax({
-                    url : '/admin/user/delete',
-                    type : 'post',
-                    headers : {
-                        [csrfHeader] : csrfToken
+                    url: '/admin/user/delete',
+                    type: 'post',
+                    headers: {
+                        [csrfHeader]: csrfToken
                     },
-                    contentType : 'application/json',
+                    contentType: 'application/json',
                     data: JSON.stringify(checkedValues),
-                    success : function(data) {
+                    success: function (data) {
                         alert(data);
                         location.reload();
                     },
-                    error : function(error) {
+                    error: function (error) {
                         console.log(error);
                     }
                 });
             }
         });
-    });
-     $(function() {
-        $(".role-change-button").on('click', function(event) {
-            event.preventDefault();
 
-            if (confirm('권한을 변경하시겠습니까?')) {
-                var form = $(this).closest('.role-change-form');
-                form.submit();
+
+        $(".roleDropdown").on('change', function (event) {
+            event.preventDefault();
+            var nickname = $(this).data("nick");
+            var role = $(this).val();
+            var username = $(this).data("user");
+            if (confirm(nickname + ' 회원의 권한을 변경하시겠습니까?')) {
+                $.ajax({
+                    url: "/admin/grantRole",
+                    type: "POST",
+                    headers: {
+                        [csrfHeader] : csrfToken
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        role: role,
+                        username: username
+                    }),
+                    success: function (data) {
+                        alert(data);
+                        window.location.reload();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
             }
         });
     });

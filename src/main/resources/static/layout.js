@@ -31,6 +31,10 @@ $(function () {
     var voiceHoursLeft = Math.floor(voiceTotalHoursLeft % 24);
     $('#voiceHourLeft').text(voiceDaysLeft + "일 " + voiceHoursLeft + "시간");
 
+    $('[data-toggle="popover"]').popover({
+        trigger: 'hover'
+    });
+
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
     stompClient.debug = null;
@@ -700,6 +704,18 @@ function showProfile(username) {
                 // 캐러셀에 이미지 추가
                 carouselInner.append(carouselItem);
             }
+
+            if (data.images.length > 0) {
+               // 토글 버튼 클릭 이벤트 핸들러 추가
+               $('#profileModal .toggle').on('click', function () {
+               $('#content1').toggle();
+               $('#content2').toggle();
+               });
+            } else {
+               // images 배열이 null이거나 빈 배열인 경우 버튼 비활성화
+               $('#profileModal .toggle').prop('disabled', true);
+               $("#profileModal .profileImage").attr('data-bs-original-title', '').css('cursor', 'default');
+            }
         },
         error: function (err) {
             alert("요청이 실패하였습니다.");
@@ -707,8 +723,3 @@ function showProfile(username) {
         }
     });
 }
-
-$('#profileModal .toggle').on('click', function () {
-    $('#content1').toggle();
-    $('#content2').toggle();
-});
