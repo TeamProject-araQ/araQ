@@ -340,7 +340,7 @@
                          th:if="${post.writer.username != user.username}" class="me-3">
                     <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
                         <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
-                        <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
+                        <div class="time text-start" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
                              style="font-size:10pt; color:gray;" th:if="${post.writer.username == user.username}"></div>
                         <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
                              style="font-size:10pt; color:gray; text-align:end;"
