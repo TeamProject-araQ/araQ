@@ -293,12 +293,14 @@ public class UserService {
                 }
             }
         }
-        if (user.getImage() != null && user.getImage().equals(imageUrl)) {
+        if (user.getImage() != null && user.getImage().equals(imageUrl) && user.getImages().isEmpty()) {
             if (user.getGender().equals("남성")) {
                 user.setImage("/profile/default-m.jpg");
             } else if (user.getGender().equals("여성")) {
                 user.setImage("/profile/default-w.jpg");
             }
+        } else {
+            user.setImage(user.getImages().get(0));
         }
         user.setImages(images);
         userRepository.save(user);
@@ -306,6 +308,18 @@ public class UserService {
 
     public void setProfileImage(String imageUrl, SiteUser user) {
         user.setImage(imageUrl);
+        List<String> images = user.getImages();
+        if(images.size() != 1){
+            Iterator<String> iterator = images.iterator();
+            while(iterator.hasNext()){
+                String image = iterator.next();
+                if(image.equals(imageUrl)){
+                    iterator.remove();
+                }
+            }
+        }
+        images.add(0,imageUrl);
+        user.setImages(images);
         userRepository.save(user);
     }
 
@@ -329,6 +343,9 @@ public class UserService {
             updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
 
             // 이미지 목록을 사용자 객체에 저장
+            if(user.getImage().equals("/profile/default-m.jpg")|| user.getImage().equals("/profile/default-w.jpg")){
+                user.setImage(updatedImages.get(0));
+            }
             user.setImages(updatedImages);
             userRepository.save(user);
             return user.getImages();
