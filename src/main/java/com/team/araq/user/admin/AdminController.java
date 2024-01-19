@@ -210,14 +210,15 @@ public class AdminController {
             String action = actionData.get("action").toString();
             Report report = this.reportService.getReport(reportId);
             SiteUser user = report.getReportedUser();
-            String reason = actionData.get("reason").toString();
             if ("활동 유지".equals(action)) {
                 this.reportService.updateStatus(report);
             } else if ("계정 정지".equals(action)) {
+                String reason = actionData.get("reason").toString();
                 int days = Integer.parseInt(String.valueOf(actionData.get("days")));
                 this.userService.suspendUser(user, days, reason);
                 this.reportService.updateStatus(report);
             } else if ("영구 정지".equals(action)) {
+                String reason = actionData.get("reason").toString();
                 this.userService.vanUser(user, reason);
                 this.reportService.updateStatus(report);
             }

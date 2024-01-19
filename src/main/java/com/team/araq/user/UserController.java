@@ -348,6 +348,21 @@ public class UserController {
         List<Inquiry> inquiryList = this.inquiryService.getListByWriter(user);
         List<Post> postList = this.postService.getListByWriter(user);
         List<Payment> paymentList = this.paymentService.getListByUser(user);
+        List<Rate> rateList = this.rateService.getRateByUser(user);
+        double manner = 0;
+        double appeal = 0;
+        double appearance = 0;
+        for (int i = 0; i < rateList.size(); i++) {
+            manner += rateList.get(i).getManner();
+            appeal += rateList.get(i).getAppeal();
+            appearance += rateList.get(i).getAppearance();
+        }
+        manner = Math.round(manner / rateList.size() * 10) / 10.0;
+        appeal = Math.round(appeal / rateList.size() * 10) / 10.0;
+        appearance = Math.round(appearance / rateList.size() * 10) / 10.0;
+        model.addAttribute("manner", manner);
+        model.addAttribute("appeal", appeal);
+        model.addAttribute("appearance", appearance);
         model.addAttribute("inquiryList", inquiryList);
         model.addAttribute("postList", postList);
         model.addAttribute("paymentList", paymentList);

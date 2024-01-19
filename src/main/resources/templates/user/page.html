@@ -11,6 +11,35 @@
             <div class="ms-3">
                 <h4 th:text="|${user.name}님 안녕하세요.|"></h4>
                 <a href="/user/edit" class="me-3">프로필 변경 ></a>
+                <a type="button" class="me-3" data-bs-toggle="modal" data-bs-target="#rateModal" th:if="${!user.rateList2.isEmpty()}">평가 점수 ></a>
+            </div>
+        </div>
+    </div>
+    <!-- 평가 점수 -->
+    <div class="modal" id="rateModal" tabindex="-1" aria-labelledby="rateModalLabel" aria-hidden="true" data-bs-backdrop="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">평가 점수</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="border-bottom pb-1 d-flex mb-1">
+                        <div>매너 점수</div>
+                        <i class="bi bi-star-fill text-danger ms-3 me-2"></i>
+                        <div th:text="${manner}"></div>
+                    </div>
+                    <div class="border-bottom pb-1 d-flex mb-1">
+                        <div>매력 점수</div>
+                        <i class="bi bi-star-fill text-danger ms-3 me-2"></i>
+                        <div th:text="${appeal}"></div>
+                    </div>
+                    <div class="border-bottom pb-1 d-flex">
+                        <div>외모 점수</div>
+                        <i class="bi bi-star-fill text-danger ms-3 me-2"></i>
+                        <div th:text="${appearance}"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
