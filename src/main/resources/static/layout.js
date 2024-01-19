@@ -31,6 +31,10 @@ $(function () {
     var voiceHoursLeft = Math.floor(voiceTotalHoursLeft % 24);
     $('#voiceHourLeft').text(voiceDaysLeft + "일 " + voiceHoursLeft + "시간");
 
+    $('[data-toggle="popover"]').popover({
+        trigger: 'hover'
+    });
+
     const socket = new SockJS("/ws");
     const stompClient = Stomp.over(socket);
     stompClient.debug = null;
