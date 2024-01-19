@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +58,9 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND preference = :status ORDER BY RAND() LIMIT 3", nativeQuery = true)
     List<SiteUser> findByGenderNotAndPreferenceRandomly(@Param("gender") String gender, @Param("status") boolean status);
+
+    List<SiteUser> findByRoleIn(Collection<UserRole> role);
+
+    long countByGender(String gender);
 
 }

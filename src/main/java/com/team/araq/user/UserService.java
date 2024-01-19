@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -311,14 +312,13 @@ public class UserService {
         List<String> images = user.getImages();
         if(!images.isEmpty()){
             Iterator<String> iterator = images.iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String image = iterator.next();
-                if(image.equals(imageUrl)){
+                if (image.equals(imageUrl)) {
                     iterator.remove();
                 }
             }
         }
-
         images.add(0,imageUrl);
         user.setImages(images);
         userRepository.save(user);
@@ -344,7 +344,7 @@ public class UserService {
             updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
 
             // 이미지 목록을 사용자 객체에 저장
-            if(user.getImage().equals("/profile/default-m.jpg")|| user.getImage().equals("/profile/default-w.jpg")){
+            if (user.getImage().equals("/profile/default-m.jpg") || user.getImage().equals("/profile/default-w.jpg")) {
                 user.setImage(updatedImages.get(0));
             }
             user.setImages(updatedImages);
@@ -582,6 +582,40 @@ public class UserService {
         user.setRole(UserRole.BAN);
         user.setReportedReason(reason);
         this.userRepository.save(user);
+    }
+
+    public Map<LocalDate, Long> getCreateDateCount() {
+        List<SiteUser> users = userRepository.findAll();
+        Map<LocalDate, Long> signupStats = new LinkedHashMap<>();
+        LocalDate today = LocalDate.now();
+        LocalDate aWeekAgo = today.minusDays(6);
+        for (LocalDate date = aWeekAgo; !date.isAfter(today); date = date.plusDays(1)) {
+            signupStats.put(date, 0L);
+        }
+        users.stream()
+                .filter(user -> user.getCreateDate() != null)
+                .forEach(user -> {
+                    LocalDate date = user.getCreateDate().toLocalDate();
+                    if (!date.isBefore(aWeekAgo) && !date.isAfter(today)) {
+                        signupStats.put(date, signupStats.getOrDefault(date, 0L) + 1);
+                    }
+                });
+        return signupStats;
+    }
+
+    public List<SiteUser> findAdminsAndSupers() {
+        return this.userRepository.findByRoleIn(Arrays.asList(UserRole.ADMIN, UserRole.SUPER));
+    }
+
+    public Map<String, Long> getGenderRatio() {
+        long maleCount = userRepository.countByGender("남성");
+        long femaleCount = userRepository.countByGender("여성");
+
+        Map<String, Long> genderRatio = new HashMap<>();
+        genderRatio.put("남성", maleCount);
+        genderRatio.put("여성", femaleCount);
+
+        return genderRatio;
     }
 
 }
