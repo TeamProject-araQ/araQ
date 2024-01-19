@@ -25,7 +25,7 @@
 
         #idealImg {
             width: 50%;
-            height:auto;
+            height: auto;
             border-radius: 5px;
         }
 
@@ -340,11 +340,16 @@
                          th:if="${post.writer.username != user.username}" class="me-3">
                     <div th:classappend="${post.writer.username == user.username} ? 'me' : 'you'">
                         <a th:text="${post.content}" th:href="@{|/post/detail/${post.id}|}"></a>
-                        <div class="time text-start" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
-                             style="font-size:10pt; color:gray;" th:if="${post.writer.username == user.username}"></div>
-                        <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
-                             style="font-size:10pt; color:gray; text-align:end;"
-                             th:if="${post.writer.username != user.username}"></div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
+                                 style="font-size:10pt; color:gray;"
+                                 th:if="${post.writer.username == user.username}"></div>
+                            <div th:text="|댓글 (${#lists.size(post.commentList)})|"
+                                 style="font-size:10pt; font-family: nanum-semiBold; color:dimgray;"></div>
+                            <div class="time" th:text="${#temporals.format(post.createDate, 'MM-dd HH:mm')}"
+                                 style="font-size:10pt; color:gray;"
+                                 th:if="${post.writer.username != user.username}"></div>
+                        </div>
                     </div>
                     <img th:src="@{${post.writer.image}}" alt=""
                          style="border:2px solid #d8d3e0; width:50px; height:50px; border-radius:50%;"
