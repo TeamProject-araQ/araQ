@@ -115,12 +115,10 @@ public class UserService {
             // 이미지를 업로드하지 않은 경우 기본 이미지 설정
             List<String> defaultImages = new ArrayList<>();
             if (userUpdateForm.getGender().equals("남성")) {
-                defaultImages.add("/profile/default-m.jpg");
+                user.setImage("/profile/default-m.jpg");
             } else {
-                defaultImages.add("/profile/default-w.jpg");
+                user.setImage("/profile/default-w.jpg");
             }
-            user.setImages(defaultImages);
-            user.setImage(defaultImages.get(0));
         }
         user.setRole(UserRole.USER);
         userRepository.save(user);
@@ -140,6 +138,11 @@ public class UserService {
         user.setCreateDate(LocalDateTime.now());
         user.setGender(userUpdateForm.getGender());
         user.setIntroduce(userUpdateForm.getIntroduce());
+        if (user.getGender().equals("남성") && (user.getImages() == null || user.getImages().isEmpty())) {
+            user.setImage("/profile/default-m.jpg");
+        } else if (user.getGender().equals("여성") && (user.getImages() == null || user.getImages().isEmpty())) {
+            user.setImage("/profile/default-w.jpg");
+        }
         userRepository.save(user);
     }
 
@@ -310,7 +313,7 @@ public class UserService {
     public void setProfileImage(String imageUrl, SiteUser user) {
         user.setImage(imageUrl);
         List<String> images = user.getImages();
-        if(!images.isEmpty()){
+        if (!images.isEmpty()) {
             Iterator<String> iterator = images.iterator();
             while (iterator.hasNext()) {
                 String image = iterator.next();
@@ -319,12 +322,14 @@ public class UserService {
                 }
             }
         }
-        images.add(0,imageUrl);
+
+        images.add(0, imageUrl);
         user.setImages(images);
         userRepository.save(user);
     }
 
     public List<String> addImage(MultipartFile image, SiteUser user) {
+
         String userUploadPath = uploadPath + "/" + user.getUsername();
         File uploadDirectory = new File(userUploadPath);
         if (!uploadDirectory.exists()) {
@@ -340,6 +345,9 @@ public class UserService {
             FileCopyUtils.copy(image.getBytes(), dest);
 
             List<String> updatedImages = user.getImages();
+            if (updatedImages == null) {
+                updatedImages = new ArrayList<>();
+            }
             // 이미지 경로를 사용자의 이미지 목록에 추가
             updatedImages.add("/user/image/" + user.getUsername() + "/" + fileName);
 

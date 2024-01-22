@@ -57,7 +57,7 @@
                     <!-- Carousel -->
                     <div id="carouselExampleIndicators" class="carousel slide">
                         <div class="carousel-indicators">
-                            <button th:each="index : ${#numbers.sequence(0, user.images.size())}"
+                            <button th:each="index : ${#numbers.sequence(0, user.images?.size() ?:0)}"
                                     type="button"
                                     data-bs-target="#carouselExampleIndicators"
                                     th:data-bs-slide-to="${index}"
