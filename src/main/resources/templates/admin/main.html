@@ -1,4 +1,11 @@
 <html layout:decorate="~{admin/page}">
+<head>
+    <style>
+        tr:hover {
+            background: #D8D3E0;
+        }
+    </style>
+</head>
 <div layout:fragment="content" class="container-fluid p-5">
     <div>
         <div class="row">
@@ -8,21 +15,27 @@
             </div>
             <div class="col-5">
                 <h4 class="my-2" th:text="|운영진 (${#lists.size(adminList)})|"></h4>
-                <div th:each="admin : ${adminList}">
+                <div>
                     <table class="table text-center">
                         <tbody>
-                        <tr>
+                        <tr th:each="admin : ${adminList}">
                             <td th:text="${admin.username}"></td>
-                            <td th:text="${admin.nickName != null ? admin.nickName : '슈퍼관리자'}"></td>
+                            <td th:text="${admin.nickName != null ? admin.nickName : '관리자'}"></td>
                             <td th:text="${admin.role}"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="col-4 mt-5">
-                <h4 class="my-2">남녀 성비</h4>
-                <canvas id="genderRatioChart" height="300"></canvas>
+            <div class="row mt-5">
+                <div class="col-4">
+                    <h4 class="my-2">남녀 성비</h4>
+                    <canvas id="genderRatioChart" height="350"></canvas>
+                </div>
+                <div class="col-8">
+                    <h4 class="my-2">매칭 성공률</h4>
+                    <canvas id="matchSuccessRateChart" height="300" width="1000"></canvas>
+                </div>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -30,6 +43,7 @@
         <script th:inline="javascript">
             var allData = [[${signupStats}]];
             var genderRatio = [[${genderRatio}]];
+            var successRate = [[${successRate}]];
         </script>
     </div>
 </div>
@@ -92,6 +106,47 @@
             options: {
                 responsive: false,
                 maintainAspectRatio: false
+            }
+        });
+
+        var dates = Object.keys(successRate);
+        var successRates = Object.values(successRate);
+        var matchCtx = document.getElementById('matchSuccessRateChart').getContext('2d');
+        var matchChart = new Chart(matchCtx, {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: '성공률',
+                    data: successRates,
+                    backgroundColor: '#d8d3e0'
+                }]
+            },
+            options: {
+                responsive: false,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: '최근 일주일 성공률',
+                    fontSize: 18
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '날짜'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: '성공률 (%)'
+                        }
+                    }
+                }
             }
         });
     })

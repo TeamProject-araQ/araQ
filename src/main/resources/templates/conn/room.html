@@ -1,6 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <table class="table">
+    <table class="table text-center">
         <thead class="table-head">
         <tr>
             <th style="width:70%">채팅방 이름</th>
@@ -10,7 +10,7 @@
         </thead>
         <tbody>
         <tr th:each="room : ${roomList}">
-            <td class="d-flex align-items-center">
+            <td>
                 <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
                    th:text="|${room.participant2.nickName}님과 채팅|"
                    th:if="${room.participant1.username.equals(user.username)}"></a>

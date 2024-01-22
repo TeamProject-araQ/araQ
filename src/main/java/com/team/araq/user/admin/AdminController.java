@@ -7,6 +7,7 @@ import com.team.araq.board.post.PostService;
 import com.team.araq.chat.RoomService;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryService;
+import com.team.araq.like.LikeService;
 import com.team.araq.pay.Payment;
 import com.team.araq.pay.PaymentService;
 import com.team.araq.plaza.PlazaService;
@@ -53,11 +54,15 @@ public class AdminController {
 
     private final PlazaService plazaService;
 
+    private final LikeService likeService;
+
     @GetMapping("")
     public String page(Model model) {
         Map<LocalDate, Long> signupStats = this.userService.getCreateDateCount();
         List<SiteUser> adminList = this.userService.findAdminsAndSupers();
-        Map<String, Long> genderRatio = userService.getGenderRatio();
+        Map<String, Long> genderRatio = this.userService.getGenderRatio();
+        Map<LocalDate, Double> successRate = this.likeService.getSuccessRate();
+        model.addAttribute("successRate", successRate);
         model.addAttribute("genderRatio", genderRatio);
         model.addAttribute("adminList", adminList);
         model.addAttribute("signupStats", signupStats);
