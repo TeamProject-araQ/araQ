@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -53,8 +54,15 @@ public class AdminController {
     private final PlazaService plazaService;
 
     @GetMapping("")
-    public String page() {
-        return "admin/page";
+    public String page(Model model) {
+        Map<LocalDate, Long> signupStats = this.userService.getCreateDateCount();
+        List<SiteUser> adminList = this.userService.findAdminsAndSupers();
+        Map<String, Long> genderRatio = userService.getGenderRatio();
+        model.addAttribute("genderRatio", genderRatio);
+        model.addAttribute("adminList", adminList);
+        model.addAttribute("signupStats", signupStats);
+
+        return "admin/main";
     }
 
     @GetMapping("/user")

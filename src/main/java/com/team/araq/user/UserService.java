@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -589,6 +590,40 @@ public class UserService {
         user.setRole(UserRole.BAN);
         user.setReportedReason(reason);
         this.userRepository.save(user);
+    }
+
+    public Map<LocalDate, Long> getCreateDateCount() {
+        List<SiteUser> users = userRepository.findAll();
+        Map<LocalDate, Long> signupStats = new LinkedHashMap<>();
+        LocalDate today = LocalDate.now();
+        LocalDate aWeekAgo = today.minusDays(6);
+        for (LocalDate date = aWeekAgo; !date.isAfter(today); date = date.plusDays(1)) {
+            signupStats.put(date, 0L);
+        }
+        users.stream()
+                .filter(user -> user.getCreateDate() != null)
+                .forEach(user -> {
+                    LocalDate date = user.getCreateDate().toLocalDate();
+                    if (!date.isBefore(aWeekAgo) && !date.isAfter(today)) {
+                        signupStats.put(date, signupStats.getOrDefault(date, 0L) + 1);
+                    }
+                });
+        return signupStats;
+    }
+
+    public List<SiteUser> findAdminsAndSupers() {
+        return this.userRepository.findByRoleIn(Arrays.asList(UserRole.ADMIN, UserRole.SUPER));
+    }
+
+    public Map<String, Long> getGenderRatio() {
+        long maleCount = userRepository.countByGender("남성");
+        long femaleCount = userRepository.countByGender("여성");
+
+        Map<String, Long> genderRatio = new HashMap<>();
+        genderRatio.put("남성", maleCount);
+        genderRatio.put("여성", femaleCount);
+
+        return genderRatio;
     }
 
 }
