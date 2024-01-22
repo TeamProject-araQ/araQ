@@ -3,14 +3,14 @@
     <table class="table text-center">
         <thead class="table-head">
         <tr>
-            <th style="width:70%">채팅방 이름</th>
+            <th style="width:70%" class="text-start">채팅방 이름</th>
             <th>마지막 대화</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="room : ${roomList}">
-            <td>
+            <td class="text-start">
                 <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
                    th:text="|${room.participant2.nickName}님과 채팅|"
                    th:if="${room.participant1.username.equals(user.username)}"></a>
@@ -21,7 +21,7 @@
             </td>
             <td th:text="${#temporals.format(room.recentDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td>
-                <button class="roomDeleteBtn btn btn-danger btn-sm" th:data-value="${room.code}" style="width:50px;">삭제</button>
+                <button class="roomDeleteBtn btn btn-danger btn-sm" style="font-size: 9pt;" th:data-value="${room.code}">삭제</button>
             </td>
         </tr>
         </tbody>
