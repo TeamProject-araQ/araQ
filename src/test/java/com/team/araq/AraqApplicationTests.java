@@ -2,7 +2,6 @@ package com.team.araq;
 
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryRepository;
-import com.team.araq.inquiry.InquiryService;
 import com.team.araq.user.SiteUser;
 import com.team.araq.user.UserService;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
