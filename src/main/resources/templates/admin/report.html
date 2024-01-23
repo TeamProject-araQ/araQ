@@ -79,10 +79,10 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/admin/report}" method="get" id="searchForm">
-            <input type="hidden" id="page" name="page" th:value="${paging.number}">
-        </form>
     </div>
+    <form th:action="@{/admin/report}" method="get" id="searchForm">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    </form>
     <!-- 정지 일수 선택을 위한 모달 -->
     <div class="modal fade" id="suspensionModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
          aria-labelledby="suspensionModalLabel"

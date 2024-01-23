@@ -147,10 +147,10 @@
         <img th:src="@{${user.image}}" alt="" style="width:150px; height:150px; border-radius:50%;" th:if="${user.role.value != 'ROLE_SUPER'}">
         <img src="/image/user/admin.png" alt="" style="width:150px; height:150px; border-radius:50%;" th:if="${user.role.value.equals('ROLE_SUPER')}">
         <div class="d-flex justify-content-center align-items-center mt-3" th:if="${user.role.value != 'ROLE_SUPER'}">
-            <div class="fs-3 pb-1" th:text="${user.nickName}"></div>
+            <div class="fs-5" th:text="${user.nickName}"></div>
             <div class="ms-1">님</div>
         </div>
-        <div class="text-center mt-3" th:if="${user.role.value.equals('ROLE_SUPER')}">관리자 님</div>
+        <div class="text-center mt-3" th:if="${user.role.value.equals('ROLE_SUPER')}"><span class="fs-5">관리자</span> 님</div>
         <div>환영합니다!</div>
         <button class="btn 버튼 w-100 my-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseWidthExample" aria-expanded="false" aria-controls="collapseWidthExample">
