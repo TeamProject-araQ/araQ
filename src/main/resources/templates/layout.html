@@ -199,7 +199,7 @@
                 <img src="/image/araQ/bubbles.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">버블</div>
             </a>
-            <a class="col-4 justify-content-center" th:href="@{/user/page}" th:if="${user.role.value != 'ROLE_ADMIN' && user.role.value != 'ROLE_SUPER'}"
+            <a class="col-4 justify-content-center" th:href="@{/user/page}" th:if="${user.role.value != 'ROLE_SUPER'}"
                style="padding:15px; border:1px solid lightgray;">
                 <img src="/image/etc/person.png" alt="" style="width:40px; height:40px;">
                 <div class="mt-2">마이페이지</div>
