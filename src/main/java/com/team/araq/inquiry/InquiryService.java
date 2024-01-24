@@ -29,13 +29,16 @@ public class InquiryService {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
+        String kwLike = "%" + kw + "%";
 
-        long beforeTime = System.currentTimeMillis();
-        Page<Inquiry> pages = this.inquiryRepository.findByKeywordAndCategory(kw, category, pageable);
-        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
-        long secDiffTime = afterTime - beforeTime; //두 시간에 차 계산
+        Page<Inquiry> pages;
+        if (kw.isBlank() && category.isBlank())
+            pages = this.inquiryRepository.findAll(pageable);
+        else if (kw.isBlank()) pages = this.inquiryRepository.findByCategory(category, pageable);
+        else if (category.isBlank())
+            pages = this.inquiryRepository.findByTitleLikeOrContentLike(kwLike, kwLike, pageable);
+        else pages = this.inquiryRepository.findByKeywordAndCategory(kwLike, category, pageable);
 
-        System.out.println("시간차이(m) : "+secDiffTime);
         return pages;
     }
 
