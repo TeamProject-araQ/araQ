@@ -28,6 +28,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -102,9 +103,15 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, Principal principal) throws IOException {
+    public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
         SiteUser user = userService.getByUsername(username);
+
+        if(!userService.update(user, userUpdateForm)){
+            redirectAttributes.addFlashAttribute("updateError", "필수 항목을 모두 입력해주세요");
+            return "redirect:/user/update";
+        }
         userService.update(user, userUpdateForm);
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> auths = new ArrayList<>();
         auths.add(new SimpleGrantedAuthority(user.getRole().getValue()));
