@@ -371,7 +371,9 @@ public class UserService {
     }
 
     public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
-        return this.userRepository.findMatchingUsersByIdealType(idealType, gender);
+        List<SiteUser> users = this.userRepository.findMatchingUsersByIdealType(idealType, gender);
+        Collections.shuffle(users);
+        return users.subList(0, Math.min(users.size(), 10));
     }
 
     public List<SiteUser> getBySmoking(String gender, String smoking) {

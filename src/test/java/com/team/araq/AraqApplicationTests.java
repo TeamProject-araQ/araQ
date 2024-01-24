@@ -3,6 +3,8 @@ package com.team.araq;
 import com.team.araq.inquiry.Inquiry;
 import com.team.araq.inquiry.InquiryRepository;
 import com.team.araq.user.SiteUser;
+import com.team.araq.user.UserRepository;
+import com.team.araq.user.UserRole;
 import com.team.araq.user.UserService;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,32 +29,42 @@ class AraqApplicationTests {
     private InquiryRepository InquiryRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private UserService userService;
 
     @Test
     void contextLoads() throws IOException {
-        Resource resource = new ClassPathResource("static/realistic_dummy_data.xlsx");
+        Resource resource = new ClassPathResource("static/dummy_users.xlsx");
         InputStream file = resource.getInputStream();
         Workbook workbook = new XSSFWorkbook(file);
         Sheet sheet = workbook.getSheetAt(0);
-        List<Inquiry> entities = new ArrayList<>();
-
-        SiteUser user = this.userService.getByUsername("dbstjwjd");
-
+        List<SiteUser> entities = new ArrayList<>();
         for (Row row : sheet) {
             if (row.getRowNum() == 0) continue;
-            Inquiry inquiry = new Inquiry();
-            inquiry.setCategory(row.getCell(0).getStringCellValue());
-            inquiry.setTitle(row.getCell(1).getStringCellValue());
-            inquiry.setContent(row.getCell(2).getStringCellValue());
-            inquiry.setVisibility(row.getCell(3).getStringCellValue());
-            inquiry.setStatus("답변 대기");
-            inquiry.setWriter(user);
-            inquiry.setCreateDate(LocalDateTime.now());
+            SiteUser user = new SiteUser();
+            user.setGender(row.getCell(0).getStringCellValue());
+            user.setAge(String.valueOf((int)row.getCell(1).getNumericCellValue()));
+            user.setHeight(String.valueOf((int)row.getCell(2).getNumericCellValue()));
+            user.setEducation(row.getCell(3).getStringCellValue());
+            user.setDrinking(row.getCell(4).getStringCellValue());
+            user.setSmoking(row.getCell(5).getStringCellValue());
+            user.setMbti(row.getCell(6).getStringCellValue());
+            user.setReligion(row.getCell(7).getStringCellValue());
+            user.setUsername(row.getCell(8).getStringCellValue());
+            user.setName(row.getCell(9).getStringCellValue());
+            user.setEmail(row.getCell(11).getStringCellValue());
+            user.setNickName(row.getCell(12).getStringCellValue());
+            user.setAddress(row.getCell(13).getStringCellValue());
+            user.setHobby(row.getCell(14).getStringCellValue());
+            user.setIntroduce(row.getCell(15).getStringCellValue());
+            user.setRole(UserRole.USER);
+            user.setCreateDate(LocalDateTime.now());
 
-            entities.add(inquiry);
+            entities.add(user);
         }
-        InquiryRepository.saveAll(entities);
+        userRepository.saveAll(entities);
         workbook.close();
         file.close();
     }

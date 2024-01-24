@@ -3,14 +3,14 @@
     <table class="table text-center">
         <thead class="table-head">
         <tr>
-            <th style="width:70%" class="text-start">채팅방 이름</th>
+            <th style="width:60%" class="text-start">채팅방 이름</th>
             <th>마지막 대화</th>
-            <th></th>
+            <th style="width: 15%;"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="room : ${roomList}">
-            <td class="text-start">
+            <td class="d-flex align-items-center">
                 <a th:href="@{|/chat/join/${room.code}|}" class="joinRoom"
                    th:text="|${room.participant2.nickName}님과 채팅|"
                    th:if="${room.participant1.username.equals(user.username)}"></a>
@@ -29,8 +29,6 @@
 </div>
 <script layout:fragment="script">
     $(function() {
-        var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-        var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
         $(".roomDeleteBtn").on('click', function() {
             if (confirm("채팅방을 삭제하시겠습니까?")) {

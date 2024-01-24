@@ -31,10 +31,10 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             "u.gender <> :gender AND " +
             "(CASE WHEN u.age BETWEEN :#{#idealType.minAge} AND :#{#idealType.maxAge} THEN 1 ELSE 0 END) + " +
             "(CASE WHEN u.height BETWEEN :#{#idealType.minHeight} AND :#{#idealType.maxHeight} THEN 1 ELSE 0 END) + " +
-            "(CASE WHEN :#{#idealType.drinking} IS NULL OR u.drinking = :#{#idealType.drinking} THEN 1 ELSE 0 END) + " +
-            "(CASE WHEN :#{#idealType.education} IS NULL OR u.education = :#{#idealType.education} THEN 1 ELSE 0 END) + " +
-            "(CASE WHEN :#{#idealType.smoking} IS NULL OR u.smoking = :#{#idealType.smoking} THEN 1 ELSE 0 END) + " +
-            "(CASE WHEN :#{#idealType.religion} IS NULL OR u.religion = :#{#idealType.religion} THEN 1 ELSE 0 END) >= 3")
+            "(CASE WHEN :#{#idealType.drinking} = '상관 없음' OR :#{#idealType.drinking} IS NULL OR u.drinking = :#{#idealType.drinking} THEN 1 ELSE 0 END) + " +
+            "(CASE WHEN :#{#idealType.education} = '상관 없음' OR :#{#idealType.education} IS NULL OR u.education = :#{#idealType.education} THEN 1 ELSE 0 END) + " +
+            "(CASE WHEN :#{#idealType.smoking} = '상관 없음' OR :#{#idealType.smoking} IS NULL OR u.smoking = :#{#idealType.smoking} THEN 1 ELSE 0 END) + " +
+            "(CASE WHEN :#{#idealType.religion} = '상관 없음' OR :#{#idealType.religion} IS NULL OR u.religion = :#{#idealType.religion} THEN 1 ELSE 0 END) >= 4")
     List<SiteUser> findMatchingUsersByIdealType(@Param("idealType") IdealType idealType, @Param("gender") String gender);
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND religion = :religion ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
@@ -53,8 +53,6 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
     List<SiteUser> findByGenderNotAndMbti(@Param("gender") String gender, @Param("mbti") String mbti);
 
     List<SiteUser> findByLocation(String location);
-
-    List<SiteUser> findByGetPreferenceTimeBefore(LocalDateTime time);
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND preference = :status ORDER BY RAND() LIMIT 3", nativeQuery = true)
     List<SiteUser> findByGenderNotAndPreferenceRandomly(@Param("gender") String gender, @Param("status") boolean status);
