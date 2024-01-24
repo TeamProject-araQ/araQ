@@ -29,7 +29,17 @@ public class InquiryService {
         List<Sort.Order> sort = new ArrayList<>();
         sort.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sort));
-        return this.inquiryRepository.findByKeywordAndCategory(kw, category, pageable);
+        String kwLike = "%" + kw + "%";
+
+        Page<Inquiry> pages;
+        if (kw.isBlank() && category.isBlank())
+            pages = this.inquiryRepository.findAll(pageable);
+        else if (kw.isBlank()) pages = this.inquiryRepository.findByCategory(category, pageable);
+        else if (category.isBlank())
+            pages = this.inquiryRepository.findByTitleLikeOrContentLike(kwLike, kwLike, pageable);
+        else pages = this.inquiryRepository.findByKeywordAndCategory(kwLike, category, pageable);
+
+        return pages;
     }
 
     public Inquiry createInquiry(InquiryDTO inquiryDTO, SiteUser user) {
