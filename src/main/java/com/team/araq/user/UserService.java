@@ -30,6 +30,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +70,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+    public boolean update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
+        if (Stream.of(
+                userUpdateForm.getNickName(), userUpdateForm.getAddress(), userUpdateForm.getAge(),
+                userUpdateForm.getHeight(), userUpdateForm.getReligion(), userUpdateForm.getDrinking(),
+                userUpdateForm.getSmoking(), userUpdateForm.getEducation(), userUpdateForm.getMbti(),
+                userUpdateForm.getHobby(), userUpdateForm.getGender(), userUpdateForm.getIntroduce()
+        ).anyMatch(value -> value == null || value.isEmpty())) {
+           return false;
+        }
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
         user.setAge(userUpdateForm.getAge());
@@ -122,6 +131,7 @@ public class UserService {
         }
         user.setRole(UserRole.USER);
         userRepository.save(user);
+        return true;
     }
 
     public void edit(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
@@ -625,5 +635,4 @@ public class UserService {
 
         return genderRatio;
     }
-
 }

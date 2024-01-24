@@ -55,6 +55,11 @@
         <input type="hidden" name="username" th:value="${user.username}">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <div id="step1">
+            <div class="row justify-content-center">
+                <div th:if="${updateError}" class="alert alert-danger col-md-6 text-center" role="alert">
+                    <p th:text="${updateError}" class="m-0"></p>
+                </div>
+            </div>
             <div class="mb-3">
                 <label class="form-label">성별</label>
                 <div class="btn-group-toggle" data-toggle="buttons">
