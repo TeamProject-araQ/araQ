@@ -4,7 +4,11 @@ import com.team.araq.user.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,6 +27,7 @@ public class LikeService {
 
     public void acceptUser(UserLike like) {
         like.setStatus("매칭 성공");
+        like.setSuccessDate(LocalDateTime.now());
         this.likeRepository.save(like);
     }
 
@@ -43,6 +48,7 @@ public class LikeService {
 
     public void refuseLike(UserLike like) {
         like.setStatus("매칭 실패");
+        like.setFailDate(LocalDateTime.now());
         this.likeRepository.save(like);
     }
 
@@ -56,5 +62,19 @@ public class LikeService {
                     .map(UserLike::getStatus).orElse("상태 없음");
         }
         return null;
+    }
+
+    public Map<LocalDate, Double> getSuccessRate() {
+        Map<LocalDate, Double> successRates = new LinkedHashMap<>();
+        LocalDate currentDate = LocalDate.now();
+        for (int i = 6; i >= 0; i--) {
+            LocalDateTime startDateTime = currentDate.minusDays(i).atStartOfDay();
+            LocalDateTime endDateTime = currentDate.minusDays(i - 1).atStartOfDay();
+            long totalMatches = this.likeRepository.countByDateRangeBetween(startDateTime, endDateTime);
+            long successMatches = this.likeRepository.countSuccessByDateRangeBetween(startDateTime, endDateTime);
+            double successRate = totalMatches == 0 ? 0.0 : (double) successMatches / totalMatches * 100;
+            successRates.put(currentDate.minusDays(i), successRate);
+        }
+        return successRates;
     }
 }

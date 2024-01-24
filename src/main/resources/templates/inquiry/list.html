@@ -70,12 +70,12 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/inquiry/list}" method="get" id="searchForm">
-            <input type="hidden" id="page" name="page" th:value="${paging.number}">
-            <input type="hidden" id="kw" name="kw" th:value="${kw}">
-            <input type="hidden" id="category" name="category" th:value="${category}">
-        </form>
     </div>
+    <form th:action="@{/inquiry/list}" method="get" id="searchForm">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+        <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        <input type="hidden" id="category" name="category" th:value="${category}">
+    </form>
     <a th:href="@{/inquiry/create}" class="btn 버튼">문의하기</a>
 </div>
 <script type="text/javascript" layout:fragment="script">
@@ -89,7 +89,9 @@
         });
 
         $("#searchBtn").on('click', function() {
-            $("#kw").val($("#searchKw").val());
+            $('#kw').val($('#searchKw').val());
+            console.log($("#searchKw").val());
+            console.log($("#kw").val());
             $("#page").val("0");
             $("#searchForm").submit();
         });

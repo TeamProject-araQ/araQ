@@ -8,8 +8,13 @@
         <h4 th:text="|Q. ${inquiry.title}|"></h4>
         <div th:text="${inquiry.content}" style="font-size:13pt;"></div>
         <div class="d-flex justify-content-end my-1">
-            <div class="badge bg-light text-dark"
-                 th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            <div>
+                <div class="text-end" th:if="${inquiry.writer.username.equals(user.username)}">
+                    <button id="inquiryDeleteBtn" class="btn btn-sm btn-outline-secondary">삭제</button>
+                </div>
+                <div class="badge bg-light text-dark"
+                     th:text="${#temporals.format(inquiry.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
         </div>
     </div>
     <div class="card">
@@ -33,5 +38,15 @@
                  th:text="${#temporals.format(inquiry.answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
         </div>
     </div>
+    <form th:action="@{|/inquiry/delete/${inquiry.id}|}" method="post" id="inquiryDeleteForm"></form>
 </div>
+<script layout:fragment="script">
+    $(() => {
+        $("#inquiryDeleteBtn").click(() => {
+            if (confirm("해당 문의를 삭제하시겠습니까?")) {
+                $("#inquiryDeleteForm").submit();
+            }
+        });
+    });
+</script>
 </html>

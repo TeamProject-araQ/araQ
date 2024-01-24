@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -21,4 +23,8 @@ public class UserLike {
     private SiteUser likedUser;
 
     private String status;
+
+    private LocalDateTime successDate;
+
+    private LocalDateTime failDate;
 }

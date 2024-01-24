@@ -76,11 +76,11 @@
                 </a>
             </li>
         </ul>
-        <form th:action="@{/admin/user}" method="get" id="searchForm">
-            <input type="hidden" id="page" name="page" th:value="${paging.number}">
-            <input type="hidden" id="kw" name="kw" th:value="${kw}">
-        </form>
     </div>
+    <form th:action="@{/admin/user}" method="get" id="searchForm">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+        <input type="hidden" id="kw" name="kw" th:value="${kw}">
+    </form>
 </div>
 <script type="text/javascript" layout:fragment="script">
     $(function() {

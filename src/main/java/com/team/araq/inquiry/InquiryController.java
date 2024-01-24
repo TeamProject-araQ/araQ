@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -67,5 +66,11 @@ public class InquiryController {
         }
         model.addAttribute("inquiry", inquiry);
         return "inquiry/detail";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable(value = "id") Integer id) {
+        inquiryService.deleteInquiry(inquiryService.getInquiry(id));
+        return "redirect:/inquiry/list";
     }
 }

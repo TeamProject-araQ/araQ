@@ -38,7 +38,6 @@ public class SiteUser {
 
     private String name;
 
-    // 별명
     private String nickName;
 
     @Column(unique = true)
