@@ -15,7 +15,6 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<SiteUser, Long> {
     Optional<SiteUser> findByusername(String username);
-    List<SiteUser> findByAddressLikeAndGender(String address, String gender);
     Page<SiteUser> findAll(Specification<SiteUser> spec, Pageable pageable);
     List<SiteUser> findByLogin(boolean login);
 
@@ -27,6 +26,10 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     List<SiteUser> findByGenderNot(String gender);
 
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender ORDER BY preference DESC, RAND() LIMIT 3", nativeQuery = true)
+    List<SiteUser> findByGenderNotRandom(@Param("gender") String gender);
+
+
     @Query("SELECT u FROM SiteUser u WHERE " +
             "u.gender <> :gender AND " +
             "(CASE WHEN u.age BETWEEN :#{#idealType.minAge} AND :#{#idealType.maxAge} THEN 1 ELSE 0 END) + " +
@@ -36,6 +39,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             "(CASE WHEN :#{#idealType.smoking} = '상관 없음' OR :#{#idealType.smoking} IS NULL OR u.smoking = :#{#idealType.smoking} THEN 1 ELSE 0 END) + " +
             "(CASE WHEN :#{#idealType.religion} = '상관 없음' OR :#{#idealType.religion} IS NULL OR u.religion = :#{#idealType.religion} THEN 1 ELSE 0 END) >= 4")
     List<SiteUser> findMatchingUsersByIdealType(@Param("idealType") IdealType idealType, @Param("gender") String gender);
+
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND religion = :religion ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
     List<SiteUser> findByGenderNotAndReligion(@Param("gender") String gender, @Param("religion") String religion);
@@ -51,6 +55,10 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND mbti = :mbti ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
     List<SiteUser> findByGenderNotAndMbti(@Param("gender") String gender, @Param("mbti") String mbti);
+
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND address LIKE %:address% ORDER BY RAND() LIMIT 10", nativeQuery = true)
+    List<SiteUser> findByAddressLikeAndGender(@Param("gender") String gender, @Param("address") String address);
+
 
     List<SiteUser> findByLocation(String location);
 

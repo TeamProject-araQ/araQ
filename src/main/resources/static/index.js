@@ -53,7 +53,7 @@ $(function () {
     });
 
     var postListVal = $('#postList').val();
-    if (!postListVal === "" || !postListVal != null) {
+    if (postListVal > 0) {
         scrollToBottom();
     }
 
