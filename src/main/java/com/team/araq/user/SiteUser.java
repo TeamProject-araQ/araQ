@@ -38,13 +38,12 @@ public class SiteUser {
 
     private String name;
 
-    // 별명
     private String nickName;
 
     @Column(unique = true)
     private String email;
 
-    // @Column(unique = true) 나중에 주석 풀기
+    @Column(unique = true)
     private String phoneNum;
 
     private String address;
