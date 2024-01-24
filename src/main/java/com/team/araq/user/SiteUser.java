@@ -44,7 +44,7 @@ public class SiteUser {
     @Column(unique = true)
     private String email;
 
-    // @Column(unique = true) 나중에 주석 풀기
+    @Column(unique = true)
     private String phoneNum;
 
     private String address;

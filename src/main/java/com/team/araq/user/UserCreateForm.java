@@ -20,7 +20,7 @@ public class UserCreateForm {
     @NotEmpty(message= "이메일을 입력하세요.")
     @Email
     private String email;
-//    @NotEmpty(message= "핸드폰 번호를 입력하세요.")
+    @NotEmpty(message= "핸드폰 번호를 입력하세요.")
     private String phoneNum;
 
     private String name;
