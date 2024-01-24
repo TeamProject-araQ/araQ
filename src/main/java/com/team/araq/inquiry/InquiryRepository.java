@@ -20,6 +20,15 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
                                            @Param("category") String category,
                                            Pageable pageable);
 
+//    @Query("SELECT i FROM Inquiry i LEFT JOIN i.writer w WHERE " +
+//            "(LOWER(i.title) LIKE LOWER(CONCAT('%', :kw, '%')) OR " +
+//            "LOWER(i.content) LIKE LOWER(CONCAT('%', :kw, '%')) OR " +
+//            "LOWER(w.nickName) LIKE LOWER(CONCAT('%', :kw, '%'))) AND " +
+//            "(i.category = :category OR :category IS NULL OR :category = '')")
+//    Page<Inquiry> findByKeywordAndCategory2(@Param("kw") String kw,
+//                                           @Param("category") String category,
+//                                           Pageable pageable);
+
     List<Inquiry> findTop3ByWriterOrderByCreateDateDesc(SiteUser writer);
 
 }
