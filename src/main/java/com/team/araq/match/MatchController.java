@@ -65,7 +65,7 @@ public class MatchController {
         List<SiteUser> drinkingList = this.userService.getByDrinking(user.getGender(), user.getDrinking());
         List<SiteUser> hobbyList = this.userService.getByHobby(user.getGender(), user.getHobby());
         List<SiteUser> mbtiList = this.userService.getByMbti(user.getGender(), user.getMbti());
-        List<SiteUser> personalityList = this.userService.getByPersonalities(user);
+//        List<SiteUser> personalityList = this.userService.getByPersonalities(user);
         List<SiteUser> religionList = this.userService.getByReligion(user.getGender(), user.getReligion());
         List<UserLike> likeList = this.likeService.getListByUser(user);
         Set<SiteUser> uniqueUsers = new HashSet<>();
@@ -74,7 +74,7 @@ public class MatchController {
         uniqueUsers.addAll(hobbyList);
         uniqueUsers.addAll(mbtiList);
         uniqueUsers.addAll(religionList);
-        uniqueUsers.addAll(personalityList);
+//        uniqueUsers.addAll(personalityList);
         Map<String, String> likesStatus = new HashMap<>();
         for (SiteUser siteUser : uniqueUsers) {
             String status = likeService.checkStatus(user, siteUser);
@@ -85,7 +85,7 @@ public class MatchController {
         model.addAttribute("drinkingList", drinkingList);
         model.addAttribute("hobbyList", hobbyList);
         model.addAttribute("mbtiList", mbtiList);
-        model.addAttribute("personalityList", personalityList);
+//        model.addAttribute("personalityList", personalityList);
         model.addAttribute("likeList", likeList);
         model.addAttribute("likesStatus", likesStatus);
         return "conn/personalityType";

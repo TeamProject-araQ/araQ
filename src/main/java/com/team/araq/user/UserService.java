@@ -410,7 +410,7 @@ public class UserService {
 
     public List<SiteUser> getByPersonalities(SiteUser loginUser) {
         List<SiteUser> matchingUsers = new ArrayList<>();
-        List<SiteUser> userList = this.userRepository.findByGenderNot(loginUser.getGender());
+        List<SiteUser> userList = this.userRepository.findByGenderNotOrderByPreferenceDesc(loginUser.getGender());
         for (SiteUser user : userList) {
             List<String> userPersonality = user.getPersonality();
             int matchCount = 0;
@@ -422,7 +422,12 @@ public class UserService {
             if (matchCount >= 2)
                 matchingUsers.add(user);
         }
-        return matchingUsers;
+        Collections.shuffle(matchingUsers);
+        if (matchingUsers.size() > 10) {
+            return matchingUsers.subList(0, 10);
+        } else {
+            return matchingUsers;
+        }
     }
 
     public void setUserLocationInPlaza(SiteUser user, String top, String left) {

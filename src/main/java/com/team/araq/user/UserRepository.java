@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     Optional<SiteUser> findByNameAndPhoneNum(String name, String phoneNum);
 
-    List<SiteUser> findByGenderNot(String gender);
+    List<SiteUser> findByGenderNotOrderByPreferenceDesc(String gender);
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender ORDER BY preference DESC, RAND() LIMIT 3", nativeQuery = true)
     List<SiteUser> findByGenderNotRandom(@Param("gender") String gender);
@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
             "(:drinking = '상관 없음' OR drinking = :drinking) AND " +
             "(:education = '상관 없음' OR education = :education) AND " +
             "(:smoking = '상관 없음' OR smoking = :smoking) AND " +
-            "(:religion = '상관 없음' OR religion = :religion) ORDER BY RAND() LIMIT 10", nativeQuery = true)
+            "(:religion = '상관 없음' OR religion = :religion) ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
     List<SiteUser> findMatchingUsersByIdealTypeRand(@Param("gender") String gender,
                                                 @Param("minAge") int minAge,
                                                 @Param("maxAge") int maxAge,
@@ -62,7 +62,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND mbti = :mbti ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
     List<SiteUser> findByGenderNotAndMbti(@Param("gender") String gender, @Param("mbti") String mbti);
 
-    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND address LIKE %:address% ORDER BY RAND() LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM site_user WHERE gender != :gender AND address LIKE %:address% ORDER BY preference DESC, RAND() LIMIT 10", nativeQuery = true)
     List<SiteUser> findByAddressLikeAndGender(@Param("gender") String gender, @Param("address") String address);
 
 

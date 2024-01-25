@@ -113,7 +113,7 @@
                     </div>
                     <div class="ms-1" th:text="|가 일치하는 ${#lists.size(smokingList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="smokingCarousel" class="carousel slide mt-5 col-10 mx-auto" style="max-width: 700px;">
+                <div id="smokingCarousel" class="carousel slide mt-5 col-10 mx-auto">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${smokingList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
@@ -213,7 +213,7 @@
                     </div>
                     <div class="ms-1" th:text="|가 일치하는 ${#lists.size(drinkingList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="drinkingCarousel" class="carousel slide mt-5 col-10 mx-auto" style="max-width: 700px;">
+                <div id="drinkingCarousel" class="carousel slide mt-5 col-10 mx-auto">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${drinkingList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
@@ -313,7 +313,7 @@
                     </div>
                     <div class="ms-1" th:text="|가 일치하는 ${#lists.size(hobbyList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="hobbyCarousel" class="carousel slide mt-5 col-10 mx-auto" style="max-width: 700px;">
+                <div id="hobbyCarousel" class="carousel slide mt-5 col-10 mx-auto">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${hobbyList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
@@ -413,7 +413,7 @@
                     </div>
                     <div class="ms-1" th:text="|가 일치하는 ${#lists.size(mbtiList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="mbtiCarousel" class="carousel slide mt-5 col-10 mx-auto" style="max-width: 700px;">
+                <div id="mbtiCarousel" class="carousel slide mt-5 col-10 mx-auto">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${mbtiList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
@@ -503,7 +503,7 @@
                     </button>
                 </div>
             </div>
-            <!-- 성격 -->
+            <!-- 성격
             <div th:if="${!personalityList.isEmpty()}" class="border-bottom pb-3">
                 <div class="my-3 text-center">
                     <div class="d-flex justify-content-center">
@@ -513,7 +513,7 @@
                     </div>
                     <div class="ms-1" th:text="|이 2개 이상 일치하는 ${#lists.size(personalityList)}명의 회원이 추천되었습니다.|"></div>
                 </div>
-                <div id="personalityCarousel" class="carousel slide mt-5 col-10 mx-auto" style="max-width: 700px;">
+                <div id="personalityCarousel" class="carousel slide mt-5 col-10 mx-auto">
                     <div class="carousel-inner">
                         <div class="carousel-item active" th:each="targetUser, status : ${personalityList}"
                              th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
@@ -603,6 +603,7 @@
                     </button>
                 </div>
             </div>
+            -->
         </div>
     </div>
 </div>

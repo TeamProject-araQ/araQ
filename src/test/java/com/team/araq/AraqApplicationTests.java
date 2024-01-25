@@ -60,7 +60,8 @@ class AraqApplicationTests {
             user.setAddress(row.getCell(13).getStringCellValue());
             user.setHobby(row.getCell(14).getStringCellValue());
             user.setIntroduce(row.getCell(15).getStringCellValue());
-            String personalityStr = row.getCell(16).getStringCellValue();
+            String personalityStr = (row.getCell(16).getStringCellValue());
+            personalityStr = personalityStr.replace("'", "");
             String[] personalityArray = personalityStr.replace("[", "").replace("]", "").split(", ");
             List<String> personalities = new ArrayList<>(Arrays.asList(personalityArray));
             user.setPersonality(personalities);

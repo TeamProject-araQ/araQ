@@ -11,7 +11,7 @@
                 </div>
                 <div class="ms-1" th:text="|을 4개 이상 충족하는 ${#lists.size(userList)}명의 회원이 추천되었습니다.|"></div>
             </div>
-            <div id="carouselExample" class="carousel slide mt-5 col-10 mx-auto" style="width: 90%;">
+            <div id="carouselExample" class="carousel slide mt-5 col-10 mx-auto">
                 <div class="carousel-inner">
                     <div class="carousel-item active" th:each="targetUser, status : ${userList}"
                          th:class="${status.first} ? 'carousel-item active' : 'carousel-item'">
