@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -59,6 +60,10 @@ class AraqApplicationTests {
             user.setAddress(row.getCell(13).getStringCellValue());
             user.setHobby(row.getCell(14).getStringCellValue());
             user.setIntroduce(row.getCell(15).getStringCellValue());
+            String personalityStr = row.getCell(16).getStringCellValue();
+            String[] personalityArray = personalityStr.replace("[", "").replace("]", "").split(", ");
+            List<String> personalities = new ArrayList<>(Arrays.asList(personalityArray));
+            user.setPersonality(personalities);
             user.setRole(UserRole.USER);
             user.setCreateDate(LocalDateTime.now());
 

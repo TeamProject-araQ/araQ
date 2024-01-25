@@ -27,8 +27,7 @@ public class MatchController {
         SiteUser user = userService.getByUsername(principal.getName());
         String address = user.getAddress();
         String[] words = address.split(" ");
-        String gender = user.getGender().equals("남성") ? "여성" : "남성";
-        List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1], gender);
+        List<SiteUser> userList = userService.getByAddress(words[0] + " " + words[1], user.getGender());
         String addressSplit = words[0] + " " + words[1];
         List<UserLike> likeList = this.likeService.getListByUser(user);
         Map<String, String> likesStatus = new HashMap<>();

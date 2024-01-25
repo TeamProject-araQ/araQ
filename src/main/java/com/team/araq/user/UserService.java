@@ -385,67 +385,7 @@ public class UserService {
     private EntityManager entityManager;
 
     public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<SiteUser> cq = cb.createQuery(SiteUser.class);
-        Root<SiteUser> user = cq.from(SiteUser.class);
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.notEqual(user.get("gender"), gender));
-        predicates.add(cb.between(user.get("age"), idealType.getMinAge(), idealType.getMaxAge()));
-        predicates.add(cb.between(user.get("height"), idealType.getMinHeight(), idealType.getMaxHeight()));
-        if (!"상관없음".equals(idealType.getDrinking())) {
-            predicates.add(cb.equal(user.get("drinking"), idealType.getDrinking()));
-        }
-        if (!"상관없음".equals(idealType.getEducation())) {
-            predicates.add(cb.equal(user.get("education"), idealType.getEducation()));
-        }
-        if (!"상관없음".equals(idealType.getSmoking())) {
-            predicates.add(cb.equal(user.get("smoking"), idealType.getSmoking()));
-        }
-        if (!"상관없음".equals(idealType.getReligion())) {
-            predicates.add(cb.equal(user.get("religion"), idealType.getReligion()));
-        }
-        List<SiteUser> result = entityManager.createQuery(cq).getResultList();
-
-        Collections.shuffle(result);
-
-        return result.stream().limit(10).collect(Collectors.toList());
-//        List<SiteUser> users = this.userRepository.findMatchingUsersByIdealType(idealType, gender);
-//        Collections.shuffle(users);
-//        return users.subList(0, Math.min(users.size(), 10));
-
-//        List<SiteUser> users = userRepository.findByGenderNot(gender);
-//        List<SiteUser> ageFilteredUsers = users.stream()
-//                .filter(u -> Integer.parseInt(u.getAge()) >= idealType.getMinAge() && Integer.parseInt(u.getAge()) <= idealType.getMaxAge())
-//                .collect(Collectors.toList());
-//        List<SiteUser> heightFilteredUsers = ageFilteredUsers.stream()
-//                .filter(u -> Integer.parseInt(u.getHeight()) >= idealType.getMinHeight() && Integer.parseInt(u.getHeight()) <= idealType.getMaxHeight())
-//                .collect(Collectors.toList());
-//        List<SiteUser> drinkingFilteredUsers = heightFilteredUsers;
-//        if (!idealType.getDrinking().equals("상관 없음")) {
-//            drinkingFilteredUsers = heightFilteredUsers.stream()
-//                    .filter(u -> Objects.equals(u.getDrinking(), idealType.getDrinking()))
-//                    .collect(Collectors.toList());
-//        }
-//        List<SiteUser> educationFilteredUsers = drinkingFilteredUsers;
-//        if (!idealType.getEducation().equals("상관 없음")) {
-//            educationFilteredUsers = drinkingFilteredUsers.stream()
-//                    .filter(u -> Objects.equals(u.getEducation(), idealType.getEducation()))
-//                    .collect(Collectors.toList());
-//        }
-//        List<SiteUser> smokingFilteredUsers = educationFilteredUsers;
-//        if (!idealType.getSmoking().equals("상관 없음")) {
-//            smokingFilteredUsers = educationFilteredUsers.stream()
-//                    .filter(u -> Objects.equals(u.getSmoking(), idealType.getSmoking()))
-//                    .collect(Collectors.toList());
-//        }
-//        List<SiteUser> religionFilteredUsers = smokingFilteredUsers;
-//        if (!idealType.getReligion().equals("상관 없음")) {
-//            religionFilteredUsers = smokingFilteredUsers.stream()
-//                    .filter(u -> Objects.equals(u.getReligion(), idealType.getReligion()))
-//                    .collect(Collectors.toList());
-//        }
-//        Collections.shuffle(religionFilteredUsers);
-//        return religionFilteredUsers.subList(0, Math.min(religionFilteredUsers.size(), 10));
+        return this.userRepository.findMatchingUsersByIdealTypeRand(gender, idealType.getMinAge(), idealType.getMaxAge(), idealType.getMinHeight(), idealType.getMaxHeight(), idealType.getDrinking(), idealType.getEducation(), idealType.getSmoking(), idealType.getReligion());
     }
 
     public List<SiteUser> getBySmoking(String gender, String smoking) {
