@@ -24,19 +24,11 @@
             font-family: 'NanumSquareNeoBold';
         }
 
-        #usernameCheckResult span {
-            font-size: 13px;
-        }
-
-        #emailCheckResult span {
-            font-size: 13px;
-        }
-
-        #password1CheckResult span {
-            font-size: 13px;
-        }
-
-        #password2CheckResult span {
+        #usernameCheckResult span,
+        #emailCheckResult span,
+        #password1CheckResult span,
+        #password2CheckResult span,
+        #phoneNumCheckResult span {
             font-size: 13px;
         }
 
@@ -92,8 +84,9 @@
                 <label for="phoneNum" class="form-label">핸드폰</label>
                 <div class="input-group">
                     <input type="text" th:field="*{phoneNum}" class="form-control">
-                    <input type="button" class="btn 버튼" onclick="sendVerKey()" value="인증번호 발송">
+                    <input id="verKeyConfirmedButton" type="button" class="btn 버튼" onclick="sendVerKey()" value="인증번호 발송">
                 </div>
+                <div id="phoneNumCheckResult"></div>
             </div>
             <div id="verKeySection" class="mb-3" style="display: none;">
                 <label for="authNum" class="form-label">인증 번호</label>
@@ -160,6 +153,10 @@
                 if (response === "success") {
                     alert('인증번호가 확인되었습니다.');
                     verKeyConfirmed = true;
+                    $('#verKeySection').hide();  // 인증 번호 입력 부분 숨김
+                    $('#phoneNumCheckResult').html('<span style="color: green;">인증이 완료되었습니다.</span>'); // 인증 완료 메시지 표시
+                    $('#verKeyConfirmedButton').prop('disabled', true);
+                    $('#phoneNum').addClass('is-valid');
                 } else {
                     alert('인증번호가 일치하지 않습니다.');
                     verKeyConfirmed = false;
@@ -212,12 +209,12 @@
 
             if(username === "") {
                 $('#usernameCheckResult').html("");
-                $(this).removeClass('is-invalid');
+                $(this).removeClass('is-invalid').removeClass('is-valid');
                 return;
             }
 
-            if(username.length < 6 || username.length > 20 || !/^[a-zA-Z0-9]+$/.test(username)){
-                $('#usernameCheckResult').html('<span style="color: red;">아이디는 6-20자 이내의 영문, 숫자만 사용 가능합니다.</span>');
+            if (username.length < 6 || username.length > 20 || !/^[a-zA-Z0-9]+$/.test(username) || !/[a-zA-Z].*[0-9]|[0-9].*[a-zA-Z]/.test(username)) {
+                $('#usernameCheckResult').html('<span style="color: red;">아이디는 6-20자 이내의 영문과 숫자의 조합만 사용 가능합니다.</span>');
                 $('#username').addClass('is-invalid');
                 return;
             }
@@ -233,6 +230,7 @@
                     if(response === "available") {
                         $('#usernameCheckResult').html('<span style="color: green;">사용 가능한 아이디입니다.</span>');
                         $('#username').removeClass('is-invalid');
+                        $('#username').addClass('is-valid');
                     } else {
                         $('#usernameCheckResult').html('<span style="color: red;">이미 사용중인 아이디입니다.</span>');
                         $('#username').addClass('is-invalid');
@@ -246,12 +244,19 @@
 
         $('#email').on('change', function(){
             var email = $(this).val().trim();
-
             if(email === "") {
                 $('#emailCheckResult').html("");
-                $(this).removeClass('is-invalid');
+                $(this).removeClass('is-invalid').removeClass('is-valid');
                 return;
             }
+
+            var emailCheck = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailCheck.test(email)){
+                $('#emailCheckResult').html('<span style="color: red;">유효하지 않은 이메일 형식입니다.</span>');
+                $(this).removeClass('is-valid').addClass('is-invalid');
+                return;
+            }
+
 
             $.ajax({
                 type:'GET',
@@ -264,6 +269,7 @@
                     if(response === "available") {
                         $('#emailCheckResult').html('<span style="color: green;">사용 가능한 이메일입니다.</span>');
                         $('#email').removeClass('is-invalid');
+                        $('#email').addClass('is-valid');
                     } else {
                         $('#emailCheckResult').html('<span style="color: red;">이미 등록된 이메일입니다.</span>')
                         $('#email').addClass('is-invalid');
@@ -277,11 +283,18 @@
 
 
         $('#password1').on('change', function(){
-            var password1 = $(this).val().trim();
+            var password1 = $(this).val();
 
             if(password1 === ""){
                 $('#password1CheckResult').html("");
-                $(this).removeClass('is-invalid');
+                $(this).removeClass('is-invalid').removeClass('is-valid');
+                $('#password2').prop('disabled', true);
+                return;
+            }
+
+            if (/\s/.test(password1)) {
+                $('#password1CheckResult').html('<span style="color: red;">비밀번호에 공백이 포함되어 있습니다.</span>');
+                $(this).removeClass('is-valid').addClass('is-invalid');
                 $('#password2').prop('disabled', true);
                 return;
             }
@@ -293,6 +306,7 @@
             } else {
                 $('#password1CheckResult').html('<span style="color: green;">유효한 비밀번호입니다.</span>');
                 $('#password1').removeClass('is-invalid');
+                $('#password1').addClass('is-valid');
                 $('#password2').prop('disabled', false).focus();
             }
         });
@@ -313,6 +327,7 @@
                 } else {
                     $('#password2CheckResult').html('<span style="color : green;">비밀번호가 일치합니다.</span>');
                     $('#password2').removeClass('is-invalid');
+                    $('#password2').addClass('is-valid');
                 }
             });
         });

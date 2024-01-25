@@ -73,6 +73,10 @@ public class UserController {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
         }
+        if (userService.isPhoneNumTaken(userCreateForm.getPhoneNum())){
+            bindingResult.rejectValue("phoneNum", "phoneNumTaken", "이미 가입된 전화번호입니다.");
+            return "user/signup";
+        }
         try {
             SiteUser user = userService.create(userCreateForm);
             model.addAttribute("user", user);

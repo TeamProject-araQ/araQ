@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.sl.draw.geom.GuideIf;
 import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -634,5 +635,10 @@ public class UserService {
         genderRatio.put("여성", femaleCount);
 
         return genderRatio;
+    }
+
+    public boolean isPhoneNumTaken(String phoneNum){
+        Optional<SiteUser> user = userRepository.findByPhoneNum(phoneNum);
+        return user.isPresent();
     }
 }
