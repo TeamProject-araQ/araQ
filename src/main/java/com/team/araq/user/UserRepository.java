@@ -75,4 +75,5 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     long countByGender(String gender);
 
+    Optional<SiteUser> findByPhoneNum(String phoneNum);
 }

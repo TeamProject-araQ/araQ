@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.sl.draw.geom.GuideIf;
 import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -80,7 +81,7 @@ public class UserService {
                 userUpdateForm.getSmoking(), userUpdateForm.getEducation(), userUpdateForm.getMbti(),
                 userUpdateForm.getHobby(), userUpdateForm.getGender(), userUpdateForm.getIntroduce()
         ).anyMatch(value -> value == null || value.isEmpty())) {
-            return false;
+           return false;
         }
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
@@ -638,5 +639,10 @@ public class UserService {
         genderRatio.put("여성", femaleCount);
 
         return genderRatio;
+    }
+
+    public boolean isPhoneNumTaken(String phoneNum){
+        Optional<SiteUser> user = userRepository.findByPhoneNum(phoneNum);
+        return user.isPresent();
     }
 }
