@@ -40,47 +40,57 @@
             <div class="mb-3 border-bottom pb-3">
                 <label for="drinking" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
                        class="form-label my-2">음주</label>
-                <div class="d-flex justify-content-around">
-                    <div style="width: 24%;">
+                <div class="row">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" id="none" autocomplete="off" value="전혀"
                                th:field="*{drinking}">
                         <label class="btn 버튼" for="none">전혀</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="가끔" th:field="*{drinking}" id="sometimes"
                                autocomplete="off">
                         <label class="btn 버튼" for="sometimes">가끔</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="자주" th:field="*{drinking}" id="often"
                                autocomplete="off">
                         <label class="btn 버튼" for="often">자주</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="매일" th:field="*{drinking}" id="everyday"
                                autocomplete="off">
                         <label class="btn 버튼" for="everyday">매일</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="radio" class="btn-check" value="상관 없음" th:field="*{drinking}" id="음주노상관"
+                               autocomplete="off">
+                        <label class="btn 버튼" for="음주노상관">상관 없음</label>
                     </div>
                 </div>
             </div>
             <div class="mb-3 border-bottom pb-3">
                 <label for="education" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
                        class="form-label my-2">학력</label>
-                <div class="d-flex justify-content-around">
-                    <div style="width: 32%;">
+                <div class="row">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="고등학교 졸업" th:field="*{education}" id="고졸"
                                autocomplete="off">
                         <label class="btn 버튼" for="고졸">고등학교 졸업</label>
                     </div>
-                    <div style="width: 32%;">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="대학교 재학" th:field="*{education}" id="대재"
                                autocomplete="off">
                         <label class="btn 버튼" for="대재">대학교 재학</label>
                     </div>
-                    <div style="width: 32%;">
+                    <div class="col-6 mb-2">
                         <input type="radio" class="btn-check" value="대학교 졸업" th:field="*{education}" id="대졸"
                                autocomplete="off">
                         <label class="btn 버튼" for="대졸">대학교 졸업</label>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <input type="radio" class="btn-check" value="상관 없음" th:field="*{education}" id="학력노상관"
+                               autocomplete="off">
+                        <label class="btn 버튼" for="학력노상관">상관 없음</label>
                     </div>
                 </div>
             </div>
@@ -101,42 +111,52 @@
             <div class="mb-3 border-bottom pb-3">
                 <label for="smoking" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
                        class="form-label my-2">흡연</label>
-                <div class="d-flex justify-content-around">
-                    <div style="width: 49%;">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="비흡연" id="noSmoking"
                                autocomplete="off" th:field="*{smoking}">
                         <label class="btn 버튼" for="noSmoking">비흡연</label>
                     </div>
-                    <div style="width: 49%;">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="흡연" id="yesSmoking"
                                autocomplete="off" th:field="*{smoking}">
                         <label class="btn 버튼" for="yesSmoking">흡연</label>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+                        <input type="radio" class="btn-check" value="상관 없음" id="흡연노상관"
+                               autocomplete="off" th:field="*{smoking}">
+                        <label class="btn 버튼" for="흡연노상관">상관 없음</label>
                     </div>
                 </div>
             </div>
             <div class="mb-3 border-bottom pb-3">
                 <label for="religion" style="border-bottom:2px solid #D8D3E0; font-size: 14pt;"
                        class="form-label my-2">종교</label>
-                <div class="d-flex justify-content-around">
-                    <div style="width: 24%;">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="기독교" th:field="*{religion}" id="Christian"
                                autocomplete="off">
                         <label class="btn 버튼" for="Christian">기독교</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="천주교" th:field="*{religion}" id="Catholic"
                                autocomplete="off">
                         <label class="btn 버튼" for="Catholic">천주교</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="불교" th:field="*{religion}" id="buddhism"
                                autocomplete="off">
                         <label class="btn 버튼" for="buddhism">불교</label>
                     </div>
-                    <div style="width: 24%;">
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
                         <input type="radio" class="btn-check" value="무교" th:field="*{religion}" id="atheism"
                                autocomplete="off">
                         <label class="btn 버튼" for="atheism">무교</label>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+                        <input type="radio" class="btn-check" value="상관 없음" th:field="*{religion}" id="종교노상관"
+                               autocomplete="off">
+                        <label class="btn 버튼" for="종교노상관">상관 없음</label>
                     </div>
                 </div>
             </div>
@@ -164,14 +184,12 @@
         setSliderHandles();
 
         $('.saveBtn').on('click', function () {
-            console.log("min :" + $('#minHeight').val() + "max :" + $('#maxHeight').val())
             if ($('#ageRangeMin').val() === $('#ageRangeMax').val())
                 alert("최소 나이와 최대 나이가 같습니다.");
             else if (parseInt($('#minHeight').val()) > parseInt($('#maxHeight').val())) {
                 alert("최소 키와 최대 키를 확인해주세요.");
             } else
                 $('#idealTypeForm').submit();
-
         });
 
     });

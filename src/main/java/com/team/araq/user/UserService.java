@@ -1,6 +1,8 @@
 package com.team.araq.user;
 
 import com.team.araq.idealType.IdealType;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -31,6 +33,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -164,7 +167,7 @@ public class UserService {
     }
 
     public List<SiteUser> getByAddress(String address, String gender) {
-        return userRepository.findByAddressLikeAndGender(address + "%", gender);
+        return userRepository.findByAddressLikeAndGender(gender, address);
     }
 
     public void createTmp(String name, String age, String phoneNum, String address, String gender) {
@@ -266,9 +269,7 @@ public class UserService {
     }
 
     public List<SiteUser> getRandomList(String gender) {
-        List<SiteUser> userList = this.userRepository.findByGenderNot(gender);
-        Collections.shuffle(userList);
-        return userList.size() > 3 ? userList.subList(0, 3) : userList;
+        return this.userRepository.findByGenderNotRandom(gender);
     }
 
     public List<SiteUser> getListByPreference(String gender) {
@@ -381,8 +382,11 @@ public class UserService {
         this.userRepository.save(user);
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public List<SiteUser> getByIdealType(IdealType idealType, String gender) {
-        return this.userRepository.findMatchingUsersByIdealType(idealType, gender);
+        return this.userRepository.findMatchingUsersByIdealTypeRand(gender, idealType.getMinAge(), idealType.getMaxAge(), idealType.getMinHeight(), idealType.getMaxHeight(), idealType.getDrinking(), idealType.getEducation(), idealType.getSmoking(), idealType.getReligion());
     }
 
     public List<SiteUser> getBySmoking(String gender, String smoking) {

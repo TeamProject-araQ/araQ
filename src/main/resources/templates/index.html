@@ -90,7 +90,7 @@
     </style>
 </head>
 <div layout:fragment="content" class="container my-3">
-    <input type="hidden" th:value="${postList}" id="postList">
+    <input type="hidden" th:value="${#lists.size(postList)}" id="postList">
     <img src="/image/araQ/main.png" alt="" style="width: 100%; height:auto; border-radius: 5px;" class="my-3 hidden">
     <img src="/image/araQ/click.png" alt="" style="width: 100%; height:auto;" class="my-3 hidden">
     <div class="my-3 hidden align-items-center d-flex justify-content-between" id="imgBox">
