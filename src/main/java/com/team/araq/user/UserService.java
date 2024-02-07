@@ -650,4 +650,8 @@ public class UserService {
         Optional<SiteUser> user = userRepository.findByPhoneNum(phoneNum);
         return user.isPresent();
     }
+
+    public Optional<SiteUser> socialPhone(String phoneNum) {
+        return userRepository.findByPhoneNum(phoneNum);
+    }
 }

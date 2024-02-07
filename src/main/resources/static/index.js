@@ -41,7 +41,6 @@ $(function () {
             setTimeout(typeWriter, 30);
         }
     }
-    typeWriter();
 
     checkVisibility();
 

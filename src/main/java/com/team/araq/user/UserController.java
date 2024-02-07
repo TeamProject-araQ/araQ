@@ -269,7 +269,8 @@ public class UserController {
         String storedVerKey = (String) session.getAttribute("verKey");
         if (verKey.equals(storedVerKey)) {
             return "success";
-        }
+        } if (userService.socialPhone(phoneNum).isPresent())
+            return "exists";
         return "fail";
     }
 

@@ -639,6 +639,8 @@ function confirmVerKey() {
             if (response === "success") {
                 alert('인증번호가 확인되었습니다.');
                 verKeyConfirmed = true;
+            } else if (response === "exists") {
+                alert("이미 가입된 전화번호입니다.")
             } else {
                 alert('인증번호가 일치하지 않습니다.');
                 verKeyConfirmed = false;
@@ -706,15 +708,15 @@ function showProfile(username) {
             }
 
             if (data.images.length > 0) {
-               // 토글 버튼 클릭 이벤트 핸들러 추가
-               $('#profileModal .toggle').on('click', function () {
-               $('#content1').toggle();
-               $('#content2').toggle();
-               });
+                // 토글 버튼 클릭 이벤트 핸들러 추가
+                $('#profileModal .toggle').on('click', function () {
+                    $('#content1').toggle();
+                    $('#content2').toggle();
+                });
             } else {
-               // images 배열이 null이거나 빈 배열인 경우 버튼 비활성화
-               $('#profileModal .toggle').prop('disabled', true);
-               $("#profileModal .profileImage").attr('data-bs-original-title', '').css('cursor', 'default');
+                // images 배열이 null이거나 빈 배열인 경우 버튼 비활성화
+                $('#profileModal .toggle').prop('disabled', true);
+                $("#profileModal .profileImage").attr('data-bs-original-title', '').css('cursor', 'default');
             }
         },
         error: function (err) {
