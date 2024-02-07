@@ -8,7 +8,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.sl.draw.geom.GuideIf;
 import org.apache.struts.chain.commands.UnauthorizedActionException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -56,8 +54,7 @@ public class UserService {
             @Override
             public Predicate toPredicate(Root<SiteUser> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 query.distinct(true);
-                return criteriaBuilder.or(criteriaBuilder.like(root.get("username"), "%" + kw + "%"),
-                        criteriaBuilder.like(root.get("nickName"), "%" + kw + "%"));
+                return criteriaBuilder.or(criteriaBuilder.like(root.get("username"), "%" + kw + "%"), criteriaBuilder.like(root.get("nickName"), "%" + kw + "%"));
             }
         };
     }
@@ -75,13 +72,8 @@ public class UserService {
     }
 
     public boolean update(SiteUser user, UserUpdateForm userUpdateForm) throws IOException {
-        if (Stream.of(
-                userUpdateForm.getNickName(), userUpdateForm.getAddress(), userUpdateForm.getAge(),
-                userUpdateForm.getHeight(), userUpdateForm.getReligion(), userUpdateForm.getDrinking(),
-                userUpdateForm.getSmoking(), userUpdateForm.getEducation(), userUpdateForm.getMbti(),
-                userUpdateForm.getHobby(), userUpdateForm.getGender(), userUpdateForm.getIntroduce()
-        ).anyMatch(value -> value == null || value.isEmpty())) {
-           return false;
+        if (Stream.of(userUpdateForm.getNickName(), userUpdateForm.getAddress(), userUpdateForm.getAge(), userUpdateForm.getHeight(), userUpdateForm.getReligion(), userUpdateForm.getDrinking(), userUpdateForm.getSmoking(), userUpdateForm.getEducation(), userUpdateForm.getMbti(), userUpdateForm.getHobby(), userUpdateForm.getGender(), userUpdateForm.getIntroduce()).anyMatch(value -> value == null || value.isEmpty())) {
+            return false;
         }
         user.setNickName(userUpdateForm.getNickName());
         user.setAddress(userUpdateForm.getAddress());
@@ -410,25 +402,36 @@ public class UserService {
     }
 
     public List<SiteUser> getByPersonalities(SiteUser loginUser) {
-        List<SiteUser> matchingUsers = new ArrayList<>();
-        List<SiteUser> userList = this.userRepository.findByGenderNotOrderByPreferenceDesc(loginUser.getGender());
-        for (SiteUser user : userList) {
-            List<String> userPersonality = user.getPersonality();
-            int matchCount = 0;
-            for (String personality : loginUser.getPersonality()) {
-                if (userPersonality.contains(personality)) {
-                    matchCount++;
+        List<String> myPersonality = loginUser.getPersonality();
+        if (myPersonality.size() < 2) return null;
+        List<SiteUser> userList = new ArrayList<>();
+        int totalPages = (int) Math.ceil((double) userRepository.count() / 100);
+        int count = 0;
+        List<Integer> pageList = new ArrayList<>(totalPages);
+        List<Sort.Order> sort = new ArrayList<>();
+        sort.add(Sort.Order.desc("preference"));
+
+        for (int i = 0; i < totalPages; i++) pageList.add(i);
+        Collections.shuffle(pageList);
+
+        for (int page : pageList) {
+            Pageable pageable = PageRequest.of(page, 100, Sort.by(sort));
+            Page<SiteUser> users = userRepository.findByGenderNot(loginUser.getGender(), pageable);
+            for (SiteUser user : users) {
+                int matchCount = 0;
+                for (String personality : myPersonality) {
+                    if (user.getPersonality().contains(personality)) matchCount++;
+                }
+
+                if (matchCount >= 2) {
+                    userList.add(user);
+                    count++;
+                    if (count == 10) return userList;
                 }
             }
-            if (matchCount >= 2)
-                matchingUsers.add(user);
         }
-        Collections.shuffle(matchingUsers);
-        if (matchingUsers.size() > 10) {
-            return matchingUsers.subList(0, 10);
-        } else {
-            return matchingUsers;
-        }
+
+        return userList;
     }
 
     public void setUserLocationInPlaza(SiteUser user, String top, String left) {
@@ -534,9 +537,7 @@ public class UserService {
             LocalDateTime getListenVoiceTime = user.getGetListenVoice();
             LocalDateTime getChatColorTime = user.getGetChatColor();
             if (getPreferenceTime != null) {
-                if (user.isPreference1Day() && getPreferenceTime.plusDays(1).isBefore(now) ||
-                        user.isPreference7Day() && getPreferenceTime.plusDays(7).isBefore(now) ||
-                        user.isPreference30Day() && getPreferenceTime.plusDays(30).isBefore(now)) {
+                if (user.isPreference1Day() && getPreferenceTime.plusDays(1).isBefore(now) || user.isPreference7Day() && getPreferenceTime.plusDays(7).isBefore(now) || user.isPreference30Day() && getPreferenceTime.plusDays(30).isBefore(now)) {
                     user.setPreference(false);
                     user.setPreference1Day(false);
                     user.setPreference7Day(false);
@@ -544,9 +545,7 @@ public class UserService {
                     user.setGetPreferenceTime(null);
                 }
             } else if (getListenVoiceTime != null) {
-                if (user.isListenVoice1Day() && getListenVoiceTime.plusDays(1).isBefore(now) ||
-                        user.isListenVoice7Day() && getListenVoiceTime.plusDays(7).isBefore(now) ||
-                        user.isListenVoice30Day() && getListenVoiceTime.plusDays(30).isBefore(now)) {
+                if (user.isListenVoice1Day() && getListenVoiceTime.plusDays(1).isBefore(now) || user.isListenVoice7Day() && getListenVoiceTime.plusDays(7).isBefore(now) || user.isListenVoice30Day() && getListenVoiceTime.plusDays(30).isBefore(now)) {
                     user.setListenVoice(false);
                     user.setListenVoice1Day(false);
                     user.setListenVoice7Day(false);
@@ -620,14 +619,12 @@ public class UserService {
         for (LocalDate date = aWeekAgo; !date.isAfter(today); date = date.plusDays(1)) {
             signupStats.put(date, 0L);
         }
-        users.stream()
-                .filter(user -> user.getCreateDate() != null)
-                .forEach(user -> {
-                    LocalDate date = user.getCreateDate().toLocalDate();
-                    if (!date.isBefore(aWeekAgo) && !date.isAfter(today)) {
-                        signupStats.put(date, signupStats.getOrDefault(date, 0L) + 1);
-                    }
-                });
+        users.stream().filter(user -> user.getCreateDate() != null).forEach(user -> {
+            LocalDate date = user.getCreateDate().toLocalDate();
+            if (!date.isBefore(aWeekAgo) && !date.isAfter(today)) {
+                signupStats.put(date, signupStats.getOrDefault(date, 0L) + 1);
+            }
+        });
         return signupStats;
     }
 
@@ -646,7 +643,7 @@ public class UserService {
         return genderRatio;
     }
 
-    public boolean isPhoneNumTaken(String phoneNum){
+    public boolean isPhoneNumTaken(String phoneNum) {
         Optional<SiteUser> user = userRepository.findByPhoneNum(phoneNum);
         return user.isPresent();
     }

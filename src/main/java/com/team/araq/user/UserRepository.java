@@ -1,6 +1,5 @@
 package com.team.araq.user;
 
-import com.team.araq.idealType.IdealType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +22,7 @@ public interface UserRepository extends JpaRepository<SiteUser, Long> {
 
     Optional<SiteUser> findByNameAndPhoneNum(String name, String phoneNum);
 
-    List<SiteUser> findByGenderNotOrderByPreferenceDesc(String gender);
+    Page<SiteUser> findByGenderNot(String gender, Pageable pageable);
 
     @Query(value = "SELECT * FROM site_user WHERE gender != :gender ORDER BY preference DESC, RAND() LIMIT 3", nativeQuery = true)
     List<SiteUser> findByGenderNotRandom(@Param("gender") String gender);

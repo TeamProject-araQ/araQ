@@ -5,11 +5,13 @@ import com.team.araq.board.post.PostService;
 import com.team.araq.like.LikeService;
 import com.team.araq.like.UserLike;
 import com.team.araq.user.SiteUser;
+import com.team.araq.user.UserRepository;
 import com.team.araq.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -25,6 +27,8 @@ public class MainController {
     private final PostService postService;
 
     private final LikeService likeService;
+
+    private final UserRepository userRepository;
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
@@ -48,8 +52,14 @@ public class MainController {
     }
 
     @GetMapping("/test")
-    public String test(Model model, Principal principal) {
-        model.addAttribute("username", principal.getName());
+    @ResponseBody
+    public String test(Principal principal) {
+        SiteUser user = userService.getByUsername(principal.getName());
+        long beforeTime = System.currentTimeMillis();
+        List<SiteUser> users = userService.getByPersonalities(user);
+        long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+        long secDiffTime = afterTime - beforeTime; //두 시간에 차 계산
+        System.out.println("시간차이: " + secDiffTime);
         return "test";
     }
 
