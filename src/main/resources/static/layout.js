@@ -582,9 +582,13 @@ $(function () {
                     [csrfHeader]: csrfToken
                 },
                 success: function (data) {
-                    alert(data);
-                    $('#verModal').modal('hide');
-
+                    if (data === "deny") {
+                        alert("이미 가입된 전화번호입니다.");
+                        window.location.href = "/user/logout";
+                    } else {
+                        alert(data);
+                        $('#verModal').modal('hide');
+                    }
                 },
                 error: function (err) {
                     console.log(err);

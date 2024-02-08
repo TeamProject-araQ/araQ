@@ -517,7 +517,7 @@ public class UserController {
         SiteUser user = this.userService.getByUsername(principal.getName());
         if (userService.socialPhone(phoneNum).isPresent()) {
             userService.deleteUser(user);
-            return "이미 가입된 전화번호입니다.";
+            return "deny";
         }
         this.userService.savePhoneNum(user, phoneNum);
         return "휴대폰 인증이 완료되었습니다.";
