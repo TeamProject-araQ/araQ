@@ -639,8 +639,6 @@ function confirmVerKey() {
             if (response === "success") {
                 alert('인증번호가 확인되었습니다.');
                 verKeyConfirmed = true;
-            } else if (response === "exists") {
-                alert("이미 가입된 전화번호입니다.")
             } else {
                 alert('인증번호가 일치하지 않습니다.');
                 verKeyConfirmed = false;

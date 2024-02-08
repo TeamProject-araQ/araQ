@@ -73,7 +73,7 @@ public class UserController {
             bindingResult.rejectValue("password2", "passwordInCorrect", "2개의 패스워드가 일치하지않습니다.");
             return "user/signup";
         }
-        if (userService.isPhoneNumTaken(userCreateForm.getPhoneNum())){
+        if (userService.isPhoneNumTaken(userCreateForm.getPhoneNum())) {
             bindingResult.rejectValue("phoneNum", "phoneNumTaken", "이미 가입된 전화번호입니다.");
             return "user/signup";
         }
@@ -110,7 +110,7 @@ public class UserController {
     public String update(@RequestParam("username") String username, UserUpdateForm userUpdateForm, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
         SiteUser user = userService.getByUsername(username);
 
-        if(!userService.update(user, userUpdateForm)){
+        if (!userService.update(user, userUpdateForm)) {
             redirectAttributes.addFlashAttribute("updateError", "필수 항목을 모두 입력해주세요");
             return "redirect:/user/update";
         }
@@ -269,8 +269,7 @@ public class UserController {
         String storedVerKey = (String) session.getAttribute("verKey");
         if (verKey.equals(storedVerKey)) {
             return "success";
-        } if (userService.socialPhone(phoneNum).isPresent())
-            return "exists";
+        }
         return "fail";
     }
 
@@ -516,6 +515,10 @@ public class UserController {
     @PostMapping("/save/phone")
     public String savePhone(@RequestBody String phoneNum, Principal principal) {
         SiteUser user = this.userService.getByUsername(principal.getName());
+        if (userService.socialPhone(phoneNum).isPresent()) {
+            userService.deleteUser(user);
+            return "이미 가입된 전화번호입니다.";
+        }
         this.userService.savePhoneNum(user, phoneNum);
         return "휴대폰 인증이 완료되었습니다.";
     }
